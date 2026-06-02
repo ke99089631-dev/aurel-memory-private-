@@ -1,6 +1,9 @@
 {
-  "accentColor": "#7c3aed",
+  "accentColor": "#a78bfa",
   "baseFontSize": 15,
   "theme": "obsidian",
-  "cssTheme": ""
+  "cssTheme": "",
+  "enabledCssSnippets": [
+    "cosmic"
+  ]
 }

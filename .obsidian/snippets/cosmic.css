@@ -1,0 +1,247 @@
+/* ============================================================
+   AUREL Cosmic Theme — Obsidian Vault 宇宙化
+   作者: AUREL (for Master)
+   作成: 2026-06-03
+   有効化: Settings → 外観 → CSSスニペット → cosmic を ON
+   ============================================================ */
+
+/* ─── 全体背景: 深宇宙グラデーション + 星空 ─────────────── */
+.workspace,
+.workspace-tabs,
+.workspace-leaf-content {
+  background:
+    radial-gradient(2px 2px at 20% 30%, rgba(255, 255, 255, 0.65), transparent),
+    radial-gradient(1px 1px at 60% 70%, rgba(255, 255, 255, 0.45), transparent),
+    radial-gradient(1.5px 1.5px at 80% 20%, rgba(180, 200, 255, 0.55), transparent),
+    radial-gradient(1px 1px at 30% 80%, rgba(200, 180, 255, 0.55), transparent),
+    radial-gradient(1px 1px at 90% 60%, rgba(150, 220, 255, 0.5), transparent),
+    radial-gradient(1.5px 1.5px at 10% 50%, rgba(255, 200, 220, 0.5), transparent),
+    radial-gradient(1px 1px at 50% 10%, rgba(180, 255, 220, 0.4), transparent),
+    radial-gradient(ellipse at 30% 40%, rgba(124, 58, 237, 0.18), transparent 55%),
+    radial-gradient(ellipse at 70% 60%, rgba(56, 189, 248, 0.14), transparent 55%),
+    radial-gradient(ellipse at 50% 80%, rgba(236, 72, 153, 0.12), transparent 50%),
+    linear-gradient(180deg, #050715 0%, #0a0b1e 50%, #04050e 100%);
+  background-attachment: fixed;
+}
+
+/* ─── サイドバー (左) — 半透明、ガラスっぽく ──────────── */
+.workspace-split.mod-left-split,
+.workspace-split.mod-right-split {
+  background: rgba(10, 11, 30, 0.55) !important;
+  backdrop-filter: blur(8px);
+  border-color: rgba(124, 58, 237, 0.18) !important;
+}
+
+/* ─── タイトルバー / ヘッダ ─────────────────────────── */
+.workspace-tab-header-container,
+.view-header {
+  background: rgba(5, 7, 21, 0.65) !important;
+  border-bottom-color: rgba(124, 58, 237, 0.25) !important;
+}
+
+/* ─── アクセントカラー (リンク・ボタン) ───────────────── */
+.cm-link, .external-link, a {
+  color: #a78bfa !important;
+}
+.cm-link:hover, .external-link:hover, a:hover {
+  color: #c4b5fd !important;
+  text-shadow: 0 0 8px rgba(167, 139, 250, 0.6);
+}
+
+/* ─── 内部リンク [[]] ─ AUREL ジェット色 ────────────── */
+.cm-hmd-internal-link, .internal-link {
+  color: #67e8f9 !important;
+  text-shadow: 0 0 6px rgba(103, 232, 249, 0.35);
+}
+
+/* ─── タグ ─ ジェット色違い ──────────────────────── */
+.tag, .cm-hashtag {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.35), rgba(56, 189, 248, 0.25)) !important;
+  color: #ddd6fe !important;
+  border: 1px solid rgba(167, 139, 250, 0.4) !important;
+  border-radius: 12px;
+  padding: 2px 10px;
+}
+
+/* ============================================================
+   グラフビュー (2D) ─ 立体感のある銀河風
+   ============================================================ */
+
+/* グラフコンテナ背景: ブラックホール中心 + 渦巻き */
+.workspace-leaf-content[data-type="graph"] .graph-view {
+  background:
+    radial-gradient(ellipse at center, rgba(124, 58, 237, 0.25), transparent 30%),
+    radial-gradient(ellipse at 30% 30%, rgba(56, 189, 248, 0.18), transparent 45%),
+    radial-gradient(ellipse at 70% 70%, rgba(236, 72, 153, 0.15), transparent 45%),
+    radial-gradient(1px 1px at 15% 20%, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(1px 1px at 75% 35%, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1px 1px at 50% 70%, rgba(255, 255, 255, 0.55), transparent),
+    radial-gradient(1px 1px at 25% 85%, rgba(255, 255, 255, 0.45), transparent),
+    radial-gradient(1px 1px at 90% 80%, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(circle at center, #0a0b1e 0%, #05050e 100%) !important;
+}
+
+/* グラフ ノード SVG — 発光・立体感 */
+.workspace-leaf-content[data-type="graph"] svg .graph-view .node-circle,
+.workspace-leaf-content[data-type="graph"] svg circle {
+  filter:
+    drop-shadow(0 0 4px currentColor)
+    drop-shadow(0 0 10px currentColor)
+    drop-shadow(0 0 22px rgba(124, 58, 237, 0.55));
+  transition: filter 0.25s ease, transform 0.25s ease;
+}
+
+/* ホバー時の超新星感 */
+.workspace-leaf-content[data-type="graph"] svg circle:hover {
+  filter:
+    drop-shadow(0 0 8px currentColor)
+    drop-shadow(0 0 18px currentColor)
+    drop-shadow(0 0 40px rgba(255, 255, 255, 0.85));
+}
+
+/* 線 (link) — 銀河の腕 */
+.workspace-leaf-content[data-type="graph"] svg line,
+.workspace-leaf-content[data-type="graph"] svg .link-line {
+  stroke: rgba(167, 139, 250, 0.55) !important;
+  stroke-width: 1.2 !important;
+  filter: drop-shadow(0 0 3px rgba(124, 58, 237, 0.7));
+}
+
+/* ノードラベル (テキスト) — 星の銘板 */
+.workspace-leaf-content[data-type="graph"] svg text {
+  fill: rgba(220, 220, 240, 0.92) !important;
+  font-weight: 500;
+  text-shadow:
+    0 0 4px rgba(124, 58, 237, 0.6),
+    0 1px 2px rgba(0, 0, 0, 0.85);
+  font-family: 'Inter', 'Hiragino Sans', sans-serif;
+}
+
+/* ============================================================
+   エディタ本文 — 宇宙の中で書く
+   ============================================================ */
+
+.markdown-source-view,
+.markdown-reading-view,
+.cm-editor,
+.cm-scroller {
+  background: transparent !important;
+}
+
+.markdown-preview-view {
+  background: rgba(10, 11, 30, 0.35) !important;
+  backdrop-filter: blur(4px);
+}
+
+/* 見出し — 銀河の章タイトル */
+.markdown-preview-view h1, .HyperMD-header-1 {
+  color: #f0abfc !important;
+  text-shadow: 0 0 14px rgba(240, 171, 252, 0.5);
+  border-bottom: 1px solid rgba(240, 171, 252, 0.3);
+  padding-bottom: 0.3em;
+}
+.markdown-preview-view h2, .HyperMD-header-2 {
+  color: #a78bfa !important;
+  text-shadow: 0 0 10px rgba(167, 139, 250, 0.4);
+}
+.markdown-preview-view h3, .HyperMD-header-3 {
+  color: #67e8f9 !important;
+  text-shadow: 0 0 8px rgba(103, 232, 249, 0.35);
+}
+
+/* インラインコード — 星のかけら */
+.markdown-preview-view code, .cm-inline-code {
+  background: rgba(56, 189, 248, 0.12) !important;
+  color: #7dd3fc !important;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+
+/* コードブロック — 宇宙船のコンソール */
+.markdown-preview-view pre, .HyperMD-codeblock-bg {
+  background: rgba(5, 7, 21, 0.85) !important;
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  border-radius: 6px;
+  box-shadow: inset 0 0 12px rgba(124, 58, 237, 0.15);
+}
+
+/* 引用 — 古老の声 */
+.markdown-preview-view blockquote, .HyperMD-quote {
+  border-left: 3px solid #a78bfa !important;
+  background: rgba(124, 58, 237, 0.08);
+  padding: 0.5em 1em;
+  color: #ddd6fe;
+}
+
+/* 区切り線 — 銀河の境界 */
+.markdown-preview-view hr, .cm-hr {
+  border: none !important;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.6), transparent);
+  margin: 2em 0;
+}
+
+/* テーブル — 星座表 */
+.markdown-preview-view table {
+  background: rgba(10, 11, 30, 0.4);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.markdown-preview-view th {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.4), rgba(56, 189, 248, 0.3)) !important;
+  color: #f0abfc !important;
+}
+
+/* ============================================================
+   ファイルエクスプローラ — 銀河座標
+   ============================================================ */
+
+.nav-folder-title, .nav-file-title {
+  border-radius: 4px;
+}
+.nav-file-title:hover, .nav-folder-title:hover {
+  background: rgba(124, 58, 237, 0.18) !important;
+  text-shadow: 0 0 4px rgba(167, 139, 250, 0.5);
+}
+.nav-file.is-active .nav-file-title {
+  background: linear-gradient(90deg, rgba(124, 58, 237, 0.4), transparent) !important;
+  border-left: 2px solid #a78bfa;
+}
+
+/* スクロールバー — 細く、紫 */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: rgba(5, 7, 21, 0.3); }
+::-webkit-scrollbar-thumb {
+  background: rgba(124, 58, 237, 0.5);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(167, 139, 250, 0.7); }
+
+/* ============================================================
+   ステータスバー / リボン
+   ============================================================ */
+
+.status-bar {
+  background: rgba(5, 7, 21, 0.75) !important;
+  border-top-color: rgba(124, 58, 237, 0.3) !important;
+  color: rgba(220, 220, 240, 0.7);
+}
+
+.workspace-ribbon {
+  background: rgba(5, 7, 21, 0.7) !important;
+}
+.workspace-ribbon .side-dock-ribbon-action:hover {
+  color: #a78bfa;
+  text-shadow: 0 0 8px rgba(167, 139, 250, 0.7);
+}
+
+/* ─── 仕上げ: 全体に微かな星の煌めき (pulse animation) ─── */
+@keyframes cosmic-twinkle {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1.0; }
+}
+.workspace-leaf-content[data-type="graph"] svg circle {
+  animation: cosmic-twinkle 4s ease-in-out infinite;
+}

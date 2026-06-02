@@ -22,5 +22,12 @@
   "workspaces": false,
   "random-note": false,
   "slash-command": true,
-  "canvas": true
+  "canvas": true,
+  "footnotes": false,
+  "editor-status": true,
+  "markdown-importer": false,
+  "zk-prefixer": false,
+  "slides": false,
+  "bases": true,
+  "webviewer": false
 }
