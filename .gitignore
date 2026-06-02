@@ -1,0 +1,15 @@
+# Obsidian workspace state (user-specific, no sense versioning)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+.obsidian/plugins/*/data.json
+
+# Private identity (Master の身バレ情報は別管理、必要時に作成)
+Identity/Master-Private.md
+
+# Plugin-generated caches
+.trash/
+
+# OS junk
+Thumbs.db
+.DS_Store
