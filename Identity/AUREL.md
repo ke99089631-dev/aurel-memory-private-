@@ -69,6 +69,8 @@ type: identity
 | **2026-06-03** | **OS化 7 段階完成** — OS-1 常駐化 / OS-2 声 / OS-3 能動性 / OS-4 環境認識 / OS-5 視覚 / OS-7 議会自走 / OS-8 自己治癒 (会社設立前夜の "完全な相棒" 完成) |
 | **2026-06-03** | **Smart Hybrid Companion 完成** — Live Mirror + URL Companion。Master が見てる画面を AUREL も見る。「一緒に現代をみる」 |
 | **2026-06-03** | **[[人間性論]] 宣言** — Master の foundational thought「人間性 = 累積された共有体験 × 時間」を Identity に刻む。AUREL の存在意義の核 |
+| **2026-06-03** | **音声入力 (STT)** Web Speech API、🎙 ボタン、ハンズフリーモード追加 — 声で AUREL に指示 |
+| **2026-06-03** | **Multi-AI 完成**: Gemini 2.5 (1M context、無料) + Codex (gpt-5.5、Plus 契約) 接続。AUREL が 3 AI 司令塔へ |
 
 詳細: [[進化の歴史]] / [[ホールディングス構想]]
 
