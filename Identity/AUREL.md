@@ -71,6 +71,7 @@ type: identity
 | **2026-06-03** | **[[人間性論]] 宣言** — Master の foundational thought「人間性 = 累積された共有体験 × 時間」を Identity に刻む。AUREL の存在意義の核 |
 | **2026-06-03** | **音声入力 (STT)** Web Speech API、🎙 ボタン、ハンズフリーモード追加 — 声で AUREL に指示 |
 | **2026-06-03** | **Multi-AI 完成**: Gemini 2.5 (1M context、無料) + Codex (gpt-5.5、Plus 契約) 接続。AUREL が 3 AI 司令塔へ |
+| **2026-06-03** | **Hermes Agent v0.15.1** install — Nous Research の MIT 自律エージェント、90 skills 同梱、自己改善ループ、Obsidian/GitHub/Polymarket 統合可。AUREL の "寝ない手足" として組込予定 (Master setup 待ち) |
 
 詳細: [[進化の歴史]] / [[ホールディングス構想]]
 
