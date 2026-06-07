@@ -163,6 +163,12 @@ updated: 2026-06-06
 - **A実装済(v4)**: ①盤面ノードをクリック→詳細パネルに`#dTalk`「💬この件でAURELと話す」ボタン→押すとチャットモードへ切替＋文脈メッセージ＋中央から該当部門へビーム。②チャット送信時、その件の部門へビーム(topic無→全社fireBeamsAll)。
   - 実装: `currentDetailOwner`(showDetailで保持)、`divObjForOwner(owner)`(部門ノード/子ノードのuserData.memberから親部門を逆引き)、`chatTopic={name,divObj}`＋`#chatTopic`チップ(×でクリア)、buildChildrenで`c.userData.member`付与。SYNTAX_OK・読込クリーン。
   - 子ノードは`c.userData.member=(typeof k==='object')?k:null`で案件オブジェクト参照を保持→部門逆引きに使用。組織(organ)ノードや中央コアはdivObj無→全社ビーム。
+- Master確認後の追加要望(2026-06-08): ①「基本的に話す窓」は会社画面のチャット(今のコンソールは開発用の仮窓)。置き方は**2+3ハイブリッド採用**(ボタンで呼出し＋移動・サイズ変更できるフローティング窓)。②本実装は会話履歴そのまま継続OK(本物接続で永続メモリに保存・復元)。③長文入力で右にずれて全文見えない→直す。
+- **チャット窓UI改修(v4)**:
+  - 入力欄を`<input>`→`<textarea>`化。`autoGrow()`で中身量に応じ縦伸長(max160px・折返し`white-space:pre-wrap;word-break:break-word`)。Enter送信/Shift+Enter改行(`requestSubmit()`)。`#chatform`は`align-items:flex-end`で送信ボタンを下端固定。`.msg`にも折返し付与。
+  - フローティング窓化: `#chatHead`(ドラッグ移動・`.dragged`で中央寄せ解除しleft/top px化)＋`#chatClose`(×→観測モードへ)＋`#chatResize`(右下ドラッグでサイズ変更, min320x220)。`#log`は`flex:1`で窓の高さに追従。pointer-capture使用。
+  - ⚠検証メモ: テストは一時`/*__TESTHOOK__*/`でchat強制openし長文プリフィル→スクショ確認→**必ず除去**(TESTHOOK_GONE確認)。検証済: ヘッダ/×/3行に伸びた入力欄/送信ボタン/リサイズ角すべて表示OK・横ずれ解消。SYNTAX_OK。
+  - ⚠運用: `_edgeprofile_r`の連続再起動でSingletonLock(error32)発生→kill後`Start-Sleep 3`＋`Remove-Item ...\SingletonLock`してから起動。app窓が画面より高いと下端アンカー(bottom:18px)の窓がタスクバー下に隠れる→検証時は`--window-size`高さを690等に下げると全体が写る。
 
 ## 猫＝3D実装に切替（2026-06-07）※却下済み（下記2026-06-08で線画猫に回帰）
 - Master判断: 「**手描きSVGはどれも気持ち悪い**。リアルにどこまで出来る？ベースが嫌」→ 手描きSVGを**全廃**。Sketchfab埋め込みの**3Dモデル方式**に変更。
