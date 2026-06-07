@@ -204,3 +204,10 @@ updated: 2026-06-06
   - ②武器庫オーバーレイ: top barに`#wpnBtn`「武器」(紫dot)。押すと`#wpnLayer`(全画面・blur)に`#wpnList`(2列カードgrid)。カード=名前＋`使用可/準備中`タグ＋`[分類]用途`。使用可カードのみクリックで選択(.on)。`#wpnQ`に依頼入力→`#wpnSend`。送信=オーバーレイ閉→チャットモードへ→`addMsg('me','【武器】<名> に依頼：…')`→該当武器ノードへ`fireBeam`＋`flashDiv`(コア→武器へ光が走り起動)→サンプルAU応答。Esc/×/外側クリックで閉。
   - 検証済: SYNTAX_OK(L447-2263抽出 node --check)、シーン描画OK・武器の星がコア周辺に出現、`/*__WPNTEST__*/`一時オープンでオーバーレイ全カード(使用可緑/準備中グレー)表示確認→**フック除去(WPNTEST 0件確認)**→クリーン再起動。
   - 残: 本実装で /api/cat-weapons 相当の動的読込＋実送信に接続。LIVEパネルA/B/C(稼働中表示)はMaster未決のまま(武器に話題が移行)。
+
+### 武器の星デザイン変更：玉→結晶のカケラ＋光輪(2026-06-08)
+- Master「星のデザインを玉じゃないのに。AURELっぽいの」→5案提示→**1(結晶のカケラ)＋2(光輪)採用**。LIVEパネルはそのまま残すで確定。
+- 実装: `makeWeaponNode(color,s,usable)` = ①OctahedronGeometry(s,0)をscale(0.78,1.3,0.78)で縦長ダイヤ=結晶 ＋ EdgesGeometryの白ライン(AdditiveBlend)でfacet光らせ ＋ ②TorusGeometry(s*2.05,s*0.085)を rotation.x=π*0.42で傾けた光輪 ＋ グロー球(s*2.2)。userDataにcore/glow/ring/edges。
+- weaponObjsに ring/edges/coreBase(core.scale.clone())/spin を保持。animate: 周回(ang)＋node.rotation.y自転(spin)＋ring.rotation.z回転(0.7)＋edges/グローを脈動、flash時はcoreBase比を保ったまま`core.scale.set(cb*f)`でふくらむ。
+- 直前の発光調整(Master「少しだけ発光」): glowBase 使用可0.44/準備中0.14、脈動0.26。
+- 検証: SYNTAX_OK(L447-2293)、画面で結晶＋輪が周回表示確認・フックなし。
