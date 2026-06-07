@@ -132,6 +132,13 @@ updated: 2026-06-06
   - **イベント連動**: `resolveDec()`承認/却下→該当部門を`flashDiv`＋`refreshBoard`（決裁が会社へ伝播）。`cmdform`指令送信→`flashAllDivs(0.7)`（指令が全社へ伝播＝盤面一斉脈動）。
   - 検証済: 収益事業部ノードが**オレンジ脈動**（conduit/LocalBoostが承認待ち）、資産帝国=シアン点灯(active)、未来研=暗め(idle)。決裁トレイと完全一致。SYNTAX_OK。
 - 既存の盤面→パネル連動（ノードクリックで`showDetail`）はそのまま。中央コア=AUREL本体(クリックで詳細「深淵の眼」)。
+
+### ノード発光オフ（2026-06-08 Master指示）
+- Master「各ノードの**文字のネオンはいい**が**発光やめれるか**」「各プロジェクトはAURELが引き継ぐ」=承認。
+- 変更: `makeNode`の`glow.visible=false`（ハロー球を非表示／div・organ・child全部）。`buildCluster`の`haloSprite(4.4)`を削除（per-nodeソフト光輪）。→ ノードは**すっきりした色ドット**に。
+- 維持: 文字ラベルのネオン(labelSprite/organLabelのshadowBlur)、中央AUREL本体(collective: swarm/halo/rings)、per-nodeの小swarm+ring(集合体デザイン)。
+- 状態連動を発光から非発光へ移行: `refreshBoard`は**coreドットの色**で表現(pending=0xff8c42/active=部署色/idle=部署色×0.45で暗め)。描画ループは**scaleの鼓動**(pending=±0.08 sin / flash=+0.22減衰)。決裁・指令の連動(resolveDec/flashDiv/flashAllDivs)は維持。
+- ⚠まだ残る発光源: UnrealBloom(中央コア用・threshold0.88)、per-node小swarm、軌道リング/アーク。さらに静かにしたい指示が来たらここを削る。
 - ⚠スクショ: Edgeが前回ウィンドウ位置を復元して`--window-position`を無視する→**新規プロファイル`_edgeprofile_r`** + `--window-position=1960,60 --window-size=1280,950`で右モニタに確実表示。司令室の右端は screen x≈1900 まで被さるので、それより右に出すこと。
 
 ## 猫＝3D実装に切替（2026-06-07）※却下済み（下記2026-06-08で線画猫に回帰）
