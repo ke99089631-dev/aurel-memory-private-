@@ -101,6 +101,22 @@ updated: 2026-06-06
 - CSS: `#catstage`166px / `#catwrap`168×166 drop-shadow暖色(255,228,180,.32)。動き=catBreathe(呼吸)/catTailWag(±10〜12°)/earTw(耳ピク)/catNod(小首)/まばたき(JS .eye scaleY)/`walking`時 catHop(ぴょこ跳ね translateY-7 + rotate)。faceR/legFN等/stepA/stepBは**廃止**。
 - patrolWalk: 左24px→右24px→中央、12〜19s毎。faceR反転ロジックは廃止。
 
+## 猫＝3D実装に切替（2026-06-07 確定）★現行
+- Master判断: 「**手描きSVGはどれも気持ち悪い**。リアルにどこまで出来る？ベースが嫌」→ 手描きSVGを**全廃**。Sketchfab埋め込みの**3Dモデル方式**に変更。
+- Master指示の最終形: 「**この方式で四足歩行のかわいい猫**。動きは猫本来＝**顔を洗う/耳を掻く等のリアルな生態**」。
+- 採用モデル: **IndieCats「Low Poly Cat」**（Sketchfab uid `f43a414c031e44a28453d74a190397d1`）。CC-BY → `#catwrap`内に `cat: IndieCats / Sketchfab` を小さく明記。50アニメ入り。
+- 実装(本番 v4):
+  - `<head>`に `https://static.sketchfab.com/api/sketchfab-viewer-1.12.1.js` を読込。
+  - `#catwrap`内に `<iframe id="catframe">`。`#catframe{pointer-events:none}`（撫でクリックを拾うため／ドラッグ回転は無効）。背景は透過(transparent:1)で濃紺パネルに溶ける。`::after`で内側ビネット。
+  - Viewer API: `client.init(uid,{...,success:api=>{ api.start(); api.addEventListener('viewerready',()=>{ api.setCycleMode('one'); api.getAnimations((e,anims)=>{…}); }); }})`。
+  - **正しいメソッドは `api.setCurrentAnimationByUID(uid, cb)`**（`setAnimation`は存在しない＝最初TypeErrorで全画面エラーになった。教訓）。
+  - 仕草キュレーション: good=`/lick|groom|wash|clean|scratch|idle|sit|lie|sleep|stretch|yawn|look|walk|eat|drink|trot|stand/i`、bad=`/death|attack|scared|fall|edge|creepy|hit|hurt|run|jump/i` を除外。毛づくろい(licking)を先頭に。`catCycle()`が4.2〜6.8s毎に切替。
+  - 撫でクリック→毛づくろいアニメ＋きげんUP。`patrolWalk()`はwalkアニメを割込み再生（旧:panelをtranslateXで物理移動 は廃止）。
+  - 役割/報告(catReport)/ゲージ(updateGauges)/名前バッジは従来どおり流用。
+- 注意: 3D読込が重い3Dシーンと競合し**表示まで30〜50秒**かかることがある（"Loading 3D model"表示）。ネット必須（CDN）。
+- 検証: 右モニタ(空きデスクトップ)で `--window-position=1720,70` 起動→`CopyFromScreen`で撮影が確実（左モニタは司令室が最前面で隠れる）。AppActivateは司令室に負けることがある。
+
 ## 却下された案（再提案しないこと）
 - 機械的ステーション(箱hull/トラス/平面ディスク+スポーク) / 中央の光柱 / 中央→ノードの玉 / アーチ状の弧 / 電光(稲妻) / 中心から出る放射線 / 背景の薄いドット。
-- 猫: サイバー(ネオン輪郭)猫 / マスコット過ぎる白猫 / 横向き四足歩行猫 / 青い縦長グロス目。
+- 猫: **手描きSVG全般**（サイバー/白マスコット/二足アイルー風SVG/横向き四足SVG/青い縦長グロス目）。SVGで猫を描くのは何度やっても不気味→二度とやらない。3Dモデル方式で行く。
+- poly.pizzaのCC0猫（Minecraft風ブロック四足 / リアル四足 / 黒豹 / 顔だけ）＝アイルー感ゼロで不採用。
