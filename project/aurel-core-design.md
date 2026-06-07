@@ -220,3 +220,14 @@ updated: 2026-06-06
 ### 武器の星：光輪も廃止＝結晶のみ／表示は左モニターへ(2026-06-08)
 - Master「結晶のリングも外そう」→makeWeaponNodeからring(Torus)削除・userData.ring/weaponObjs.ring廃止・animateのring回転削除。武器ノードは結晶core＋発光edgesのみ(丸グロー球も光輪も無し)。検証SYNTAX_OK・画面でダイヤ結晶のみ発光を確認。
 - ★運用変更: Master「基本左のモニターで見る」→**以後サンプル表示・スクショは左モニター(DISPLAY2 Primary 0,0 / 1920x1080)**。起動 `--window-position=0,0 --window-size=1920,1040`、`CopyFromScreen(0,0,...,1920x1040)`。(右モニターDISPLAY1=1920,71/1366x768は使わない)
+
+## 完成レビュー＋利益化の打ち手(2026-06-08)
+- Master「これでほぼ完成。全体の改善・追加案を深く。利益に繋がる視点で」→AURELが優先順で提示:
+  1.本物データ接続(+本物/サンプル表示) 2.資金の真実パネル(残高/今週損益/runway/exposure) 3.決裁に数字(想定利益・最悪損失・取り返し可否・推奨と自信度=評議員が作る) 4.全体リスク信号(緑黄赤＋一番危ないもの) 5.実弾/DRY_RUNの明示バッジ 6.スマホ通知(notifier) 7.決裁履歴と答え合わせ＋武器コスト 8.ラベル可読性/検索。
+  - 推し順: まず2+4、次に3+6、1は土台で並行。
+- Master「外出先から会話で会社を動かす(指示・実行・会長タスク完了)＝6に近い。それ以外は推しで進めて」。
+  - 遠隔運用の設計回答(本実装): ①常駐AUREL本体(既存/send APIが種) ②トンネル(Cloudflare Tunnel/Tailscale)＋司令室をPWA化しスマホ追加 ③決裁はMaster端末限定の顔認証(パスキー)。流れ=危険/承認待ち→push→開く→数字見て承認→AUREL実行・報告。必須=実弾は承認後(DRY_RUN既定)＋スマホから「全停止」。要対応=今の横長UIをスマホ縮約表示にする(本実装で)。
+- **サンプルv4に実装(推し2+4)**:
+  - #4 全体リスク信号: top barに`#risk`(rdot＋#riskTxt)。`refreshRisk()`=divObjsのattentionからrisk→赤点滅「リスク高:名」/pending→橙「承認待ち:名」/無→「リスク:安定」。refreshBoard()末尾で必ず呼び同期。CSS .amber/.red＋@keyframes riskblink。
+  - #2 資金パネル: #left最上段に`#moneyPanel`。`資金 <ttl-sub>サンプル</>`＋`練習モード(DRY_RUN)`バッジ＋残高/今週損益(緑)/持ちこたえ(runway)/危険にさらし中(exposure,橙)。値はモック(本実装で実数へ)。CSS .money-mode/.money-row。
+  - 検証: SYNTAX_OK(script L474-2329)、左モニターで赤リスクバッジ＋資金パネル表示確認・結晶リング無し発光OK。
