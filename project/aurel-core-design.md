@@ -193,3 +193,14 @@ updated: 2026-06-06
 - 猫: **手描きSVG全般**（サイバー/白マスコット/二足アイルー風SVG/横向き四足SVG/青い縦長グロス目）。SVGで猫を描くのは何度やっても不気味→二度とやらない。3Dモデル方式で行く。
 - poly.pizzaのCC0猫（Minecraft風ブロック四足 / リアル四足 / 黒豹 / 顔だけ）＝アイルー感ゼロで不採用。
 - **3D(Sketchfab IndieCats Low Poly Cat)も却下**（2026-06-08「気持ちワイル」）。重い/ロゴ/険しい目。→ 司令室の線画猫に回帰（上記★現行）。凝った猫は全部NG。
+
+## 武器庫(Arsenal)を会社ビジュアルへ移植 — ハイブリッド(2026-06-08)
+- 背景: Master「いまのコンソール猫ウインドに『武器を使う』機能があるだろ、それを新しい会社ビジュアルにどう実装するか相談」。
+- 既存の猫ウインド武器機能(`bin/_rebuild-ui.mjs`)の正体: 「武器を使う」ボタン→オーバーレイにカード一覧(`/api/cat-weapons`→arsenal manifest群)→使用可(equipped)カードを選択→依頼文入力→`/api/projects/home/send`へ`【武器パネルから】<名> に以下を依頼:…`をPOST。stub/brokenは選択不可。
+- AURELの提案2方向→Master「**ハイブリットで行こう**」採用。
+- **v4実装(AUREL会社_sample_v4.html)**:
+  - データはサンプルなので実arsenalをベイク: `WEAPONS[]`(slug/name/cat/status/purpose 約23件)＋`WEAPON_CAT`(分類→色)・`WEAPON_CATJP`(分類→日本語)。`wpnUsable(w)`=status equipped|active。本実装では manifest 群から読む想定(増えれば自動で並ぶ設計)。
+  - ①3D「道具の星」: organObjs直後に`weaponObjs`生成。各武器を`makeNode(色, 使用可0.42/準備中0.30)`でコア近傍に周回配置(使用可 r=12.5 内側 / 準備中 r=15.5 外側、yb=sin(i*1.7)*2.4)。`node.userData.info`(isWeapon:true)＋`node.userData.weapon=w`。使用可のみ`pickables`に追加(クリック→詳細パネル流用)。animateで`wo.ang+=dt*0.05`周回＋使用可は脈動、起動時`wo.flash`でフラッシュ。
+  - ②武器庫オーバーレイ: top barに`#wpnBtn`「武器」(紫dot)。押すと`#wpnLayer`(全画面・blur)に`#wpnList`(2列カードgrid)。カード=名前＋`使用可/準備中`タグ＋`[分類]用途`。使用可カードのみクリックで選択(.on)。`#wpnQ`に依頼入力→`#wpnSend`。送信=オーバーレイ閉→チャットモードへ→`addMsg('me','【武器】<名> に依頼：…')`→該当武器ノードへ`fireBeam`＋`flashDiv`(コア→武器へ光が走り起動)→サンプルAU応答。Esc/×/外側クリックで閉。
+  - 検証済: SYNTAX_OK(L447-2263抽出 node --check)、シーン描画OK・武器の星がコア周辺に出現、`/*__WPNTEST__*/`一時オープンでオーバーレイ全カード(使用可緑/準備中グレー)表示確認→**フック除去(WPNTEST 0件確認)**→クリーン再起動。
+  - 残: 本実装で /api/cat-weapons 相当の動的読込＋実送信に接続。LIVEパネルA/B/C(稼働中表示)はMaster未決のまま(武器に話題が移行)。
