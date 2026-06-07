@@ -211,3 +211,12 @@ updated: 2026-06-06
 - weaponObjsに ring/edges/coreBase(core.scale.clone())/spin を保持。animate: 周回(ang)＋node.rotation.y自転(spin)＋ring.rotation.z回転(0.7)＋edges/グローを脈動、flash時はcoreBase比を保ったまま`core.scale.set(cb*f)`でふくらむ。
 - 直前の発光調整(Master「少しだけ発光」): glowBase 使用可0.44/準備中0.14、脈動0.26。
 - 検証: SYNTAX_OK(L447-2293)、画面で結晶＋輪が周回表示確認・フックなし。
+
+### 武器の星：丸いグロー球を廃止し結晶本体を発光(2026-06-08)
+- Master「結晶まわりの〇はけして結晶を光らせる」→makeWeaponNodeからグロー球(SphereGeometry)削除・userData.glow廃止。
+- 発光は結晶core(MeshBasic)の color 明るさを明滅させブルームで滲ませる方式に変更。weaponObjsに`baseCol:new THREE.Color(col)`保持。animate: `pulse`で `lvl=usable?1.0+0.55*pulse:0.5`(+flash*0.9)、`core.material.color.setRGB(min(1,bc.r*lvl)...)`、明るいとき`f=1+(lvl-1)*0.18`で僅かに膨張、edges opacityもpulse。輪(ring)は維持。
+- 検証: SYNTAX_OK・画面で結晶＋細い輪が発光、丸いグロー球が消えたのを確認。
+
+### 武器の星：光輪も廃止＝結晶のみ／表示は左モニターへ(2026-06-08)
+- Master「結晶のリングも外そう」→makeWeaponNodeからring(Torus)削除・userData.ring/weaponObjs.ring廃止・animateのring回転削除。武器ノードは結晶core＋発光edgesのみ(丸グロー球も光輪も無し)。検証SYNTAX_OK・画面でダイヤ結晶のみ発光を確認。
+- ★運用変更: Master「基本左のモニターで見る」→**以後サンプル表示・スクショは左モニター(DISPLAY2 Primary 0,0 / 1920x1080)**。起動 `--window-position=0,0 --window-size=1920,1040`、`CopyFromScreen(0,0,...,1920x1040)`。(右モニターDISPLAY1=1920,71/1366x768は使わない)
