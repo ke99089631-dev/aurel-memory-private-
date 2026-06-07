@@ -139,7 +139,21 @@ updated: 2026-06-06
 - 維持: 文字ラベルのネオン(labelSprite/organLabelのshadowBlur)、中央AUREL本体(collective: swarm/halo/rings)、per-nodeの小swarm+ring(集合体デザイン)。
 - 状態連動を発光から非発光へ移行: `refreshBoard`は**coreドットの色**で表現(pending=0xff8c42/active=部署色/idle=部署色×0.45で暗め)。描画ループは**scaleの鼓動**(pending=±0.08 sin / flash=+0.22減衰)。決裁・指令の連動(resolveDec/flashDiv/flashAllDivs)は維持。
 - ⚠まだ残る発光源: UnrealBloom(中央コア用・threshold0.88)、per-node小swarm、軌道リング/アーク。さらに静かにしたい指示が来たらここを削る。
+
+### 文字ネオン廃止＋連動可視化=ノード発光に転換（2026-06-08 Master指示）★現行★
+- Master「**文字のネオン発光もなくした、連動の可視化でノードの発光にしよう**」。=役割を入替え：文字=静か／状態=光。
+- 文字: `.nlabel .en/.jp/.small .en` の `text-shadow` から色付きネオン(`0 0 Npx var(--lc)`)を除去 → 暗いフチ(`0 1px 2px rgba(0,0,0,.9),0 0 2px rgba(0,0,0,.7)`)のみ。可読性確保。※labelSprite/organLabel(canvas, shadowBlur)はデッドコード(未使用)。
+- ノード発光復活＝連動指標: `makeNode`の`glow.visible=false`を撤去。`refreshBoard`はglow色+glowBaseを状態で設定(pending=0xff8c42/0.32, active=部署色/0.20, idle=部署色/0.05)。核は部署色のまま。描画ループで pending=`+0.24*(0.5+0.5sin(t*3))`脈動、flash=`+0.6`減衰+coreスケール1.2倍。
+- 検証済: 文字フラット化OK、収益事業部がオレンジに強発光・脈動(conduit/LocalBoost承認待ち)、資産帝国=シアン点灯、未来研=消灯気味。SYNTAX_OK。
 - ⚠スクショ: Edgeが前回ウィンドウ位置を復元して`--window-position`を無視する→**新規プロファイル`_edgeprofile_r`** + `--window-position=1960,60 --window-size=1280,950`で右モニタに確実表示。司令室の右端は screen x≈1900 まで被さるので、それより右に出すこと。
+
+### 状態語彙の拡張＋伝播ビーム実装（2026-06-08 Master「1と2を実装」）★現行★
+- Master「**1と2を実装　試しにみせて**」=（1）発光の状態語彙を増やす（2）指令・決裁が中央コア→部門へ「光の粒」で走る伝播ビーム。
+- **(1) 状態語彙5種**: `divAttention(d)`が返す → `risk`(d.risk or member.risk＝最優先) / `pending`(承認待ち) / `live`(稼働) / `working`(開発・検証) / `idle`(休眠)。`refreshBoard`でglow色+glowBase設定: risk=0xff3b3b/0.30, pending=0xff8c42/0.32, live=0x39d98a/0.26, working=部署色/0.18, idle=部署色/0.05。描画ループの脈動: risk=`+0.40*pow(0.5+0.5sin(t*7),2)`速い赤点滅、pending=`+0.24*(0.5+0.5sin(t*3))`、live=`+0.10*(0.5+0.5sin(t*1.5))`呼吸。
+- **(2) 伝播ビーム**: `beams[]`配列+`_origin=(0,0,0)`(中央コア)。`fireBeam(o,color)`=DISCスプライト(additive)を生成しコア位置から発射、`fireBeamsAll(color)`=全部門へ。`updateBeams(dt)`(描画ループ末で呼ぶ)がease-outでコア→部門ノードへ`lerpVectors`移動、opacity/scaleは`sin(k*π)`の山なり、到達(k>=1)で`flashDiv(target,1)+refreshBoard()`し消滅。dur=0.8s。
+- 結線: `resolveDec`=決裁時 `refreshBoard(); fireBeam(o, 承認?0x39d98a:却下0xff8c42)`。`cmdform`=指令時 `fireBeamsAll(0x8fc4ff)`全部門へ。
+- デモ用: `資産帝国事業部`に`risk:true`を付与(コメント「デモ表示用（本来はリスク監視が立てる）」)→赤点滅が常時見えるようにした。**本番ではリスク監視ロジックが立てる/外す**こと。
+- 検証済(2026-06-08): 資産帝国=赤グロー点滅で表示確認(リスク管理/異常検知ラベル)、SYNTAX_OK。ビームは決裁/指令イベントで発火(静止画では見えない＝Masterが承認クリックで確認)。
 
 ## 猫＝3D実装に切替（2026-06-07）※却下済み（下記2026-06-08で線画猫に回帰）
 - Master判断: 「**手描きSVGはどれも気持ち悪い**。リアルにどこまで出来る？ベースが嫌」→ 手描きSVGを**全廃**。Sketchfab埋め込みの**3Dモデル方式**に変更。
