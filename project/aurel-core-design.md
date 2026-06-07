@@ -231,3 +231,9 @@ updated: 2026-06-06
   - #4 全体リスク信号: top barに`#risk`(rdot＋#riskTxt)。`refreshRisk()`=divObjsのattentionからrisk→赤点滅「リスク高:名」/pending→橙「承認待ち:名」/無→「リスク:安定」。refreshBoard()末尾で必ず呼び同期。CSS .amber/.red＋@keyframes riskblink。
   - #2 資金パネル: #left最上段に`#moneyPanel`。`資金 <ttl-sub>サンプル</>`＋`練習モード(DRY_RUN)`バッジ＋残高/今週損益(緑)/持ちこたえ(runway)/危険にさらし中(exposure,橙)。値はモック(本実装で実数へ)。CSS .money-mode/.money-row。
   - 検証: SYNTAX_OK(script L474-2329)、左モニターで赤リスクバッジ＋資金パネル表示確認・結晶リング無し発光OK。
+
+## 決裁トレイに数字を追加（#3 完了）
+承認待ちカードに council{gain,loss,reversible,rec,conf,note} を持たせ、決裁トレイで
+想定利益 / 最悪損失 / 取り返し / AUREL推奨+自信度バー / ひとことメモ を表示。
+conduit=推奨「承認」自信78%（緑バー）、LocalBoost=「保留」自信55%。すべてサンプル値。
+buildDecisions が council を運ぶ→renderDecisions の pending 分岐で .dec-nums/.dec-rec/.conf-bar/.dec-note を描画。CSS追加済み。node --check 緑、左モニターで確認済み。
