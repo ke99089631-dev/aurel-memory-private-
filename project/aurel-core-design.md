@@ -101,7 +101,18 @@ updated: 2026-06-06
 - CSS: `#catstage`166px / `#catwrap`168×166 drop-shadow暖色(255,228,180,.32)。動き=catBreathe(呼吸)/catTailWag(±10〜12°)/earTw(耳ピク)/catNod(小首)/まばたき(JS .eye scaleY)/`walking`時 catHop(ぴょこ跳ね translateY-7 + rotate)。faceR/legFN等/stepA/stepBは**廃止**。
 - patrolWalk: 左24px→右24px→中央、12〜19s毎。faceR反転ロジックは廃止。
 
-## 猫＝3D実装に切替（2026-06-07 確定）★現行
+## 猫＝司令室の線画猫に回帰（2026-06-08 確定）★★現行★★
+- Master判断: 「**ごめん気持ちワイルｗ いま使っているこの猫くらいでいい**」→ 3D(Sketchfab)も**気持ち悪い**と却下。司令室(Master Console)で稼働中の**クリーンな紫の線画猫(^_^)**に回帰。
+- 採用元: `snapshots/aurel_life-20260525-174728-GOOD-constellation.html` の `#auCatFace` SVG（耳/顔/白マズル/eyes-open(黒目+ハイライト)/eyes-closed(にっこり弧)/鼻/口/ひげ6本、viewBox 0 0 100 100）。
+- 本番 v4 実装:
+  - `<head>`のSketchfabスクリプトを**削除**。`#catwrap`内の`<iframe>`を`<div class="face" id="catFace"><svg…></div>`に置換。クレジット表記不要（自前SVG）。
+  - CSS: `#catFace svg{width:150px;height:150px}`、`drop-shadow(0 0 16px rgba(180,150,230,.4))`。まばたきは`@keyframes catBlink`(7s毎)。`#catFace.sleepy .eyes-open{display:none}` / `:not(.sleepy) .eyes-closed{display:none}`。`#catwrap`はflex中央寄せ(180x180)。
+  - JS: `catSetMood(mood)`で表情切替 — normal(にっこり) / happy(撫で=閉じ目+大きな笑み, 2.6s後normal復帰) / alert(承認待ち=目を見開く) / think(細目) / sleepy(夜=閉じ目)。司令室の`applyMood`を移植。
+  - 役割/報告(catReport)/ゲージ(updateGauges)/撫でクリック/名前バッジは流用。catReportがalert/normalでcatSetMoodを駆動。
+  - patrolWalk(物理移動/3D歩行)は**完全廃止**。SYNTAX_OK・右モニタで表示確認済。
+- 教訓: 凝った猫(手描り精緻SVG/3D)は全部「気持ち悪い」。**シンプルな線画(司令室猫)が正解**。これ以上凝らない。
+
+## 猫＝3D実装に切替（2026-06-07）※却下済み（下記2026-06-08で線画猫に回帰）
 - Master判断: 「**手描きSVGはどれも気持ち悪い**。リアルにどこまで出来る？ベースが嫌」→ 手描きSVGを**全廃**。Sketchfab埋め込みの**3Dモデル方式**に変更。
 - Master指示の最終形: 「**この方式で四足歩行のかわいい猫**。動きは猫本来＝**顔を洗う/耳を掻く等のリアルな生態**」。
 - 採用モデル: **IndieCats「Low Poly Cat」**（Sketchfab uid `f43a414c031e44a28453d74a190397d1`）。CC-BY → `#catwrap`内に `cat: IndieCats / Sketchfab` を小さく明記。50アニメ入り。
@@ -120,3 +131,4 @@ updated: 2026-06-06
 - 機械的ステーション(箱hull/トラス/平面ディスク+スポーク) / 中央の光柱 / 中央→ノードの玉 / アーチ状の弧 / 電光(稲妻) / 中心から出る放射線 / 背景の薄いドット。
 - 猫: **手描きSVG全般**（サイバー/白マスコット/二足アイルー風SVG/横向き四足SVG/青い縦長グロス目）。SVGで猫を描くのは何度やっても不気味→二度とやらない。3Dモデル方式で行く。
 - poly.pizzaのCC0猫（Minecraft風ブロック四足 / リアル四足 / 黒豹 / 顔だけ）＝アイルー感ゼロで不採用。
+- **3D(Sketchfab IndieCats Low Poly Cat)も却下**（2026-06-08「気持ちワイル」）。重い/ロゴ/険しい目。→ 司令室の線画猫に回帰（上記★現行）。凝った猫は全部NG。
