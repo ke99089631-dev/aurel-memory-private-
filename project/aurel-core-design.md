@@ -237,3 +237,25 @@ updated: 2026-06-06
 想定利益 / 最悪損失 / 取り返し / AUREL推奨+自信度バー / ひとことメモ を表示。
 conduit=推奨「承認」自信78%（緑バー）、LocalBoost=「保留」自信55%。すべてサンプル値。
 buildDecisions が council を運ぶ→renderDecisions の pending 分岐で .dec-nums/.dec-rec/.conf-bar/.dec-note を描画。CSS追加済み。node --check 緑、左モニターで確認済み。
+
+## #7 決裁履歴・答え合わせ＋武器コスト追跡（完了）
+左カラムに「決裁の履歴（答え合わせ・サンプル）」パネルを追加。
+- 承認/却下するとHISTORYに記録（案件名・会長の判断・AUREL推奨・自信%・時刻）。
+- 各履歴に「うまくいった/ダメだった」ボタン→結果を記録（やり直す可）。
+- サマリー：答え合わせ済み件数（成功/失敗）＋AURELの的中率。
+- 的中ロジック recHit: correctDo=(承認&good)||(却下&bad)、aurelDo=(rec==='承認')、一致で的中。
+  文言「AURELの読みが当たり/外れ」。サンプル3件=2当たり1外れ=67%。
+- 武器コスト: WPN_UNIT_COST(カテゴリ別,円)＋WPN_USE(localStorage保存)。武器使用時 logWpnUse で回数・コスト加算。
+  武器庫オーバーレイ上部 #wpnUse に「今月の使用 合計N回/外部コスト¥M」、各カードに「使用N回・¥」。自前の職人(internal/sense/automation)は¥0。
+
+## #8 ラベル可読性＋検索/危険へ飛ぶ（完了）
+- updateDomLabels を重なり回避に刷新：サテライト優先→近い順に貪欲配置、重なる後続は隠す。画面端clampで切れ防止（「SYSTEM CON」切れ解消）。
+- トップバーに検索ボックス #findIn 追加：名前入力Enterでノードへカメラが寄る（flyToNode）。
+- リスクbadgeをクリック可能に：一番危ない部門へカメラが飛び詳細表示（jumpToRisk）。
+- flyToNode/updateFly: controls.target と camera.position を滑らかにlerp、到着でautoRotate復帰。
+全てサンプル。node --check 緑、左モニターで確認済み。
+
+## 修正: カメラズーム廃止（会長フィードバック）
+会長「危険みズームはやめよう。重くなる。コンソールのズーム機能も重くてほぼ機能してない」。
+→ flyToNode/updateFly/flyT を削除（animateのupdateFly呼び出しも除去）。
+リスクbadgeクリックと検索は「カメラを動かさず該当ノードの詳細パネルを出すだけ」に変更（jumpToRisk/findAndShow）。軽量化。ツールチップ文言も「詳細を出す」に修正。
