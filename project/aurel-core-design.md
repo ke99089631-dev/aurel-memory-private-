@@ -259,3 +259,11 @@ buildDecisions が council を運ぶ→renderDecisions の pending 分岐で .de
 会長「危険みズームはやめよう。重くなる。コンソールのズーム機能も重くてほぼ機能してない」。
 → flyToNode/updateFly/flyT を削除（animateのupdateFly呼び出しも除去）。
 リスクbadgeクリックと検索は「カメラを動かさず該当ノードの詳細パネルを出すだけ」に変更（jumpToRisk/findAndShow）。軽量化。ツールチップ文言も「詳細を出す」に修正。
+
+## 本接続 第1弾 完了（2026-06-09）
+読み取り専用の橋渡し役 `company-bridge.mjs`（port 7891, CORS有効, 書き込み/お金/決裁は一切しない・秘密情報は読まない）経由で、会社ビジュアルに本物データを3種接続:
+- 武器庫: arsenal/<slug>/manifest.json の本物27個（安全項目のみ）→ 武器スター再構築
+- 世界の動き: state/news.json の翻訳済み43件（カテゴリ 金融/AI/IT/世界 がそのまま一致）
+- プロジェクト一覧: state/registry.json の実在4事業（AUREL 2.0/ImperialFlow/CYPHER/CONDUIT）→ LIVE欄に表示
+HTML側は fetch失敗時サンプルに自動フォールバック。top barのバッジ「本接続 武器27・ニュース43・事業4」緑で確認済み。
+資金残高・取引・決裁の実行は引き続きサンプル/DRY_RUN（会長承認待ち）。橋は現状 手動起動（自動起動は後で）。
