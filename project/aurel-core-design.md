@@ -348,3 +348,22 @@ illustrative（足場）：決裁履歴・タスク一覧・3D部門構成・リ
 - リスク信号(#risk): 実事業タグの高リスク数から全体リスク算出、window.realRisk 経由で refreshRisk() がベースライン表示。
 - 安全: 取引・送金・本番実行は全てDRY_RUN/ロック維持。会長の最終GOまで実弾は動かさない。
 - 検証 SYNTAX_OK / bridge再起動でfunds配信確認 / _edgeprofileのみ再起動。
+
+## 全面実働化・サンプル全廃（指令室を唯一の操作面に）2026-06-09
+会長「サンプルはもういらない。すべて実働。彼からはすべてこの指令室で行う」。
+- 新規の本物台帳: state/decisions.json {pending:[],resolved:[]}、state/reports.json {items:[]}。
+- 橋(company-bridge.mjs)に getDecisions()/getReports() 追加、/api/company に decisions・reports を含める（読むだけ）。
+- HTML: 決裁トレイ=decisions.pending、決裁履歴=decisions.resolved、部門レポート=reports.items（空なら実事業状況で代替）、会長タスク=registry実事業、資金=funds.json。すべて30秒ポーリング。サンプル配列(TASKS/INBOX/LIVE/HISTORY/buildDecisions)とニセ自走進捗は全廃。
+- 【AUREL頭脳の運用プロトコル（重要・必ず守る）】
+  * 会長の承認が必要な案件が出たら state/decisions.json の pending に追加：{id,name,question,desc,council:{gain,loss,reversible,rec,conf,note},createdAt}。指令室トレイに🟠で出る。
+  * 会長が指令室で承認/却下すると【会長決裁・承認/却下】（決裁ID付き）がチャットに届く。受けたら該当を pending→resolved へ移し {decision:approved/rejected,reason,resolvedAt,outcome:null} を記録。実行はDRY_RUN厳守、お金が動く一歩は会長の最終GO必須。
+  * 【答え合わせ】が来たら resolved.outcome を good/bad に更新。
+  * 各事業の状況を上げたい時は state/reports.json items に {from,msg,unread,at} を追加。
+  * 取引・送金・本番実行は会長の最終GOまで全ロック。実弾は funds.json（今¥0）。
+- 現状: pending/resolved/reports は空（捏造しない）。本物の決裁が要るときにAURELが登録する。
+
+## 3D可視化も本物に同期 (2026-06-09)
+- 起動時にmoduleのtop-level awaitで橋(7891)から実事業を取得→DIVSを本物で構築。タグで3部門に振り分け：trading/fx/crypto/cme/mev/defi/liquidation=資産帝国、revenue/service/consulting/ai-director=収益、その他(meta/infra等)=未来研究所。
+- 現状の割当: imperialflow・cypher→資産帝国、conduit→収益、aurel-2-0→未来研究所。3Dの星の名前・状態・説明クリックが本物の事業に。activeは緑点灯。
+- 橋に繋がらない時だけ「(接続待ち)」骨組みにフォールバック。MOCK DATA表記は廃止。
+- 承認待ちは3Dではなくdecisions.json由来、リスクはwindow.realRisk由来で統一。
