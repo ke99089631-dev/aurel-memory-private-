@@ -367,3 +367,10 @@ illustrative（足場）：決裁履歴・タスク一覧・3D部門構成・リ
 - 現状の割当: imperialflow・cypher→資産帝国、conduit→収益、aurel-2-0→未来研究所。3Dの星の名前・状態・説明クリックが本物の事業に。activeは緑点灯。
 - 橋に繋がらない時だけ「(接続待ち)」骨組みにフォールバック。MOCK DATA表記は廃止。
 - 承認待ちは3Dではなくdecisions.json由来、リスクはwindow.realRisk由来で統一。
+
+## 部屋を司令室に取り込む（3つ目: 自走＋要所で会長）2026-06-09
+会長の選択: 運用は「普段はAUREL自走、要所で会長が口出し」。各プロジェクトの部屋を司令室のチャットに統合。
+- 頭脳の部屋一覧 /api/projects（home＋実部屋: p_850f5e35 ImperiaFlow CYPHER / p_localboost LocalBoost / p_962e3092 Cassiopeia / p_a986d306 金融装置 / p_682ef895 資産帝国部門）。
+- チャットを CUR_PROJ 変数化。messages/send/stream/attach は CUR_PROJ を使う。部屋切替バー #roomBar を chat ヘッダ下に追加（ensureBrainでloadRooms）。クリックで switchRoom→履歴再読込＋ストリーム再接続。
+- discoverBrain のメッセージ数カウントは home 固定（ライブ判定）。決裁送信と指令フォーム(cmdform)・答え合わせは home（統括）固定。
+- これで会長は1画面で本体とも各部屋とも会話でき、自走と手綱の両立が可能。
