@@ -267,3 +267,16 @@ buildDecisions が council を運ぶ→renderDecisions の pending 分岐で .de
 - プロジェクト一覧: state/registry.json の実在4事業（AUREL 2.0/ImperialFlow/CYPHER/CONDUIT）→ LIVE欄に表示
 HTML側は fetch失敗時サンプルに自動フォールバック。top barのバッジ「本接続 武器27・ニュース43・事業4」緑で確認済み。
 資金残高・取引・決裁の実行は引き続きサンプル/DRY_RUN（会長承認待ち）。橋は現状 手動起動（自動起動は後で）。
+
+## 橋渡し役 自動起動 完了（2026-06-09）
+company-bridge.mjs を会長のログオン時に自動起動するよう仕上げ。
+- 起動ファイル: C:\Users\user\AssetEmpire\start-bridge.vbs（WScript.Shell.Run, window=0 で黒い画面を出さず裏で node を起動。コメントはASCIIのみ＝日本語だと文字化けで失敗するため）
+- 登録方式: スタートアップフォルダのショートカット「AUREL Bridge.lnk」(%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup)。
+  ※ 最初タスクスケジューラで試したが wscript がそのセッションで止まり node を起動できなかったため、より確実なスタートアップ方式に変更。
+- 二重起動対策: bridge に server 'error' EADDRINUSE ハンドラ追加（既に動いていたら静かに exit）。
+動作確認済み: ショートカット起動→ http://127.0.0.1:7891/api/company が weapons/news/projects を返す。node は1プロセスのみ・画面非表示。
+
+## 本接続 第2弾（2026-06-09）クリック深掘り
+- ニュース: 各見出しクリックで元記事を別タブで開く（bridgeのlinkを使用, window.open）。
+- プロジェクト: LIVE欄の実在事業クリックで showDetail に本物の説明＋タグを表示。status を日本語化(active→稼働等)。
+読むだけ・お金/決裁には未接続のまま。構文確認OK・左モニターで表示確認済み。
