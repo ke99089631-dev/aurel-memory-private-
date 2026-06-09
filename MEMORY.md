@@ -124,4 +124,5 @@ Invocation: `C:\Users\user\.aurel\bin\aurel.bat <cmd>` (or `aurel` if PATH).
 
 _Last bootstrap: 2026-05-19 — AUREL 2.0 Sprint 3 complete (Arsenal foundation)_
 
-- [[human/購買と信頼の心理]] — 人間理解(購買/信頼の心理)。調査部が継続内在化。文章・診断・営業の判断軸。
+- [[human/_学習カリキュラム]] — 調査部の学習設計図(全9領域)。必要な章を局面ごとに内在化。
+- [[human/購買と信頼の心理]] — 人間理解(購買/信頼の心理)=第1章完了。文章・診断・営業の判断軸。
