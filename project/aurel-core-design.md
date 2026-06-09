@@ -374,3 +374,14 @@ illustrative（足場）：決裁履歴・タスク一覧・3D部門構成・リ
 - チャットを CUR_PROJ 変数化。messages/send/stream/attach は CUR_PROJ を使う。部屋切替バー #roomBar を chat ヘッダ下に追加（ensureBrainでloadRooms）。クリックで switchRoom→履歴再読込＋ストリーム再接続。
 - discoverBrain のメッセージ数カウントは home 固定（ライブ判定）。決裁送信と指令フォーム(cmdform)・答え合わせは home（統括）固定。
 - これで会長は1画面で本体とも各部屋とも会話でき、自走と手綱の両立が可能。
+
+## 2026-06-09 — P1 完了：状態の背骨 (State Spine) 一本化
+- 強化ロードマップ全6段の **1段目**。会長「始めよう」承認で着手。
+- 散らばっていた台帳(registry/current/funds/decisions/reports)を **唯一の窓口** に統合：
+  - `C:\Users\user\.aurel\state\spine.mjs` — getState()/appendEvent()/readEvents()/addDecision/resolveDecision/setOutcome/setFunds/addReport + CLI。
+  - `C:\Users\user\.aurel\state\events.jsonl` — **追記専用の記録帳**（消えない記憶）。決裁・資金・報告の動きを1行ずつ記録。
+- 橋(company-bridge 7891)を spine 経由に切替：/api/company が `source:'spine'` + `events[]` を返す。spine 失敗時は従来ローカル読みにフォールバック。
+- 司令室HTML：決裁・答え合わせの指示文を **背骨CLI経由** に変更（手でJSON編集→`spine.mjs resolve/outcome`）。脳もこの単一窓口を通る。
+- 安全：spine はお金を動かさない。mode 勝手に LIVE 化しない。DRY_RUN厳守。aurel.mjs 本体は不変。
+- 検証：spine state/log OK、bridge `source=spine`/projects4/funds DRY_RUN¥0/resolved1/events1、HTML+spine 構文OK。conduit承認の過去事実を events.jsonl へバックフィル済。
+- 次：P2（Codex=開発部長 接続＋検証ゲート）。
