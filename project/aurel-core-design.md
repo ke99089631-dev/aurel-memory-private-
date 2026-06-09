@@ -385,3 +385,15 @@ illustrative（足場）：決裁履歴・タスク一覧・3D部門構成・リ
 - 安全：spine はお金を動かさない。mode 勝手に LIVE 化しない。DRY_RUN厳守。aurel.mjs 本体は不変。
 - 検証：spine state/log OK、bridge `source=spine`/projects4/funds DRY_RUN¥0/resolved1/events1、HTML+spine 構文OK。conduit承認の過去事実を events.jsonl へバックフィル済。
 - 次：P2（Codex=開発部長 接続＋検証ゲート）。
+
+## 2026-06-09 — P2 完了：Codex=開発部長 接続＋検証ゲート
+- ロードマップ2段目。会長「進める」承認で着手。
+- `C:\Users\user\.aurel\dev\dev.mjs` 新設＝開発部パイプライン。流れ：AURELが仕様→Codex実装→検証ゲート→AURELレビュー→(会長承認)→採用。
+- 呼び出し：`node dev.mjs run "<仕様>" [--repo <path>] [--model] [--plan]`。`--plan` はCodex呼ばず安全ラップ指示文のみ表示(コスト0)。
+- Codex実体：`C:\Users\user\AppData\Roaming\npm\codex.cmd`（PATH未通だが自動解決）。ChatGPTログイン生存・v0.136.0・model gpt-5.5。
+- 仕様は **stdin経由**で渡す（多行/空白の事故回避）。最終報告は `-o` でファイル取得。
+- **重要な発見**：Codex のOSサンドボックスは **Windows非対応**→`-s workspace-write` 指定でも常に read-only に落ちる。書込には `--dangerously-bypass-approvals-and-sandbox` が必須。
+- 安全はAUREL側の **外部統制** で担保：①`-C`で専用リポに限定 ②git ブランチ隔離(`aurel/dev-*`) ③検証ゲート(node --check＋npm test) ④**自動マージ無し**(採用は会長承認後) ⑤プロンプトで「金・取引・本番デプロイ・secrets/.env/秘密鍵 禁止」を厳命。
+- 検証ゲート内容：変更js/mjsを `node --check`／package.jsonにtestがあり実行可能なら `npm test`(120s上限)。全て記録(events.jsonl)＋部門レポート(spine.addReport from:'開発部長(Codex)')。
+- **実弾で証明済**：sandbox(`.aurel/dev/_devsandbox`, git)で math.mjs+test 実装タスク→Codex 147s→3ファイル変更→ゲートPASS(構文OK＋テスト2/2 pass)→PASS判定・自動マージ無し→背骨に記録→橋が司令室へレポート。
+- 次：P3（conduit 初収益・DRY_RUNのまま準備完了、実行は会長最終GO）。
