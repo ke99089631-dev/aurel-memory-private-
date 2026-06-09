@@ -475,3 +475,19 @@ illustrative（足場）：決裁履歴・タスク一覧・3D部門構成・リ
 - さらにHermèsは現在APIキーが消失(両方の.envに無し、~/.hermes/.env無し/config.yamlのみ)。今は調査タスクを投げても失敗する。
 - → 第2段(本物のWeb調査をFuture Labに接続)には、会長によるGeminiキー復元(secret)が必要。鍵復元後にAURELが配線する。
 - 当面、深掘り調査が要る時はAUREL頭脳(WebSearch)が即対応可能。
+
+
+## Future Lab 第2段 完成 — 本物の調査 + 内在化 (2026-06-09)
+### 調査エンジン(無料・確実)
+- Hermèsは「武器としては実在だが未セットアップ(対話OAuth要)」で今は使えない。依存しない判断。
+- 代わりに【Gemini無料】を直結。鍵は User環境変数 GEMINI_API_KEY(長さ53)。nodeは継承しないので PowerShell で一回だけ取得→node fetch で直接API。invoke.ps1のstdin依存は不安定なので回避。
+- 鍵は表示・記録しない。レポートにも残さない。
+- 混雑対策: thinkingBudget:0(思考トークンで出力枠を食わない)+ モデルfallback [gemini-2.5-flash→gemini-flash-latest→gemini-2.0-flash] 各2回リトライ。503/429時はRSSのみで graceful continue。
+### 内在化(取り込み) — 会長の核心指示の実装
+- buildReport({research:true}) で「世界の深掘り」をGeminiに実行→ memory/world/YYYY-MM.md に月別追記(internalize)。
+- 「報告(司令室) + 内在化(memory)」を必ずセット。AURELが人間界を蓄積し相棒として理解する器官。
+- 毎日12:10の future_lab は research:true で自動実行(無料・¥0、spine.recordSpendで記録)。
+### 実証
+- end-to-end成功。memory/world/2026-06.md に初取り込み。
+- Geminiが独自に「業種特化型AIエージェントのパッケージ化(美容室/飲食/士業)」を商機提示=会長の戦略と一致。新規プロジェクトの材料化が機能。
+### CLI: node futurelab.mjs deep (調査+取り込みつき) / run(RSSのみ) / peek / scan
