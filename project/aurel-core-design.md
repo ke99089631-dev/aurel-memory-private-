@@ -491,3 +491,23 @@ illustrative（足場）：決裁履歴・タスク一覧・3D部門構成・リ
 - end-to-end成功。memory/world/2026-06.md に初取り込み。
 - Geminiが独自に「業種特化型AIエージェントのパッケージ化(美容室/飲食/士業)」を商機提示=会長の戦略と一致。新規プロジェクトの材料化が機能。
 ### CLI: node futurelab.mjs deep (調査+取り込みつき) / run(RSSのみ) / peek / scan
+
+
+## 2026-06-09 Hermès 稼働化 完了 (調査部)
+
+**経緯:** 会長が「Hermèsが使えない問題を、私の操作が必要なら操作して直そう」と。診断の結果、頭脳(Gemini)は既に動作(HERMES_OK)。欠けていたのは「ネット検索=組み込みツール」。
+
+**会長が実施した操作:**
+- `hermes auth add nous --type oauth` → Nous Portal にブラウザでサインイン
+- プランは「無料(月0ドル)」を選択（破産回避優先・組み込みツールの本格利用は有料だが、$0.10クレジットで検証可）
+- デバイス承認 → `Nous Portal ✓ logged in` / `managed tools available`
+
+**現状:**
+- ログイン ✓ / 組み込みツール(検索など) ✓ / 頭脳=Gemini無料 ✓
+- ネット検索の最終確認は、その日のうちにGemini無料の「1日枠(~250回)」をFuture Lab＋テストで使い切り未確定。翌日リセットで動くはず。
+
+**設計上の注意 (重要):**
+- Future Lab と Hermès は同じ Gemini 無料キーを共有 → 調査が多い日は1日枠を奪い合う。
+- 低頻度なら問題なし。ヘビー化するなら「専用キー追加」か「有料化」を検討（料金移動は会長GO）。
+
+**使い方:** `& "C:\Users\user\AppData\Local\hermes\hermes-agent\venv\Scripts\hermes.exe" -z "<指示>"` で非対話ワンショット。
