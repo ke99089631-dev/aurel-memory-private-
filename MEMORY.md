@@ -123,3 +123,5 @@ Invocation: `C:\Users\user\.aurel\bin\aurel.bat <cmd>` (or `aurel` if PATH).
 ---
 
 _Last bootstrap: 2026-05-19 — AUREL 2.0 Sprint 3 complete (Arsenal foundation)_
+
+- [[human/購買と信頼の心理]] — 人間理解(購買/信頼の心理)。調査部が継続内在化。文章・診断・営業の判断軸。
