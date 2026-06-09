@@ -404,3 +404,26 @@ illustrative（足場）：決裁履歴・タスク一覧・3D部門構成・リ
 - dev.mjs の buildPrompt を改修：毎回このブリーフィングを冒頭に注入（無ければ最小フォールバック）。記憶全部は渡さない＝コストと雑音を回避、要点1枚のみ。
 - repo固有文脈は **AGENTS.md**（Codex標準・cwdから自動読込）。サンドボックスに設置済。本番リポ接続時に各々用意。
 - `--plan`（Codex呼ばずコスト0で指示文確認）の副作用を修正＝ブランチを作らないよう plan判定をブランチ作成前へ移動。注入確認済。
+
+## 2026-06-09 — P4 完了：コスト統制＋リスク予算＋キルスイッチ（お金が動く前の砦）
+- ロードマップ4段目（P3=conduit初収益は会長の集客方針待ちで保留＝飛ばした）。
+- `C:\Users\user\.aurel\state\limits.json` 新設＝安全台帳：killSwitch / mode(DRY_RUN) / execution(allowMoneyMovement・allowLiveTrading・allowProductionDeploy 全false) / daily(costCapJPY=2000・spentJPY) / risk(perTrade・dailyLoss・totalExposure 全0)。
+- spine に安全ロジック追加：
+  - `canExecute(money|trade|deploy|general)` ＝**実行可否の唯一の判定口**。kill ON or DRY_RUN or 許可false → 拒否。お金が動く一歩は必ずここを通す設計。
+  - `recordSpend(JPY, why)` ＝自律コスト日次計上・上限超過フラグ（JST日付で自動リセット）。
+  - `setKill(on, reason)` / `setLimit(patch)` ＝停止は安全側で自律可、緩和は会長判断。全て events.jsonl 記録。
+  - CLI: `spine.mjs limits|can <act>|kill [on|off] <理由>|spend <JPY> <why>`。
+- 橋：/api/company に `limits` 追加。**唯一の書込口** `POST /api/safety {on,reason}` ＝緊急停止のON/OFFのみ（お金は動かさない・安全フラグだけ・記録付き）。読取専用原則の唯一例外＝停止は常に安全側だから許容。
+- 司令室：`#safetyPanel` 追加（キル状態/今日の自律コスト ¥/¥cap/お金移動・実トレード・本番デプロイの 許可orロック 表示）＋ **🛑緊急停止ボタン**（確認ダイアログ→/api/safety→即connectReal再描画）。
+- 検証：canExecute(money/trade/deploy)=DRY_RUNで全ロック・general=OK／spend計上／kill ON=全停止→OFF=復帰／橋がlimits配信／POST /api/safety 往復成功／HTML+spine構文OK。テスト計上分はlimits.jsonをspent=0に戻し正直化。
+- 意義：実弾¥0の今のうちに「お金が動く前に安全装置が必ず存在する」状態を確立。実行許可は全ロック、緩和は会長GOのみ。
+- 残：P5（小さな自律ループ）/ P6（拡大）。P3集客は会長判断待ち。
+
+
+## P5 小さな自律ループ (2026-06-09 完了)
+- proactive.mjs に morning_patrol ルール追加 (daily 12:07, 既定ON)。
+- buildPatrolReport(): 背骨(spine)を唯一の真実として読む→全事業/安全装置/本日コスト/要決裁を1枚に。読むだけ・お金は動かさない。
+- executeAction に morning_patrol case 追加。既存 postToMother フックで司令室へ投稿。aurel.mjs は無改変。
+- 巡回ごとに spine.appendEvent(patrol.morning)+addReport で消えない記録。
+- triggerNow テスト成功(事業4件/要決裁0件/DRY_RUN)。
+- 要決裁は「会長GO待ち」として可視化のみ。お金/取引/本番は実行しない(P4 canExecute 尊重)。
