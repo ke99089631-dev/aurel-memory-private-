@@ -397,3 +397,10 @@ illustrative（足場）：決裁履歴・タスク一覧・3D部門構成・リ
 - 検証ゲート内容：変更js/mjsを `node --check`／package.jsonにtestがあり実行可能なら `npm test`(120s上限)。全て記録(events.jsonl)＋部門レポート(spine.addReport from:'開発部長(Codex)')。
 - **実弾で証明済**：sandbox(`.aurel/dev/_devsandbox`, git)で math.mjs+test 実装タスク→Codex 147s→3ファイル変更→ゲートPASS(構文OK＋テスト2/2 pass)→PASS判定・自動マージ無し→背骨に記録→橋が司令室へレポート。
 - 次：P3（conduit 初収益・DRY_RUNのまま準備完了、実行は会長最終GO）。
+
+## 2026-06-09 — Codex に人格・立場・全体把握を付与（部長ブリーフィング）
+- 会長の指摘：Codexに会社内の立場と全体プロジェクトを把握させれば賢く使える。当時は毎回まっさら（その回の安全ルール＋仕様のみ）。
+- `C:\Users\user\.aurel\dev\codex-briefing.md` 新設＝Codex常設ブリーフィング1枚。中身：あなたは開発部長/上司AUREL/会長は知識ゼロ／会社の目的(¥1兆・信頼性ファースト)／組織図(AUREL・Codex・Gemini・Hermes・Council・Playwright・記憶庫)／実在4プロジェクト(imperialflow/cypher/conduit/aurel-2-0)／絶対の安全方針／仕事の進め方／コード規約。
+- dev.mjs の buildPrompt を改修：毎回このブリーフィングを冒頭に注入（無ければ最小フォールバック）。記憶全部は渡さない＝コストと雑音を回避、要点1枚のみ。
+- repo固有文脈は **AGENTS.md**（Codex標準・cwdから自動読込）。サンドボックスに設置済。本番リポ接続時に各々用意。
+- `--plan`（Codex呼ばずコスト0で指示文確認）の副作用を修正＝ブランチを作らないよう plan判定をブランチ作成前へ移動。注入確認済。
