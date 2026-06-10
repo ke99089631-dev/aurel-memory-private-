@@ -14,6 +14,11 @@ Base チェーン上の Aave V3 / Morpho の清算ボーナス（5-10%）を、
 Balancer フラッシュローン + atomic 実行で刈り取る MEV searcher。
 [[imperialflow]] の「多軸統合の美」に対し、「単一ニッチの速度」を体現する対比設計。
 
+## 【再稼働 2026-06-10】会長GO
+- 2026-06-03 08:36 のPCシャットダウンで7日停止していた→**会長指示で再起動**。
+- 停止までの稼働中は清算発火ゼロ（候補は常時検出も net −$0.01<$3で全却下＝設計どおり不採算を弾く）、損失ゼロ。
+- .env の DRY_RUN=false のままなので、再起動で**LIVE発射可能状態**に復帰（採算清算が出れば初の実tx発火）。
+
 ## Status (Phase 2a v2 **LIVE**, 2026-06-01 AM4:12)
 - ✅ **Aave event listener LIVE** — `eth_subscribe("logs")` で Aave V3 Pool の LiquidationCall を即時購読中
 - ✅ **QuickNode WSS** 経由（publicnode / 公式 base.org は不可と判明）

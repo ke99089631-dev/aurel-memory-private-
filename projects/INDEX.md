@@ -6,13 +6,14 @@
 |------|-------------|--------|-------------|-------------|
 | AUREL 2.0 (Mother/司令塔) | home | [A] | 2026-06-10 | `aurel-2.0.md` |
 | LocalBoost (会社/燃料1号機) | p_localboost | [A] | 2026-06-10 | `localboost.md` |
-| ImperialFlow / CYPHER | p_850f5e35 | [A] | 2026-05-19 | `imperialflow.md` / `cypher.md` |
+| ImperialFlow / CYPHER | p_850f5e35 | [A] | 2026-06-10 | `imperialflow.md` / `cypher.md` |
 | CONDUIT (Cassiopeia) | p_962e3092 | [A] | 2026-05-26 | `conduit.md` |
 | 資産帝国部門 | p_682ef895 | [A] | 2026-06 | (未作成) |
 | 金融装置 | p_a986d306 | [A] | 2026-06 | (未作成) |
 
 Legend: [A] active / [P] paused / [Z] archived
 注: AI診断事業はLocalBoostに統合(2026-06-10)。診断エンジン= .aurel/business/diagnose.mjs。
+注: IF/CYPHERは6/3停止→6/10会長指示で再稼働。停止前は実弾発火ゼロ・損失ゼロ。IF=AUDIT継続、CYPHER=LIVE発射可能状態。
 
 ---
 _Updated: 
