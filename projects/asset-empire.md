@@ -49,6 +49,16 @@ AI CEO「AUREL」(司令塔/home) ── 経営・資本配分・全部門統括
 - **まずペーパー（紙/最小ロット）。**
 - **卒業条件（全達成まで横展開＝複製禁止）**: ①信号→バス→リスク→約定→台帳→週次配分が**無人90日完走** ②ペーパー実績とBTの期待値乖離が許容帯内 ③デッドマン訓練合格（故意発火で全クローズ+キー失効60秒以内）④台帳突合不一致ゼロ。**収益性は卒業条件ではない**（検証対象は配管と淘汰機構）。
 
+## 3.5 ビルド進捗ログ
+- **2026-06-11 Phase0-1 統合台帳 完成・実証。** 実装ルート `C:\Users\user\AssetEmpire\empire\`（古いp_682ef895のboundCwdは会社ブリッジ等が同居して散らかっているため、部門コードは `empire\` サブフォルダに隔離）。
+  - `ledger/schema.sql` `ledger/ledger.py`：追記専用イベントログ＝唯一の真実。ハッシュ連鎖で改ざん検知、任意時点リプレイ、日次照合(reconcile)。mode=paper/live を各行に刻む。
+  - `scripts/demo_ledger.py` で実証（お金/ネットワーク不使用）：8件記録→再生でポジション復元（XAUUSD確定益+24.5, EURUSDショート）→過去価格を改ざんしたら即検知(seq4)→照合OK/MISMATCH動作。
+- **2026-06-11 Phase0-2 防衛司令 完成・実証。** `defense/risk_engine.py`：段階デッドマン(-8%新規停止/-12%半減/-15%全クローズ+キー失効)、ファクター合算（symbol→リスク種類{USD/GOLD/CRYPTO/各通貨}に変換し種類別上限）、プレトレード検査(ALLOW/HALVE/REJECT)、ハートビート監視。KILLは SafeExecutor（意図ログのみ・実鍵/実建玉に触れない）。
+  - `scripts/demo_defense.py` 実証：DD進行でNORMAL→新規停止→半減→KILL、ファクターは正常取引ALLOW・偏りREJECT・分散ALLOW、全てRISK_EVENTで台帳記録。
+- **2026-06-11 Phase0-3 信号バス 完成・実証。** `bus/signal_bus.py`：兵の意思(SignalIntent: agent/symbol/dir/size_pct/conviction/ttl/horizon/market)をトピック制(sig.{market}/hb.{agent})で流す。TTLで期限切れ自動無視、スキーマ検証、ハートビートで生存把握、台帳へ監査ミラー。SQLite実装（呼び出し側API固定で後日Redis差替可能）。
+  - `scripts/demo_bus.py` 実証：意思発行→生きてる意思だけ読める→短命TTLは2秒で消滅→無効direction弾く→台帳に監査記録。
+  - 次：Phase0-4 資本アロケータ（vol目標ベース）＝配管の最後のレンガ。その後Phase1第1分隊。
+
 ## 4. ビルド順
 
 1. 帝国憲章 v0.1 確定（本ファイル）← イマココ
