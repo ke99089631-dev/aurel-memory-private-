@@ -62,7 +62,15 @@ AI CEO「AUREL」(司令塔/home) ── 経営・資本配分・全部門統括
   - **配管4本(統合台帳・防衛司令・信号バス・資本アロケータ)全て完成・実証済み。Phase0=神経バックボーン完成。**
 - **2026-06-11 Phase1 第1分隊 着手・配管貫通実証。** `squads/fx_trend.py`：FX/Gold日足トレンドフォロー。100%決定的コード（注文経路にLLMを入れない＝憲章①。同じ価格列なら必ず同じ判断＝監査可能）。手法=トレンドフィルタ(SMA20/50で地合い)＋ドンチャン・ブレイクアウト(終値ベース entry20/exit10日)＋ボラ目標サイジング(損切り距離=ATR×2 をリスク予算で割ってロット比を逆算＝リターン目標でなくブレ幅で張る)。エッジ仮説(事前登録)=モメンタム・リスクプレミアム、反対側で負けるのは損を抱える個人＋強制ヘッジ勢。この兵は意思(SignalIntent)を返すだけ＝発注も資金移動もしない（判断と執行の分離）。
   - `scripts/demo_squad.py` 実証：合成の金日足(上昇70→反転50日)で **配管を一周**（兵の判断→信号バス→防衛プレトレード検査→台帳にSIGNAL/ORDER/FILL記録→鎖の整合で締め）。結果=D050ロング→E003手仕舞い(ロング+160.60確定)→E019反転ショート、低頻度3手、鎖整合OK、ファクター合算GOLD/USDに正しく変換、**同じ価格2回で判断列が完全一致(決定性の証明)**。
-  - **次：合成価格でなく(a)実IFロジックの分解取り込み＋(b)実価格でのバグ取り。問題なければ最小実弾は会長の最終GO待ち。配管4本＋兵が1つの輪としてつながった。**
+- **2026-06-11 Phase1 IF分解＋実価格バックテスト 完了。** (a)IFロジック分解：IF本体(`C:\Users\user\ImperialFlow\`、yfinance日足、5regime判定→戦略ルーティング、gold_long=「5日モメンタム≥+1% OR vol急騰&GLD20日>0」)の核を、決定的トレンド兵に「**5日モメンタム確認ゲート**」として取り込み(建てたい方向に動いてる時だけ入る＝だまし除け)。(b)実価格：研究室ツール`research/fetch_prices.py`(yfinance/IFのvenvで実行・読取専用)で 金GC=F/EURUSD/GBPUSD の日足2年をCSV化(`data/bars_*.csv`)。兵は`load_bars_csv`で純Pythonに読む(依存ゼロ維持)。
+  - `scripts/demo_squad_real.py` 実証(本物の金XAUUSD 504本/2024-06〜2026-06)：配管(バス→防衛→台帳)を実データで一周。**27シグナル/13決済/勝率54%(7勝6敗)/確定損益+1301.4/平均勝+274:平均負-103(非対称ペイオフ=トレンドフォローの健全な姿)/期末評価額11,667(+16.7%)/最大DD5.7%/防衛NORMAL/鎖整合OK**。overfitなし(古典タートル+IFモメンタムを実データに当てただけ)。収益性は卒業条件でなく、配管と規律の検証が目的。
+  - empire構成: ledger/ defense/ bus/ allocator/ squads/ research/ scripts/。配管4本＋兵＋研究室データ取得が1つの輪に。
+- **2026-06-11 観測所(地合い判定) 分解・接続 完了。** `observatory/regime.py`：IFの Weather Classifier(`core/weather/classifier.py`)を決定的・純Python・CSV駆動に忠実分解。マクロ系列(SPY/GLD/DXY/TLT/BTC/VIX を `research/fetch_prices.py` でCSV化)から risk_score(株最重要・BTCノイズ抑制・金/ドルはリスクオフ)・vol_score(VIX水準とrel60日平均のmax)を計算→5地合い(sunny/stormy_bull/cloudy/crisis/range)分類。IFのWA-5校正ルール＋SPY/TLT相関の危機補正＋ヒステリシス(連続3回確定)。`MacroHistory`がSPY営業日を基準に各系列を日付整列、相関は純Pythonpearson。
+  - `scripts/demo_observatory.py` 実証(マクロ2年441日)：地合い分布 sunny28.6%/cloudy26.1%/range23.1%/crisis18.6%/stormy_bull3.6%、決定的(同マクロ2回で同判定)。
+  - 兵への接続：`fx_trend.decide(..., regime_vol_score)` で**荒れた地合いほどサイズを削る**(regime_haircut=0.5/floor=0.5＝マクロ層のボラ目標。ATRは銘柄レベル、観測所は地合いレベル)。エントリは止めない＝トレンド益は守りリスクだけ抑える。
+  - `scripts/demo_squad_regime.py` 実証(金2年・OFF/ON比較)：トレンド判断は完全同一・張る量だけ地合いで調整。ON は crisis等で自動縮小(例2024-12-19 crisisショート 0.365→0.227)。この期間は削った荒れ場が負け筋ゆえ損益 +1301→+1390・DD5.7%同等。狙いは増益でなく「リスクが地合いに反応する規律」(収益性は卒業条件でない)。
+  - empire構成: ledger/ defense/ bus/ allocator/ squads/ observatory/ research/ scripts/。**循環(市場→観測所→兵→バス→防衛→台帳→評価)の中核が紙の上で回った。**
+  - **次：紙の連続運転（複数銘柄=金/EUR/GBP同時＋日次照合reconcile）→ 最小実弾は会長の最終GO待ち。**
 
 ## 4. ビルド順
 
