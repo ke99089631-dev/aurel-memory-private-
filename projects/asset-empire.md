@@ -152,3 +152,29 @@ AI CEO「AUREL」(司令塔/home) ── 経営・資本配分・全部門統括
 
 ---
 _2026-06-11 着手。実弾発火・本番GOは会長。床（破産回避）は外さない。_
+
+---
+## 2026-06-12 マルチAI研究室の起動（"全社員AI"の第一周を実証）
+会長指摘「形しか理解してない／EA軍以下／Codexを使っていない／自身の知能が低い」を受け、
+売買判断ではなく**発案・審査・投票の頭脳を実際にAIに置き換えた一周**を回した。
+
+**回ったループ（実弾ゼロ・研究室のみ）:**
+1. 発案=**Codex(gpt-5.5, read-only)** を実起動 → トレンド以外・小資金・低容量の攻めエッジを6個生成。
+2. 審査=**門番 gate_check** が機械審査 → 2却下（hedged_funding_dislocation=負の歪み /
+   depeg_redemption_scratch=罠 stablecoin_depeg_carry）。AI出力を鵜呑みにせず落とした。
+3. 投票=**評議会(Gemini 2.5 Flash 投票AI×4: quant/bear/bull/gemini-quant)** を実起動 →
+   生存4候補から本命を **3-1 で stale_amm_sweep に選定**（bearのみairdrop推し）。
+
+**台帳に永続登録（research/edges.py）:**
+- E4_stale_amm_sweep = status=BUILDING（評議会本命。次に実データでmarkout検証）
+- E5_forced_liquidation_dust / E6_airdrop_dump_absorption / E7_bridge_imbalance_arb = REGISTERED
+- 補助スクリプト: research/screen_codex_batch.py（Codexバッチ→gate審査の再現可能ログ）
+- 評議会ランナー: ~/.aurel/daemon/_council_run_edges.mjs
+
+**思想の確定（会長の"全社員AI"の正しい実装形）:**
+- AI = 発見・発案・審査・投票・適応の頭脳（数十〜数百体が別々の非効率を探す）。
+- 引き金（発注・建玉）は決定論的な機械のまま＝速くて幻覚しない執行の手。
+- → ヘッジファンド型: クオンツ頭脳が設計、冷たいアルゴが執行。**頭脳をAI化＝全社員AI。**
+
+**次段（本命E4）:** 実データでスワップ後markoutが手数料・ガス後も正に実在するかを検証。
+  E1同様、証拠が出るまで張らない（エッジ仮説ファースト）。実弾・本番GOは会長。
