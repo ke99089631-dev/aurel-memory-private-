@@ -6,8 +6,10 @@
 - **Slug**: `conduit`
 - **Path**: `C:\Users\user\conduit`
 - **Tags**: service, ai-director, consulting, revenue
-- **Status**: active
+- **Status**: MERGED → LocalBoost (2026-06-16時点で統合済み・独立事業としては休止)
 - **Created**: 2026-05-26
+
+> ⚠️ **2026-06-16 訂正 (会長一次情報)**: CONDUITはLocalBoostに**統合済み**。理由=調査でAI診断ツールを追加→ターゲットが院系(整骨院等)で重複したため、別事業ではなくLBの一部(ココナラ出品=LB集客チャネル)として運用中。本ファイルは発足時の構想記録として保存。最新の生きた状態は `localboost.md` を参照。
 
 ## Vision
 

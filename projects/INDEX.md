@@ -5,9 +5,9 @@
 | Name | Room (node) | Status | Last Update | Memory File |
 |------|-------------|--------|-------------|-------------|
 | AUREL 2.0 (Mother/司令塔) | home | [A] | 2026-06-10 | `aurel-2.0.md` |
-| LocalBoost (会社/燃料1号機) | p_localboost | [A] | 2026-06-10 | `localboost.md` |
+| LocalBoost (会社/燃料1号機・CONDUIT吸収) | p_localboost | [A] | 2026-06-16 | `localboost.md` |
 | ImperialFlow / CYPHER | p_850f5e35 | [A] | 2026-06-10 | `imperialflow.md` / `cypher.md` |
-| CONDUIT (Cassiopeia) | p_962e3092 | [A] | 2026-05-26 | `conduit.md` |
+| └ 旧 CONDUIT (AI受託) | p_962e3092 | [Z] | 2026-06-16 | LocalBoostへ統合(ココナラ=LB集客)→`conduit.md`保存 |
 | 資産帝国部門（投資部門/正式設立中） | (新設) | [A] | 2026-06-11 | `asset-empire.md` |
 | └ 旧 資産帝国部門 | p_682ef895 | [Z] | 2026-06-11 | 思想のみ継承→asset-empireへ統合・部屋は畳む |
 | └ 旧 金融装置 | p_a986d306 | [Z] | 2026-06-11 | 思想のみ継承→asset-empireへ統合・部屋は畳む |
@@ -17,8 +17,8 @@ Legend: [A] active / [P] paused / [Z] archived
 ## 会社構造（AUREL Holdings）
 会長（オーナー/最終GO）→ AI CEO「AUREL」(司令塔/home：経営・資本配分・統括)→ 3事業部門。
 - ①資産帝国部門（投資/自己勘定）＝IF＋CYPHER吸収。`asset-empire.md`
-- ②LocalBoost（MEO SaaS/整骨院＝燃料1号機）。`localboost.md`
-- ③CONDUIT（AI活用代行）。`conduit.md`
+- ②LocalBoost（MEO SaaS/整骨院＝燃料1号機・**CONDUIT吸収**: AI診断入口＋ココナラ受託＋GBP運用）。`localboost.md`
+  - ※旧CONDUIT(AI受託)は別事業ではなくLBへ統合(2026-06-16, 会長一次情報)。集客=X運用＋ココナラ同時並行。
 全社共通基盤：記憶の家 / リスク・規律（破産回避＝床）/ 将来：経理・税務・法務。
 各部門は独立P&Lを出しCEOに報告、勝った部門に資本が多く回る。
 
