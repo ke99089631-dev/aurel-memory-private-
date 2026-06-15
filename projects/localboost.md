@@ -44,8 +44,9 @@ AI診断×LocalBoost統合を正式確定。AI診断=入口、LB=その先の完
   - OAuthクライアント"LocalBoost Web"作成済(ウェブアプリ)。Client ID末尾 ...tkcp.apps.googleusercontent.com。リダイレクトURI=https://local-boost.xyz/api/google/callback。**JSON保存済(会長Downloads)**。Client Secretはチャット非経由(JSON内)。
   - テストユーザー ke99089631@gmail.com 登録済(アプリはTesting状態=登録者のみ連携可)。
 - **コード実装完了&commit(88bc088)**: app配下に lib/google.ts(OAuth+GBP REST raw fetch), lib/google-tokens.ts(保存+自動リフレッシュ), api/google/connect+callback, actions/reviews.ts(同期/AI返信案/投稿/解除), dashboard/google-card.tsx(連携ボタン+口コミ一覧UI), page.tsx(仮枠を本物に置換)。既存schema(oauth_tokens/stores/reviews)を利用。`npx next build`成功(TS通過)。scope=business.manage。レビューはv4 mybusiness API(accounts/{id}/locations/{id}/reviews)。
-- **残り(本番稼働まで)**: ~~①Vercel本番env追加~~✅完了(会長手作業6/16) → ~~②git push→Vercel自動デプロイ~~✅完了(88bc088をorigin/mainへpush 6/16, Vercel自動再ビルド開始) → ③会長が/dashboardで「Googleと連携」→同期→テスト【次これ】。
-- **テスト前の確認待ち(会長へ質問中)**: 会長がGoogleビジネスプロフィール(Googleマップ登録店舗)を管理しているか? 無いと同期しても口コミ0件で動作確認不可。無ければAURELが練習用ビジネス作成を案内する。
+- **本番稼働確認済み(6/16)**: ~~①Vercel本番env追加~~✅ → ~~②git push(88bc088)→Vercel自動デプロイ~~✅ → ~~③配線テスト~~✅完了。会長が本番/dashboardで「Googleと連携」成功(連携中:ke99089631@gmail.com表示)→「口コミ取得・同期」実行→お店未所有のため0件テロップ(=正常な想定動作)。**OAuth連携・トークン保存・同期処理が本番で完動**。
+- **GBP機能の唯一の残り = 実物テスト**: 会長は自分のお店(Googleビジネスプロフィール)を持たない=正解(会長は売る側)。口コミは"お店"に紐づくため、AI返信まで含む最終確認は**1人目の契約客(整骨院)のプロフィールを連携した時点**で行う。それまでGBPエンジンは完成・待機状態。
+- **本番ログインはパスワードレス(Magic Link方式)**: メール入力→「ログインリンクを送信」→届いたメールのリンクをクリックでログイン。パスワード欄は無い。
 - **テスト前提の未確認事項**: 会長がGoogleビジネスプロフィール(Googleマップ登録店舗)を管理しているか要確認。無いと口コミ0件で動作確認できない。
 
 ## 制約
