@@ -38,5 +38,14 @@ AI診断×LocalBoost統合を正式確定。AI診断=入口、LB=その先の完
 - リポジトリは6/5バッチ以降コミット無し(LB部長ノードの作業停滞)。今後はAUREL直轄で前進。
 - **GBP本番接続に必要な会長インプット2点**: (a)審査完了メール本文(許可されたAPI/scope確認用) (b)Google CloudでOAuth認証情報(Client ID/Secret)発行←AURELが手順を超平易に案内。入手後AURELが自動返信機能を実装。
 
+## 2026-06-16 GBP自動返信 実装完了(AUREL直轄・画面共有で会長と協働)
+- **Google Cloud設定完了**(画面共有で確認): project=My First Project(project-9dd25b45-96ed-4195-845)。審査クリア確定(My Business Account Management/Business Information/Business Profile Performance APIが有効)。レビュー用Google My Business APIは"許可制の隠しスイッチ型"で一覧に出ない=審査クリアで使用可。
+  - OAuth同意画面(branding)構成済(アプリ名LocalBoost, support=ke99089631@gmail.com, 外部)。
+  - OAuthクライアント"LocalBoost Web"作成済(ウェブアプリ)。Client ID末尾 ...tkcp.apps.googleusercontent.com。リダイレクトURI=https://local-boost.xyz/api/google/callback。**JSON保存済(会長Downloads)**。Client Secretはチャット非経由(JSON内)。
+  - テストユーザー ke99089631@gmail.com 登録済(アプリはTesting状態=登録者のみ連携可)。
+- **コード実装完了&commit(88bc088)**: app配下に lib/google.ts(OAuth+GBP REST raw fetch), lib/google-tokens.ts(保存+自動リフレッシュ), api/google/connect+callback, actions/reviews.ts(同期/AI返信案/投稿/解除), dashboard/google-card.tsx(連携ボタン+口コミ一覧UI), page.tsx(仮枠を本物に置換)。既存schema(oauth_tokens/stores/reviews)を利用。`npx next build`成功(TS通過)。scope=business.manage。レビューはv4 mybusiness API(accounts/{id}/locations/{id}/reviews)。
+- **残り(本番稼働まで)**: ①Vercel本番envに GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET 追加(会長手作業/シークレットはチャット非経由) ②git push→Vercel自動デプロイ ③会長が/dashboardで「Googleと連携」→同期→テスト。
+- **テスト前提の未確認事項**: 会長がGoogleビジネスプロフィール(Googleマップ登録店舗)を管理しているか要確認。無いと口コミ0件で動作確認できない。
+
 ## 制約
 お金が動く一歩・本番課金は会長の最終GO。秘密(sk_live/whsec/.env)はgit/出力に絶対出さない。
