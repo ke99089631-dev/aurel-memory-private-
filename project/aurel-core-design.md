@@ -469,11 +469,11 @@ illustrative（足場）：決裁履歴・タスク一覧・3D部門構成・リ
 5. 辞書拡張+精度修正: 汎用語(アップデート/発表/新機能)が誤検知してたので除去、モデル名/企業名を追加。
 - CLI: run(本番/履歴更新) / peek(履歴更新せず確認) / scan(生スコア)。
 - テスト成功: 初回=全↑+AIエージェントを次の波候補、2回目=全→横ばい+急上昇未検出を正しく判定。
-### Hermès(調査エンジン)の現状 — 重要
+### Hermès(調査エンジン)の現状 — 2026-06-17 完動確認(旧「キー消失」記述は撤回)
 - Hermès武器は実在(Nous Research, 90スキル, web検索/ブラウザ/cron/自律)。本来かなり強力。
-- だがFuture Labは未接続。researcher武器も未使用。
-- さらにHermèsは現在APIキーが消失(両方の.envに無し、~/.hermes/.env無し/config.yamlのみ)。今は調査タスクを投げても失敗する。
-- → 第2段(本物のWeb調査をFuture Labに接続)には、会長によるGeminiキー復元(secret)が必要。鍵復元後にAURELが配線する。
+- **2026-06-17 実機確認: Hermèsは完動**。`hermes status`=Nous Portalログイン済/Geminiキー有効(User env GEMINI_API_KEY len53)/model=gemini-2.5-flash/managedツール(Web検索・画像生成・ブラウザ自動化)契約内で利用可。テスト実行「はい、動作中です」即答。CLI=C:\Users\user\AppData\Local\hermes\hermes-agent\venv\Scripts\hermes.exe、wrapper=.aurel\arsenal\hermes\invoke.ps1(-z で非対話実行)。
+- **xAI/Grokは未設定**(status上の空き枠あり)。Grok接続は2経路: ①xAI APIキー(従量課金) ②xAI OAuth(SuperGrok/Premium+加入者)。`hermes model`で追加。
+- 注意: Nous Portal access/key exp=2026-06-17付近だがRefresh:yesで自動更新。Web toolsは"included by subscription, not currently selected"=使う時に選択要。
 - 当面、深掘り調査が要る時はAUREL頭脳(WebSearch)が即対応可能。
 
 
