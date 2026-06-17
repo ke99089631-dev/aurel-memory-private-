@@ -21,6 +21,9 @@ updated: 2026-06-03
 ## ⚠️ CRITICAL — Read before any UI edit
 - **[aurel-ui-rules.md](aurel-ui-rules.md)** — `C:\Users\user\aurel_life.html` を編集する**前**に必ず読む。`const sharedU` を動かす／消すと過去2回ブートが死んでいる。R1–R5 を守ること。
 
+## 📌 PINNED — プロップ戦略ロードマップ（司令室・常設パネル）
+- **[projects/PROP-ROADMAP.md](projects/PROP-ROADMAP.md)** — 会長がいつでも開く「全体像＋決定事項＋ロードマップ」1枚。現在地=Phase 7（$25k×1本の実弾GO待ち）。大きな決定・GO・数値が変わるたびにここを更新すること。
+
 ---
 
 ## 0. Identity
