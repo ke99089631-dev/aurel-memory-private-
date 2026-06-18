@@ -7,6 +7,12 @@ updated: 2026-06-10
 
 # LocalBoost — プロジェクト記憶 (司令塔側サマリ)
 
+## 2026-06-19 Grok X偵察 成功（Agent Tools API）
+- **Live Search は廃止(410 Gone)**。新方式 `POST https://api.x.ai/v1/responses` + `tools=[{type:'web_search'},{type:'x_search'}]`、`input`は**文字列**(配列だと422)。model='grok-4'→実体grok-4.3。鍵=`C:\Users\user\.aurel\state\xai.env`(84文字)で稼働確認済。
+- スクリプト: `C:\Users\user\.aurel\state\grok_recon_run.ps1`(プロンプトは`grok_recon_prompt.txt`、ログ`grok_recon.log`)。**注意: 各起動でログをtruncateする**為、複数同時起動すると最新BOOTしか残らない→md(`x-recon-grok.md`)の有無で完了判定すること。長時間callはharnessにbackground kill されやすい→`Start-Process -WindowStyle Hidden`で完全デタッチが安定。
+- 成果物: `C:\Users\user\.aurel\state\x-recon-grok.md`(7.3KB)。(A)整骨院×MEO/口コミ と (B)個人SaaS/BIP の伸びアカウント・フック・型・エンゲージ要因・アンチパターン＋LocalBoost向け打ち手5個。
+- **検証必須(過信禁止)**: Grokは status URL を「IDから構築」と明記=**捏造リスク**。@levelsio/@marc_louvion/@tdinh_me/@arvidkahl は実在だが、日本側@handle(@meo_goto等)と全status URLは**未検証**。引用先は使う前に実在確認すること。
+
 > 実体の部屋 = `p_localboost`(LB部長ノード, boundCwd C:\Users\user\localboost)。詳細状態は localboost\STATE.md が生命線。ここはMother側の把握用サマリ。
 
 ## 何者か
