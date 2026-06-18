@@ -35,6 +35,7 @@ LocalBoost=会社の看板(屋号)。下に2本を**同時並行稼働**:
 - **Grok API**: xAI開発者APIキー取得済(console.x.ai, team=LocalBoost)。HermèsにXAI_API_KEY登録済(status=xAI/Grok✓, 84文字, 値はチャット非経由でクリップボード経由登録)。**ただしチーム残高$0でpermission-denied** → 少額チャージ待ち(会長のデビット決済が一旦不通=カード会社の本人確認待ち。代替=別カード or 後追い)。鍵自体は有効。料金: grok-4.1-fast $0.20/M入・$0.50/M出, X/web検索$5/1000回, 月¥1-2k見込み・無料枠可能性。
 - **Hermès**: 完動・無料・web_search稼働確認(levelsio≈89.9万fol取得)。6/17にX運用調査タスク投入(出力先 C:/Users/user/.aurel/state/x-strategy-research.md)。
 - 次: Hermès調査結果を受けてX運用プレイバック確定→投稿量産(AUREL作成→会長が投稿クリック)。Grokは残高入り次第Xリアルタイム偵察に投入。
+- **2026-06-18 Grok鍵 復旧・稼働確認**: 旧鍵は保存できておらず消失→会長が新規キー作成。受け渡し=会長がメモ帳(新規)に貼付→AURELが開きっぱなしのNotepad TabState .bin(共有読取)から抽出。※printableバイト全拾いでバイナリ付録2字が混入し86字→「Incorrect API key」。末尾2字削った**84字が正**と判明、grok-3で実問い合わせ成功(「Got it!」)＝**鍵・残高(課金)とも有効**。保存=`C:\Users\user\.aurel\state\xai.env`(XAI_API_KEY=, UTF8 BOM無)。`.aurel`はgit管理外で漏洩事故なし。呼出し=xAI直叩き(`https://api.x.ai/v1/chat/completions`, Bearer)。有効モデル例=grok-3。**会長手元のNotepad鍵メモは要削除(loose secret)**。X Live Search=search_parameters(sources x)で偵察可。
 - **2026-06-17 Hermès調査完了**: 出力=C:/Users/user/.aurel/state/x-strategy-research.md(2297語)。要点=①返信>いいね(会話誘発が最強)②投稿後30分の初速③最初の投稿に外部リンク貼ると埋もれる(リンクは2投目/返信欄)④型=課題提起→共感→具体→断言→CTA、製品名は最後⑤日本院長向けは"収益ドヤ"でなく時間/評判の悩みに寄り添う。素材=プロフ文/コンテンツ5本柱/フック10本/2週間日割り計画。⚠**LBは顧客ゼロ→架空の導入事例投稿は厳禁(信用喪失地雷)。顧客が付くまでBuild in Public/専門知識に差し替える**。
 - **会長の重要指摘(6/17)**: LB側Xは既に1か月運用(投稿多数/リプ・いいね周りも実施)。ゼロから書くより**実アカを先に解剖(伸びた投稿・文体・効く話題を抽出)→心理設計フレームと掛合せ**た方が良い投稿になる。観覧は当面画面共有(Xはログイン要)、将来Grok funded後は自動偵察。
 
