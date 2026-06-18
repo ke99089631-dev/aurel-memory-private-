@@ -89,3 +89,18 @@ The snapshots directory is at `~/.aurel/snapshots/`.
 - **2026-05-20 mid-day**: Re-edited and the `const sharedU` line was outright removed (only the comment remained). `Uncaught ReferenceError: sharedU is not defined`. Same hang. Master had to debug AGAIN.
 
 The fix added a "DO NOT MOVE OR DELETE" comment block above `sharedU`. Honor that comment.
+
+---
+
+## R6. The chairman's REAL console is `AUREL会社_sample_v4.html` (NOT aurel_life.html)
+
+The chairman opens **`C:\Users\user\AssetEmpire\AUREL会社_sample_v4.html`** (title "AUREL 司令室 — sample v2 (3D)") directly in his browser. `aurel_life.html` is a different console served at 127.0.0.1:7878. **Edit the file he actually uses.** (2026-06-18: wasted a cycle editing the wrong file once — confirmed by his screenshot.)
+
+- Its chat/3D code lives in ONE big `<script type="module">` (roughly lines 625–3291), so a syntax slip there kills the whole 3D boot too. Verify by extracting that module **by line range** (Get-Content `$lines[625..N]`) and `node --check` — do NOT use the R3 regex here (an inner `</script>` string truncates it → false positive).
+- It has its own error overlay: `window.addEventListener('error', …)` → shows `#err` ("⚠ 描画エラー"). Don't remove.
+- Always snapshot to `~/.aurel/snapshots/` first (works for this file too).
+
+### 2026-06-18 chat-send freeze fix + send-undo (in sample_v4.html)
+- **Bug**: chat input froze ("送信できない", reload/restart didn't help). Cause = `brainBusy` flag stuck `true`: it's set true on send and only cleared by the SSE `done`/`status` event; if the stream stalls it never clears, and on reload the stale "thinking" `status` event re-locks it. Send button is `disabled` while busy → hard lock with no escape.
+- **Fix**: added a watchdog (`STREAM_STALL_MS=90000`) that records `lastStreamAct` on every SSE event (`streamAlive()`) and auto-clears `brainBusy` after 90s of true silence (won't misfire during real long tasks since status/text/tool keep the stream alive). Also a `#chatNote` hint when the user tries to send while busy.
+- **Send-undo (会長 request)**: `queueSend()` wraps the form submit — pressing 送信 starts a `UNDO_SECS=5` countdown shown in `#undoBar` with a 「取り消す」 button; only after 0s does the real `sendChat()` fire. Cancel keeps the text in the box. Adjustable via `UNDO_SECS`.
