@@ -72,5 +72,14 @@ AI診断×LocalBoost統合を正式確定。AI診断=入口、LB=その先の完
 - 含意: 「全自動」とは“頭脳と作業はAURELが全自動、最後の送信/決裁クリックだけ会長”の意。手抜きや会長運用ではない。Xも同じ=文章・ネタ・戦略はAUREL全自動、投稿ボタンのみ会長(X代理投稿はしない標準ルール)。
 - AI診断側Xも同モデルで立ち上げる(=AURELが投稿ネタ・文面を全自動生成、会長が投稿クリック)。
 
+## 2026-06-19 X集客 偵察→テンプレ化(プランA完了・※会長が組み直し予定)
+- **Grok X偵察 成功**(`C:\Users\user\.aurel\state\x-recon-grok.md`)。xAI Agent Tools API経由(`POST /v1/responses`, model=grok-4→grok-4.3解決, `tools=[{type:web_search},{type:x_search}]`, `tool_choice='required'`)。**Live Search(search_parameters)は410で廃止済**。
+  - 詰まり回避の知見: 巨大1発プロンプト＋検索強制なし=暴走15分ハング。**軽い2発(整骨院系/個人開発系)＋tool_choice=required**だと各19〜55秒で実在ハンドル付き応答。切り離し(Start-Process)はネット呼び出しで固まる→**AUREL直叩き(PowerShellツール)が安定**。
+  - PS5.1のUTF-8地雷2つ: ①.ps1内の日本語inlineはANSI誤読でmojibake→日本語(プロンプト/見出し)は別UTF-8ファイルから`[IO.File]::ReadAllText(...,UTF8)`で読む。②応答は`Invoke-WebRequest -UseBasicParsing`＋`[Text.Encoding]::UTF8.GetString($resp.RawContentStream.ToArray())`でデコード(IRMだと文字化け)。スクリプト群=`grok_recon3.ps1`/`grok_recon_prompt.txt`/`grok_titles.txt`/`grok_diag*.ps1`。
+  - 偵察の核心: 両ジャンルとも「自慢」でなく「悩みズバリ→具体数字→次の一歩」で伸びる。整骨院系実在例=@kamen___writer/@meo_goto/@siro111323/@yuzukuri5。勝ちフック=「Googleマップで上位なのに予約が入らない」型。アンチパターン=**サクラ口コミ/★操作(医療広告ガイドライン違反リスク)**・抽象論・単発。個人開発系=@levelsio/@tdinh_me等、Build-in-Public(収益/失敗の正直公開)。
+- **Hermès心理フレーム既存**(`x-strategy-research.md`): フック→共感→具体→断言→CTA／返信はいいねの27倍／投稿後30分初速／リンクは2投稿目／毎日同時刻+40%。※ただし**架空の導入事例・効果保証を多用**=顧客ゼロでは使用不可。
+- **統合テンプレ作成**(`C:\Users\user\.aurel\state\lb-x-templates.md`): 心理フレーム＋アルゴリズム術は採用、**架空実績は全部Build-in-Public(作っている過程の実況)に置換**。プロフ文/5本柱(主役=作っている過程)/即投稿フック10本/完成テンプレ2本/1週間リズム。**顧客ゼロ→導入事例・お客様の声は封印、★操作禁止明記、文章AUREL・投稿ボタン会長を厳守**。
+- **状態: 会長が「LBについて伝えたいことがある→組み直したい」と保留。上記は土台として保存、方針転換待ち。**
+
 ## 制約
 お金が動く一歩・本番課金は会長の最終GO。秘密(sk_live/whsec/.env)はgit/出力に絶対出さない。ログイン情報は自動化に渡さない(物理送信は会長の手)。
