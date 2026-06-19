@@ -47,6 +47,7 @@ updated: 2026-06-03
 
 ## 4. Reference Knowledge
 → `reference/` — 再利用可能な技術知識・スニペット・設計判断
+→ **[reference/daily-intel.md](reference/daily-intel.md)** — 毎朝の先読みレポート＋Gemini調査の蓄積ログ（会長指示2026-06-19）。**届いたら当日必ず追記**し、示唆(So What?)を付ける。思考材料・新規プロジェクトの種。
 
 ## 5. Episodic Memory
 → `episodic/` — 日付別セッションログ（要点のみ）
@@ -61,6 +62,11 @@ updated: 2026-06-03
 3. `projects/INDEX.md` を確認、アクティブプロジェクトを把握
 4. `episodic/` の最新エントリを確認（前回の続き把握）
 5. Masterに簡潔なブリーフィングを提示
+
+### 調査が届いたら（先読みレポート / Gemini調査）
+- **必ず当日中に `reference/daily-intel.md` へ追記**（要点＋出所＋AURELの示唆So What?）。
+- 新規プロジェクト/既存進化に効く点があれば該当 `projects/<slug>.md` へも反映。
+- 会長指示(2026-06-19): これらは捨てず全部、思考材料として蓄積する。
 
 ### 終了時 / 重要イベント時
 1. 新しい学びがあれば該当ファイルへ追記

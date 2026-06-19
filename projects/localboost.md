@@ -7,6 +7,11 @@ updated: 2026-06-10
 
 # LocalBoost — プロジェクト記憶 (司令塔側サマリ)
 
+## 2026-06-19 市場の追い風 確認（調査部/Gemini）
+世界トレンドがLocalBoostの方向と一致＝**追い風**。①マルチモーダルAIエージェント台頭 ②RPA×AI融合 ③**専門特化(縦割り)型AIエージェント普及**←LocalBoost(治療院×MEO/口コミ)はまさに③。中小・店舗側の需要＝**顧客対応の自動化/パーソナライズ**＋**データ分析で経営改善**。
+- **会長の所感**: 「今まさに構築したものがやはり波みたいだ」＝方向性に確信。
+- **AURELの正直な留保**: 縦割りが流行る=**競合も縦割りで来る**。差別化はAIそのものではなく(a)地域の信頼 (b)実行スピード (c)「口コミ捏造しない」正直ポジショニング。波=**時間の窓**＝速く動く側が勝つ。次は集客の口(X/投稿)を回し始めること。
+
 ## 2026-06-19 Grok X偵察 成功（Agent Tools API）
 - **Live Search は廃止(410 Gone)**。新方式 `POST https://api.x.ai/v1/responses` + `tools=[{type:'web_search'},{type:'x_search'}]`、`input`は**文字列**(配列だと422)。model='grok-4'→実体grok-4.3。鍵=`C:\Users\user\.aurel\state\xai.env`(84文字)で稼働確認済。
 - スクリプト: `C:\Users\user\.aurel\state\grok_recon_run.ps1`(プロンプトは`grok_recon_prompt.txt`、ログ`grok_recon.log`)。**注意: 各起動でログをtruncateする**為、複数同時起動すると最新BOOTしか残らない→md(`x-recon-grok.md`)の有無で完了判定すること。長時間callはharnessにbackground kill されやすい→`Start-Process -WindowStyle Hidden`で完全デタッチが安定。
