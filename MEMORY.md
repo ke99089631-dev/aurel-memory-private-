@@ -63,10 +63,11 @@ updated: 2026-06-03
 4. `episodic/` の最新エントリを確認（前回の続き把握）
 5. Masterに簡潔なブリーフィングを提示
 
-### 調査が届いたら（先読みレポート / Gemini調査）
-- **必ず当日中に `reference/daily-intel.md` へ追記**（要点＋出所＋AURELの示唆So What?）。
-- 新規プロジェクト/既存進化に効く点があれば該当 `projects/<slug>.md` へも反映。
-- 会長指示(2026-06-19): これらは捨てず全部、思考材料として蓄積する。
+### 調査の蓄積（先読みレポート / Gemini調査）= 自動化済み(2026-06-19)
+- **生成は全自動**: `daemon/futurelab.mjs` の `buildReport({research:true})`（毎日12:10 future_lab）が、**先読み本文＋Gemini深掘り全文を `reference/daily-intel.md` へ自動追記**する。Geminiは別途 `memory/world/YYYY-MM.md` にも内在化される。
+- **AURELの起動時タスク**: `reference/daily-intel.md` を読み、`_未記入_` の So What? 欄を埋める（波の意味づけ・新規事業の種・既存進化への転用）。これがAURELの思考材料。
+- 新規プロジェクト/既存進化に効く点は該当 `projects/<slug>.md` へも反映。
+- 会長指示(2026-06-19): 毎朝の調査は捨てず全部、思考材料として蓄積する。
 
 ### 終了時 / 重要イベント時
 1. 新しい学びがあれば該当ファイルへ追記
