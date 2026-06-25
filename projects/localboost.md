@@ -21,6 +21,18 @@ AURELが古い設計(整骨院含む広め＋"口コミ返信AI")に引きずら
 - **現状の問題=ピン投稿(6/19「先着5院 無料診断」)の反応がほぼゼロ**。指標=表示136 / ♥3 / 💬1 / **診断希望の応募=0**。会長「投稿したが反応ゼロ」。
 - AUREL作成物の要再調整: `localboost\x-posts-week1.md`(口コミ軸・整骨院広め=要作り直し) / `localboost\x-profile.md`(整骨院含む広め=鍼灸専門＋AI番頭へ修正要)。
 
+## 2026-06-25 【技術】Grok偵察が詰まる真因2つ＝解決済み
+何度も400/ハング/文字化けした原因はAPIでなく**PowerShell 5.1の2バグ**だった。今後は以下で叩く。
+1. **`ConvertTo-Json` が不安定**（"Cannot convert value to type System.String"でハング/空body→400）。→ **JSONを手組みする**:
+   `$esc=$prompt -replace '\\','\\' -replace '"','\"' -replace "\`r",'' -replace "\`n",'\n'; $bodyJson='{"model":"grok-4","input":"'+$esc+'",...}'; $bytes=[Text.Encoding]::UTF8.GetBytes($bodyJson)` を `-Body $bytes -ContentType 'application/json; charset=utf-8'` でPOST。
+2. **Invoke-RestMethodがUTF-8応答をLatin1で復号→日本語が文字化け**。→ 無損失なので復元: `[Text.Encoding]::UTF8.GetString([Text.Encoding]::GetEncoding(28591).GetBytes($mojibake))`。
+- 副次: ログファイルを複数インスタンスで共有すると**ロック競合で書き込み静かに失敗**→同時起動させない／コマンド内に'grok_dist'等の自分のマーカー文字を含めると kill ループが自分を殺す(exit255)ので注意。
+
+## 2026-06-25 鍼灸院長 X偵察 成功（届け方/リプ集客用）
+- 成果物: `state\x-recon-shinkyu.md`（chars4573, tools7, sources0）。鍼灸院長の実アカ8件(@anyuni/@risa_shinkyu/@i_backstage/@nozaki_acu/@crysta_ya/@nangyou69/@sugizakikenya/@conditionage)＋悩みトップ5＋価値リプ型5＋検索クエリ10＋NG5。**@handleは未検証=使う前に画面共有で実在確認**。
+- 実戦化: `localboost\x-distribution-playbook.md`（今日リプする相手・リプ型・毎日15-20分ルーティン）。
+- プロフ/投稿も鍼灸専門＋AI番頭へ改訂済: `localboost\x-profile.md`(v2) / `localboost\x-posts-week1.md`(v2)。
+
 ## 2026-06-19 Grok X偵察 成功（Agent Tools API）
 - **Live Search は廃止(410 Gone)**。新方式 `POST https://api.x.ai/v1/responses` + `tools=[{type:'web_search'},{type:'x_search'}]`、`input`は**文字列**(配列だと422)。model='grok-4'→実体grok-4.3。鍵=`C:\Users\user\.aurel\state\xai.env`(84文字)で稼働確認済。
 - スクリプト: `C:\Users\user\.aurel\state\grok_recon_run.ps1`(プロンプトは`grok_recon_prompt.txt`、ログ`grok_recon.log`)。**注意: 各起動でログをtruncateする**為、複数同時起動すると最新BOOTしか残らない→md(`x-recon-grok.md`)の有無で完了判定すること。長時間callはharnessにbackground kill されやすい→`Start-Process -WindowStyle Hidden`で完全デタッチが安定。
