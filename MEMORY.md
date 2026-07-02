@@ -92,6 +92,13 @@ AURELが指揮官、武器=装備、Masterが司令官。新AI出現時はマニ
 → `~/.aurel/state/secrets.json` — 認証ボルト（.gitignore）
 → `~/.aurel/state/arsenal-log.jsonl` — 全起動ログ
 
+### 🔧 主要装備クイック索引（起動時に頭へ入れる＝2026-07-02追加。調査依頼で即使えるように）
+- **`researcher`** — 内部の調査職人。invoker=`internal:Agent`(general-purpose)＋`system.md`。WebSearch/WebFetchで一次情報。**←調査は原則これを正式に起動する**（会長呼称「Hermès調査部隊」の実務担当はこれ）。
+- **`gemini`** — Gemini(google_ai_api_key接続済・**即使用可**)。第二意見/長文脈/裏取り。invoke: `{"prompt":"..."}` を `arsenal/gemini/invoke.ps1` にstdin。model既定=2.5-flash、深掘り=2.5-pro。
+- **`hermes`** — Nous自律エージェント（web検索/ブラウザ自動化/cron/長時間）。**⚠️install済だが会長のOAuth setup未実施＝未起動**。`hermes.exe setup`(会長の一度きり操作)で解禁。長時間web調査の本命。
+- **`gpt` / `codex`** — OpenAI系。/ **council voters**: analyst-bull/bear/quant/meta＋gemini＝評議会。
+- **教訓(2026-07-02)**：調査依頼時、汎用Agentを即席で立てず**まず上記の正式装備を使う**。researcherのsystem.mdを読ませ、必要ならgeminiで裏取り、深掘りはhermes（要setup）。
+
 ## CLI
 
 ```
