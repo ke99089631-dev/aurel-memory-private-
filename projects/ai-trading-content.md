@@ -80,6 +80,14 @@ related: [projects/PROP-ROADMAP.md, projects/localboost.md]
 - **模倣不能の2兵器（先頭に立てる白地）**：①**実際に買った詐欺商材のレシート付き解剖**（他は抽象警告のみ・検索される）②**日本→英語の橋**（密集JPのAI-EA界隈を世界に繋ぐ者がほぼ皆無）。
 - **最大の敵＝競合でなく"拡散の遅さ"**。覆すのは実況のドラマ性＋レシート。
 
+### D. Hermès独立調査による三角測量（2026-07-02・Hermès実働で裏取り）
+- **Hermès(Nous自律エージェント)が完動を実証**（status ok/52秒/web検索実行）。会社の"調査本命エンジン"として今後常用。
+- **一致**：価格帯「数万〜数十万」再確認／空白でないが差別化可／法規制・拡散が要注意＝Claude3隊と同結論＝**堅い**。
+- **★Hermès独自の新リスク＝「正直さ疲れ・飽き」**：負け実況が続くと客のモチベ低下＆発信者自身が消耗しコンテンツ継続困難。「勝てない発信者に客は定着しない」。
+  - → **Wレビュー日記の設計に直接反映**：負け局面で客と会長が折れない仕掛けが要る。勝敗でなく**"上達の物語(進歩曲線)"**として見せる／**診断ストック**で価値を切らさない／金銭循環(受験料を売上で賄う)で会長自身の消耗を防ぐ。
+- 追加の失敗要因：技術難易度×客層ミスマッチ（"手軽さ"期待ギャップ→悪評）。
+- ⚠️Hermès提示のハンドル(@AITradeLab等)は**未検証**（フォロワー数不明と自認）。採用前にscreen-shareで確認。
+
 > 出典例：note.com/funded7challenge, /ue_fx_strategy, /nic9nic9, /46chan ／ woz.co.jp/jpmedia/prop-firm-survey-2026 ／ Brain/Tips/note価格(yukemuri, app-tatsujin, media.brain-market) ／ X金融広告ポリシー ／ 投資助言業該当基準(it-bengosi) ／ FundingPips affiliate ／ prop業界2024破綻(veritaschain) ／ MyForexFunds(track360)。数値は方向性（JP各creatorの正確な販売数はWebで非公開＝要注意）。
 
 ## 📌 現在地・次の一歩
