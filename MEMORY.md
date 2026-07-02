@@ -93,6 +93,7 @@ AURELが指揮官、武器=装備、Masterが司令官。新AI出現時はマニ
 → `~/.aurel/state/arsenal-log.jsonl` — 全起動ログ
 
 ### 🔧 主要装備クイック索引（起動時に頭へ入れる＝2026-07-02追加。調査依頼で即使えるように）
+> **★常設命令（会長 2026-07-02）**：調査部隊は「会長の号令でいつでも」使えるよう常時待機。会長が「調べろ/調査しろ」と言ったら**即Hermèsを起動**（迷わない）。ワンコマンド口＝`C:\Users\user\.aurel\bin\squad.ps1 -Prompt "…"`（既定=hermes／`-Engine gemini`で軽い第二意見）。UTF-8整形済。
 - **`researcher`** — 内部の調査職人。invoker=`internal:Agent`(general-purpose)＋`system.md`。WebSearch/WebFetchで一次情報。**←調査は原則これを正式に起動する**（会長呼称「Hermès調査部隊」の実務担当はこれ）。
 - **`gemini`** — Gemini(google_ai_api_key接続済・**即使用可**)。第二意見/長文脈/裏取り。invoke: `{"prompt":"..."}` を `arsenal/gemini/invoke.ps1` にstdin。model既定=2.5-flash、深掘り=2.5-pro。
 - **`hermes`** — Nous自律エージェント（web検索/ブラウザ自動化/cron/長時間）。**✅稼働中：Nous Portal ログイン済・Gemini/Grokキー設定済・web providers(brave/ddgs/searxng等)有効・6/17まで実稼働・errors空**。「課金してある」の正体＝**Nous Portal(管理型推論)＋Grok**。**調査の本命はこれ。** 呼び出し＝`arsenal/hermes/invoke.ps1 -Prompt "..." -Yolo`（非対話 `hermes -z`／長時間はbg）。状態確認は `-Status`。⚠️2026-07-02教訓：AURELが「未設定」と誤断して長く放置していた＝**調査依頼はまずHermèsを叩く**。
