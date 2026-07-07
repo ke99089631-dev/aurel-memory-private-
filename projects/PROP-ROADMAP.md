@@ -491,4 +491,20 @@ NY=全0.81bps/p90 1.25bps（片道 typ0.407/p90 0.624）、LON=全1.53bps/p90 2.
 ### ★2026-07-08 発見＝G4前に潰す要ビルド乖離（デプロイ調査で判明）
 - **確定審査機=US100 NY ORB（MT5指数CFD）だが、現行デプロイ側(autopilot/`challenge_25k_config.json`)は暗号スリーブ(ETH/BTC/LTC)のまま**＝track B時代のテンプレ（track Bは棄却済）。**確定機はバックテスタ(`session_breakout_trackA.py`)にしか存在せず、ライブ実行可能スリーブへ未移植。**
 - デプロイ資産の現状（`empire/`）: `execution/mt5_live.py`(MT5アダプタ)・`execution/gateway.py`(PaperBroker/Mt5Live・GO無しロック)・`defense/risk_engine.py`(-8%新規停止/-12%半減/-15%kill)・`ledger/ledger.py`(sha256ハッシュ連鎖・稼働中)・`scripts/autopilot.py`(--dry対応)・`scripts/live_preflight.py`・`scripts/live_monitor.py`。**C-5(config切替dispatcher)・C-4(サーバー側SL照合)・expected_account口座アサーション=未実装**。
+
+### ✅2026-07-08｜移植ビルド完了＋同一性テスト合格（Fable5 決定(b) Python×MT5橋の実体化）
+- **方針(Fable5 5原則)**: ①頭脳=書き直さず共有 ②新規は「データの入口/注文の出口」だけ ③サーバー側SL(SL+TP同一order_send)+C-4照合 ④spec実測+floorロット ⑤NY休場/半休カレンダー。順序=移植→C-5→C-4→G5。全て読取専用・--dry。
+- **凍結不可侵の証明**: `session_breakout_trackA.py` SHA256=**74f1cacf...**（G0時と一致・1バイト未変更）。ライブは凍結に「合わせる」側。
+- **新規ファイル(`empire/`)**:
+  - `strategies/trackA_signal.py`＝共有頭脳（凍結simulate行292-334を純関数化: width_of/should_skip_width/detect_break/entry_stops/target_price/notional_for_risk/decide_entry＋`CONFIRMED`確定構成dict＋`Intent`）。
+  - `research/equivalence_test_trackA.py`＝**原則1の機械的証明**。同じバー列を凍結simulateと共有頭脳版simulate_via_sharedに食わせ、**R格子12点すべてで trades・daily がバイト同値**（取引数2962-2988・daily3697 全一致）。
+  - `strategies/trackA_us100_sleeve.py`＝ライブ・スリーブ（①入口=`build_ny_session_live`（MT5 m1→NY単日session・凍結precomputeと同一手順）②STATE=width履歴JSON永続化 ③BRAIN=共有頭脳 ④出口=`plan_order`（floorロット+SL/TP同梱））。**自己テスト: FEED≡凍結precompute(3697/3697一致)＋スリーブ発火数≡凍結取引数(2988=2988)**。
+  - `strategies/trackA_calendar.py`＝原則5。NYSE/Nasdaq全休+半休(2025-27)。休場/半休=不参加＋データ薄検出の二重ガード。
+  - `execution/mt5_live.py`に追加(既存不変)＝`market_order_bracket`(原則3:SL+TP同一order_send)・`modify_sltp`・`reconcile_sl`(**C-4**:約定後にサーバー建玉再取得→SL実載検証→不一致は是正→是正失敗はEMERGENCY_CLOSE_NEEDED返し)。
+  - `execution/sizing.py`に追加(既存不変)＝`lots_for_notional_floor`(原則4:常に切り捨て=risk1.0%超えない)。
+  - `data/challenge_25k_us100_config.json`＝US100審査機config(暗号templateは温存・別ファイル)。`expected_account`欄。
+  - `strategies/trackA_activation.py`＝**C-5**(config切替dispatcher `load_config('us100')`＋誤口座ガード`assert_expected_account`: login=0未設定/不一致は発火例外)。
+  - `strategies/trackA_g5_arithmetic.py`＝**G5**。日次: 3x滑りでも-3%<床-5%(厚)。総額: 2x滑りで-9%<床-10%(緩衝1%)・3xは床ちょうど→サーバー側SL+1取引/日の構造ガードで担保。自主-4%/-8%は床の内側2%緩衝。**判定○**。
+- **残(G4で実施)**: ①ブローカーUS100実シンボル名・contract_size・vol_min/step/max を`symbol_info`実測しconfig確定(原則4) ②C-4を$53実口座(暗号proxy可)でライブ検証 ③MT5実カレンダー突合 ④autopilotへ`--config`/`--arm`配線して--dry≥4週。**G4は「移植ビルド」を挟み終えた＝開始可能な状態になった。**
+- 報告=移植完了+同一性テストの1通を会長/Fable5へ提出済（本更新と同時）。
 - **含意**: G4（--dry 4週）は「US100 NY ORBのライブ・スリーブ移植」を挟まないと開始不能。これは新規ビルド（バックテスト論理→gatewayへシグナル発火する実行体）＝独自の正しさリスクを持つ。**Fable5プロトコルはこの移植を既完了と仮定している疑い**。→会長/Fable5に上げて、移植スコープ（誰が/どの粒度で/EAかPythonブリッジか）を確定してから着手する。
