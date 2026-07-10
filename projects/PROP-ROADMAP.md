@@ -2,7 +2,7 @@
 tags: [project/asset-empire, roadmap, foundational, pinned]
 type: roadmap
 created: 2026-06-18
-updated: 2026-07-06
+updated: 2026-07-11
 status: active
 owner: AUREL
 audience: 会長(KEIKIMAEDA) — 専門用語ゼロで読める前提で書くこと
@@ -508,3 +508,29 @@ NY=全0.81bps/p90 1.25bps（片道 typ0.407/p90 0.624）、LON=全1.53bps/p90 2.
 - **残(G4で実施)**: ①ブローカーUS100実シンボル名・contract_size・vol_min/step/max を`symbol_info`実測しconfig確定(原則4) ②C-4を$53実口座(暗号proxy可)でライブ検証 ③MT5実カレンダー突合 ④autopilotへ`--config`/`--arm`配線して--dry≥4週。**G4は「移植ビルド」を挟み終えた＝開始可能な状態になった。**
 - 報告=移植完了+同一性テストの1通を会長/Fable5へ提出済（本更新と同時）。
 - **含意**: G4（--dry 4週）は「US100 NY ORBのライブ・スリーブ移植」を挟まないと開始不能。これは新規ビルド（バックテスト論理→gatewayへシグナル発火する実行体）＝独自の正しさリスクを持つ。**Fable5プロトコルはこの移植を既完了と仮定している疑い**。→会長/Fable5に上げて、移植スコープ（誰が/どの粒度で/EAかPythonブリッジか）を確定してから着手する。
+
+## 2026-07-11｜Fable5 指示4号(G4起動)反映＝§2-2/§2-1/§3 実装＋G4 runner配線(全て読取専用・--dry・お金ゼロ)
+- **経路**: 会長経由でFable5指示4号(`~/Downloads/fable5_directive_04.md`)受領。G4ドライラン起動指示＋Gemini監査反映2点＋規約改定反映。
+- **§2-2 スマホ到達アラート(プロセス死・マシン死)= 実装完了・自己テスト合格**:
+  - `observatory/notifier.py`＝env駆動の多重通知(dead-man ping URL / webhook / SMTP / **常時ローカルJSONL**＝data/alerts.jsonl＋台帳RISK_EVENT)。★秘密はコード/ログに一切書かない。未設定でもローカル層に必ず残る。
+  - `observatory/heartbeat.py`＝心拍ファイル(data/g4_heartbeat.json・原子的書込)＋PID生存判定(tasklist/os.kill・依存無し)。
+  - `scripts/g4_watchdog.py`＝別プロセス番犬。心拍のstale(既定180s超)/PID消滅で **process_death CRITICAL通知**(復帰で解除・連投防止)。自身もdead-manへping。
+  - 検証: alive→alive / stale(age9999s>180s)→死判定 / dead-PID→死判定 の3経路OK。**マシン死=dead-man ping途絶を外部サービスが検知(URLは会長投入待ち)**。
+- **§2-1 デバフ後合格率(≥50%ゲート)= 実装完了・sanctuary基準で受理値を完全再現**:
+  - `observatory/divergence_recorder.py`＝各シグナルで モデルコスト(Dukascopy片道bps) vs FundingPips実勢(bid/ask半スプレッド+スリッページ)を data/divergence.jsonl に記録。要約(median/p90/mean/max)。
+  - `research/debuff_passrate.py`＝実測コストで**凍結simulateを再計算**→evaluate2→デバフ後合格率。★凍結`session_breakout_trackA.py`(SHA256=74f1cacf…)はimportのみ・不変。scope=sanctuary(seed777/N_CONFIRM=3000)既定で**baselineが受理値を完全再現**: 合格55.7%/2回累積80.3%/8週決着22.8%/日次0.0%/中央77日(=G2/G3確定値とバイト一致)。
+  - **★重大発見＝この確定機はコスト極薄耐性**: base NY=0.407bps/片道。合成デバフ **+1.0bps/片道で 55.7%→31.5%**(§2-1ゲート50%割れ)、+3.0bpsで5.4%。「価格で通ってコストで死ぬ」がリアル。**G4の本当の審判=FundingPips実スプレッド/スリッページがDukascopy 0.407bpsモデルからどれだけ乖離するか**。NY US100で片道~1bpでも余計にかかれば§2-1不通過→ゲート0(risk/R再設計)へ戻る。
+- **§3 規約改定(2026-07-09 Responsible Trading Policy)反映= 完了**:
+  - C-1適合表(`~/Downloads/C1-fundingpips-compliance-table.md`)に §D 追加。**1.2% risk guideline撤廃・50% margin guideline撤廃**(グレー条項減＝没収リスク低減／うちrisk1.0%で元から内側)。単一アイデア60%集中規定は明文化(新規$25k+口座対象・合否非該当)＝審査機は1セッション1トレード・再エントリ禁止・1トレード最大+3%(目標8%の37.5%)で**構造的に非発動**。「トレードアイデア」10分ルール整合確認済(再エントリ自体しないので合算対象が発生しない)。
+  - 台帳記録: `live_min_ledger.sqlite` に `NOTE`(event=policy_revision_2026_07_09) を **seq=529** で刻んだ(sha256鎖固定)。
+- **C-5 トライアル口座反映**: `challenge_25k_us100_config.json` の expected_account を **login=40000162046 / server=FundingPips-Trial / kind=free_trial**(14日制・失効前再取得)に確定。誤口座ガード=接続login≠40000162046 なら発火例外。
+- **checklist#4(日次リセットUTC+3・00:00・max(始値残高,始値エクイティ)・含み損込)**: `autopilot.today_prop()`(utc+3h)で既実装＝最終確認のみ完了。
+- **G4 runner= `scripts/g4_dryrun.py` 骨格完成・preflight合格**:
+  - 配線: C-5誤口座ガード→カレンダー(原則5)→FEED+BRAIN(移植スリーブ)→出口プラン(原則3/4=SL/TP同梱・floorロット)→§2-1乖離hook→日次export(data/g4_daily/{date}.json)→§2-2心拍/通知。**order_sendは絶対に呼ばない(plan止まり)**。
+  - preflight(MT5なし・実履歴CSV): login=40000162046ガードOK→直近5NY日を紙評価5/5→floorロット+SL/TP+日次export生成。一直線に配線が通ることを確認。
+  - **実接続(--mt5)は会長がtrial .env(FundingPips-Trial/40000162046)投入後**。接続直後にassert_expected_accountを通し不一致は即停止。銘柄spec(contract_size/最小ロット/刻み)は接続時symbol_info実測でconfig確定(collation⑤)。
+- **会長アクション待ち(3点・これが揃わないとG4実起動不可)**:
+  1. **同封物が本機に存在しない**(machine全域検索で確認): business_bible_v2.md / aurel_cover_letter.md / Responsible Trading Policy全文。→「添え状を先に読め」「Bible v2内在化」「C-1の逐条突合」がブロック中。
+  2. **§2-2の通知先チャネル未投入**: dead-man URL(healthchecks.io等・秘密不要・マシン死の本命) / Gmailアプリパスワード(SMTP) / webhook のいずれか。
+  3. **trial .env未投入**: MT5_LOGIN/PASSWORD/SERVER=FundingPips-Trial(会長の手で)。
+- 報告: 上記を会長へ1通(起動確認は実起動時に別途)。実弾は会長GO(--arm CHAIRMAN-GO)まで無し。
