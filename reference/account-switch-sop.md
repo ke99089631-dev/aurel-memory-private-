@@ -1,0 +1,52 @@
+---
+tags: [reference, prop, mt5, sop, safety]
+type: reference
+updated: 2026-07-13
+status: skeleton（2本目トライアル取得時に実施しながら実測値で埋める）
+---
+
+# 口座切替 標準手順書（SOP）— Fable5 指示4号 §4
+
+**目的**: トライアル口座の継ぎ（1本目 40000162046 → 2本目）を、本番（審査合格→実弾審査口座への切替）の**予行演習**として手順化する。ここで作った手順は**本番でそのまま使う**。単なる鍵の差し替えにしない。
+
+**鉄則（不変）**: 実弾は enable_live+CHAIRMAN-GO+会長GO。ログインID/パスワードは会長の手で .env に投入・本書やログに値を書かない。トライアルと実弾の冷たい口座（27972608/Vantage）は同一端末に同居させない。
+
+## 切替チェックリスト（順序厳守・各段で台帳記録）
+
+1. **取得（会長の手）**
+   - FundingPips ダッシュボードで 2本目トライアル発行 → 新 login / server / password を控える（AURELには渡さない）。
+   - 期限日をメモ（1本目 7/23 → 2本目の期限を記録）。
+
+2. **端末へサーバ住所を落とす（会長の手・一度だけGUI）**
+   - 隔離端末 `C:\FundingPips-MT5\terminal64.exe`（/portable）で **File→口座開設(Open an Account)→"FundingPips"検索→選択**。
+   - ★これが servers.dat に住所を書く唯一の操作（File→ログイン ではダメ＝1本目の教訓）。
+   - 新 login+password でログイン → **右下が緑**を確認（`authorized on <server>` が journal に出る）。
+
+3. **鍵投入（会長の手）**
+   - `C:\Users\user\FundingPipsTrial\.env` の `MT5_LOGIN` / `MT5_PASSWORD` / `MT5_SERVER` を新口座に差替。
+   - `MT5_PATH` / `MT5_PORTABLE=1` は据え置き（隔離端末は同じ）。
+
+4. **expected_account 更新（AUREL）**
+   - `us100` config の `expected_account.mt5_login` を新 login に更新（誤口座ガードの基準を新口座へ）。server も併せて。
+   - ★更新前に旧値をコミット/控え。更新後に `--preflight` で `誤口座ガード(login=新) 発火=True` を確認。
+
+5. **接続確認（AUREL・--dry）**
+   - `g4_dryrun.py --mt5` で 口座アサートOK（login==新）→ NDX100 spec実測 → 心拍。
+   - `srv_skew_s ≈ +10800s`（UTC+3）を再確認（時刻系が新口座でも健全か）。
+
+6. **常駐再開（AUREL）**
+   - runner を再起動（run_g4_live.bat）。width_hist state は継続（`data/g4_live_state.json`）＝幅履歴の連続性を切らさない。
+   - ★`_DRYRUN_START` と done ガードで二重評価・取りこぼしなしを確認。
+
+7. **台帳記録（AUREL）**
+   - 切替日・旧/新login・期限・接続確認ログを episodic とこの SOP に追記。切替に要した実時間を計測（本番の所要見積り用）。
+
+## 本番（実弾審査口座）との差分メモ（切替時に埋める）
+- （実施後に記入）本番では order_send ゲート（enable_live/arm_code=CHAIRMAN-GO）が別途要る。トライアルでは触れない。
+- （実施後に記入）本番口座の contract_size / vol_min がトライアル NDX100（20.0/0.01）と同じか要実測。
+- （実施後に記入）住所DL・緑化に要する会長の手作業時間。
+
+## 未確定（2本目取得時に実測で埋める）
+- 2本目の実 server 名（FundingPips-Trial のままか別か）。
+- 期限日。
+- width_hist を継続すべきか、口座交代でクリーンにすべきか（現状: 銘柄同一 NDX100 なので継続が凍結と連続＝継続を既定とする）。

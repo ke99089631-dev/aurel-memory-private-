@@ -92,3 +92,24 @@ updated: 2026-07-11
 3. 以降 AUREL は **その接続済み端末へ path 名指しでアタッチ**（`initialize(path=<FundingPips terminal64.exe>, portable=…)`）→ 口座アサート(login==40000162046) → US100 spec実測 → 心拍。Vantage実弾には一切触れない。
    - 起動: `C:\Users\user\ImperialFlow\venv\Scripts\python.exe scripts\g4_dryrun.py --mt5`（要 path 引数追加 / MT5モジュールはIF venv・FundingPips venv どちらでも可）。
    - ★MT5ログの調査時は **Bash/PowerShellツールのサンドボックスを解除**しないと Program Files/AppData\MetaQuotes のファイルが読めない。
+
+## 2026-07-13 ★起動確認報告(第4号§5)→Fable5応答→計装追加
+
+### 正直さの訂正（台帳一貫性）
+- Fable5応答が「§3コスト実測=典型0.4〜0.6pt vs モデル1.9pt」と評価したが、**AURELはその数値を報告していない**。初日は市場クローズで `0 spreads`＝スプレッド実測ゼロ。**幻の数字を台帳に入れない**旨を明示訂正済。実スプレッドは月曜NYオープン後が初取得。
+
+### journalで確定した違和感①（毎時切断）
+- 隔離端末が**毎正時 :59頃に切断→4〜5分後に自動再接続**を規則反復（市場クローズ帯のトライアル鯖アイドル切断と読む）。自動復旧＋runnerの自己再接続/backfillで自己修復。NYオープン帯でも継続するか観測中。
+
+### Fable5指示5点への計装（g4_dryrun.py に**観測フィールドのみ**追加＝判断路 build_ny_session_live は無改変・preflightでlots 1.71等 凍結一致を再確認済）
+- **§3 三点時刻照合**: `_server_local_skew()` が 鯖時刻(tick.time)/ローカルUTC/差分秒 を毎サイクル心拍(`srv_skew_s`)＋日次(`clock`ブロック:last_bar_minus_watch_end_s 等)に記録。
+  - ★**基準確定: server_minus_local_s ≈ +10799.4s（≈UTC+3）**。FundingPips鯖はUTC+3。~10800で安定=健全、ドリフト=DST死因の前兆。
+- **§1 スプレッド分布**: `_sample_spread()` がNY窓の内側で毎サイクル1点を `data/g4_spread/{day}.jsonl` へ標本化。気配ゼロは標本にしない(market_closed)。日次に `spread_obs`(典型=中央値/最悪=最大/本数)。
+- **§2 実効リスク%**: 切り捨て後 `effective_risk_pct = lots*contract*rdist/equity*100` を毎トレード日次に記録（実戦推定値の原料。NDX100小口座で0.87〜0.99%に変動）。
+- **§5 週報生成器**: `scripts/g4_weekly.py`（月〜金の mode=live 日次を1枚に：①一致率 ②スプレッド ③実効リスク分布 ④時刻ズレ分布＋入らなかった日）。出力 `data/g4_weekly/{月曜}.txt`。**金曜NYクローズ後にAURELが実行→会長へ渡す**（土曜の週報第1号原料）。
+- runner再起動済（PID stub 5668 / worker 17200、cycle1 srv_skew_s=10799.4 確認）。width_hist=3697はstate永続で継続。
+
+### Fable5への宿題（会長判断待ち）
+- **口座継ぎ(7/23期限)×シグナル10本要件が数学的に非両立**（残7〜8 NYセッション）。**2本目トライアルの早期発行が事実上必須** → §4 SOP（`reference/account-switch-sop.md`）を切替実施時に本番予行として作成。
+- **通知チャネル未配線**（deadman/webhook/smtp すべて False・local_jsonlのみ）。テスト発火の前提＝送信先を会長が1回投入。方式未定。
+- 週4末: デバフ後合格率を「良い方向」でも同手続きで再計算＋実効リスク分布版を併記（§1/§2）。
