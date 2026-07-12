@@ -64,10 +64,21 @@ updated: 2026-07-11
 - `FundingPipsTrial\.env`: `MT5_PATH=C:\FundingPips-MT5\terminal64.exe` / `MT5_PORTABLE=1` を追記。
 - `scripts/g4_dryrun.py` `SYMBOL_CANDIDATES` に **`NDX100`** 追加。
 
+### 2026-07-12 ★4週ドライラン本走を実装・常駐化（月曜オープンで自動起動）
+- `g4_dryrun.py` に **`--live` 常駐ループ**を新規実装（`live_dryrun`）。NY営業日ごとに監視終了(13:30 ET)+1分後、`copy_rates`→(ts,O,H,L,C,hs,atr)→`run_one_session`→日次export(`data/g4_daily`)＋§2-1乖離＋心拍。**order_send は絶対に呼ばない**。決定は `build_ny_session_live` 経由=凍結とバイト同値(selftest済)。
+  - 週末に過去NY日で実データ検証済(07-06..07-10, copy_rates→判断→SL/TP/floorロット→乖離が全通)。one-shot(`--max-cycles`)も正常終了。
+  - width_hist は履歴CSV全NY幅(3697本)で初回シード → 凍結と連続。state=`data/g4_live_state.json`。
+  - 起点ガード `_DRYRUN_START=2026-07-13`(先週を混ぜない) / `_candidate_days` は直近平日を backfill(PC停止の取りこぼし自己修復) / **自己再接続**(端末が落ちても再initialize・誤口座は即停止)。
+- **常駐化(admin不要)**: `schtasks /create` は Access denied(要昇格)だったので **スタートアップフォルダ**方式。
+  - `Startup\aurel_g4_dryrun.bat` → 起動時に runner+watchdog を最小化起動。
+  - launcher: `C:\Users\user\FundingPipsTrial\run_g4_live.bat`(=`python -u g4_dryrun.py --live --poll 300`) / `run_g4_watchdog.bat`(=`g4_watchdog.py --interval 60 --stale 900`)。ログは同フォルダ `g4_live.log`/`g4_watchdog.log`。
+  - **今すぐ起動済**: runner worker PID(例)16724・watchdog worker 15072 稼働、心拍 live_idle 更新中。★IF venv の python.exe は launcher stub を噛むので "python.exe 2個/役割" は正常(stub+worker=1論理プロセス)。
+- 運用注意: runnerは端末が落ちても `Mt5Session(path+creds)` で再接続=自己修復するが、**隔離端末を緑のまま放置**推奨(belt-and-suspenders)。**PCがオープン時間帯(NY 09:30-13:30 ET=JST 22:30-翌02:30, EDT期)に起動している**必要。
+
 ### 残（次段）
-- NY セッションのリアルタイム評価ループ(copy_rates→FEED→BRAIN→plan→乖離記録)を**この接続の上で回す**＝実際の4週ドライラン本走。市場オープン(月曜NY)以降に稼働。要: 隔離端末を起動状態で維持（会長が緑のまま放置 or 自動起動）。
-- NDX100 spec を config sleeve へ確定記入（floorロット換算を実測ベース化）。
-- §2-2 通知チャネル(dead-man URL/SMTP/webhook)は未接続のまま。
+- NDX100 spec を config sleeve へ確定記入（floorロット換算を実測ベース化。現状は接続時 measure_symbol 実測を毎回使用で機能上は足りている）。
+- §2-2 通知チャネル(dead-man URL/SMTP/webhook)未接続 → NOTIFY.notify はローカル台帳止まり。会長スマホ通知はチャネル配線が要る。
+- 冬時間(11月〜)は NY時刻のJST換算が+1h。ドライラン窓(7-8月)は影響なし。
 
 ### 済んだこと（AUREL側・自動）
 - `C:\FundingPips-MT5\terminal64.exe` に **portable 分離インスタンス**を作成済（Vantage実弾データに非接触）。初回更新・全再コンパイル(131ファイル)完了・build 5836。
