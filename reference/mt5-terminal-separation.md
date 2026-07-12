@@ -43,6 +43,32 @@ updated: 2026-07-11
   - ブラウザ版WebTerminal: https://mt5.fundingpips.com/terminal
   - ★注意: .envのサーバ名 `FundingPips-Trial` が実サーバ名と一致するか要確認（SIM系 `FundingPips-SIM1`/`FundingPips2-SIM` 等の可能性。会長ダッシュボードのCredentials欄が正）。
 
+## 2026-07-12 ★解決（接続確立・G4ドライラン起動段まで通過）
+
+### 真因の最終確定（誤診の訂正）
+- サーバ名は会長が正しかった＝**`FundingPips-Trial` が実サーバ名**（SIM1/SIM2説はこの口座には的外れ。ブローカーは "FundingPips Corp"）。
+- 壁の正体＝**`servers.dat` に FundingPips-Trial のアクセスポイント(サーバIP住所)が未登録**。口座はタイトルに残像表示されるが、ダイヤル先住所が無く「緑にならず・エラーも出ずハング」。
+- **決定的な入口の違い**: 「ファイル→取引口座にログイン」ではサーバ住所(.srv)は落ちない。**「ファイル→口座開設(Open an Account)」でブローカー"FundingPips"を検索→選択**すると住所がDLされ servers.dat に入る。**これが全失敗を貫いていた唯一の欠落操作**。
+- 会長がこの口座開設ウィザードを実行 → journal に確定行:
+  - `'40000162046': authorized on FundingPips-Trial`
+  - `terminal synchronized with FundingPips Corp: 52 symbols, trading enabled - hedging mode`
+
+### 接続後にAURELが自動で通したこと（本番配線・検証済）
+- `initialize(path=C:\FundingPips-MT5\terminal64.exe, portable=True)` で**接続済み端末へ純アタッチ成功**。
+- 口座照合OK: `login=40000162046 server=FundingPips-Trial currency=USD balance=25000 name='Guest U'`。
+- **US100実シンボル = `NDX100`**（contract_size=20.0, vol_min=0.01, step=0.01, max=10.0, digits=2, point=0.01）。※日曜クローズ中は bid/ask=0（スペックは取得可）。
+- 本番 `g4_dryrun.py --mt5` が IF venv 経由で**接続→誤口座ガード→spec実測→心拍**まで一気通貫（order_send不使用・--dry厳守）。
+
+### コード/設定変更（恒久化・済）
+- `execution/mt5_live.py` `Mt5Session.__init__`: **`MT5_PATH`/`MT5_PORTABLE` 対応**追加。端末名指しアタッチ＋接続済みなら creds 無しの純アタッチにフォールバック。→ 実弾Vantage端末と混ざらない。
+- `FundingPipsTrial\.env`: `MT5_PATH=C:\FundingPips-MT5\terminal64.exe` / `MT5_PORTABLE=1` を追記。
+- `scripts/g4_dryrun.py` `SYMBOL_CANDIDATES` に **`NDX100`** 追加。
+
+### 残（次段）
+- NY セッションのリアルタイム評価ループ(copy_rates→FEED→BRAIN→plan→乖離記録)を**この接続の上で回す**＝実際の4週ドライラン本走。市場オープン(月曜NY)以降に稼働。要: 隔離端末を起動状態で維持（会長が緑のまま放置 or 自動起動）。
+- NDX100 spec を config sleeve へ確定記入（floorロット換算を実測ベース化）。
+- §2-2 通知チャネル(dead-man URL/SMTP/webhook)は未接続のまま。
+
 ### 済んだこと（AUREL側・自動）
 - `C:\FundingPips-MT5\terminal64.exe` に **portable 分離インスタンス**を作成済（Vantage実弾データに非接触）。初回更新・全再コンパイル(131ファイル)完了・build 5836。
 - 隔離venv `C:\Users\user\FundingPipsTrial\venv` に MetaTrader5 導入済（検証用）。
