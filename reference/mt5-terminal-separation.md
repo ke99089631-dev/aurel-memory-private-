@@ -66,6 +66,15 @@ updated: 2026-07-11
 - **是正(最優先・再発防止)**: runner+番犬を**タスクスケジューラ登録で真に分離起動**する。ログオン時自動起動＋独立プロセス化で「セッション閉鎖・PC再起動」両方に耐える形へ。`start /min`のBash子起動は二度とやらない。
 ### 教訓
 - 常駐は**セッション寿命から完全に切り離す**のが絶対要件。番犬も同じツリーに置いたら保険にならない(単一障害点)。Task Scheduler(またはWindowsサービス)で親を持たせず、番犬は別トリガーで独立起動。
+
+### ★是正完了＋実証(2026-07-24 21:30 JST) — 言葉でなく「殺しても蘇る」証拠で確認
+- **タスクスケジューラ3層**を構築(すべて親=svchost.exe pid1912=Task Schedulerサービス。Claudeセッションの子では**ない**):
+  - `AUREL_G4_Runner` … `run_g4_live.bat`(--live --poll 300)。LogonTrigger delay20s。ExecTimeLimit=PT0S(無制限)/IgnoreNew/RestartCount3。※前セッション昇格で登録済=非昇格の今は改変不可だが**実行(schtasks /run)は非昇格でも可**。
+  - `AUREL_G4_Watchdog` … `run_g4_watchdog.bat`(--interval60 --stale900 --restart)。番犬の再起動を`schtasks /run AUREL_G4_Runner`経由に変更済=**単一障害点を除去**(番犬が死んでもrunnerはスケジューラ所有)。
+  - `AUREL_G4_Keepalive`(★新規・俺が所有/非昇格) … Action=`schtasks /run /tn AUREL_G4_Watchdog`。**時刻トリガ5分間隔・Duration無制限**・MultipleInstances=IgnoreNew。番犬が生きていればIgnoreNewで空振り、死んでいれば5分以内に蘇生。**RestartOnFailureは非採用**(cmd/batの終了コードでは不発だと今回実測=当てにしない)。
+- **反証不能な実証**: 番犬 pid16708(+子19952)を`taskkill /F`で殺害(21:27:46, present=False確認)→**手動介入なし**で待機→21:30:12にKeepalive時刻トリガが発火し**番犬が新pid11756で無人蘇生**(親cmd→祖父svchost1912=スケジューラ)。さらに番犬が停心拍を検知→`schtasks /run runner`でrunnerも自動復活(pid16740/15584、心拍live_idle更新再開=age259s)。
+- **RestartOnFailureの罠(実測)**: 番犬を殺すとタスクはLastResult=1で終了するが、Task SchedulerのRestartOnFailureは**150s待っても再起動しなかった**(State=Ready止まり)。→ 終了コード依存の自動再起動は信用せず、**独立タスクの反復トリガ(Keepalive)**で蘇生する設計に切替。
+- **残る手当て**: Runner/Watchdog本体は前セッションが昇格で作ったためLogonTriggerのみ(反復トリガ追加は非昇格では改変不可)。だがKeepaliveがWatchdogを5分ごとに叩き、WatchdogがRunnerを叩く二段で**ログオン後・再起動後・セッション閉鎖後すべてに耐える**。次に昇格機会があればRunner/Watchdogにも反復トリガを直付けして冗長化する。
   - `'40000162046': authorized on FundingPips-Trial`
   - `terminal synchronized with FundingPips Corp: 52 symbols, trading enabled - hedging mode`
 
