@@ -21,6 +21,9 @@ updated: 2026-06-03
 ## ⚠️ CRITICAL — Read before any UI edit
 - **[aurel-ui-rules.md](aurel-ui-rules.md)** — `C:\Users\user\aurel_life.html` を編集する**前**に必ず読む。`const sharedU` を動かす／消すと過去2回ブートが死んでいる。R1–R5 を守ること。
 
+## ⚠️ ACCOUNTABILITY — 宣言タスクは完了確認まで消えない（会長ルール 2026-07-25）
+- **[OPEN_COMMITMENTS.md](OPEN_COMMITMENTS.md)** — セッション起動時に必ず読む。**未完了(OPEN)項目があれば、全報告の冒頭に「【未完了】」ブロックとして掲げ続ける**。書かれなくなる＝完了ではない。完了の定義は「実装した」でなく「**検証で動作確認した**」。発端=7/20-24の週2欠測（宣言済み自動再起動が未実装のまま週跨ぎ）。
+
 ## 📌 PINNED — プロップ戦略ロードマップ（司令室・常設パネル）
 - **[projects/PROP-ROADMAP.md](projects/PROP-ROADMAP.md)** — 会長がいつでも開く「全体像＋決定事項＋ロードマップ」1枚。現在地=Phase 7（$25k×1本の実弾GO待ち）。大きな決定・GO・数値が変わるたびにここを更新すること。
 
