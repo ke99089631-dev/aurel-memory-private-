@@ -35,6 +35,17 @@ g4_dashboard.py → data/g4_state.json（唯一の真実・共通データ源）
 | 出力HTML | `C:\Users\user\AssetEmpire\empire\data\g4_dashboard.html`（30秒自動リフレッシュ） |
 | ログ | `C:\Users\user\FundingPipsTrial\g4_dashboard.log` |
 | ログオン自動オープン | `...\Startup\g4_dashboard_open.bat`（25秒待って既定ブラウザで開く） |
+| 共通データ源 | `data/g4_state.json`（ビューA/B共通の唯一の真実） |
+| ビューB公開PNG | `data/g4_public.png`（生成=`scripts/g4_public.py`・毎分ビューA生成に同梱） |
+| 期限メタ | `data/g4_trial_meta.json`（trial_no/expiry_date/status/note・2本目発行後に会長情報で更新） |
+
+## ビューB公開PNG（実装済 2026-07-26）
+- 依存: **Pillow**（ImperialFlow venvに導入済）＋Windows同梱JPフォント(YuGothB/meiryo)。
+- `g4_dashboard.py` main() が `from g4_public import generate_png` を try/except で呼ぶ＝**PNG失敗はビューAを壊さない**。
+- 描画するのは4つだけ: **生死状態（稼働中/注意/停止）・稼働率%・カレンダー色・シグナル本数(X/10)**。
+- 「載せないもの」を state から一切参照しない構造: login/PW/サーバ/ブローカー/残高絶対額/EP/SL/TP/lot/pid/host/パス/skew生値/未確定判断。
+- フッタに免責「※ドライラン(記録のみ)。売買実績・損益ではありません」（景表法/金商法配慮）。
+- 検証: 1200x630 PNG。稼働中(緑)・60%・5/10・欠測4連が赤で表示、秘密の漏れなしを目視確認。
 
 ## 常駐タスク
 - **`AUREL_G4_Dashboard`**: schtasks `/sc MINUTE /mo 1`（1分毎・無期限）。State=Ready。
