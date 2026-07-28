@@ -52,6 +52,16 @@ g4_dashboard.py → data/g4_state.json（唯一の真実・共通データ源）
   非管理者で作成成功（`schtasks.exe`方式。Register-ScheduledTask(CIM)は0x80070005で拒否された）。
 - 既存3タスク（Runner=Running / Watchdog=Running / Keepalive=Ready）と並び、ダッシュボード自身にも4タスクの生死が出る。
 
+## 可視ウィンドウ抑止（2026-07-28 修正・恒久）
+> 症状: 会長PCに cmd 窓が**定期的に開く**＋「AUREL/Attaches/order_send は認識されていません」エラー窓。かなり迷惑との指摘。
+- **原因①** 反復タスク（Dashboard=毎分 / Keepalive=5分毎）が Interactive で `cmd/bat` を直接起動＝毎回**可視窓**が点滅。
+- **原因②** batのREMコメントが日本語(UTF-8)。cmd(cp932)が化けてREM解析が壊れ、英単語をコマンド扱い→「〜は認識されていません」。会長が撮った窓の正体は `run_g4_live.bat` の「会長」バイト。
+- **対策A（隠し起動）** `C:\Users\user\FundingPipsTrial\hidden_run.vbs` を新設。`WScript.Shell.Run "<bat>", 0, True`（0=非表示／**True=完了待ち**）。Dashboard/Keepalive の action を `wscript.exe //B "hidden_run.vbs" "<bat>"` に付け替え（`Set-ScheduledTask`・非管理者で成功）。
+  - **落とし穴**: 最初 `,0,False`（非同期）にしたら wscript が即終了→Task Schedulerが完了扱い→pythonが走らずHTML凍結（LastResult=0なのに未更新）。**必ず True（同期待ち）**にする。短命タスク限定。Runner等の常駐は wrap しない（Trueだと永久ブロック）。
+- **対策B（ASCII化）** 全 `run_g4_*.bat` の日本語コメントをASCIIに。検証: `nonASCII_bytes=0` 全bat。
+- **検証(2026-07-28)**: 自然発火(毎分)で HTML/state 更新=True・LastResult=0・**可視窓 NONE**。Runner心拍 pid=12168（C-002同一pid＝不変）新鮮。Runner/Watchdog=Running 継続。
+- Startup の `g4_dashboard_open.bat` は `timeout /t 25` の窓がログオン時に**1回だけ**出る（定期ではない）。気になれば同VBSで隠せるが今回は据置。
+
 ## 読むデータ
 - `data/g4_heartbeat.json` … 生死（ts鮮度）・phase・cycle・srv_skew_s
 - `data/g4_daily/*.json` … 日別判断（entered/side/lots/eff_risk）
