@@ -53,13 +53,15 @@ g4_dashboard.py → data/g4_state.json（唯一の真実・共通データ源）
 - 既存3タスク（Runner=Running / Watchdog=Running / Keepalive=Ready）と並び、ダッシュボード自身にも4タスクの生死が出る。
 
 ## 可視ウィンドウ抑止（2026-07-28 修正・恒久）
-> 症状: 会長PCに cmd 窓が**定期的に開く**＋「AUREL/Attaches/order_send は認識されていません」エラー窓。かなり迷惑との指摘。
-- **原因①** 反復タスク（Dashboard=毎分 / Keepalive=5分毎）が Interactive で `cmd/bat` を直接起動＝毎回**可視窓**が点滅。
-- **原因②** batのREMコメントが日本語(UTF-8)。cmd(cp932)が化けてREM解析が壊れ、英単語をコマンド扱い→「〜は認識されていません」。会長が撮った窓の正体は `run_g4_live.bat` の「会長」バイト。
-- **対策A（隠し起動）** `C:\Users\user\FundingPipsTrial\hidden_run.vbs` を新設。`WScript.Shell.Run "<bat>", 0, True`（0=非表示／**True=完了待ち**）。Dashboard/Keepalive の action を `wscript.exe //B "hidden_run.vbs" "<bat>"` に付け替え（`Set-ScheduledTask`・非管理者で成功）。
-  - **落とし穴**: 最初 `,0,False`（非同期）にしたら wscript が即終了→Task Schedulerが完了扱い→pythonが走らずHTML凍結（LastResult=0なのに未更新）。**必ず True（同期待ち）**にする。短命タスク限定。Runner等の常駐は wrap しない（Trueだと永久ブロック）。
-- **対策B（ASCII化）** 全 `run_g4_*.bat` の日本語コメントをASCIIに。検証: `nonASCII_bytes=0` 全bat。
-- **検証(2026-07-28)**: 自然発火(毎分)で HTML/state 更新=True・LastResult=0・**可視窓 NONE**。Runner心拍 pid=12168（C-002同一pid＝不変）新鮮。Runner/Watchdog=Running 継続。
+> 症状: 会長PCに cmd 窓が**定期的に開く**＋「AUREL/Attaches/order_send は認識されていません」エラー窓。かなり迷惑との指摘。閉じても復活。
+- **真犯人＝Runner/Watchdog**: `AUREL_G4_Runner`/`AUREL_G4_Watchdog` は `cmd.exe /c bat` で**終わらないpython**（無限ポーリング）を起動→cmd窓が**開きっぱなし**。出力は`>> log`へ逃がすので**空窓**。これが「空の窓が2つ」の正体。閉じると`--restart`が復活→「閉じても定期的開く」。
+- **副次源**: 反復タスク Dashboard(毎分)/Keepalive(5分)/ETHAutopilot(毎時) も Interactive で cmd/bat 直起動＝可視窓。
+- **エラー文言の原因**: batのREMが日本語(UTF-8)→cmd(cp932)で化けREM解析破壊→英単語をコマンド扱い。`run_g4_live.bat` の「会長」バイトが元凶。→全 `run_g4_*.bat` をASCII化（`nonASCII_bytes=0`）。
+- **対策A（隠し起動VBS）**: `C:\Users\user\FundingPipsTrial\hidden_run.vbs` = `WScript.Shell.Run "<bat>", 0, True`（0=非表示／**True=完了待ち**）。**5タスク全部**の action を `wscript.exe //B "hidden_run.vbs" "<bat>"` に付替（Dashboard/Keepalive/Runner/Watchdog/ETHAutopilot）。`Set-ScheduledTask`・非管理者で成功。ETL=PT0S(無期限)なので常駐OK。
+  - **落とし穴1**: `,0,False`（非同期）だと wscript 即終了→タスク完了扱い→pythonが走らずHTML凍結（LastResult=0なのに未更新）。**必ず True（同期待ち）**。常駐タスクでもTrueでwscriptが生き続け State=Running を保つ（＝Task Schedulerが木を所有＝停止で確実にkill）。
+  - **落とし穴2**: `Stop-ScheduledTask` は旧`cmd/c bat`起動のpythonを**取り逃す**ことがある（オーファン化）。切替時は旧pythonを `Stop-Process -Force` で一掃してから隠しで再起動しないと、旧runnerがMT5端末を掴んだまま新runnerが即終了しReady落ちする。
+- **対策B（watchdog再起動経路も隠し）**: `g4_watchdog.py` の `_relaunch_runner()` フォールバックを `cmd /c start /min`→`wscript //B hidden_run.vbs <bat>` に変更（主経路の `schtasks /run` はタスク=隠し済で既に無音）。
+- **検証(2026-07-28 22:24)**: 80秒間・毎分発火を跨いで**可視窓ゼロ**。Runner=Running(新pid12464・心拍新鮮)/Watchdog=Running(新runner生存確認)/Dashboard毎分更新継続。※クリーン再起動で心拍pidは 12168→12464 に更新（C-002の無人自動起動は不変・タスク所有のまま）。
 - Startup の `g4_dashboard_open.bat` は `timeout /t 25` の窓がログオン時に**1回だけ**出る（定期ではない）。気になれば同VBSで隠せるが今回は据置。
 
 ## 読むデータ
