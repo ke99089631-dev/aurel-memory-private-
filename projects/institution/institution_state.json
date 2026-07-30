@@ -513,7 +513,7 @@
         "id": "9",
         "name": "自己進化（日次カデンツ）",
         "breathing": true,
-        "signal": "同一write_backで毎朝1拍・冪等収束。"
+        "signal": "同一write_backで毎朝1拍・冪等収束。 【昇格】③研究予算が収束深さ(depth=1+min(units,3))を供給＝資本が学習の速さを買う。行き先は不変・単調・単一書き手write_back不変(evolve.py)。"
       }
     ],
     "production_owners": {
@@ -533,9 +533,24 @@
       "authorized": true,
       "target_loop": "9-self-evolution",
       "note": "paperのみ・金ゼロ・助言のみ→進化ノブは単一書き手write_backのみ・本番/実弾非接触"
+    },
+    "evolve": {
+      "promotion": "③研究予算→⑨自己進化：助言→命令（資本が学習の速さを買う）",
+      "convergence_depth": 3,
+      "research_units": 2,
+      "max_accel": 3,
+      "authorized": true,
+      "invariants": "供給は歩数上限のみ・行き先(target)は予算に不変・単調・目標追い越し無し・範囲[0.001,0.02]・本番書込みは write_back ただ一つ（単一書き手不変）・隔離兵は免疫がmax固定",
+      "today_production": "不変(DRY symbols_changed=0：全兵が目標到達済/隔離固定)。加速は将来「目標から遠い非隔離兵」の日に効く",
+      "note": "paperのみ・金ゼロ・進化ノブ書込は単一書き手write_backのみ・実弾/live/プロップ非接触"
     }
   },
   "recent_decisions": [
+    {
+      "date": "2026-07-30",
+      "decision": "【③→⑨を助言→命令へ昇格：資本が学習の速さを買う・AUREL推進・検証PASS】更新⑪で③研究予算は「⑨へ研究サイクル起動可と助言」止まりだった。evolve.pyで最後の一歩＝助言→命令を、単一書き手・単調・境界の原則を崩さず閉じた：③研究予算 research_units を読み「今サイクル同じ目標へ何歩寄せてよいか」の収束深さ depth=1+min(units,MAX_ACCEL=3) を write_back へ供給。write_back の _plan_new に max_steps を追加し move上限を STEP*depth に（move は常に target-old で頭打ち＝目標を追い越さない・単調・範囲[0.001,0.02]内）。＝資本が学習の速さを買うが方向は買わない（行き先は予算に不変）。本番書込みは依然 write_back ただ一つ（単一書き手不変）・隔離兵は免疫が深さより優先しmax固定。検証(run_evolve PASS)：純関数証明で全depth目標追い越し無し・境界内・depth1は従来同一・遠い負け兵(0.005/win0.10/目標0.013)は1歩0.007→3歩0.011で加速・連鎖OK。本番不変監査：今日depth=3供給も全兵が目標到達済/隔離固定のため write_back DRY symbols_changed=0＝今日の本番は完全不変。auto_writeback step5f＋digestに⑨昇格表示。実弾非接触。＝稼ぐ→留保→速く賢くなる→もっと稼ぐ が金ゼロで一周閉じた。●は6/9のまま(③⑨の深化)。",
+      "type": "fact"
+    },
     {
       "date": "2026-07-30",
       "decision": "【③の残枝：利益の留保→研究投資分岐を閉じた・AUREL推進・検証PASS】③資本(treasury)は単一化・時間追跡まで閉じたが、稼いだ紙資本を『次に賢くなる投資』へ回す枝が未実装だった。reserve.pyで③資本→⑨自己進化を血管で接続：資本総額の正の実現利益から20%を研究予算へ留保・残80%は運転資本→予算がRESEARCH_UNIT(1000)を満たせば⑨へ「研究サイクル起動可」を助言→予算を専用台帳へ日次記録(同日ガード)。検証(run_reserve PASS)：総額10037→研究予算2007.44/運転8029.78/起動可2サイクル・合成累積(500→1500→2200で起動0→1→2)・連鎖OK・write_back DRY symbols_changed=0(本番無傷)。auto_writeback step5eで日次自動＋digestに③残枝表示。助言＋paper予算台帳のみ＝進化ノブは単一書き手write_backのみ・実弾非接触。●は6/9のまま(③の深化)。",
