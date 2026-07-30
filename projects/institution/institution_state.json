@@ -459,7 +459,7 @@
   ],
   "circulation": {
     "doc_note": "循環（帰還ループ）の共有面。生きた正本は empire/data/circulation/circulation_digest.json（毎朝カデンツで更新）。ここは会長command画面表示用の直近スナップショット。",
-    "closed_loops": 8,
+    "closed_loops": 9,
     "total_loops": 9,
     "cadence": "毎朝07:00 JST: auto_writeback -> write_back -> digest公開 -> 心拍を共有神経へbroadcast -> 他Group(G5/G1)が能動読取し姿勢更新 -> ②利益: paper資本を再配分(capital_book更新) -> ③資本: 複数枠を単一化しequity curveへ1点記録(treasury.json更新)（全て助言＋paper台帳のみ・本番evolved_configs/実弾非接触）",
     "active_read": {
@@ -513,6 +513,12 @@
         "id": "6",
         "name": "AI(council/合議・paper自律・助言)",
         "signal": "各循環臓器(①worldmodel/②capital/⑤immune/⑧personnel/台帳+⑨evolve)が共有面digestを読み一票→AURELが信頼度加重で合意へ束ね共有神経へ戻す。本日合意=DEFEND(防御4:拡大1・agreement0.8・直近pnl整合)。外部AI/API/秘密も本番も実弾も非接触。",
+        "breathing": true
+      },
+      {
+        "id": "7",
+        "name": "技術(technology/開発ループ・paper自律・助言)",
+        "signal": "生きた読取専用ソース(digest+運用ファイル)から技術問題を検知→改善要求(チケット)→前回比で結果検証(消えた=直った=帰還)→履歴で累積解決/再発を追う。本日3件(quarantine_backlog HIGH/chronic_watch MEDIUM/regime_lag LOW)。実装は循環の外=人手・既存コード無改変・凍結資産非接触。",
         "breathing": true
       },
       {
@@ -589,9 +595,29 @@
       "safety": "合意+助言+paper台帳のみ。外部AI/API/秘密も本番evolved_configsも実弾も非接触。台帳連鎖NGなら監査AIが最大信頼で防御へ。",
       "wired": "auto_writeback step5h (date-guard + broadcast + publish) / digest 6-ai / closed_loops=8",
       "remaining": "合意→②資本姿勢/⑨深さへの反映(助言→命令)・会長の一票の取り込み"
+    },
+    "technology": {
+      "module": "circulation/technology.py + run_technology.py",
+      "agent_id": "G6.technology",
+      "closes": "⑦技術(最後の未閉鎖・これで9/9)",
+      "loop": "検知→改善要求(チケット)→追跡→結果検証(問題が消えたか)→技術へ帰還",
+      "honest_boundary": "既存コードを1行も書き換えない(G2聖域/凍結backtester/修正Stage5禁止)。実装そのものは循環の外=人間/AURELの手作業のまま。閉じたのは検知〜結果検証〜帰還の環。",
+      "today_open": [
+        "quarantine_backlog:HIGH",
+        "chronic_watch:MEDIUM",
+        "regime_lag:LOW"
+      ],
+      "safety": "チケット+助言+paper台帳のみ。コードも本番evolved_configsも実弾も非接触・凍結資産無改変・外部監視/API/秘密非接触。",
+      "wired": "auto_writeback step5i (date-guard + broadcast + publish) / digest 7-technology / closed_loops=9",
+      "remaining": "チケット→実装の受け渡し(人手のまま)・再発の根治判定・命令化(監視強化が前提)"
     }
   },
   "recent_decisions": [
+    {
+      "date": "2026-07-30",
+      "decision": "⑦技術循環を◐→●で閉じた(technology.py):検知→改善要求(チケット)→結果検証→帰還の開発ループ。●=9/9(全循環閉鎖)。正直な線引き=実装は循環の外=人手・既存コード/凍結資産無改変・本番も実弾も非接触・検証PASS。",
+      "type": "circulation"
+    },
     {
       "date": "2026-07-30",
       "decision": "⑥AI循環を◐→●で閉じた(council.py):各循環臓器がdigestを読み一票→AUREL合意→共有神経へ戻す中枢神経。本日合意DEFEND。●=8/9。外部AI/API/秘密も本番も実弾も非接触・検証PASS。",
