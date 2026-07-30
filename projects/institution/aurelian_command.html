@@ -143,12 +143,14 @@ const SNAPSHOT = {
     {"date":"2026-07-30","decision":"機関フェーズ=統治・表示・監査基盤の構築"}
   ],
   "circulation":{
-    "closed_loops":4,"total_loops":9,
-    "cadence":"毎朝07:00 JST: auto_writeback -> write_back -> digest（読取専用の共有面を更新）",
+    "closed_loops":6,"total_loops":9,
+    "cadence":"毎朝07:00 JST: auto_writeback -> write_back -> digest公開 -> 共有神経へbroadcast -> G5/G1能動読取 -> ②利益paper資本再配分 -> ③資本単一台帳へ記録（本番/実弾非接触）",
     "digest_file":"empire/data/circulation/circulation_digest.json",
     "world":{"date":"2026-07-29","regime":"crisis/range","vol_score":0.362,"stance":"defensive","floor":0.009},
     "loops":[
-      {"id":"1","name":"情報（世界モデル）","breathing":true,"signal":"今日crisis+本が出血→守り。ETHの選別を0.005→0.009。金XAUは危機に強く免除。"},
+      {"id":"1","name":"情報（世界モデル）","breathing":true,"signal":"今日crisis+本が出血→守り。ETHの選別を0.005→0.009。金XAUの免除は地合い別の親和性学習へ置換。"},
+      {"id":"2","name":"利益（paper資本の再配分）","breathing":true,"signal":"paper実現損益で資本を再配分。勝ち頭XAU@0.339・隔離BTC/GBP@0.047・等分0.2から資本0.31移動。実弾非接触。"},
+      {"id":"3","name":"資本（単一化台帳・時間追跡）","breathing":true,"signal":"複数枠(日足5301+4h4735)を単一総額10037へ集約。②ウェイトで各兵へ配分。日次でequity curve/最大DD/成長率を追跡。実弾非接触。"},
       {"id":"4","name":"知識（慢性勝率→選別）","breathing":true,"signal":"自分のpaper戦績で選別ノブを冪等に収束（EUR等）。"},
       {"id":"5","name":"失敗（免疫）","breathing":true,"signal":"直近ウィンドウで隔離5銘柄（BTC/GBP/XRP/ADA/LTC）。回復すれば自動解除。"},
       {"id":"9","name":"自己進化（日次カデンツ）","breathing":true,"signal":"同一write_backで毎朝1拍・冪等収束。"}
