@@ -42,7 +42,7 @@ approver: 会長（KEIKI MAEDA）
 |---|---|---|
 | Institutional Core | 骨格〜一部稼働 | ― |
 | Proprietary Investment | 一部稼働（ETH LIVE + paper群） | ETH自律枠のみ実弾 |
-| Prop Trading | Phase 7（$25k実弾GO待ち・dry継続） | 未（受験料GO待ち） |
+| Prop Trading | Phase 7（$25k実弾GO待ち・dry継続）／維持機=MM0凍結済 | 未（受験料GO待ち） |
 | Research and Evolution | 骨格 | ― |
 | Audit and Risk | 一部稼働（台帳/防衛） | ― |
 | Future Strategy | 枠のみ | ― |
@@ -99,6 +99,9 @@ approver: 会長（KEIKI MAEDA）
 | J-2 | **ETH口座同定＋衝突確認** | Vantage($53)は会長裁定で機関外（会長裁量）へ分離済。だが `autopilot_config live:true` のまま。**ETHAutopilotが現在どの口座でLIVEか要確認**。旧ETH口座=現裁量Vantageを指すなら手動裁量と自動発注が同一口座で衝突する危険。AURELは読取専用のため踏み込まず。**会長の確認が必要**。 |
 | J-3 | プロップ実弾GO | Phase 7 の $25k×1本 受験料支払いGO。 |
 | J-4 | Core活性化 | 台帳/アロケータ本活性化への着手可否（Stage 3）。 |
+| J-5 | 維持機の系譜 | 維持機はMM0凍結済（`archive/2026-07-30_maintenance_17hrp_freeze`・専用台帳seq=1）。審査終了まで改善探索禁止（凍結保存のみ）。 |
+| J-6 | 維持機-8%接触率の権威確定 | 床-8%接触率の生数値は永続出力ファイル無し（stdout限り・実行日未記録）。数値を台帳の唯一の正にするには、凍結スクリプトをパラメータ不変で一度再走し出力保存が要る。**再走を許可するか（指示5の凍結保存の範囲内か）会長判断待ち**。 |
+| J-7 | 凍結台帳の統合先 | MM0凍結は専用 `institution_freeze_ledger.sqlite` に記録（ライブDB競合回避）。特定の統合台帳へ寄せるべきか会長判断待ち。 |
 
 ---
 
