@@ -610,9 +610,35 @@
       "safety": "チケット+助言+paper台帳のみ。コードも本番evolved_configsも実弾も非接触・凍結資産無改変・外部監視/API/秘密非接触。",
       "wired": "auto_writeback step5i (date-guard + broadcast + publish) / digest 7-technology / closed_loops=9",
       "remaining": "チケット→実装の受け渡し(人手のまま)・再発の根治判定・命令化(監視強化が前提)"
+    },
+    "approval": {
+      "module": "circulation/approval.py + run_approval.py",
+      "agent_id": "AUREL.overseer",
+      "purpose": "会長は〇(やる)/x(様子見)だけ。面倒(どこを触ってよいか・バックアップ・検証・後始末)は全部AUREL。危険(G2聖域/凍結backtester/US100 FINAL/実弾)はカードに出さない/auto実行に載せない。",
+      "auto_actions": [
+        "killswitch_on=自動書き戻しの停止解除",
+        "cadence_stalled=止まったカデンツを1周(auto_writeback --force)"
+      ],
+      "manual_actions": [
+        "ledger_integrity",
+        "quarantine_backlog",
+        "chronic_watch",
+        "council_split",
+        "regime_lag(=人の手・〇でもGO記録だけ)"
+      ],
+      "flow": "⑦チケット→カード仕分け(auto/manual)→会長〇→auto:退避→実行→検証→失敗なら復元 / manual:会長GO記録→AURELが別途diff提示つきで手作業→翌朝⑦が結果検証",
+      "safety": "自動承認は絶対にしない(会長が〇したときだけapprove)。本番evolved_configsは単一書き手write_backのみ。実弾/聖域/凍結/US100 非接触。",
+      "wired": "auto_writeback step5j (キュー公開のみ・自動承認なし) / approvals.json",
+      "verified": "run_approval --selftest PASS(危険5カテゴリ auto混入なし・killswitch安全実行往復・manual自動実行しない)",
+      "remaining": "dashboardに〇/xボタンUI(現状は会長chatで〇/x→AUREL approve/reject)・auto種類の安全拡張"
     }
   },
   "recent_decisions": [
+    {
+      "date": "2026-07-30",
+      "decision": "会長の〇/x受け渡し(approval.py)を新設=⑦の助言→命令の第一歩。会長は〇/xだけ、面倒は全部AUREL、危険(聖域/凍結/US100/実弾)はカードに出さない。auto=可逆運用のみ自動実行(退避→実行→検証→復元)、manual=人の手はGO記録だけ。自動承認は絶対しない・本番/実弾非接触・検証PASS。",
+      "type": "circulation"
+    },
     {
       "date": "2026-07-30",
       "decision": "⑦技術循環を◐→●で閉じた(technology.py):検知→改善要求(チケット)→結果検証→帰還の開発ループ。●=9/9(全循環閉鎖)。正直な線引き=実装は循環の外=人手・既存コード/凍結資産無改変・本番も実弾も非接触・検証PASS。",
