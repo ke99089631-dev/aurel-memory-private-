@@ -43,7 +43,7 @@ source: FINAL-ARCHITECTURE.md / ASSET-REPLACEMENT-MAP.md
 ### (c) 未着手の機能【無】
 - 複数口座・複数ブローカー管理
 - ポートフォリオ横断リスクの一元集約（部分的にdefense、全体は未）
-- プロップ会社別ルールエンジン（照合は手動）
+- 口座別/ブローカー別ルールエンジン（機関自身の将来の実弾運用向け。※現・独立プロップは非関与で対象外）
 - 月次運営サイクル（日次/週次はあり）
 - AI社員の職務・権限・エスカレーション規程
 - 新市場・新Divisionの追加手順（枠は設計済・手順は未）
@@ -52,7 +52,7 @@ source: FINAL-ARCHITECTURE.md / ASSET-REPLACEMENT-MAP.md
 - 全 empire/ モジュール（→ G2 Core / G3 事業 / G4 研究に再配置：ASSET-REPLACEMENT-MAP.md）
 - Arsenal / Hermes / Gemini / Council（AUREL基盤 → G4/G6 に正式所属）
 - 日足19・4H暗号8・ETH等（Proprietary一括 → Proprietary Quant / Crypto に分離）
-- G4（Prop中心の扱い → Prop Trading Division の1 Program へ格下げ配置）
+- G4/審査機/維持機（プロップ中心の扱い → **独立事業・機関非関与**として切り離し。組織図に置くだけ・機関の運用/資本配分/ロードマップ/完成率から除外・さわらない）
 
 ### (e) 重複機能
 - レジーム判定が observatory（G2寄り）と Market Intelligence（G4）で重なる → **G2が信号供給・G4が解釈/研究**と役割分離（重複解消方針）。
@@ -65,7 +65,7 @@ source: FINAL-ARCHITECTURE.md / ASSET-REPLACEMENT-MAP.md
 - **不足データ**: 複数口座の資本台帳 / ブローカー別約定データ / 各市場のライブデータ購読。
 - **不足インフラ**: 複数ブローカーアダプタ / ローカルHTTP配信（UI）/ 口座ルーティング。
 - **不足AI社員（定義）**: AI社員名簿・権限表・エスカレーション先（Arsenal/Council/Hermes/ai_soldierは在るが職務未定義）。
-- **不足統治機能**: 自動違反検知・プロップ会社別ルールエンジン・月次運営。
+- **不足統治機能**: 自動違反検知・口座別/ブローカー別ルールエンジン（機関自身の将来の実弾運用向け。※独立プロップは非関与で対象外）・月次運営。
 - **不足UI**: Group/Division別完成度ビュー・ライブ更新・操作段階解放。
 
 ---
@@ -76,7 +76,7 @@ source: FINAL-ARCHITECTURE.md / ASSET-REPLACEMENT-MAP.md
 |---|---|---|
 | G1 Executive and Governance | **70%** | 憲章・会長承認・決定履歴・AUREL稼働。自動統治は未。 |
 | G2 Institutional Core | **35%** | 6基盤のコードは在るが多くが骨格。observatory/executionのみ一部稼働。 |
-| G3 Investment Business | **12%** | 9 Division中、実質稼働は Proprietary Quant(paper)・Prop(dry)・Crypto(paper/disarmed) の部分のみ。6 Divisionは枠。 |
+| G3 Investment Business | **10%** | 機関が構築する Division中、実質はProprietary Quant(paper)・Crypto(paper/disarmed) の部分のみ。他は枠。**Prop Trading は独立事業・機関非関与のため算入外**。 |
 | G4 Research and Intelligence | **40%** | research/evolution/observatory/council/Hermes は在り稼働。昇格パイプラインと多様性が未。 |
 | G5 Risk, Audit and Compliance | **30%** | Audit and Risk統治文書化済。自動検知・Compliance/Securityの実装は骨格。 |
 | G6 Technology and Operations | **75%** | デーモン/死活監視/自動起動/Arsenal/記憶/データ盤が稼働。UI配信・複数口座インフラが未。 |
@@ -91,7 +91,7 @@ source: FINAL-ARCHITECTURE.md / ASSET-REPLACEMENT-MAP.md
 | Division | 完成度 | 現況 | 次の一歩 |
 |---|---|---|---|
 | Proprietary Quant | **30%** | 日足19 paper稼働・断面/回帰は骨格 | Trend Desk検証→最小実弾候補化 |
-| Prop Trading | **45%** | 審査機dry稼働・維持機MM0凍結 | Phase 7 実弾GO判断（会長） |
+| Prop Trading | **算入外** | 独立事業・機関非関与（置いてあるだけ・さわらない） | 機関は関与しない（プロップ側運用軸で完結） |
 | Crypto and Digital Assets | **20%** | 4H暗号8 paper・ETH/BTC/LTCはDISARMED | ETH別口座再武装 or paper継続の選択 |
 | Yield / Carry / Swap | **8%** | carry squad 骨格のみ | Carry Desk を初期中身化 |
 | Arbitrage | **0%** | 枠のみ | 裁定手法の研究着手（G4起点） |
@@ -111,7 +111,7 @@ source: FINAL-ARCHITECTURE.md / ASSET-REPLACEMENT-MAP.md
 | 複数戦略 | 一部(35%) | AI会議 | 一部(40%) |
 | 複数口座 | 無(5%) | 会長承認 | 済(80%) |
 | 複数ブローカー | 無(5%) | 意思決定履歴 | 済(90%) |
-| プロップ会社別管理 | 一部(25%) | 監査 | 一部(35%) |
+| 口座別/ブローカー別管理※ | 無(10%) | 監査 | 一部(35%) |
 | ポートフォリオ横断リスク | 一部(25%) | セキュリティ | 済(80%) |
 | 資本配分 | 一部(30%) | 研究 | 一部(45%) |
 | 利益源評価 | 一部(30%) | 自己進化 | 一部(45%) |
@@ -120,6 +120,7 @@ source: FINAL-ARCHITECTURE.md / ASSET-REPLACEMENT-MAP.md
 | 市場レジーム判定 | 一部(40%) | 月次運営 | 無(10%) |
 | 執行品質分析 | 一部(35%) | 新市場/新Division追加 | 枠設計(20%) |
 
+> ※「口座別/ブローカー別管理」は**機関自身の将来の実弾運用**に向けた機能を指す。現・独立プロップは運用軸が別・機関非関与のため対象外。
 > ※パーセントは「最終形に対する体感進捗」で、権威的計測値ではない（**推測を含む**）。目的は数字自慢ではなく、**どこが薄いかを見えるようにする**こと。最も薄いのは「複数口座/複数ブローカー/月次運営/各利益Division中身」。
 
 ---

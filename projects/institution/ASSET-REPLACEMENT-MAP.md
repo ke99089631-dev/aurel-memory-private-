@@ -38,8 +38,10 @@ source: FINAL-ARCHITECTURE.md / ADVISOR-DIRECTIVE-STAGE5-FINAL-ARCH.md
 | ETH Autonomous `scripts/autopilot.py`(eth sleeve) | Proprietary Div | **Crypto and Digital Assets Division → Autonomous Crypto Desk → ETH Autonomous Strategy** | Strategy | ETH自律売買 | **DISARMED**（口座衝突） | 別口座で再武装検討（会長判断） |
 | BTC Autonomous (btc sleeve) | Proprietary Div | 同上 → BTC Autonomous Strategy | Strategy | BTC自律 | DISARMED | 将来活性化 |
 | LTC Autonomous (ltc sleeve) | Proprietary Div | 同上 → LTC Autonomous Strategy | Strategy | LTC自律 | DISARMED | 将来活性化 |
-| G4審査機 `scripts/g4_*.py`（US100 NY ORB） | Prop Div（読取専用） | **Prop Trading Division → FundingPips Program → US100 ORB Strategy → g4_dryrun execution** | Program/Strategy | プロップ審査ドライラン | 稼働・dry・READ ONLY | 合格判断（会長GO） |
-| Prop維持機（17本HRP・MM0凍結） | Prop Div | **Prop Trading Division → Funded Operation Program → 17-HRP Strategy** | Program/Strategy | 合格後の資金運用機 | **FROZEN**（MM0） | 合格後に解凍・運用 |
+| G4審査機 `scripts/g4_*.py`（US100 NY ORB） | Prop Div（独立） | **Prop Trading Division → FundingPips Program → US100 ORB Strategy → g4_dryrun execution** | Program/Strategy | プロップ審査ドライラン | 稼働・dry・READ ONLY | **プロップ側運用軸で完結・機関非関与（さわらない）** |
+| Prop維持機（17本HRP・MM0凍結） | Prop Div | **Prop Trading Division → Funded Operation Program → 17-HRP Strategy** | Program/Strategy | 合格後の資金運用機 | **FROZEN**（MM0） | **プロップ側運用軸で完結・機関非関与（さわらない）** |
+
+> **⚠ Prop Trading Division は独立事業（会長確定 2026-07-30）**: 方向性・目的が既に確定済で、運用軸が機関と別。機関は **関与・管理・資本配分・ロードマップ化・完成率算入をしない**。組織図に**置いてあるだけ**で、中身は**さわらない**。g4_ 境界・読取専用を維持。
 | `squads/carry.py` | AssetEmpire | **Yield / Carry / Swap Division → Carry Desk** | Desk/Strategy | キャリー戦略 | 骨格 | Divisionの初期中身 |
 | `squads/cross_sectional.py` / `mean_reversion.py` | AssetEmpire | Proprietary Quant Division（各Desk） | Strategy | 断面/平均回帰 | 骨格 | paper投入候補 |
 | （器のみ）Arbitrage / Macro / Equity / Commodity / Future Division | — | **G3 各Division枠** | Division | 将来利益源 | 枠のみ（未着手） | 各Deskを段階構築 |
@@ -62,7 +64,7 @@ source: FINAL-ARCHITECTURE.md / ADVISOR-DIRECTIVE-STAGE5-FINAL-ARCH.md
 | 資産 | 現在所属 | 最終所属 | 階層 | 役割 | 現在状態 | 将来状態 |
 |---|---|---|---|---|---|---|
 | Audit and Risk（文書＋監督機能） | 機関統治 | **G5 Audit and Risk Division** | Division | Core監督・会長/AURELへ報告 | 一部稼働 | 全実行の統治監督 |
-| funded_config 照合 / プロップ会社別規程 | Prop | **G5 Compliance Desk** | Desk | 会社別ルール（2%日次等）整合 | 骨格 | ルールエンジン化 |
+| Compliance（機関自身の実弾運用ルール向け） | 新規機能 | **G5 Compliance Desk** | Desk | 機関の実弾運用ルール整合（※プロップ会社別規程はプロップ側管轄・機関非関与） | 未着手 | ルールエンジン化 |
 | 秘匿ルール（.env非読取・出力レダクション・鍵隔離） | 全体規約 | **G5 Security Desk** | Desk | 秘密保護・出力安全 | ルール稼働 | 手順の文書化・自動化 |
 | `institution_freeze_ledger.sqlite`（意思決定履歴） | 機関台帳 | G5監督下（記録はG2 ledger系） | 記録 | 決定履歴ハッシュ連鎖 | 稼働（seq=3） | 決定履歴の正本 |
 
@@ -105,7 +107,7 @@ source: FINAL-ARCHITECTURE.md / ADVISOR-DIRECTIVE-STAGE5-FINAL-ARCH.md
 
 ## 設計上の判断（会長確認事項）
 1. **暗号の二分**: 日足19=Proprietary Quant / 4H暗号8・ETH等=Crypto Division に振り分けた。「全暗号をCryptoに寄せる」か「クオンツ book に残す」かは会長の好みで調整可。※現配置は「単一資産自律＋暗号系統一運用＝Crypto Division」の方針。
-2. **維持機の17本ユニバース**にはFX/商品/指数ETF/暗号が混在。これは Prop Trading Division 内の1戦略（Funded Operation Program）として一体運用する前提で、Commodity/Equity Division へは分解しない（プロップ規程に紐づくため）。
+2. **維持機の17本ユニバース**（FX/商品/指数ETF/暗号）は Prop Trading Division 内で一体運用され、Commodity/Equity Division へは分解しない。**ただしプロップは独立事業・機関非関与のため、そもそも機関の運用計画・資本配分の対象外**（会長確認不要＝プロップ側で完結）。
 3. **GitSync のスクリプト実パス**は今回のExplore調査で再発見できなかった（前セッションで稼働実読済）。次回、Task Scheduler定義から実パスを再確認して補記する。
 
 ---

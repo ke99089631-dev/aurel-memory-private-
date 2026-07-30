@@ -27,7 +27,7 @@
   "final_architecture": {
     "doc": "FINAL-ARCHITECTURE.md（最終形の器）／ASSET-REPLACEMENT-MAP.md（再配置）／GAP-ANALYSIS.md（差分・完成度）",
     "principle": "Build All, Activate Gradually — 器を先に全登録し、実装と起動は段階的。",
-    "prop_position": "Prop Trading Division は中心ではなく Investment Business Group の9 Divisionの一つ。G4はその配下のProgram/Strategy。",
+    "prop_position": "Prop Trading Division は独立事業。機関の中に置いてあるだけで、機関は関与・管理・資本配分・ロードマップ化しない（運用軸が別・方向性確定済・読取のみ・触らない）。中心ではなく、機関の完成率にも算入しない。",
     "groups": [
       { "id": "G1", "name": "Executive and Governance Group", "completion_pct": 70 },
       { "id": "G2", "name": "Institutional Core", "completion_pct": 35 },
@@ -40,7 +40,7 @@
     "hierarchy": "Group → Division → Desk → Strategy → Agent/Squad → Execution System",
     "investment_divisions": [
       { "name": "Proprietary Quant Division", "status": "一部稼働(paper)", "completion_pct": 30 },
-      { "name": "Prop Trading Division", "status": "稼働(dry)・複数利益源の一つ", "completion_pct": 45 },
+      { "name": "Prop Trading Division", "status": "独立事業・機関非関与・読取のみ（機関の完成率に算入しない）", "completion_pct": null, "independent": true },
       { "name": "Crypto and Digital Assets Division", "status": "一部(paper/disarmed)", "completion_pct": 20 },
       { "name": "Yield / Carry / Swap Division", "status": "骨格", "completion_pct": 8 },
       { "name": "Arbitrage Division", "status": "枠のみ", "completion_pct": 0 },
@@ -86,18 +86,23 @@
     "prop_trading": {
       "name_ja": "プロップ事業部門",
       "name_en": "Prop Trading Division",
-      "status": "稼働（読取専用登録）",
-      "phase": "Phase 7（$25k×1本の実弾GO待ち）",
-      "mode": "ACTIVE / DRY_RUN / READ_ONLY",
+      "status": "独立事業（機関に置いてあるだけ・機関は非関与）",
+      "independent_business": true,
+      "institution_involvement": "なし。方向性・目的は既に確定済。運用軸が機関と別。機関はさわらない・巻き込まない・管理しない。",
+      "excluded_from_institution_completion": true,
+      "excluded_from_institution_roadmap": true,
+      "excluded_from_capital_allocation": true,
+      "phase": "プロップ側の運用軸で完結（機関のフェーズ管理対象外）",
+      "mode": "READ_ONLY（機関から見えるだけ）",
       "profit_source": true,
       "protection_boundary": "g4_",
-      "access": "機関からは読取専用（状態把握/結果表示/異常報告のみ）",
+      "access": "機関からは読取のみ。触らない。",
       "sub_machines": {
-        "audit_machine": { "name": "審査機", "desc": "US100 NY ORB 単一戦略・g4_dryrun.py --dry", "mode": "DRY_RUN", "frozen_ref": "archive/2026-07-08_trackA_preflight_freeze (G0)" },
-        "maintenance_machine": { "name": "維持機", "desc": "17本多市場HRP・合格後の資金運用機", "mode": "FROZEN", "frozen_ref": "archive/2026-07-30_maintenance_17hrp_freeze (MM0)" }
+        "audit_machine": { "name": "審査機", "desc": "US100 NY ORB 単一戦略・g4_dryrun.py --dry（プロップ側運用軸・機関非関与）", "mode": "DRY_RUN", "frozen_ref": "archive/2026-07-08_trackA_preflight_freeze (G0)" },
+        "maintenance_machine": { "name": "維持機", "desc": "17本多市場HRP・合格後の資金運用機（プロップ側運用軸・機関非関与）", "mode": "FROZEN", "frozen_ref": "archive/2026-07-30_maintenance_17hrp_freeze (MM0)" }
       },
-      "next_move": "Phase 7 実弾GO判断（会長）",
-      "last_updated": "2026-07-30T03:24:28Z",
+      "next_move": "機関は関与しない（プロップ側で完結）",
+      "last_updated": "2026-07-30T04:54:55Z",
       "warning": null
     },
     "research_and_evolution": {
@@ -191,7 +196,8 @@
     "Institutional Core 本活性化計画の策定"
   ],
   "recent_decisions": [
-    { "date": "2026-07-30", "decision": "修正Stage 5：最終形を先に設計しその器へ既存資産を配置する方針へ転換。現存AssetEmpire/プロップ/EAを最終形の中心に据えない。プロップは9 Divisionの一つ。旧Stage 5（実弾運用基盤・資本口座設計）は保留。", "type": "fact" },
+    { "date": "2026-07-30", "decision": "会長裁定：プロップは方向性・目的が既に確定した独立事業であり、運用軸が機関と別。機関は関与・管理・資本配分・ロードマップ化をせず、組織図に置くだけ・さわらない。機関の完成率から除外（前決定『プロップは9 Divisionの一つ』を上書き）。", "type": "fact" },
+    { "date": "2026-07-30", "decision": "修正Stage 5：最終形を先に設計しその器へ既存資産を配置する方針へ転換。現存AssetEmpire/プロップ/EAを最終形の中心に据えない。旧Stage 5（実弾運用基盤・資本口座設計）は保留。", "type": "fact" },
     { "date": "2026-07-30", "decision": "Aurelian 正式成立（Stage 1+2 監査合格・会長裁定）", "type": "fact" },
     { "date": "2026-07-30", "decision": "ETH自律枠を口座衝突のため DISARMED。機関監査が初めて実際の資本・実行経路の衝突を発見し防止した成果として記録（後退ではない）。", "type": "fact" },
     { "date": "2026-07-30", "decision": "維持機（合格後運用機）を FROZEN（MM0・別系統SHA256）", "type": "fact" },

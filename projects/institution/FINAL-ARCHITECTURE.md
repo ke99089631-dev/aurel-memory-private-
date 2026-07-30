@@ -14,7 +14,7 @@ source: ADVISOR-DIRECTIVE-STAGE5-FINAL-ARCH.md
 
 > **原則**: Build All, Activate Gradually — **最終形の全構造を先に設計・登録し、実装と起動は段階的に行う**。
 > **軸**: 現存の AssetEmpire / G4プロップ / EA群 から組織を組み立てない。**最終形を先に設計し、その器へ既存資産を配置する**。
-> **プロップの位置づけ**: Prop Trading Division は Aurelian の中心ではなく、**Investment Business Group 内にある複数の利益事業部の一つ**。
+> **プロップの位置づけ（会長確定 2026-07-30）**: Prop Trading Division は**方向性・目的が既に確定した独立事業**。運用軸が機関と別のため、**機関は関与しない・管理しない・資本配分しない・ロードマップ化しない・完成率に算入しない**。機関の中に「置いてあるだけ」で、**さわらない**。中心ではなく、独立した一事業として登録のみ。
 > **完成率**: 単一の数字で測らない。Group別・Division別・機能別に評価する（→ GAP-ANALYSIS.md）。
 > **既存資産の配置**: → ASSET-REPLACEMENT-MAP.md。差分と完成度: → GAP-ANALYSIS.md。
 
@@ -33,7 +33,7 @@ source: ADVISOR-DIRECTIVE-STAGE5-FINAL-ARCH.md
 │
 ├─ [G3] Investment Business Group（利益事業＝複数の独立利益源）
 │     ├ Proprietary Quant Division            （自己勘定クオンツ）※一部稼働(paper)
-│     ├ Prop Trading Division                 （プロップ事業）※稼働(dry)・複数利益源の一つ
+│     ├ Prop Trading Division                 （プロップ事業）※独立事業・機関非関与・置いてあるだけ・さわらない
 │     ├ Arbitrage Division                    （裁定）※枠のみ
 │     ├ Macro and Global Markets Division     （マクロ・世界市場）※枠のみ
 │     ├ Crypto and Digital Assets Division    （暗号・デジタル資産）※一部(paper/disarmed)
@@ -50,7 +50,7 @@ source: ADVISOR-DIRECTIVE-STAGE5-FINAL-ARCH.md
 │
 ├─ [G5] Risk, Audit and Compliance Group（リスク・監査・法務）
 │     ├ Audit and Risk Division               （Core監督・統治）※一部稼働
-│     ├ Compliance Desk                       （プロップ会社別規程・会長承認整合）※骨格
+│     ├ Compliance Desk                       （機関自身の実弾運用ルール・会長承認整合）※未着手
 │     └ Security Desk                         （鍵隔離・秘匿・出力レダクション）※ルール稼働
 │
 ├─ [G6] Technology and Operations Group（技術・運用）
@@ -79,7 +79,7 @@ source: ADVISOR-DIRECTIVE-STAGE5-FINAL-ARCH.md
 | **Execution System** | 実際に注文・計算を行う末端（paper/dry/live）。 | paper execution / g4_dryrun / mt5_live |
 
 **確定した階層適用（会長の指定通り）**:
-- **Prop Trading Division は Division**。**G4 はその配下の Program / Strategy**（審査機＝FundingPips Program の US100 ORB Strategy）。
+- **Prop Trading Division は Division**（G4 はその配下の Program / Strategy）。ただし**独立事業として機関は運用に関与しない**（登録・階層記載のみ。中身の運用軸はプロップ側で完結し、機関はさわらない）。
 - **ETH Autonomous は Division ではなく Strategy**（Crypto Division 配下の1戦略）。
 - **日足19兵・4H暗号8兵は組織部門ではなく Agent / Squad（Execution Unit）**。
 
@@ -100,7 +100,7 @@ Investment Business Group
 > 各機能に現況フラグ: 【済】完成 /【一部】一部完成 /【無】未着手。詳細評価は GAP-ANALYSIS.md。
 
 **市場・戦略の広さ**
-- 複数市場対応【一部】/ 複数時間軸【一部】/ 複数戦略【一部】/ 複数口座【無】/ 複数ブローカー【無】/ プロップ会社別管理【一部】
+- 複数市場対応【一部】/ 複数時間軸【一部】/ 複数戦略【一部】/ 複数口座【無】/ 複数ブローカー【無】/ 口座別・ブローカー別管理【無】（機関自身の将来運用向け。※独立プロップは運用軸が別・機関非関与で対象外）
 
 **ポートフォリオ・資本**
 - ポートフォリオ横断リスク【一部】/ 資本配分（allocator）【一部】/ 利益源評価（PSR×テール）【一部】
@@ -165,16 +165,17 @@ Investment Business Group
 ### T5. Investment Divisions（各利益事業の構築）
 - 目的: 9 Division の器へ戦略を段階投入（paper→検証）。
 - 完成条件: 各Divisionに最低1 Desk/Strategyが検証済みpaperで稼働。
-- 既存利用: 日足19→Proprietary Quant / 4H暗号8・ETH等→Crypto / G4→Prop / carry→Yield。
+- 既存利用: 日足19→Proprietary Quant / 4H暗号8・ETH等→Crypto / carry→Yield。
+- **対象外**: Prop Trading Division は独立事業・機関非関与のため本トラックの構築対象に**含めない**（機関はさわらない）。
 - 新規: Arbitrage/Macro/Equity/Commodity/Future の初期Desk。
 - リスク: 器だけ増やして中身が伴わない。→ 各Divisionに完成条件を課す。
-- 会長判断: どのDivisionを次に中身入れするか。
+- 会長判断: どのDivisionを次に中身入れするか（プロップを除く）。
 
 ### T6. Risk and Audit（リスク・監査の統治強化）
-- 目的: Core監督・プロップ会社別規程・横断リスク・違反検知の統治確立。
+- 目的: Core監督・機関自身の実弾運用ルール・横断リスク・違反検知の統治確立。（プロップは独立事業・機関非関与のため対象外。）
 - 完成条件: 全実行が監督下・違反は自動検知し会長/AURELへ報告。
-- 既存利用: Audit and Risk, defense, funded_config照合。
-- 新規: Compliance Desk（会社別ルールエンジン）, Security Desk手順の文書化。
+- 既存利用: Audit and Risk, defense。（※プロップの会社別規程・funded_config はプロップ側運用軸の管轄。機関は非関与。）
+- 新規: Compliance Desk（機関自身の実弾運用ルール向け）, Security Desk手順の文書化。
 - リスク: 監督の抜け。→ 実行者と監督者の分離を維持。
 - 会長判断: 実弾前の監査合格基準。
 
@@ -223,12 +224,13 @@ Investment Business Group
 
 ---
 
-## 提出物10：プロップが「中心ではなく、独立事業部の一つ」である確認
+## 提出物10：プロップは「中心ではない・独立事業・機関非関与」である確認（会長確定 2026-07-30）
 
-- Prop Trading Division は **Investment Business Group 内の9 Division の1つ**。同格に Proprietary Quant / Arbitrage / Macro / Crypto / Equity / Commodity / Yield / Future が並ぶ。
-- G4 は Division ではなく Prop Trading Division 配下の **Program / Strategy**。
-- Aurelian の完成率は**プロップの合格や現存EAの数で計算しない**（→ GAP-ANALYSIS.md は Group別/Division別/機能別で評価）。
-- プロップ隔離（g4_境界・読取専用）は Stage 1-4 の通り**維持**。中心化はしない。
+- Prop Trading Division は **方向性・目的が既に確定した独立事業**。運用軸が機関と別。
+- **機関は関与しない**: 管理しない / 資本配分しない / ロードマップの構築対象にしない / 研究・AI会議の判断対象にしない / **完成率に算入しない**。
+- 機関の中に **「置いてあるだけ」**。Prop Trading Division として組織図に**登録のみ**し、中身は**さわらない**。
+- G4・審査機・維持機はプロップ側運用軸で完結。機関からは **g4_境界・読取専用**のまま（Stage 1-4 の隔離を維持し、さらに強化＝機関の運用計画から切り離す）。
+- Aurelian の完成率は**プロップの合格や現存EAの数で計算しない**（→ GAP-ANALYSIS.md は Group別/Division別/機能別で評価し、プロップは算入対象外）。
 
 ---
 
