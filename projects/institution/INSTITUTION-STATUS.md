@@ -96,7 +96,7 @@ approver: 会長（KEIKI MAEDA）
 | # | 事項 | 内容 |
 |---|---|---|
 | J-1 | 機関名の確定 | 「AUREL Capital」で確定してよいか（改称可）。 |
-| J-2 | **ETH口座同定** | `autopilot_state.json day_start_equity=25000` がどの口座か未確定。$25kはプロップ口座額と一致。AURELは読取専用のため踏み込まず。**会長の確認が必要**。 |
+| J-2 | **ETH口座同定＋衝突確認** | Vantage($53)は会長裁定で機関外（会長裁量）へ分離済。だが `autopilot_config live:true` のまま。**ETHAutopilotが現在どの口座でLIVEか要確認**。旧ETH口座=現裁量Vantageを指すなら手動裁量と自動発注が同一口座で衝突する危険。AURELは読取専用のため踏み込まず。**会長の確認が必要**。 |
 | J-3 | プロップ実弾GO | Phase 7 の $25k×1本 受験料支払いGO。 |
 | J-4 | Core活性化 | 台帳/アロケータ本活性化への着手可否（Stage 3）。 |
 
