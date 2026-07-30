@@ -459,7 +459,7 @@
   ],
   "circulation": {
     "doc_note": "循環（帰還ループ）の共有面。生きた正本は empire/data/circulation/circulation_digest.json（毎朝カデンツで更新）。ここは会長command画面表示用の直近スナップショット。",
-    "closed_loops": 7,
+    "closed_loops": 8,
     "total_loops": 9,
     "cadence": "毎朝07:00 JST: auto_writeback -> write_back -> digest公開 -> 心拍を共有神経へbroadcast -> 他Group(G5/G1)が能動読取し姿勢更新 -> ②利益: paper資本を再配分(capital_book更新) -> ③資本: 複数枠を単一化しequity curveへ1点記録(treasury.json更新)（全て助言＋paper台帳のみ・本番evolved_configs/実弾非接触）",
     "active_read": {
@@ -508,6 +508,12 @@
         "name": "失敗（免疫）",
         "breathing": true,
         "signal": "直近ウィンドウで隔離5銘柄（BTC/GBP/XRP/ADA/LTC）。回復すれば自動解除。"
+      },
+      {
+        "id": "6",
+        "name": "AI(council/合議・paper自律・助言)",
+        "signal": "各循環臓器(①worldmodel/②capital/⑤immune/⑧personnel/台帳+⑨evolve)が共有面digestを読み一票→AURELが信頼度加重で合意へ束ね共有神経へ戻す。本日合意=DEFEND(防御4:拡大1・agreement0.8・直近pnl整合)。外部AI/API/秘密も本番も実弾も非接触。",
+        "breathing": true
       },
       {
         "id": "8",
@@ -564,9 +570,33 @@
       "suspended": "BTCUSD・GBPUSD（⑤免疫隔離＝懲戒停止）",
       "states": "PROBATION(在職<10取引)/ACTIVE/SENIOR(勝率≥0.55＋黒字)/SUSPENDED(免疫隔離)/RETIRE_REVIEW(慢性の負け・助言のみ)",
       "note": "paper名簿＋人事助言のみ・金ゼロ・社員の追加/解雇なし・本番evolved_configs/実弾非接触"
+    },
+    "council": {
+      "module": "circulation/council.py + run_council.py",
+      "agent_id": "AUREL.overseer",
+      "closes": "⑥AI",
+      "consensus_today": "DEFEND",
+      "agreement": 0.8,
+      "unanimous": false,
+      "aligned_with_recent": true,
+      "voters": [
+        "research_ai=1-worldmodel",
+        "strategy_ai=2-capital",
+        "risk_ai=5-immune",
+        "execution_ai=8-personnel",
+        "audit_ai=ledger+9-evolve"
+      ],
+      "safety": "合意+助言+paper台帳のみ。外部AI/API/秘密も本番evolved_configsも実弾も非接触。台帳連鎖NGなら監査AIが最大信頼で防御へ。",
+      "wired": "auto_writeback step5h (date-guard + broadcast + publish) / digest 6-ai / closed_loops=8",
+      "remaining": "合意→②資本姿勢/⑨深さへの反映(助言→命令)・会長の一票の取り込み"
     }
   },
   "recent_decisions": [
+    {
+      "date": "2026-07-30",
+      "decision": "⑥AI循環を◐→●で閉じた(council.py):各循環臓器がdigestを読み一票→AUREL合意→共有神経へ戻す中枢神経。本日合意DEFEND。●=8/9。外部AI/API/秘密も本番も実弾も非接触・検証PASS。",
+      "type": "circulation"
+    },
     {
       "date": "2026-07-30",
       "decision": "【⑧人材循環を○→●で閉じた＝●が7/9へ・AUREL推進・検証PASS】地図で唯一○(全く流れていない)だった⑧を paper/助言で閉じた。核心＝『AI社員』は新規に雇うのでなく既に居る各ソルジャー(銘柄戦略)そのもの＝社員は増やさない。personnel.py＋run_personnel.py：既存基盤(evolved_configs＋⑤免疫＋②資本＋paper帳簿)を読むだけで各社員にキャリア状態(採用/試用→現役→上級昇格／懲戒停止=免疫隔離／退役審査=慢性の負け・助言のみ)と評価点(勝率×損益×②資本ウェイト×⑤免疫)を付与。前回名簿(専用台帳)比で昇降格/退役候補を検出＝時間を通じた人事。後進育成=上級のノブ中央値を新人の参照に助言。検証(run_personnel PASS)：5社員=XAU(試用トップ89.27)/ETH(現役監視)/EUR(試用監視)/BTC・GBP(懲戒停止)・キャリア判定純関数PASS・昇降格検出(合成ACTIVE→SENIOR/SENIOR→ACTIVE)PASS・連鎖OK。auto_writeback step5g(同日ガード＋broadcast＋publish)＋digestに⑧(closed_loops=7)。paper名簿＋人事助言のみ＝社員の追加/解雇せず本番evolved_configsも実弾も非接触。write_back DRY symbols_changed=0(本番無傷)。残る未閉鎖は⑥AIのみ。残：権限モデル・昇降格の②資本反映(助言→命令)。",
