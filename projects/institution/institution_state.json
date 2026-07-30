@@ -459,7 +459,7 @@
   ],
   "circulation": {
     "doc_note": "循環（帰還ループ）の共有面。生きた正本は empire/data/circulation/circulation_digest.json（毎朝カデンツで更新）。ここは会長command画面表示用の直近スナップショット。",
-    "closed_loops": 6,
+    "closed_loops": 7,
     "total_loops": 9,
     "cadence": "毎朝07:00 JST: auto_writeback -> write_back -> digest公開 -> 心拍を共有神経へbroadcast -> 他Group(G5/G1)が能動読取し姿勢更新 -> ②利益: paper資本を再配分(capital_book更新) -> ③資本: 複数枠を単一化しequity curveへ1点記録(treasury.json更新)（全て助言＋paper台帳のみ・本番evolved_configs/実弾非接触）",
     "active_read": {
@@ -510,6 +510,12 @@
         "signal": "直近ウィンドウで隔離5銘柄（BTC/GBP/XRP/ADA/LTC）。回復すれば自動解除。"
       },
       {
+        "id": "8",
+        "name": "人材（AI社員のライフサイクル・paper/助言）",
+        "breathing": true,
+        "signal": "各ソルジャー=AI社員に採用/試用→現役→上級(昇格)／懲戒停止(免疫隔離)／退役審査(慢性の負け・助言のみ)を付与。評価=勝率×損益×②資本×⑤免疫。前回名簿比で昇降格/退役候補を検出＝時間を通じた人事。後進育成=上級のノブ中央値を新人参照。paper名簿＋人事助言のみ＝社員追加/解雇せず本番/実弾非接触(personnel.py)。"
+      },
+      {
         "id": "9",
         "name": "自己進化（日次カデンツ）",
         "breathing": true,
@@ -543,9 +549,29 @@
       "invariants": "供給は歩数上限のみ・行き先(target)は予算に不変・単調・目標追い越し無し・範囲[0.001,0.02]・本番書込みは write_back ただ一つ（単一書き手不変）・隔離兵は免疫がmax固定",
       "today_production": "不変(DRY symbols_changed=0：全兵が目標到達済/隔離固定)。加速は将来「目標から遠い非隔離兵」の日に効く",
       "note": "paperのみ・金ゼロ・進化ノブ書込は単一書き手write_backのみ・実弾/live/プロップ非接触"
+    },
+    "personnel": {
+      "owner": "G4.research",
+      "headcount": 5,
+      "by_state": {
+        "SUSPENDED": 2,
+        "PROBATION": 2,
+        "ACTIVE": 1,
+        "SENIOR": 0,
+        "RETIRE_REVIEW": 0
+      },
+      "top": "XAUUSD=PROBATION(89.27) / ETHUSD=ACTIVE(46.3・監視) / EURUSD=PROBATION(19.18・監視)",
+      "suspended": "BTCUSD・GBPUSD（⑤免疫隔離＝懲戒停止）",
+      "states": "PROBATION(在職<10取引)/ACTIVE/SENIOR(勝率≥0.55＋黒字)/SUSPENDED(免疫隔離)/RETIRE_REVIEW(慢性の負け・助言のみ)",
+      "note": "paper名簿＋人事助言のみ・金ゼロ・社員の追加/解雇なし・本番evolved_configs/実弾非接触"
     }
   },
   "recent_decisions": [
+    {
+      "date": "2026-07-30",
+      "decision": "【⑧人材循環を○→●で閉じた＝●が7/9へ・AUREL推進・検証PASS】地図で唯一○(全く流れていない)だった⑧を paper/助言で閉じた。核心＝『AI社員』は新規に雇うのでなく既に居る各ソルジャー(銘柄戦略)そのもの＝社員は増やさない。personnel.py＋run_personnel.py：既存基盤(evolved_configs＋⑤免疫＋②資本＋paper帳簿)を読むだけで各社員にキャリア状態(採用/試用→現役→上級昇格／懲戒停止=免疫隔離／退役審査=慢性の負け・助言のみ)と評価点(勝率×損益×②資本ウェイト×⑤免疫)を付与。前回名簿(専用台帳)比で昇降格/退役候補を検出＝時間を通じた人事。後進育成=上級のノブ中央値を新人の参照に助言。検証(run_personnel PASS)：5社員=XAU(試用トップ89.27)/ETH(現役監視)/EUR(試用監視)/BTC・GBP(懲戒停止)・キャリア判定純関数PASS・昇降格検出(合成ACTIVE→SENIOR/SENIOR→ACTIVE)PASS・連鎖OK。auto_writeback step5g(同日ガード＋broadcast＋publish)＋digestに⑧(closed_loops=7)。paper名簿＋人事助言のみ＝社員の追加/解雇せず本番evolved_configsも実弾も非接触。write_back DRY symbols_changed=0(本番無傷)。残る未閉鎖は⑥AIのみ。残：権限モデル・昇降格の②資本反映(助言→命令)。",
+      "type": "fact"
+    },
     {
       "date": "2026-07-30",
       "decision": "【③→⑨を助言→命令へ昇格：資本が学習の速さを買う・AUREL推進・検証PASS】更新⑪で③研究予算は「⑨へ研究サイクル起動可と助言」止まりだった。evolve.pyで最後の一歩＝助言→命令を、単一書き手・単調・境界の原則を崩さず閉じた：③研究予算 research_units を読み「今サイクル同じ目標へ何歩寄せてよいか」の収束深さ depth=1+min(units,MAX_ACCEL=3) を write_back へ供給。write_back の _plan_new に max_steps を追加し move上限を STEP*depth に（move は常に target-old で頭打ち＝目標を追い越さない・単調・範囲[0.001,0.02]内）。＝資本が学習の速さを買うが方向は買わない（行き先は予算に不変）。本番書込みは依然 write_back ただ一つ（単一書き手不変）・隔離兵は免疫が深さより優先しmax固定。検証(run_evolve PASS)：純関数証明で全depth目標追い越し無し・境界内・depth1は従来同一・遠い負け兵(0.005/win0.10/目標0.013)は1歩0.007→3歩0.011で加速・連鎖OK。本番不変監査：今日depth=3供給も全兵が目標到達済/隔離固定のため write_back DRY symbols_changed=0＝今日の本番は完全不変。auto_writeback step5f＋digestに⑨昇格表示。実弾非接触。＝稼ぐ→留保→速く賢くなる→もっと稼ぐ が金ゼロで一周閉じた。●は6/9のまま(③⑨の深化)。",
