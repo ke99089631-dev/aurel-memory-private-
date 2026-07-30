@@ -1,5 +1,5 @@
 ---
-doc_id: AURELCAPITAL-ORGCHART-v1
+doc_id: AURELIAN-ORGCHART-v1
 tags: [institution, org-chart, foundational]
 type: org-chart
 rank: 憲章直下（機関の正式組織図）
@@ -36,7 +36,7 @@ approver: 会長（KEIKI MAEDA）
         │     └─ 進化           evolution     【骨格】ai_soldier/backtest/coroner/evolve
         │
         ├─ Proprietary Investment Division（自己勘定投資部門）【一部稼働】
-        │     ├─ ETH自律枠 ETHAutopilot   【稼働・LIVE】会長常時GO（2026-06-16）枠内
+        │     ├─ ETH自律枠 ETHAutopilot   【武装解除】2026-07-30 会長GO・口座衝突のため live:false（旧LIVE 2026-06-16〜）
         │     ├─ BTC枠                     【骨格・武装解除】
         │     ├─ LTC枠                     【骨格・武装解除】
         │     ├─ 日足19ソルジャー群         【稼働・paper】run_trading_cycle.py
@@ -69,7 +69,7 @@ Institutional Core は**自己勘定投資部門の内部ではない**。全Div
 会長とAURELの間に立つ説明・可視化層。憲章 第2条2・第2章目的に基づき、AURELが会長に「最終形／現在地／完成・未完成／過去決定と理由／次の最優先／会長判断待ち」を常に提示する機能。実体は INSTITUTION-STATUS.md とダッシュボード群。
 
 ### 権限活性化の順序（Build All, Activate Gradually）
-1. 【稼働済】ETH自律枠（会長常時GO・枠内）、Prop dry-run（読取専用）、paperソルジャー群。
+1. 【稼働済】Prop dry-run（読取専用）、paperソルジャー群。※ETH自律枠は2026-07-30に武装解除（口座衝突・会長GO）＝現在の実弾稼働はゼロ。
 2. 【次段階候補】Institutional Core の台帳・アロケータの本活性化（会長承認待ち）。
 3. 【将来】実弾増資・新Division活性化（各段で会長の最終GO必須）。
 

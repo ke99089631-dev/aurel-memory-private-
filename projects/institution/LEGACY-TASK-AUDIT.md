@@ -1,5 +1,5 @@
 ---
-doc_id: AURELCAPITAL-LEGACY-TASK-AUDIT-v1
+doc_id: AURELIAN-LEGACY-TASK-AUDIT-v1
 tags: [institution, audit, legacy-tasks, read-only]
 type: audit
 rank: 憲章直下（レガシータスク精査結果）

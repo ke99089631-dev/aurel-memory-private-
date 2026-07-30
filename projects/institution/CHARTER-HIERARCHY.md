@@ -1,5 +1,5 @@
 ---
-doc_id: AURELCAPITAL-CHARTER-HIERARCHY-v1
+doc_id: AURELIAN-CHARTER-HIERARCHY-v1
 tags: [institution, charter, hierarchy, foundational]
 type: charter-hierarchy
 rank: 憲章の階層定義

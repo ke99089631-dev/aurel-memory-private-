@@ -1,5 +1,5 @@
 ---
-doc_id: AURELCAPITAL-DIVISION-PROP-v1
+doc_id: AURELIAN-DIVISION-PROP-v1
 tags: [institution, division, prop, read-only, g4]
 type: division-charter
 rank: 第3層（Division個別規程）

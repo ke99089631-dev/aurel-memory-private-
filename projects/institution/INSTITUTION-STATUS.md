@@ -1,5 +1,5 @@
 ---
-doc_id: AURELCAPITAL-INSTITUTION-STATUS-v1
+doc_id: AURELIAN-INSTITUTION-STATUS-v1
 tags: [institution, status, dashboard, pinned, top-level]
 type: status
 rank: 司令室・常設ステータス（会長がいつでも開く1枚）

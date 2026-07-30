@@ -1,5 +1,5 @@
 ---
-doc_id: AURELCAPITAL-CHARTER-v1
+doc_id: AURELIAN-CHARTER-v1
 tags: [institution, charter, foundational, top-level]
 type: charter
 rank: 最上位（AI投資機関憲章）

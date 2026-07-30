@@ -1,5 +1,5 @@
 ---
-doc_id: AURELCAPITAL-DIVISION-PROPRIETARY-v1
+doc_id: AURELIAN-DIVISION-PROPRIETARY-v1
 tags: [institution, division, proprietary, self-account]
 type: division-charter
 rank: 第3層（Division個別規程）

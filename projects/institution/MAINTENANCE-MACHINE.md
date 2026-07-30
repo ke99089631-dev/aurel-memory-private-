@@ -1,5 +1,5 @@
 ---
-doc_id: AURELCAPITAL-MAINTENANCE-MACHINE-MM0-v1
+doc_id: AURELIAN-MAINTENANCE-MACHINE-MM0-v1
 tags: [institution, prop, maintenance-machine, freeze, MM0, frozen]
 type: machine-registry
 rank: 第3層（Prop Division 内・合格後運用機の登録＋凍結記録）

@@ -1,5 +1,5 @@
 ---
-doc_id: AURELCAPITAL-MODULE-ASSIGNMENT-v1
+doc_id: AURELIAN-MODULE-ASSIGNMENT-v1
 tags: [institution, modules, assignment]
 type: module-assignment
 rank: 憲章直下（各既存モジュールの正式所属）
