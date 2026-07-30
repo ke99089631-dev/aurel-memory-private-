@@ -195,3 +195,64 @@ supersedes_priority: FINAL-ARCHITECTURE.md より上位（組織図は骨格・�
 
 ### 次アクション
 第1歩スワップを紙で1体試作→循環に乗せる実証（会長GO待ち）。会長が未体験の感覚=5.ボラ売りと6.マクロ因果→AURELが噛み砕き紙で小さく見せて移す。
+
+
+---
+
+## 2026-07-30 BUILD: 拡張ドクトリン第1歩を実装 -- 異種臓器『キャリー』を紙で循環に差した
+
+会長GO『今作れるものは全部作る/ライブ化とUI可視化/走りながら循環も強化』を受けて着手。第1増分=完了・検証PASS。
+
+### 新規ファイル(既存は無改変・circulation所有モジュール)
+- circulation/carry.py -- 第2の戦略族『持って稼ぐ(スワップ/キャリー)』の紙臓器。
+  - 専用ノブ MIN_CARRY_EDGE=0.020(=carry/vol比の下限。リスクに見合う金利しか持たない)。
+  - 専用免疫=勝率でなく tail_cover(尻尾カバー率=貯めたキャリー/最悪損失)。勝率0.95でも尻尾薄なら隔離。
+  - 自前帳簿 carry_book.json / 公開面 carry.json。シンボルは .carry 接尾で既存5兵と衝突せず、evolved_configs/paper_book に一切書かない。
+  - いまは _synthetic_practice=true の練習血液(決定的seed)。本物のレート/資金調達率フィード接続は次の増分(loop1と同じ作法)。
+- circulation/run_carry.py -- 検証ハーネス。--selftest PASS(ノブ選別/免疫は勝率でなく尻尾/帳簿は日次で伸び冪等)。
+
+### 配線(circulation所有ファイルのみ編集)
+- auto_writeback.py: step4c追加 -- digest公開の前に carry.step(1日分)->assess->publish->broadcast->mark。日次ガード・非致命try/except。
+- digest.py: CARRY_FILE定数 + _load_carry() + build()に top-level carry ブロック(import循環回避のファイル経由)。
+- run_digest.py: [strategy family #2 / carry] プリンタ追加。
+
+### 検証結果
+- run_carry --selftest = PASS。 run_digest: chain_verified=True, closed_loops=9/9(carryは戦略臓器でありガバナンス循環ではないので9のまま=正)。
+- 実演: 専用ノブが BTCPERP.carry(資金調達率・旨味に対しボラ過大 edge0.0154)を選別除外。fx 4器をhold。
+- 注意: 練習履歴が薄い間(1日)は tail_cover が無意味でノイズ。日数が溜まって初めて免疫判定が信頼できる(他臓器と同じ薄さの正直)。
+
+### 進行中の会長号令(残タスク)
+- [ ] 循環の可視化ダッシュボード(公開JSONを読む読取専用HTML)
+- [ ] 実弾ゲートの骨組み(施錠のまま・金ゼロ・二重ロックGOでのみ解錠)
+- [ ] 次の戦略臓器: アービトラージ -> 平均回帰 -> ボラ売り
+
+不変則(維持): 新戦略=新規モジュール+専用ノブ+専用免疫+帳簿アダプター。凍結資産/G2聖域/production非接触。まず紙。実弾は会長二重ロックGO後。プロップ非関与。
+
+
+---
+
+## 2026-07-30 BUILD(続): ライブ化(施錠ゲート)+UI可視化 を実装 -- 検証PASS
+
+### 新規ファイル(既存無改変・circulation所有)
+- circulation/dashboard.py -- 循環の可視化。公開済みJSON(circulation_digest.json/carry.json/approvals.json/live_gate.json)を
+  読み、データを焼き込んだ自己完結HTML data/circulation/dashboard.html を1枚生成(サーバ不要・ダブルクリックで開く)。読取専用・秘匿非接触。
+  盤面カード: 9循環の呼吸/世界レジーム/帳簿の脈/免疫/資本配分/合議/技術チケット/戦略族#2キャリー/会長の〇xカード/実弾ゲート施錠状態。
+- circulation/live_gate.py -- 実弾への『鍵穴と施錠』。既定LOCKED・金ゼロ。
+  readiness()=準備チェックリスト(練習周回>=30・9循環閉/chain_verified/口座防衛なし/killswitch機構/床/出金権限なしキー)。
+  練習周回は【異なるカデンツ日付数】で正直に数える(生イベント数は使わない)。現状 2/30 -> eligible=False。
+  arm(enable_live,arm_code)=二重ロック(enable_live=True かつ arm_code='CHAIRMAN-GO')＋準備完了で初めて武装フラグ。
+  【最重要】下流に発注器(executor)は無い。二重ロックが揃っても金は動かない(フラグのみ)。引き金は未実装＝別途会長署名つき発注経路の新設が要る(本ゲートは作らない)。
+  --selftest PASS: 施錠維持/二重ロック無し・片方だけは拒否/正しい二重ロックでも executor無し・money_moved=0。
+
+### 配線(auto_writeback.py step追加・非致命try/except)
+- step5k: live_gate.readiness()->publish (live_gate.json)。arm()は絶対に自動で呼ばない。
+- step5l: dashboard.publish (dashboard.html 再生成)。毎朝カデンツで盤面自動更新。
+
+### 会長号令の進捗(2026-07-30 GO『今作れるものは全部作る/ライブ化とUI可視化/走りながら循環強化』)
+- [x] 第1歩: 異種臓器キャリーを紙で循環に差す(carry.py/run_carry.py)
+- [x] UI可視化: dashboard.py -> dashboard.html(自己完結・読取専用)
+- [x] ライブ化: live_gate.py(施錠ゲート・発注器なし・二重ロック鍵は会長のみ)
+- [ ] 次の戦略臓器: アービトラージ -> 平均回帰 -> ボラ売り(未着手・次の増分)
+- [ ] キャリーの実データ(レート/資金調達率)フィード接続(今は練習血液)
+
+不変則(維持): 実弾は会長二重ロックGO後のみ・発注器は会長署名つきで別途新設・出金権限なしキー/床/killswitch外さない・秘匿非接触・凍結資産/G2聖域/production非接触・プロップ非関与。
