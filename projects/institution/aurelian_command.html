@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aurelian — 中央司令画面（読取専用）</title>
+<style>
+  :root{
+    --bg:#0b0e14; --panel:#131824; --panel2:#0f141e; --line:#232b3a;
+    --txt:#e6ebf5; --muted:#8a97ad; --gold:#c8a24a;
+    --good:#37c871; --warn:#e0a92e; --bad:#e0563f; --info:#4a90d9; --frozen:#6db4d0; --disarm:#9aa4b5;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);font-family:"Segoe UI",Meiryo,system-ui,sans-serif;font-size:14px;line-height:1.5}
+  header{padding:18px 24px;border-bottom:1px solid var(--line);display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;background:linear-gradient(180deg,#111725,#0b0e14)}
+  header h1{margin:0;font-size:20px;letter-spacing:.06em;color:var(--gold);font-weight:600}
+  header .sub{color:var(--muted);font-size:12px}
+  .ro{margin-left:auto;border:1px solid var(--gold);color:var(--gold);padding:3px 10px;border-radius:20px;font-size:11px;letter-spacing:.08em}
+  main{padding:20px 24px;max-width:1180px;margin:0 auto}
+  h2{font-size:13px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin:26px 0 12px;border-left:3px solid var(--gold);padding-left:10px}
+  .grid{display:grid;gap:12px}
+  .kpis{grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px}
+  .kpi .n{font-size:26px;font-weight:700}
+  .kpi .l{color:var(--muted);font-size:11px;letter-spacing:.05em;margin-top:2px}
+  .kpi.live .n{color:var(--good)} .kpi.zero .n{color:var(--disarm)}
+  .kpi.warn .n{color:var(--warn)} .kpi.pending .n{color:var(--info)}
+  .cards{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .card h3{margin:0 0 4px;font-size:15px}
+  .card .en{color:var(--muted);font-size:11px;margin-bottom:10px}
+  .row{display:flex;justify-content:space-between;gap:10px;padding:4px 0;border-top:1px dashed var(--line)}
+  .row:first-of-type{border-top:none}
+  .row .k{color:var(--muted)} .row .v{text-align:right}
+  .pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:11px;font-weight:600;letter-spacing:.03em}
+  .m-LIVE{background:rgba(55,200,113,.15);color:var(--good);border:1px solid var(--good)}
+  .m-PAPER{background:rgba(74,144,217,.15);color:var(--info);border:1px solid var(--info)}
+  .m-DRY_RUN,.m-DRY{background:rgba(224,169,46,.13);color:var(--warn);border:1px solid var(--warn)}
+  .m-FROZEN{background:rgba(109,180,208,.13);color:var(--frozen);border:1px solid var(--frozen)}
+  .m-DISARMED{background:rgba(154,164,181,.13);color:var(--disarm);border:1px solid var(--disarm)}
+  .sleeves{margin-top:10px;font-size:12px}
+  .sleeves .s{display:flex;justify-content:space-between;gap:8px;padding:3px 0;color:var(--muted)}
+  .warnbox{background:rgba(224,169,46,.08);border:1px solid var(--warn);border-radius:10px;padding:12px 14px;color:var(--warn)}
+  .nav li,.dec li{margin:6px 0}
+  ul{margin:6px 0;padding-left:20px}
+  .prot{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+  .prot .card{border-color:#2a3550}
+  .ok{color:var(--good)} .muted{color:var(--muted)}
+  a.link{color:var(--gold);text-decoration:none;border-bottom:1px dotted var(--gold)}
+  footer{color:var(--muted);font-size:11px;padding:20px 24px;border-top:1px solid var(--line);margin-top:30px}
+  .src{color:var(--muted);font-size:11px;margin-top:4px}
+  .note{color:var(--disarm);font-size:11px;font-style:italic}
+</style>
+</head>
+<body>
+<header>
+  <h1>AURELIAN</h1>
+  <span class="sub">機関中央司令画面 / Chairman Command Console</span>
+  <span class="ro">READ ONLY・表示専用</span>
+</header>
+<main>
+  <div id="banner"></div>
+
+  <h2>機関総覧</h2>
+  <div class="grid kpis" id="kpis"></div>
+  <div class="src" id="overview-src"></div>
+
+  <h2>Division 一覧</h2>
+  <div class="grid cards" id="divisions"></div>
+
+  <h2>Institutional Core（共通基盤・利益源ではない）</h2>
+  <div class="grid cards" id="core"></div>
+
+  <h2>会長ナビゲーション</h2>
+  <div class="grid cards" id="nav"></div>
+
+  <h2>保護・安全状態</h2>
+  <div class="grid prot" id="prot"></div>
+
+  <h2>参照先（リンクのみ・埋め込みなし）</h2>
+  <div class="card">
+    <div class="row"><span class="k">投資ダッシュボード</span><span class="v"><a class="link" href="file:///C:/Users/user/AssetEmpire/empire/data/dashboard.html">dashboard.html</a></span></div>
+    <div class="row"><span class="k">プロップ盤（g4_・読取専用）</span><span class="v"><a class="link" href="file:///C:/Users/user/AssetEmpire/empire/data/g4_dashboard.html">g4_dashboard.html</a></span></div>
+    <div class="row"><span class="k">AUREL人格UI</span><span class="v"><a class="link" href="file:///C:/Users/user/aurel_life.html">aurel_life.html</a></span></div>
+    <div class="row"><span class="k">機械可読の正本</span><span class="v"><a class="link" href="./institution_state.json">institution_state.json</a></span></div>
+    <div class="note">※ これらは表示せず参照するのみ。本画面は状態表示専用で、操作・実行・停止・再起動・設定変更はできない。</div>
+  </div>
+</main>
+<footer id="foot"></footer>
+
+<script>
+// ============================================================
+// 埋め込みスナップショット（fallback）。
+// 単一情報源は institution_state.json。file:// で fetch が
+// ブロックされる環境のため、同内容のミラーを同梱する。
+// fetch 成功時は json を優先し、この値は使わない。
+// ============================================================
+const SNAPSHOT = {
+  "institution_name":"Aurelian","parent_org":"AUREL Holdings","base_architecture":"AssetEmpire",
+  "overall_phase":"統治・表示・監査基盤の構築","last_updated":"2026-07-30T03:24:28Z",
+  "counts":{"live":0,"paper":2,"dry_run":1,"frozen":1,"disarmed":3,"warnings":1,"chairman_pending":4},
+  "live_profit_source_count":0,
+  "institutional_core":{"status":"骨格〜一部稼働","subsystems":[
+    {"name":"統合台帳 ledger","role":"唯一の真実源・追記専用・ハッシュ連鎖","status":"骨格","supervised_by":"Audit and Risk"},
+    {"name":"防衛司令 defense","role":"段階デッドマン(-8/-12/-15%)・全停止権限","status":"骨格","supervised_by":"Audit and Risk"},
+    {"name":"信号バス bus","role":"TTL/topic付き信号配信","status":"骨格","supervised_by":"Audit and Risk"},
+    {"name":"資本アロケータ allocator","role":"PSR×テールペナルティ補正・月次±20%","status":"骨格","supervised_by":"Audit and Risk"},
+    {"name":"観測所 observatory","role":"レジーム判定・乖離記録・生存信号・通知","status":"一部稼働","supervised_by":"Audit and Risk"},
+    {"name":"執行ゲートウェイ execution gateway","role":"決定的発注・二重ロック・約定コスト分析","status":"一部稼働","supervised_by":"Audit and Risk"}
+  ]},
+  "divisions":{
+    "proprietary_investment":{"name_ja":"自己勘定投資部門","name_en":"Proprietary Investment Division","phase":"実弾ゼロ（ETH武装解除後）","mode_summary":"paper群のみ稼働","warning":"実弾稼働ゼロ。稼ぐ足が現在止まっている。","next_move":"Stage 5 で実弾利益源を選定","sleeves":[
+      {"name":"ETH自律枠","mode":"DISARMED"},{"name":"BTC枠","mode":"DISARMED"},{"name":"LTC枠","mode":"DISARMED"},
+      {"name":"日足19","mode":"PAPER"},{"name":"4h暗号8","mode":"PAPER"}]},
+    "prop_trading":{"name_ja":"プロップ事業部門","name_en":"Prop Trading Division","phase":"Phase 7（$25k実弾GO待ち）","mode_summary":"ACTIVE / DRY_RUN / READ_ONLY","warning":null,"next_move":"Phase 7 実弾GO判断（会長）","sleeves":[
+      {"name":"審査機（US100 ORB）","mode":"DRY_RUN"},{"name":"維持機（17本HRP）","mode":"FROZEN"}]},
+    "research_and_evolution":{"name_ja":"研究・進化部門","name_en":"Research and Evolution","phase":"未活性","mode_summary":"骨格","warning":null,"next_move":"Core基盤を利用して実運用投入","sleeves":[]},
+    "audit_and_risk":{"name_ja":"監査・リスク部門","name_en":"Audit and Risk","phase":"統治機能の明示化中","mode_summary":"Core全体を監督（実行はしない）","warning":null,"next_move":"監督基準の明文化","sleeves":[]},
+    "future_strategy":{"name_ja":"将来利益源の枠","name_en":"Future Strategy Divisions","phase":"未定義","mode_summary":"枠のみ","warning":null,"next_move":"共通基盤に接続して追加","sleeves":[]}
+  },
+  "protection_boundaries":{
+    "g4_prefix":{"status":"登録済・不可侵","rule":"g4_ のコード・データ・プロセス・タスク・設定・ログ形式を変更しない。読取専用。"},
+    "aurel_life_html":{"status":"保護","rule":"編集前に aurel-ui-rules.md 必読。const sharedU に触れない。"},
+    "live_lock":{"status":"有効","rule":"実弾は enable_live=True かつ arm_code='CHAIRMAN-GO' かつ会長最終GO の三重。床・キルスイッチ不可侵。"},
+    "frozen_assets":{"status":"有効","rule":"維持機MM0・審査機G0・凍結backtester は改変禁止。"}
+  },
+  "chairman_pending":[
+    {"text":"実弾利益源の選定（ETH別口座再武装 or プロップ合格後）"},
+    {"text":"Institutional Core（台帳/アロケータ）本活性化の着手可否"},
+    {"text":"プロップ Phase 7 の $25k×1本 実弾GO"},
+    {"text":"ETH自律枠を別口座で再武装するか"}
+  ],
+  "next_priority":["Stage 5 の実弾利益源選定（会長判断）","Institutional Core 本活性化計画の策定"],
+  "recent_decisions":[
+    {"date":"2026-07-30","decision":"Aurelian 正式成立（Stage 1+2 監査合格）"},
+    {"date":"2026-07-30","decision":"ETH自律枠を口座衝突のため DISARMED（機関監査が初めて資本・実行経路の衝突を発見し防止した成果）"},
+    {"date":"2026-07-30","decision":"維持機を FROZEN（MM0）"},
+    {"date":"2026-07-30","decision":"プロップは ACTIVE / DRY_RUN / READ_ONLY を維持"},
+    {"date":"2026-07-30","decision":"機関フェーズ=統治・表示・監査基盤の構築"}
+  ]
+};
+
+function esc(s){return String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function pill(m){return `<span class="pill m-${esc(m)}">${esc(m)}</span>`;}
+
+function render(S){
+  const c = S.counts||{};
+  // banner
+  document.getElementById('banner').innerHTML =
+    `<div class="warnbox">機関フェーズ：<b>${esc(S.overall_phase)}</b>　／　実弾で稼働中の利益源：<b>${S.live_profit_source_count}</b>（現在ゼロ・守り＋準備フェーズ）</div>`;
+  // kpis
+  const kpi = [
+    ['live','実弾 LIVE',c.live,'live'],
+    ['paper','PAPER',c.paper,''],
+    ['dry','DRY RUN',c.dry_run,''],
+    ['frozen','FROZEN',c.frozen,''],
+    ['disarm','DISARMED',c.disarmed,'zero'],
+    ['warn','警告',c.warnings,'warn'],
+    ['pend','会長判断待ち',c.chairman_pending,'pending']
+  ];
+  document.getElementById('kpis').innerHTML = kpi.map(k=>
+    `<div class="kpi ${k[3]}"><div class="n">${k[2]==null?'—':k[2]}</div><div class="l">${k[0]==='live'?'実弾 LIVE':k[1]}</div></div>`).join('');
+  document.getElementById('overview-src').textContent =
+    `機関: ${S.institution_name}（${S.parent_org} / 基盤 ${S.base_architecture}）　最終更新: ${S.last_updated}`;
+
+  // divisions
+  const D = S.divisions||{};
+  document.getElementById('divisions').innerHTML = Object.values(D).map(d=>{
+    const sl = (d.sleeves||[]).map(s=>`<div class="s"><span>${esc(s.name)}</span>${pill(s.mode||'')}</div>`).join('');
+    return `<div class="card">
+      <h3>${esc(d.name_ja)}</h3><div class="en">${esc(d.name_en)}</div>
+      <div class="row"><span class="k">フェーズ</span><span class="v">${esc(d.phase)}</span></div>
+      <div class="row"><span class="k">稼働モード</span><span class="v">${esc(d.mode_summary||d.status||'')}</span></div>
+      <div class="row"><span class="k">次の一手</span><span class="v">${esc(d.next_move||'—')}</span></div>
+      ${d.warning?`<div class="row"><span class="k warn">⚠ 警告</span><span class="v warn">${esc(d.warning)}</span></div>`:''}
+      ${sl?`<div class="sleeves">${sl}</div>`:''}
+    </div>`;
+  }).join('');
+
+  // core
+  const core = (S.institutional_core&&S.institutional_core.subsystems)||[];
+  document.getElementById('core').innerHTML = core.map(s=>`<div class="card">
+      <h3>${esc(s.name)}</h3>
+      <div class="row"><span class="k">役割</span><span class="v">${esc(s.role)}</span></div>
+      <div class="row"><span class="k">状態</span><span class="v">${esc(s.status)}</span></div>
+      <div class="row"><span class="k">監督部署</span><span class="v">${esc(s.supervised_by)}</span></div>
+    </div>`).join('') +
+    `<div class="card" style="border-color:#2a3550"><h3>役割分離</h3>
+      <p class="muted" style="margin:6px 0">Core=記録・防衛・信号・資本配分・観測・執行を<b>実行する技術基盤</b>。
+      Audit and Risk=それらの設定・動作・結果・違反・資本リスクを<b>監督し会長とAURELへ報告する統治部門</b>（実行はしない）。</p>
+      <p class="muted" style="margin:6px 0">Core自体は<b>利益源ではない</b>。利益源は Proprietary と Prop が保有し、Core が両者を支える。Propへの接続は読取専用。</p></div>`;
+
+  // nav
+  const pend = (S.chairman_pending||[]).map(p=>`<li>${esc(p.text)}</li>`).join('');
+  const nxt  = (S.next_priority||[]).map(p=>`<li>${esc(p)}</li>`).join('');
+  const dec  = (S.recent_decisions||[]).map(d=>`<li><span class="muted">${esc(d.date)}</span> — ${esc(d.decision)}</li>`).join('');
+  document.getElementById('nav').innerHTML =
+    `<div class="card"><h3>何を構築しているか / 現在地</h3>
+       <div class="row"><span class="k">最終目的</span><span class="v">複数の独立利益源で破産回避を床に複利増殖するAI投資機関</span></div>
+       <div class="row"><span class="k">現在地</span><span class="v">${esc(S.overall_phase)}</span></div>
+       <div class="row"><span class="k">実弾利益源</span><span class="v">${S.live_profit_source_count} 本（ゼロ）</span></div></div>
+     <div class="card"><h3>⚠ 会長判断待ち</h3><ul class="nav">${pend}</ul></div>
+     <div class="card"><h3>次に何を（最優先）</h3><ul class="nav">${nxt}</ul></div>
+     <div class="card dec"><h3>最近の重要決定</h3><ul>${dec}</ul></div>`;
+
+  // protection
+  const P = S.protection_boundaries||{};
+  const labels={g4_prefix:'g4_ 保護境界',aurel_life_html:'AUREL人格UI',live_lock:'実弾ロック',frozen_assets:'凍結資産'};
+  document.getElementById('prot').innerHTML = Object.keys(P).map(k=>`<div class="card">
+      <h3>${esc(labels[k]||k)}</h3>
+      <div class="row"><span class="k">状態</span><span class="v ok">${esc(P[k].status)}</span></div>
+      <p class="muted" style="margin:8px 0 0">${esc(P[k].rule)}</p></div>`).join('');
+
+  document.getElementById('foot').innerHTML =
+    `AURELIAN 中央司令画面（読取専用）。単一情報源=<code>institution_state.json</code>。本画面は状態表示のみで一切の操作機能を持たない。`+
+    ` &nbsp;|&nbsp; データ源: ${window.__loaded_from||'埋め込みスナップショット'}　最終更新: ${esc(S.last_updated)}`;
+}
+
+// fetch を試み、失敗時は埋め込みスナップショットで描画
+fetch('./institution_state.json',{cache:'no-store'})
+  .then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); })
+  .then(j=>{ window.__loaded_from='institution_state.json（fetch成功）'; render(j); })
+  .catch(()=>{ window.__loaded_from='埋め込みスナップショット（fetch不可のため）'; render(SNAPSHOT); });
+</script>
+</body>
+</html>

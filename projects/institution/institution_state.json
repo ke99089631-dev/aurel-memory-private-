@@ -1,0 +1,194 @@
+{
+  "schema": "aurelian.institution_state/v1",
+  "doc_note": "Aurelian 機関状態の単一情報源（machine-readable source of truth）。AUREL・INSTITUTION-STATUS.md・aurelian_command.html はこのファイルを参照する。既存DBスキーマは変更していない独立新規ファイル。secrets（パスワード等）は一切含めない。",
+  "institution_name": "Aurelian",
+  "parent_org": "AUREL Holdings",
+  "base_architecture": "AssetEmpire",
+  "overall_phase": "統治・表示・監査基盤の構築",
+  "last_updated": "2026-07-30T03:24:28Z",
+  "updated_reason": "Stage 3+4 実行：機関状態モデル新設・中央司令画面新設・Institutional Core/Audit and Risk 責任境界確定・重要決定の記録",
+  "counts": {
+    "live": 0,
+    "paper": 2,
+    "dry_run": 1,
+    "frozen": 1,
+    "disarmed": 3,
+    "warnings": 1,
+    "chairman_pending": 4
+  },
+  "mode_legend": {
+    "LIVE": "実弾稼働（金銭が動く）",
+    "PAPER": "紙運用（練習・金銭は動かない）",
+    "DRY_RUN": "ドライラン（発注せず判断のみ・受験準備）",
+    "FROZEN": "凍結（SHA256スナップショット・改変禁止）",
+    "DISARMED": "武装解除（live:false・会長GOで再武装可）"
+  },
+  "institutional_core": {
+    "definition": "全Divisionが共用する機関共通基盤。自己勘定投資部門の内部ではない。Core自体は利益源ではない。",
+    "status": "骨格〜一部稼働",
+    "subsystems": [
+      { "key": "ledger", "name": "統合台帳", "role": "唯一の真実源・追記専用・ハッシュ連鎖・任意時点リプレイ・日次突合", "status": "骨格", "supervised_by": "Audit and Risk" },
+      { "key": "defense", "name": "防衛司令", "role": "段階デッドマン(-8/-12/-15%)・ファクター集約・全停止権限の実行", "status": "骨格", "supervised_by": "Audit and Risk" },
+      { "key": "bus", "name": "信号バス", "role": "TTL/topic付き信号配信", "status": "骨格", "supervised_by": "Audit and Risk" },
+      { "key": "allocator", "name": "資本アロケータ", "role": "PSR×テールペナルティ補正・昇格遅降格速・月次±20%の実行", "status": "骨格", "supervised_by": "Audit and Risk" },
+      { "key": "observatory", "name": "観測所", "role": "レジーム判定・乖離記録・生存信号・通知", "status": "一部稼働", "supervised_by": "Audit and Risk" },
+      { "key": "execution_gateway", "name": "執行ゲートウェイ", "role": "決定的発注・二重ロック(enable_live+arm_code)・FLOOR丸め・約定コスト分析", "status": "一部稼働", "supervised_by": "Audit and Risk" }
+    ]
+  },
+  "divisions": {
+    "proprietary_investment": {
+      "name_ja": "自己勘定投資部門",
+      "name_en": "Proprietary Investment Division",
+      "status": "paper群のみ稼働",
+      "phase": "実弾ゼロ（ETH武装解除後）",
+      "profit_source": true,
+      "next_move": "Stage 5 で実弾利益源を選定（ETH別口座再武装 or プロップ合格後）",
+      "warning": "実弾稼働ゼロ。稼ぐ足が現在止まっている。",
+      "last_updated": "2026-07-30T03:24:28Z",
+      "sleeves": [
+        { "key": "eth_autopilot", "name": "ETH自律枠 ETHAutopilot", "mode": "DISARMED", "note": "口座衝突のため2026-07-30会長GOで live:false。再武装は会長GO必須。", "magic": 770611 },
+        { "key": "btc", "name": "BTC枠", "mode": "DISARMED", "note": "元から live:false", "magic": 770612 },
+        { "key": "ltc", "name": "LTC枠", "mode": "DISARMED", "note": "元から live:false", "magic": 770613 },
+        { "key": "daily19", "name": "日足19ソルジャー群", "mode": "PAPER", "note": "run_trading_cycle.py" },
+        { "key": "crypto4h8", "name": "4h暗号8ソルジャー群", "mode": "PAPER", "note": "run_trading_cycle_4h.py" }
+      ]
+    },
+    "prop_trading": {
+      "name_ja": "プロップ事業部門",
+      "name_en": "Prop Trading Division",
+      "status": "稼働（読取専用登録）",
+      "phase": "Phase 7（$25k×1本の実弾GO待ち）",
+      "mode": "ACTIVE / DRY_RUN / READ_ONLY",
+      "profit_source": true,
+      "protection_boundary": "g4_",
+      "access": "機関からは読取専用（状態把握/結果表示/異常報告のみ）",
+      "sub_machines": {
+        "audit_machine": { "name": "審査機", "desc": "US100 NY ORB 単一戦略・g4_dryrun.py --dry", "mode": "DRY_RUN", "frozen_ref": "archive/2026-07-08_trackA_preflight_freeze (G0)" },
+        "maintenance_machine": { "name": "維持機", "desc": "17本多市場HRP・合格後の資金運用機", "mode": "FROZEN", "frozen_ref": "archive/2026-07-30_maintenance_17hrp_freeze (MM0)" }
+      },
+      "next_move": "Phase 7 実弾GO判断（会長）",
+      "last_updated": "2026-07-30T03:24:28Z",
+      "warning": null
+    },
+    "research_and_evolution": {
+      "name_ja": "研究・進化部門",
+      "name_en": "Research and Evolution",
+      "status": "骨格",
+      "phase": "未活性",
+      "profit_source": false,
+      "modules": ["research/edges.py", "evolution/ai_soldier", "evolution/backtest", "evolution/coroner", "evolution/evolve"],
+      "note": "Institutional Core の基盤を利用。仮説生成・敗戦分析・戦略進化。",
+      "last_updated": "2026-07-30T03:24:28Z",
+      "warning": null
+    },
+    "audit_and_risk": {
+      "name_ja": "監査・リスク部門",
+      "name_en": "Audit and Risk",
+      "status": "一部稼働",
+      "phase": "統治機能の明示化中",
+      "profit_source": false,
+      "role": "Institutional Core の設定・動作・結果・例外・違反・資本リスクを監督し会長とAURELへ報告する統治部門（実行はしない）",
+      "supervises": ["ledger", "defense", "bus", "allocator", "observatory", "execution_gateway"],
+      "last_updated": "2026-07-30T03:24:28Z",
+      "warning": null
+    },
+    "future_strategy": {
+      "name_ja": "将来利益源の枠",
+      "name_en": "Future Strategy Divisions",
+      "status": "枠のみ",
+      "phase": "未定義",
+      "profit_source": false,
+      "note": "共通基盤に接続するだけで組み込める空き枠",
+      "last_updated": "2026-07-30T03:24:28Z",
+      "warning": null
+    }
+  },
+  "profit_sources": [
+    { "name": "ETH自律枠", "division": "proprietary_investment", "mode": "DISARMED", "live": false },
+    { "name": "日足19 paper", "division": "proprietary_investment", "mode": "PAPER", "live": false },
+    { "name": "4h暗号8 paper", "division": "proprietary_investment", "mode": "PAPER", "live": false },
+    { "name": "プロップ審査機", "division": "prop_trading", "mode": "DRY_RUN", "live": false },
+    { "name": "プロップ維持機", "division": "prop_trading", "mode": "FROZEN", "live": false }
+  ],
+  "live_profit_source_count": 0,
+  "accounts": [
+    { "id_public": "40000162046", "broker_server": "FundingPips-Trial", "purpose": "プロップ審査（会社資金$25k・会長入金なし）", "belongs_to": "Prop Trading Division", "note": "ログイン番号=公開可" },
+    { "id_login": "27972608", "broker_server": "VantageTradingLtd-Live", "purpose": "会長の裁量トレード口座。旧ETH実弾の発注先だったが衝突判明→ETH武装解除。", "belongs_to": "機関外（会長個人裁量）", "note": "ETHはこの口座への自動発注を停止済み。パスワードは非保持。" },
+    { "id_note": "Vantage $53 口座", "purpose": "会長の裁量トレードで使用", "belongs_to": "機関外（会長個人裁量）", "note": "Aurelianの管理・運用対象から分離。AURELは干渉しない。" }
+  ],
+  "protection_boundaries": {
+    "g4_prefix": { "status": "登録済・不可侵", "rule": "g4_で始まるコード・データ・プロセス・タスク・venv・設定・ログ形式を変更しない。読取専用。" },
+    "aurel_life_html": { "status": "保護", "rule": "編集前に aurel-ui-rules.md 必読。const sharedU に触れない（過去2回ブート死）。今回変更なし。" },
+    "live_lock": { "status": "有効", "rule": "実弾は enable_live=True かつ arm_code='CHAIRMAN-GO' かつ会長最終GO の三重。出金権限なし鍵・床・キルスイッチ不可侵。" },
+    "frozen_assets": { "status": "有効", "rule": "維持機MM0・審査機G0・凍結backtester(SHA256 74f1cacf...)は改変禁止。" }
+  },
+  "running_systems": [
+    { "name": "AUREL在宅デーモン :7878", "state": "稼働", "pid": 13092 },
+    { "name": "司令室 :7891", "state": "稼働", "pid": 14272 },
+    { "name": "ETHAutopilot タスク", "state": "稼働（毎時）", "note": "eth sleeve live:false のため実弾発注はしない（paper計算のみ）" },
+    { "name": "GitSync", "state": "稼働（15分毎）" },
+    { "name": "HealthMonitor", "state": "稼働（5分毎）" },
+    { "name": "プロップ G4 runner/watchdog", "state": "稼働（dry-run・読取専用）" }
+  ],
+  "completed": [
+    "ETH自律枠 LIVE運用ループ（現在は武装解除）",
+    "日足19 / 4h暗号8 の paper 運用ループ",
+    "プロップ G4 dry-run（4営業日連続ゼロ欠測）",
+    "AUREL在宅デーモン + 司令室 + 死活監視/自動復活/記憶バックアップ",
+    "Stage 1+2 機関登録・文書化（監査合格）",
+    "Stage 3+4 状態モデル・中央司令画面・責任境界（本更新）"
+  ],
+  "incomplete": [
+    "Institutional Core（台帳/アロケータ）の本活性化",
+    "research/evolution の実運用投入",
+    "BTC/LTC 枠（武装解除中）",
+    "Future Strategy Divisions（枠のみ）"
+  ],
+  "in_progress": [
+    "Stage 3+4（機関状態モデル・中央司令画面・責任境界の確定）"
+  ],
+  "warnings": [
+    { "level": "notice", "text": "実弾で動いている利益源が現在ゼロ（ETH武装解除後）。機関は守り＋準備フェーズ。", "since": "2026-07-30" }
+  ],
+  "chairman_pending": [
+    { "id": "Stage5-profit", "text": "実弾利益源の選定：ETHを別口座で再武装 or プロップ合格後の実弾運用（Stage 3+4完了後に判断）" },
+    { "id": "Stage5-core", "text": "Institutional Core（台帳/アロケータ）の本活性化着手可否" },
+    { "id": "prop-phase7", "text": "プロップ Phase 7 の $25k×1本 実弾GO" },
+    { "id": "eth-rearm", "text": "ETH自律枠を別口座で再武装するか（現状は武装解除のまま）" }
+  ],
+  "next_priority": [
+    "Stage 5 の実弾利益源選定（会長判断）",
+    "Institutional Core 本活性化計画の策定"
+  ],
+  "recent_decisions": [
+    { "date": "2026-07-30", "decision": "Aurelian 正式成立（Stage 1+2 監査合格・会長裁定）", "type": "fact" },
+    { "date": "2026-07-30", "decision": "ETH自律枠を口座衝突のため DISARMED。機関監査が初めて実際の資本・実行経路の衝突を発見し防止した成果として記録（後退ではない）。", "type": "fact" },
+    { "date": "2026-07-30", "decision": "維持機（合格後運用機）を FROZEN（MM0・別系統SHA256）", "type": "fact" },
+    { "date": "2026-07-30", "decision": "プロップは ACTIVE / DRY_RUN / READ_ONLY を維持", "type": "fact" },
+    { "date": "2026-07-30", "decision": "現在の機関フェーズ=統治・表示・監査基盤の構築", "type": "fact" },
+    { "date": "2026-07-30", "decision": "Stage 5 実弾利益源選定は Stage 3+4 完了後に行う", "type": "fact" },
+    { "date": "2026-06-16", "decision": "ETH自律枠 常時GO（枠内自律運用）※現在は衝突により武装解除", "type": "fact" }
+  ],
+  "source_map": {
+    "eth_disarm": "autopilot_config.json（eth sleeve live:false）＋ institution_freeze_ledger.sqlite NOTE seq=2",
+    "eth_account": "ImperialFlow/.env（login/server のみ読取・パスワード非読取）＋ 会長口頭確認",
+    "maintenance_freeze": "empire/research/archive/2026-07-30_maintenance_17hrp_freeze/FREEZE.md ＋ institution_freeze_ledger.sqlite NOTE seq=1",
+    "stage34_milestone": "institution_freeze_ledger.sqlite NOTE seq=3（hash 44c7b8f6…・prev 59494f61…・全鎖検証OK）",
+    "prop_status": "g4_heartbeat.json / g4_daily/*.json（読取専用）",
+    "running_systems": "Task Scheduler + プロセス一覧（読取）",
+    "modules": "empire/ README・コード・稼働ログの実読（MODULE-ASSIGNMENT.md / INSTITUTIONAL-CORE.md）"
+  },
+  "fact_vs_inference": {
+    "confirmed": [
+      "ETH武装解除（config実変更・台帳記録あり）",
+      "ETH口座=会長裁量口座と同一（会長確認）",
+      "維持機MM0凍結（SHA256スナップショット・台帳記録）",
+      "プロップ dry-run 稼働（heartbeat 実読）",
+      "各稼働システムのpid・状態（実読）"
+    ],
+    "inference": [
+      "Institutional Core各サブシステムの『骨格/一部稼働』区分（コード存在は確認済だが本活性化の度合いは実運用未投入のため推定を含む）",
+      "研究・進化部門の実運用効果（未投入のため未検証）"
+    ]
+  }
+}

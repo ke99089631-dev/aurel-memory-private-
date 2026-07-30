@@ -14,6 +14,13 @@ approver: 会長（KEIKI MAEDA）
 
 > **これは会長がいつでも開く「機関の全体像＋現在地＋会長判断待ち」1枚**。重要決定・GO・数値が変わるたびに更新する。Chairman Navigation Layer の実体。
 
+> **情報源の役割分担（Stage 3+4 で確定）**
+> - `institution_state.json` = **機械可読の単一情報源（source of truth）**。数値・状態・カウントの正本。
+> - `INSTITUTION-STATUS.md`（本書） = 会長向けの**説明・理由・次の一手**。json と整合させる。
+> - `aurelian_command.html` = 上記を**読取専用で表示**する中央司令画面（操作ボタンなし）。
+> - AUREL = 両方を参照して会長に説明する統括CEO。
+> 数値が食い違う場合は json を正とし、本書を追随更新する。
+
 ---
 
 ## 0. 機関の最終目的（一行）
@@ -25,14 +32,14 @@ approver: 会長（KEIKI MAEDA）
 ```
 会長 KEIKI MAEDA
   └ 統括CEO AUREL
-      ├ Institutional Core（共通基盤: 台帳/防衛/バス/アロケータ/観測/執行/研究/進化）
-      ├ Proprietary Investment Division（自己勘定）★実弾稼働あり
+      ├ Institutional Core（共通基盤: 台帳/防衛/バス/アロケータ/観測/執行）※利益源ではない
+      ├ Proprietary Investment Division（自己勘定）※現在 実弾ゼロ・paper群のみ
       ├ Prop Trading Division（プロップ・読取専用/g4_境界）
       ├ Research and Evolution
       ├ Audit and Risk
       └ Future Strategy Divisions（枠）
 ```
-詳細 → ORG-CHART.md
+詳細 → ORG-CHART.md ／ Core の定義 → INSTITUTIONAL-CORE.md ／ 機械可読の正本 → institution_state.json
 
 ---
 
@@ -75,7 +82,7 @@ approver: 会長（KEIKI MAEDA）
 - Future Strategy Divisions
 
 **進行中（今回の作業）**:
-- 機関の正式登録・文書化（本ステータス含む Stage 1+2）
+- Stage 3+4：機関状態モデル（institution_state.json）・中央司令画面（aurelian_command.html）・Core/Audit責任境界（INSTITUTIONAL-CORE.md）の確定
 
 ---
 
@@ -88,9 +95,10 @@ approver: 会長（KEIKI MAEDA）
 ---
 
 ## 6. 次の最優先作業
-1. 本Stage 1+2 文書群の会長レビュー。
-2. （会長GO後）Institutional Core 台帳/アロケータの本活性化計画（Stage 3）。
-3. プロップ Phase 7 の実弾GO判断（会長）。
+1. Stage 3+4 成果物の会長レビュー（institution_state.json / INSTITUTIONAL-CORE.md / aurelian_command.html / 本ステータス）。
+2. **Stage 5：実弾利益源の選定**（会長判断）— (a) ETHを別口座で再武装 か (b) プロップ合格後の実弾運用。
+3. Institutional Core（台帳/アロケータ）本活性化計画の策定（会長GO後）。
+4. プロップ Phase 7 の実弾GO判断（会長）。
 
 ---
 
@@ -127,10 +135,12 @@ approver: 会長（KEIKI MAEDA）
 
 ## 10. 全体構築進捗
 - 骨格構築: ~90%（既存AssetEmpire）
-- 正式機関化（登録・憲章・組織図・ステータス）: Stage 1+2 完了（本文書群）
-- 本活性化（台帳/アロケータ実運用）: 未着手（会長GO待ち）
+- 正式機関化（登録・憲章・組織図・ステータス）: **Stage 1+2 完了（監査合格）**
+- 統治・表示・監査基盤（状態モデル・中央司令画面・責任境界）: **Stage 3+4 完了（本更新）**
+- 本活性化（台帳/アロケータ実運用）＋実弾利益源選定: **Stage 5 以降（会長GO待ち）**
 
 ---
 
 ## 改定
 - v1（2026-07-30）: 初版。Stage 1+2 で制定。
+- v1.1（2026-07-30）: Stage 3+4 反映。institution_state.json との役割分担明記／組織図の実弾表記を実弾ゼロへ是正／次の最優先を Stage 5 実弾利益源選定へ更新／進捗に Stage 3+4 完了を追記。

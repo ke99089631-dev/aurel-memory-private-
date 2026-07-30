@@ -35,7 +35,7 @@ approver: 会長（KEIKI MAEDA）
 
 | モジュール | パス | 役割 | 状態 | 確度 |
 |---|---|---|---|---|
-| ETH自律枠 | `scripts/autopilot.py` + `run_eth_autopilot.bat` | ETH実弾自律（会長常時GO・枠内・0.01lot・SL必須・日次-$5・床$40） | 稼働・LIVE | 【確認済】 |
+| ETH自律枠 | `scripts/autopilot.py` + `run_eth_autopilot.bat` | ETH実弾自律。2026-07-30 会長GOで **武装解除**（口座27972608=会長裁量口座と衝突）。タスクは毎時稼働だが live:false で実弾発注なし（paper計算のみ）。 | **武装解除 DISARMED** | 【確認済】 |
 | BTC枠 | autopilot 内 sleeve | BTC枠（武装解除 live:false） | 骨格 | 【確認済】 |
 | LTC枠 | autopilot 内 sleeve | LTC枠（武装解除 live:false） | 骨格 | 【確認済】 |
 | 日足ソルジャー群(11) | `scripts/run_trading_cycle.py` | 日足戦略 paper 実行 | 稼働・paper | 【確認済】 |
