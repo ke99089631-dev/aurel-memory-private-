@@ -27,7 +27,7 @@ principle: 完成度は「箱があるか」でなく「帰還ループ⑤が閉
 | ② | 利益 | 利益→Capital→再配分→Business→利益→留保→研究投資 | ○ | allocatorはコードのみ。paper利益がCapitalへ入り再配分される流れが動いていない。実データ本活性化前 |
 | ③ | 資本 | 資本→Allocator→各事業→運用→利益→資本増加→再配分 | ○ | 資本台帳が単一化されていない。複数枠の資本が一箇所に集約→再配分される血流が無い |
 | ④ | 知識 | 成功→Research→Knowledge Ledger→全部門共有→次世代戦略 | **●（本番自律）** | 【2026-07-30】機構→実データ読取→本番書き戻し→**日次自動カデンツ**まで到達。自分のpaper戦績→本番evolved_configs.jsonへ毎朝07:00自動帰還（AUREL_Circulation_WriteBack）。専用Ledger連鎖OK。残：全部門共有（他Groupが読む）は次増分 |
-| ⑤ | 失敗 | 事故→Risk→Audit→分析→知識化→Research→改善→Technology→Business | **●（本番自律・最小）** | 【2026-07-30】immune.py＋run_immune.py で事故→検死→抗体→守り の免疫ループを構築。実データで口座事故2件(25%DD＋deadman3回発火)・慢性出血2件を隔離・抗体8件記録・隔離銘柄の判断が long→flat 反転。本番反映は write_back に免疫オーバーライド統合(単一書き手・隔離=momentum_confirm_min最大=凍結)、GBPUSD隔離を本番commit済。日次カデンツで自動。残：検死の因果分析深化・口座レベル応答・全部門共有 |
+| ⑤ | 失敗 | 事故→Risk→Audit→分析→知識化→Research→改善→Technology→Business | **●（本番自律・自己治癒付）** | 【2026-07-30 v2】immune.py を強化。①急性検知＋自己治癒：判定を寿命累計→直近K=10取引へ＝“今の体調”で診る。回復すれば隔離が自動で解ける。隠れ出血のBTCUSD(寿命では健全に見えるが直近-0.096)を新規隔離＝隔離5件へ。②口座レベル応答：歴史的25%DDは抗体(記憶)に留め、発火は現在状態(def_level/def_dd_trailing)で判断。現在は回復済のため account_defense は正しく非発火(過剰防御しない)。発火時フロア0.008を全ソルジャーへ課す配線を write_back に統合(単調・引上げのみ)。BTCUSD 0.01→0.02 を本番commit(GBPUSD 0.02維持)。日次カデンツで④慢性＋⑤急性を自動同時適用。残：検死の因果分析深化・全部門共有 |
 | ⑥ | AI | Research AI→Strategy AI→Risk AI→Execution AI→Audit AI→AUREL→Chairman→Research AI | ◐ | Arsenal/Council/Hermes/ai_soldier/Gemini は個別に在るが、AI同士が結果を渡し合い学習し合う環が繋がっていない。councilはオンデマンド |
 | ⑦ | 技術 | 問題→Technology→改善→実装→Business→結果→Technology | ◐ | health-monitor/自動起動など運用の自動修復は●。だが「Businessの問題→自動で改善要求→実装→結果検証」の開発ループは手動 |
 | ⑧ | 人材(AI社員) | 新AI→教育→評価→専門化→昇格→統括AI→後進育成 | ○ | AI社員の名簿・権限・評価・昇格の定義が無い。エージェントは在るが組織化・育成の環が未 |
