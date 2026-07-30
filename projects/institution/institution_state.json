@@ -196,6 +196,7 @@
     "Institutional Core 本活性化計画の策定"
   ],
   "recent_decisions": [
+    { "date": "2026-07-30", "decision": "会長直達『Circulation Architecture（循環設計思想）』を最上位設計思想として登録。Aurelianは部署を並べた会社ではなく一つの生命体。今後の設計対象は組織図でなく循環そのもの。全部署は5点契約（受け取る/判断する/生み出す/渡す/戻ってくる）を定義してから設計完了とする。帰還ループの無い箱は禁止。組織図（FINAL-ARCHITECTURE）は骨格＝静止画で本思想が上位。CIRCULATION-ARCHITECTURE.md 参照。", "type": "fact" },
     { "date": "2026-07-30", "decision": "会長裁定：プロップは方向性・目的が既に確定した独立事業であり、運用軸が機関と別。機関は関与・管理・資本配分・ロードマップ化をせず、組織図に置くだけ・さわらない。機関の完成率から除外（前決定『プロップは9 Divisionの一つ』を上書き）。", "type": "fact" },
     { "date": "2026-07-30", "decision": "修正Stage 5：最終形を先に設計しその器へ既存資産を配置する方針へ転換。現存AssetEmpire/プロップ/EAを最終形の中心に据えない。旧Stage 5（実弾運用基盤・資本口座設計）は保留。", "type": "fact" },
     { "date": "2026-07-30", "decision": "Aurelian 正式成立（Stage 1+2 監査合格・会長裁定）", "type": "fact" },
