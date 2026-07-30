@@ -196,6 +196,8 @@
     "Institutional Core 本活性化計画の策定"
   ],
   "recent_decisions": [
+    { "date": "2026-07-30", "decision": "STEP1完了（設計のみ）：G2 Core単一背骨の配線設計。現物調査で判明＝bus(signal_bus.py)は在るが背骨未使用・institution_state.jsonは人手維持で運用実体(empire/data/*.json)と未接続・帰還ループ(知識)は既に鎖として存在するが手動分断。背骨=Core Hub(SignalBus神経+Ledger記憶+StateStore現在値)。循環契約をバストピック規約化(result.*新設で上流へ帰還)。実装はGO待ち・金ゼロ。CORE-BACKBONE-DESIGN.md 参照。", "type": "fact" },
+    { "date": "2026-07-30", "decision": "STEP0完了：循環の断裂地図(CIRCULATION-GAPMAP.md)。9循環で完全に閉じて回るものは現状ゼロ。完成度を箱でなく帰還ループの閉/開で測り直す方針を確立。", "type": "fact" },
     { "date": "2026-07-30", "decision": "会長直達『Circulation Architecture（循環設計思想）』を最上位設計思想として登録。Aurelianは部署を並べた会社ではなく一つの生命体。今後の設計対象は組織図でなく循環そのもの。全部署は5点契約（受け取る/判断する/生み出す/渡す/戻ってくる）を定義してから設計完了とする。帰還ループの無い箱は禁止。組織図（FINAL-ARCHITECTURE）は骨格＝静止画で本思想が上位。CIRCULATION-ARCHITECTURE.md 参照。", "type": "fact" },
     { "date": "2026-07-30", "decision": "会長裁定：プロップは方向性・目的が既に確定した独立事業であり、運用軸が機関と別。機関は関与・管理・資本配分・ロードマップ化をせず、組織図に置くだけ・さわらない。機関の完成率から除外（前決定『プロップは9 Divisionの一つ』を上書き）。", "type": "fact" },
     { "date": "2026-07-30", "decision": "修正Stage 5：最終形を先に設計しその器へ既存資産を配置する方針へ転換。現存AssetEmpire/プロップ/EAを最終形の中心に据えない。旧Stage 5（実弾運用基盤・資本口座設計）は保留。", "type": "fact" },
