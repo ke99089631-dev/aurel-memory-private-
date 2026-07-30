@@ -196,6 +196,8 @@
     "Institutional Core 本活性化計画の策定"
   ],
   "recent_decisions": [
+    { "date": "2026-07-30", "decision": "最初の心拍（実装・会長GO後）：④知識/⑨自己進化の最小ループを実装し隔離環境で閉ループ検証OK。新規パッケージ empire/circulation/（topics.py・loop1.py・run_loop1.py）を【追加のみ】で作成、既存稼働コード・運用DB・*.jsonは無改変、専用DB(circ_bus/circ_ledger)使用、paperのみ・金ゼロ・凍結資産非接触。実証結果=paper結果→学習(閾値1.0→1.2)→次の判断がlong→flat反転(behavior_changed=true)→loop_closedを専用Ledgerに記録・ハッシュ連鎖検証(True,None)。独立読取でも確認。“機構●・運用○”＝実データ接続/連続運転/全部門共有は次増分。CIRCULATION-LOOP1-DESIGN.md / GAPMAP更新。", "type": "fact" },
+    { "date": "2026-07-30", "decision": "STEP2完了（設計のみ）：最初の1ループ＝知識/自己進化の最小“呼吸”を背骨上に詳細設計。既存の手動鎖(trading→ledger→evolution→evolved_configs)を新トピックresult.*/knowledge.*＋listener1個＋薄い後段フックでイベント駆動に繋ぎ替える。合格条件=loop_closed NOTEが連鎖検証OKで1件残る（結果が次の判断を実際に変えた証跡）。学習ループの安全弁（paper限定/変異上限/QUARANTINE関門/Audit監督/凍結非接続/listenerキルスイッチ）を設計に内蔵。実装GO待ち・金ゼロ。CIRCULATION-LOOP1-DESIGN.md 参照。", "type": "fact" },
     { "date": "2026-07-30", "decision": "STEP1完了（設計のみ）：G2 Core単一背骨の配線設計。現物調査で判明＝bus(signal_bus.py)は在るが背骨未使用・institution_state.jsonは人手維持で運用実体(empire/data/*.json)と未接続・帰還ループ(知識)は既に鎖として存在するが手動分断。背骨=Core Hub(SignalBus神経+Ledger記憶+StateStore現在値)。循環契約をバストピック規約化(result.*新設で上流へ帰還)。実装はGO待ち・金ゼロ。CORE-BACKBONE-DESIGN.md 参照。", "type": "fact" },
     { "date": "2026-07-30", "decision": "STEP0完了：循環の断裂地図(CIRCULATION-GAPMAP.md)。9循環で完全に閉じて回るものは現状ゼロ。完成度を箱でなく帰還ループの閉/開で測り直す方針を確立。", "type": "fact" },
     { "date": "2026-07-30", "decision": "会長直達『Circulation Architecture（循環設計思想）』を最上位設計思想として登録。Aurelianは部署を並べた会社ではなく一つの生命体。今後の設計対象は組織図でなく循環そのもの。全部署は5点契約（受け取る/判断する/生み出す/渡す/戻ってくる）を定義してから設計完了とする。帰還ループの無い箱は禁止。組織図（FINAL-ARCHITECTURE）は骨格＝静止画で本思想が上位。CIRCULATION-ARCHITECTURE.md 参照。", "type": "fact" },
