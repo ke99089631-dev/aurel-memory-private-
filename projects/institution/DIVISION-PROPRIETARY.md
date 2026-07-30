@@ -20,7 +20,7 @@ approver: 会長（KEIKI MAEDA）
 
 | 枠 | 実弾状態 | 規律 |
 |---|---|---|
-| ETH自律枠 ETHAutopilot | **LIVE**（2026-06-16〜・会長常時GO） | ETHのみ / 0.01 lot / SL必須 / 日次-$5停止 / 床$40 / magic 770611 |
+| ETH自律枠 ETHAutopilot | **武装解除（live:false）2026-07-30** ← 旧LIVE(2026-06-16〜) | 口座衝突のため会長GOで停止。再武装は会長GO必須。ETHのみ / 0.01 lot / SL必須 / 日次-$5停止 / 床$40 / magic 770611 |
 | BTC枠 | 武装解除（live:false） | 活性化には会長の最終GO必須 |
 | LTC枠 | 武装解除（live:false） | 活性化には会長の最終GO必須 |
 | 日足ソルジャー群(11) | paper | 昇格ゲート通過＋会長承認で極小実弾へ |
@@ -55,11 +55,13 @@ approver: 会長（KEIKI MAEDA）
 - 挙動: 毎時、ETHにサインが出て資金可なら口座27972608に**本物の0.01ロットETH買い**（magic 770611・SL必須）。自分の建玉(magic770611)のみ管理し、会長の手動建玉は閉じない。
 - `autopilot_state day_start_equity=25000` はこの口座で観測した当日基準（max(残高,エクイティ)）。
 
-**⚠️ 会長への唯一の質問（J-2）**: ログイン **27972608** は、会長が今、手で（裁量で）取引しているVantage口座か？
-- **YES** → 衝突。自動botが会長の裁量口座に0.01ロットETHを入れ続ける＋床/日次計算を共有。→ eth sleeve を `live:false` に武装解除するのが安全（config変更＝会長GO必須・AURELは無断変更しない）。
-- **NO** → 別口座。衝突なし。現状維持でよい。
-
-**AURELは読取専用の原則により、口座の同定・衝突判定は会長の回答を待つ。無断でconfigを変更しない。**
+**✅ 解決（2026-07-30 会長回答＋GO）**: 会長が「**27972608は今、手で取引している同じ口座**」と確定回答＝衝突確認。
+- 会長GOに基づき **eth sleeve を `live:true → live:false` に武装解除**（`autopilot_config.json`）。
+- バックアップ: `data/autopilot_config.backup_2026-07-30_pre-eth-disarm.json`（新規作成）。
+- 武装解除時の状態: eth position=flat（botの開玉なし＝混在なし・巻き戻し不要）。
+- 非干渉: autopilot.py プロセス／タスクスケジューラは**停止していない**。configの値を1つ変えただけ（毎時走るがETH実弾は出さない・paper計算のみ）。会長の手動建玉には一切触れていない。
+- 台帳: `institution_freeze_ledger.sqlite` に NOTE `ETH_SLEEVE_DISARM` を記録（seq=2 / hash 59494f61…、MM0凍結seq=1から連鎖）。
+- **再武装ポリシー**: eth を再び live:true に戻すには**会長の最終GO必須**。別口座に切り替える場合も同様。
 
 ---
 

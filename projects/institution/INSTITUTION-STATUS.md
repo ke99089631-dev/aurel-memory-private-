@@ -41,7 +41,7 @@ approver: 会長（KEIKI MAEDA）
 | Division | フェーズ | 実弾 |
 |---|---|---|
 | Institutional Core | 骨格〜一部稼働 | ― |
-| Proprietary Investment | 一部稼働（ETH LIVE + paper群） | ETH自律枠のみ実弾 |
+| Proprietary Investment | paper群のみ稼働（ETH実弾は2026-07-30 武装解除） | **実弾ゼロ**（ETH口座衝突のため停止） |
 | Prop Trading | Phase 7（$25k実弾GO待ち・dry継続）／維持機=MM0凍結済 | 未（受験料GO待ち） |
 | Research and Evolution | 骨格 | ― |
 | Audit and Risk | 一部稼働（台帳/防衛） | ― |
@@ -50,8 +50,11 @@ approver: 会長（KEIKI MAEDA）
 ---
 
 ## 3. 稼働中の利益源【確認済】
-- **ETH自律枠（LIVE）**: 2026-06-16〜。ETH/0.01lot/SL必須/日次-$5/床$40。毎時稼働、last 08:59 result 0。
-- （プロップは dry-run。実弾はまだ動いていない＝利益源ではなく受験準備段階。）
+- ⚠️ **現在、実弾で動いている利益源はゼロ**（2026-07-30時点）。
+- **ETH自律枠**: 2026-06-16 LIVE開始 → **2026-07-30 武装解除（live:false）**。理由=発注先(login 27972608)が会長の裁量トレード口座と同一で衝突。会長GOで停止。再武装は会長GO必須。
+- 日足19 / 4h暗号8 = paper（練習）継続。実弾ではない。
+- プロップ = dry-run（受験準備段階・利益源ではない）。
+- **意味**: 機関は現在「守り＋準備」フェーズ。次の実弾利益源は (a) ETHを別口座で再武装 か (b) プロップ合格後の実弾運用。いずれも会長GO待ち。
 
 ---
 
@@ -96,7 +99,7 @@ approver: 会長（KEIKI MAEDA）
 | # | 事項 | 内容 |
 |---|---|---|
 | J-1 | 機関名の確定 | ✅ 解決。**Aurelian（アウレリアン）で確定**（会長裁可 2026-07-30）。 |
-| J-2 | **ETH口座衝突（機構確定・要会長回答）** | 【確認済】ETHAutopilotは `ImperialFlow\.env` の **ログイン27972608 / VantageTradingLtd-Live** に接続。eth sleeve `live:true`＝毎時サイン時に本物の0.01ロットETH注文を出す（runtime armコード不要・常時GOがconfig焼込み）。**質問1つ: 27972608は会長が今、手で取引しているVantage口座か？** YESなら衝突（自動発注が会長の裁量口座に入る）→eth sleeveの武装解除を推奨（config変更は会長GO必須）。NOなら別口座で衝突なし。※botは自分の建玉(magic770611)のみ管理し会長の手動建玉は閉じないが、証拠金・エクイティ・床計算を共有するため同居は非推奨。 |
+| J-2 | **ETH口座衝突** | ✅ **解決（2026-07-30 会長GO）**。会長が「27972608は今、手で取引している同じ口座」と確定回答→衝突確認。**eth sleeve を live:false に武装解除**（`autopilot_config.json`、バックアップ `autopilot_config.backup_2026-07-30_pre-eth-disarm.json`）。武装解除時 eth position=flat（開玉なし・巻き戻し不要）。btc/ltcは元からfalse。台帳記録＝`institution_freeze_ledger.sqlite` seq=2（hash 59494f61…）。**再武装は会長の最終GO必須。** プロセス(autopilot.py)は停止せず・configの値変更のみ。 |
 | J-3 | プロップ実弾GO | Phase 7 の $25k×1本 受験料支払いGO。 |
 | J-4 | Core活性化 | 台帳/アロケータ本活性化への着手可否（Stage 3）。 |
 | J-5 | 維持機の系譜 | 維持機はMM0凍結済（`archive/2026-07-30_maintenance_17hrp_freeze`・専用台帳seq=1）。審査終了まで改善探索禁止（凍結保存のみ）。 |
@@ -108,7 +111,7 @@ approver: 会長（KEIKI MAEDA）
 ## 8. 各システム稼働状態【確認済 2026-07-30】
 - AUREL在宅デーモン :7878 = pid 13092（07-25 22:40〜）稼働
 - 司令室 :7891 = pid 14272 稼働
-- ETHAutopilot = 毎時 result 0（last 08:59）
+- ETHAutopilot = 毎時稼働継続（タスク/プロセスは止めていない）。ただし eth sleeve `live:false` のため**実弾発注はしない**（paper計算のみ）。
 - GitSync = 15分毎 result 0（last 09:22）
 - HealthMonitor = 5分毎 result 0（last 09:34）
 - プロップ G4 = dry-run 稼働（heartbeat live_idle）
