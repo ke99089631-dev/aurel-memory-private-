@@ -4,9 +4,10 @@
   "institution_name": "Aurelian",
   "parent_org": "AUREL Holdings",
   "base_architecture": "AssetEmpire",
-  "overall_phase": "統治・表示・監査基盤の構築",
-  "last_updated": "2026-07-30T03:24:28Z",
-  "updated_reason": "Stage 3+4 実行：機関状態モデル新設・中央司令画面新設・Institutional Core/Audit and Risk 責任境界確定・重要決定の記録",
+  "overall_phase": "最終機関設計（Aurelian Final Institution Architecture・器の確定）",
+  "phase_note": "Stage 1-4 の成果は有効。修正Stage 5 で最終形の器（7 Group・9 Investment Division）を先に設計登録。実装は段階的（Build All, Activate Gradually）。完成率はプロップ数で測らない→GAP-ANALYSIS.md。",
+  "last_updated": "2026-07-30T04:54:55Z",
+  "updated_reason": "修正Stage 5：Aurelian最終機関設計。7 Group と Investment Business Group の9 Division枠を正式登録。既存資産の再配置・差分分析・全体ロードマップを作成。",
   "counts": {
     "live": 0,
     "paper": 2,
@@ -22,6 +23,35 @@
     "DRY_RUN": "ドライラン（発注せず判断のみ・受験準備）",
     "FROZEN": "凍結（SHA256スナップショット・改変禁止）",
     "DISARMED": "武装解除（live:false・会長GOで再武装可）"
+  },
+  "final_architecture": {
+    "doc": "FINAL-ARCHITECTURE.md（最終形の器）／ASSET-REPLACEMENT-MAP.md（再配置）／GAP-ANALYSIS.md（差分・完成度）",
+    "principle": "Build All, Activate Gradually — 器を先に全登録し、実装と起動は段階的。",
+    "prop_position": "Prop Trading Division は中心ではなく Investment Business Group の9 Divisionの一つ。G4はその配下のProgram/Strategy。",
+    "groups": [
+      { "id": "G1", "name": "Executive and Governance Group", "completion_pct": 70 },
+      { "id": "G2", "name": "Institutional Core", "completion_pct": 35 },
+      { "id": "G3", "name": "Investment Business Group", "completion_pct": 12 },
+      { "id": "G4", "name": "Research and Intelligence Group", "completion_pct": 40 },
+      { "id": "G5", "name": "Risk, Audit and Compliance Group", "completion_pct": 30 },
+      { "id": "G6", "name": "Technology and Operations Group", "completion_pct": 75 },
+      { "id": "G7", "name": "Chairman Navigation Layer", "completion_pct": 55 }
+    ],
+    "hierarchy": "Group → Division → Desk → Strategy → Agent/Squad → Execution System",
+    "investment_divisions": [
+      { "name": "Proprietary Quant Division", "status": "一部稼働(paper)", "completion_pct": 30 },
+      { "name": "Prop Trading Division", "status": "稼働(dry)・複数利益源の一つ", "completion_pct": 45 },
+      { "name": "Crypto and Digital Assets Division", "status": "一部(paper/disarmed)", "completion_pct": 20 },
+      { "name": "Yield / Carry / Swap Division", "status": "骨格", "completion_pct": 8 },
+      { "name": "Arbitrage Division", "status": "枠のみ", "completion_pct": 0 },
+      { "name": "Macro and Global Markets Division", "status": "枠のみ", "completion_pct": 0 },
+      { "name": "Equity Division", "status": "枠のみ", "completion_pct": 0 },
+      { "name": "Commodity Division", "status": "枠のみ", "completion_pct": 0 },
+      { "name": "Future Markets Division", "status": "枠のみ", "completion_pct": 0 }
+    ],
+    "roadmap_tracks": ["Institutional Foundation","Institutional Core Activation","Central Command UI","Research and Intelligence","Investment Divisions","Risk and Audit","Capital Allocation","Execution Infrastructure","AI Agent Organization","Live Activation & Scale/Expansion"],
+    "next_priority_order": ["1.全体の器","2.共通基盤","3.可視化","4.研究・評価","5.各利益事業","6.実弾化","7.拡張"],
+    "note": "旧Stage 5（実弾運用基盤・資本口座設計）は保留し、Live Activation トラック(T10)へ再合流。"
   },
   "institutional_core": {
     "definition": "全Divisionが共用する機関共通基盤。自己勘定投資部門の内部ではない。Core自体は利益源ではない。",
@@ -161,6 +191,7 @@
     "Institutional Core 本活性化計画の策定"
   ],
   "recent_decisions": [
+    { "date": "2026-07-30", "decision": "修正Stage 5：最終形を先に設計しその器へ既存資産を配置する方針へ転換。現存AssetEmpire/プロップ/EAを最終形の中心に据えない。プロップは9 Divisionの一つ。旧Stage 5（実弾運用基盤・資本口座設計）は保留。", "type": "fact" },
     { "date": "2026-07-30", "decision": "Aurelian 正式成立（Stage 1+2 監査合格・会長裁定）", "type": "fact" },
     { "date": "2026-07-30", "decision": "ETH自律枠を口座衝突のため DISARMED。機関監査が初めて実際の資本・実行経路の衝突を発見し防止した成果として記録（後退ではない）。", "type": "fact" },
     { "date": "2026-07-30", "decision": "維持機（合格後運用機）を FROZEN（MM0・別系統SHA256）", "type": "fact" },
