@@ -29,40 +29,160 @@
     "principle": "Build All, Activate Gradually — 器を先に全登録し、実装と起動は段階的。",
     "prop_position": "Prop Trading Division は独立事業。機関の中に置いてあるだけで、機関は関与・管理・資本配分・ロードマップ化しない（運用軸が別・方向性確定済・読取のみ・触らない）。中心ではなく、機関の完成率にも算入しない。",
     "groups": [
-      { "id": "G1", "name": "Executive and Governance Group", "completion_pct": 70 },
-      { "id": "G2", "name": "Institutional Core", "completion_pct": 35 },
-      { "id": "G3", "name": "Investment Business Group", "completion_pct": 12 },
-      { "id": "G4", "name": "Research and Intelligence Group", "completion_pct": 40 },
-      { "id": "G5", "name": "Risk, Audit and Compliance Group", "completion_pct": 30 },
-      { "id": "G6", "name": "Technology and Operations Group", "completion_pct": 75 },
-      { "id": "G7", "name": "Chairman Navigation Layer", "completion_pct": 55 }
+      {
+        "id": "G1",
+        "name": "Executive and Governance Group",
+        "completion_pct": 70
+      },
+      {
+        "id": "G2",
+        "name": "Institutional Core",
+        "completion_pct": 35
+      },
+      {
+        "id": "G3",
+        "name": "Investment Business Group",
+        "completion_pct": 12
+      },
+      {
+        "id": "G4",
+        "name": "Research and Intelligence Group",
+        "completion_pct": 40
+      },
+      {
+        "id": "G5",
+        "name": "Risk, Audit and Compliance Group",
+        "completion_pct": 30
+      },
+      {
+        "id": "G6",
+        "name": "Technology and Operations Group",
+        "completion_pct": 75
+      },
+      {
+        "id": "G7",
+        "name": "Chairman Navigation Layer",
+        "completion_pct": 55
+      }
     ],
     "hierarchy": "Group → Division → Desk → Strategy → Agent/Squad → Execution System",
     "investment_divisions": [
-      { "name": "Proprietary Quant Division", "status": "一部稼働(paper)", "completion_pct": 30 },
-      { "name": "Prop Trading Division", "status": "独立事業・機関非関与・読取のみ（機関の完成率に算入しない）", "completion_pct": null, "independent": true },
-      { "name": "Crypto and Digital Assets Division", "status": "一部(paper/disarmed)", "completion_pct": 20 },
-      { "name": "Yield / Carry / Swap Division", "status": "骨格", "completion_pct": 8 },
-      { "name": "Arbitrage Division", "status": "枠のみ", "completion_pct": 0 },
-      { "name": "Macro and Global Markets Division", "status": "枠のみ", "completion_pct": 0 },
-      { "name": "Equity Division", "status": "枠のみ", "completion_pct": 0 },
-      { "name": "Commodity Division", "status": "枠のみ", "completion_pct": 0 },
-      { "name": "Future Markets Division", "status": "枠のみ", "completion_pct": 0 }
+      {
+        "name": "Proprietary Quant Division",
+        "status": "一部稼働(paper)",
+        "completion_pct": 30
+      },
+      {
+        "name": "Prop Trading Division",
+        "status": "独立事業・機関非関与・読取のみ（機関の完成率に算入しない）",
+        "completion_pct": null,
+        "independent": true
+      },
+      {
+        "name": "Crypto and Digital Assets Division",
+        "status": "一部(paper/disarmed)",
+        "completion_pct": 20
+      },
+      {
+        "name": "Yield / Carry / Swap Division",
+        "status": "骨格",
+        "completion_pct": 8
+      },
+      {
+        "name": "Arbitrage Division",
+        "status": "枠のみ",
+        "completion_pct": 0
+      },
+      {
+        "name": "Macro and Global Markets Division",
+        "status": "枠のみ",
+        "completion_pct": 0
+      },
+      {
+        "name": "Equity Division",
+        "status": "枠のみ",
+        "completion_pct": 0
+      },
+      {
+        "name": "Commodity Division",
+        "status": "枠のみ",
+        "completion_pct": 0
+      },
+      {
+        "name": "Future Markets Division",
+        "status": "枠のみ",
+        "completion_pct": 0
+      }
     ],
-    "roadmap_tracks": ["Institutional Foundation","Institutional Core Activation","Central Command UI","Research and Intelligence","Investment Divisions","Risk and Audit","Capital Allocation","Execution Infrastructure","AI Agent Organization","Live Activation & Scale/Expansion"],
-    "next_priority_order": ["1.全体の器","2.共通基盤","3.可視化","4.研究・評価","5.各利益事業","6.実弾化","7.拡張"],
+    "roadmap_tracks": [
+      "Institutional Foundation",
+      "Institutional Core Activation",
+      "Central Command UI",
+      "Research and Intelligence",
+      "Investment Divisions",
+      "Risk and Audit",
+      "Capital Allocation",
+      "Execution Infrastructure",
+      "AI Agent Organization",
+      "Live Activation & Scale/Expansion"
+    ],
+    "next_priority_order": [
+      "1.全体の器",
+      "2.共通基盤",
+      "3.可視化",
+      "4.研究・評価",
+      "5.各利益事業",
+      "6.実弾化",
+      "7.拡張"
+    ],
     "note": "旧Stage 5（実弾運用基盤・資本口座設計）は保留し、Live Activation トラック(T10)へ再合流。"
   },
   "institutional_core": {
     "definition": "全Divisionが共用する機関共通基盤。自己勘定投資部門の内部ではない。Core自体は利益源ではない。",
     "status": "骨格〜一部稼働",
     "subsystems": [
-      { "key": "ledger", "name": "統合台帳", "role": "唯一の真実源・追記専用・ハッシュ連鎖・任意時点リプレイ・日次突合", "status": "骨格", "supervised_by": "Audit and Risk" },
-      { "key": "defense", "name": "防衛司令", "role": "段階デッドマン(-8/-12/-15%)・ファクター集約・全停止権限の実行", "status": "骨格", "supervised_by": "Audit and Risk" },
-      { "key": "bus", "name": "信号バス", "role": "TTL/topic付き信号配信", "status": "骨格", "supervised_by": "Audit and Risk" },
-      { "key": "allocator", "name": "資本アロケータ", "role": "PSR×テールペナルティ補正・昇格遅降格速・月次±20%の実行", "status": "骨格", "supervised_by": "Audit and Risk" },
-      { "key": "observatory", "name": "観測所", "role": "レジーム判定・乖離記録・生存信号・通知", "status": "一部稼働", "supervised_by": "Audit and Risk" },
-      { "key": "execution_gateway", "name": "執行ゲートウェイ", "role": "決定的発注・二重ロック(enable_live+arm_code)・FLOOR丸め・約定コスト分析", "status": "一部稼働", "supervised_by": "Audit and Risk" }
+      {
+        "key": "ledger",
+        "name": "統合台帳",
+        "role": "唯一の真実源・追記専用・ハッシュ連鎖・任意時点リプレイ・日次突合",
+        "status": "骨格",
+        "supervised_by": "Audit and Risk"
+      },
+      {
+        "key": "defense",
+        "name": "防衛司令",
+        "role": "段階デッドマン(-8/-12/-15%)・ファクター集約・全停止権限の実行",
+        "status": "骨格",
+        "supervised_by": "Audit and Risk"
+      },
+      {
+        "key": "bus",
+        "name": "信号バス",
+        "role": "TTL/topic付き信号配信",
+        "status": "骨格",
+        "supervised_by": "Audit and Risk"
+      },
+      {
+        "key": "allocator",
+        "name": "資本アロケータ",
+        "role": "PSR×テールペナルティ補正・昇格遅降格速・月次±20%の実行",
+        "status": "骨格",
+        "supervised_by": "Audit and Risk"
+      },
+      {
+        "key": "observatory",
+        "name": "観測所",
+        "role": "レジーム判定・乖離記録・生存信号・通知",
+        "status": "一部稼働",
+        "supervised_by": "Audit and Risk"
+      },
+      {
+        "key": "execution_gateway",
+        "name": "執行ゲートウェイ",
+        "role": "決定的発注・二重ロック(enable_live+arm_code)・FLOOR丸め・約定コスト分析",
+        "status": "一部稼働",
+        "supervised_by": "Audit and Risk"
+      }
     ]
   },
   "divisions": {
@@ -76,11 +196,39 @@
       "warning": "実弾稼働ゼロ。稼ぐ足が現在止まっている。",
       "last_updated": "2026-07-30T03:24:28Z",
       "sleeves": [
-        { "key": "eth_autopilot", "name": "ETH自律枠 ETHAutopilot", "mode": "DISARMED", "note": "口座衝突のため2026-07-30会長GOで live:false。再武装は会長GO必須。", "magic": 770611 },
-        { "key": "btc", "name": "BTC枠", "mode": "DISARMED", "note": "元から live:false", "magic": 770612 },
-        { "key": "ltc", "name": "LTC枠", "mode": "DISARMED", "note": "元から live:false", "magic": 770613 },
-        { "key": "daily19", "name": "日足19ソルジャー群", "mode": "PAPER", "note": "run_trading_cycle.py" },
-        { "key": "crypto4h8", "name": "4h暗号8ソルジャー群", "mode": "PAPER", "note": "run_trading_cycle_4h.py" }
+        {
+          "key": "eth_autopilot",
+          "name": "ETH自律枠 ETHAutopilot",
+          "mode": "DISARMED",
+          "note": "口座衝突のため2026-07-30会長GOで live:false。再武装は会長GO必須。",
+          "magic": 770611
+        },
+        {
+          "key": "btc",
+          "name": "BTC枠",
+          "mode": "DISARMED",
+          "note": "元から live:false",
+          "magic": 770612
+        },
+        {
+          "key": "ltc",
+          "name": "LTC枠",
+          "mode": "DISARMED",
+          "note": "元から live:false",
+          "magic": 770613
+        },
+        {
+          "key": "daily19",
+          "name": "日足19ソルジャー群",
+          "mode": "PAPER",
+          "note": "run_trading_cycle.py"
+        },
+        {
+          "key": "crypto4h8",
+          "name": "4h暗号8ソルジャー群",
+          "mode": "PAPER",
+          "note": "run_trading_cycle_4h.py"
+        }
       ]
     },
     "prop_trading": {
@@ -98,8 +246,18 @@
       "protection_boundary": "g4_",
       "access": "機関からは読取のみ。触らない。",
       "sub_machines": {
-        "audit_machine": { "name": "審査機", "desc": "US100 NY ORB 単一戦略・g4_dryrun.py --dry（プロップ側運用軸・機関非関与）", "mode": "DRY_RUN", "frozen_ref": "archive/2026-07-08_trackA_preflight_freeze (G0)" },
-        "maintenance_machine": { "name": "維持機", "desc": "17本多市場HRP・合格後の資金運用機（プロップ側運用軸・機関非関与）", "mode": "FROZEN", "frozen_ref": "archive/2026-07-30_maintenance_17hrp_freeze (MM0)" }
+        "audit_machine": {
+          "name": "審査機",
+          "desc": "US100 NY ORB 単一戦略・g4_dryrun.py --dry（プロップ側運用軸・機関非関与）",
+          "mode": "DRY_RUN",
+          "frozen_ref": "archive/2026-07-08_trackA_preflight_freeze (G0)"
+        },
+        "maintenance_machine": {
+          "name": "維持機",
+          "desc": "17本多市場HRP・合格後の資金運用機（プロップ側運用軸・機関非関与）",
+          "mode": "FROZEN",
+          "frozen_ref": "archive/2026-07-30_maintenance_17hrp_freeze (MM0)"
+        }
       },
       "next_move": "機関は関与しない（プロップ側で完結）",
       "last_updated": "2026-07-30T04:54:55Z",
@@ -111,7 +269,13 @@
       "status": "骨格",
       "phase": "未活性",
       "profit_source": false,
-      "modules": ["research/edges.py", "evolution/ai_soldier", "evolution/backtest", "evolution/coroner", "evolution/evolve"],
+      "modules": [
+        "research/edges.py",
+        "evolution/ai_soldier",
+        "evolution/backtest",
+        "evolution/coroner",
+        "evolution/evolve"
+      ],
       "note": "Institutional Core の基盤を利用。仮説生成・敗戦分析・戦略進化。",
       "last_updated": "2026-07-30T03:24:28Z",
       "warning": null
@@ -123,7 +287,14 @@
       "phase": "統治機能の明示化中",
       "profit_source": false,
       "role": "Institutional Core の設定・動作・結果・例外・違反・資本リスクを監督し会長とAURELへ報告する統治部門（実行はしない）",
-      "supervises": ["ledger", "defense", "bus", "allocator", "observatory", "execution_gateway"],
+      "supervises": [
+        "ledger",
+        "defense",
+        "bus",
+        "allocator",
+        "observatory",
+        "execution_gateway"
+      ],
       "last_updated": "2026-07-30T03:24:28Z",
       "warning": null
     },
@@ -139,31 +310,106 @@
     }
   },
   "profit_sources": [
-    { "name": "ETH自律枠", "division": "proprietary_investment", "mode": "DISARMED", "live": false },
-    { "name": "日足19 paper", "division": "proprietary_investment", "mode": "PAPER", "live": false },
-    { "name": "4h暗号8 paper", "division": "proprietary_investment", "mode": "PAPER", "live": false },
-    { "name": "プロップ審査機", "division": "prop_trading", "mode": "DRY_RUN", "live": false },
-    { "name": "プロップ維持機", "division": "prop_trading", "mode": "FROZEN", "live": false }
+    {
+      "name": "ETH自律枠",
+      "division": "proprietary_investment",
+      "mode": "DISARMED",
+      "live": false
+    },
+    {
+      "name": "日足19 paper",
+      "division": "proprietary_investment",
+      "mode": "PAPER",
+      "live": false
+    },
+    {
+      "name": "4h暗号8 paper",
+      "division": "proprietary_investment",
+      "mode": "PAPER",
+      "live": false
+    },
+    {
+      "name": "プロップ審査機",
+      "division": "prop_trading",
+      "mode": "DRY_RUN",
+      "live": false
+    },
+    {
+      "name": "プロップ維持機",
+      "division": "prop_trading",
+      "mode": "FROZEN",
+      "live": false
+    }
   ],
   "live_profit_source_count": 0,
   "accounts": [
-    { "id_public": "40000162046", "broker_server": "FundingPips-Trial", "purpose": "プロップ審査（会社資金$25k・会長入金なし）", "belongs_to": "Prop Trading Division", "note": "ログイン番号=公開可" },
-    { "id_login": "27972608", "broker_server": "VantageTradingLtd-Live", "purpose": "会長の裁量トレード口座。旧ETH実弾の発注先だったが衝突判明→ETH武装解除。", "belongs_to": "機関外（会長個人裁量）", "note": "ETHはこの口座への自動発注を停止済み。パスワードは非保持。" },
-    { "id_note": "Vantage $53 口座", "purpose": "会長の裁量トレードで使用", "belongs_to": "機関外（会長個人裁量）", "note": "Aurelianの管理・運用対象から分離。AURELは干渉しない。" }
+    {
+      "id_public": "40000162046",
+      "broker_server": "FundingPips-Trial",
+      "purpose": "プロップ審査（会社資金$25k・会長入金なし）",
+      "belongs_to": "Prop Trading Division",
+      "note": "ログイン番号=公開可"
+    },
+    {
+      "id_login": "27972608",
+      "broker_server": "VantageTradingLtd-Live",
+      "purpose": "会長の裁量トレード口座。旧ETH実弾の発注先だったが衝突判明→ETH武装解除。",
+      "belongs_to": "機関外（会長個人裁量）",
+      "note": "ETHはこの口座への自動発注を停止済み。パスワードは非保持。"
+    },
+    {
+      "id_note": "Vantage $53 口座",
+      "purpose": "会長の裁量トレードで使用",
+      "belongs_to": "機関外（会長個人裁量）",
+      "note": "Aurelianの管理・運用対象から分離。AURELは干渉しない。"
+    }
   ],
   "protection_boundaries": {
-    "g4_prefix": { "status": "登録済・不可侵", "rule": "g4_で始まるコード・データ・プロセス・タスク・venv・設定・ログ形式を変更しない。読取専用。" },
-    "aurel_life_html": { "status": "保護", "rule": "編集前に aurel-ui-rules.md 必読。const sharedU に触れない（過去2回ブート死）。今回変更なし。" },
-    "live_lock": { "status": "有効", "rule": "実弾は enable_live=True かつ arm_code='CHAIRMAN-GO' かつ会長最終GO の三重。出金権限なし鍵・床・キルスイッチ不可侵。" },
-    "frozen_assets": { "status": "有効", "rule": "維持機MM0・審査機G0・凍結backtester(SHA256 74f1cacf...)は改変禁止。" }
+    "g4_prefix": {
+      "status": "登録済・不可侵",
+      "rule": "g4_で始まるコード・データ・プロセス・タスク・venv・設定・ログ形式を変更しない。読取専用。"
+    },
+    "aurel_life_html": {
+      "status": "保護",
+      "rule": "編集前に aurel-ui-rules.md 必読。const sharedU に触れない（過去2回ブート死）。今回変更なし。"
+    },
+    "live_lock": {
+      "status": "有効",
+      "rule": "実弾は enable_live=True かつ arm_code='CHAIRMAN-GO' かつ会長最終GO の三重。出金権限なし鍵・床・キルスイッチ不可侵。"
+    },
+    "frozen_assets": {
+      "status": "有効",
+      "rule": "維持機MM0・審査機G0・凍結backtester(SHA256 74f1cacf...)は改変禁止。"
+    }
   },
   "running_systems": [
-    { "name": "AUREL在宅デーモン :7878", "state": "稼働", "pid": 13092 },
-    { "name": "司令室 :7891", "state": "稼働", "pid": 14272 },
-    { "name": "ETHAutopilot タスク", "state": "稼働（毎時）", "note": "eth sleeve live:false のため実弾発注はしない（paper計算のみ）" },
-    { "name": "GitSync", "state": "稼働（15分毎）" },
-    { "name": "HealthMonitor", "state": "稼働（5分毎）" },
-    { "name": "プロップ G4 runner/watchdog", "state": "稼働（dry-run・読取専用）" }
+    {
+      "name": "AUREL在宅デーモン :7878",
+      "state": "稼働",
+      "pid": 13092
+    },
+    {
+      "name": "司令室 :7891",
+      "state": "稼働",
+      "pid": 14272
+    },
+    {
+      "name": "ETHAutopilot タスク",
+      "state": "稼働（毎時）",
+      "note": "eth sleeve live:false のため実弾発注はしない（paper計算のみ）"
+    },
+    {
+      "name": "GitSync",
+      "state": "稼働（15分毎）"
+    },
+    {
+      "name": "HealthMonitor",
+      "state": "稼働（5分毎）"
+    },
+    {
+      "name": "プロップ G4 runner/watchdog",
+      "state": "稼働（dry-run・読取専用）"
+    }
   ],
   "completed": [
     "ETH自律枠 LIVE運用ループ（現在は武装解除）",
@@ -183,13 +429,29 @@
     "Stage 3+4（機関状態モデル・中央司令画面・責任境界の確定）"
   ],
   "warnings": [
-    { "level": "notice", "text": "実弾で動いている利益源が現在ゼロ（ETH武装解除後）。機関は守り＋準備フェーズ。", "since": "2026-07-30" }
+    {
+      "level": "notice",
+      "text": "実弾で動いている利益源が現在ゼロ（ETH武装解除後）。機関は守り＋準備フェーズ。",
+      "since": "2026-07-30"
+    }
   ],
   "chairman_pending": [
-    { "id": "Stage5-profit", "text": "実弾利益源の選定：ETHを別口座で再武装 or プロップ合格後の実弾運用（Stage 3+4完了後に判断）" },
-    { "id": "Stage5-core", "text": "Institutional Core（台帳/アロケータ）の本活性化着手可否" },
-    { "id": "prop-phase7", "text": "プロップ Phase 7 の $25k×1本 実弾GO" },
-    { "id": "eth-rearm", "text": "ETH自律枠を別口座で再武装するか（現状は武装解除のまま）" }
+    {
+      "id": "Stage5-profit",
+      "text": "実弾利益源の選定：ETHを別口座で再武装 or プロップ合格後の実弾運用（Stage 3+4完了後に判断）"
+    },
+    {
+      "id": "Stage5-core",
+      "text": "Institutional Core（台帳/アロケータ）の本活性化着手可否"
+    },
+    {
+      "id": "prop-phase7",
+      "text": "プロップ Phase 7 の $25k×1本 実弾GO"
+    },
+    {
+      "id": "eth-rearm",
+      "text": "ETH自律枠を別口座で再武装するか（現状は武装解除のまま）"
+    }
   ],
   "next_priority": [
     "Stage 5 の実弾利益源選定（会長判断）",
@@ -200,47 +462,220 @@
     "closed_loops": 6,
     "total_loops": 9,
     "cadence": "毎朝07:00 JST: auto_writeback -> write_back -> digest公開 -> 心拍を共有神経へbroadcast -> 他Group(G5/G1)が能動読取し姿勢更新 -> ②利益: paper資本を再配分(capital_book更新) -> ③資本: 複数枠を単一化しequity curveへ1点記録(treasury.json更新)（全て助言＋paper台帳のみ・本番evolved_configs/実弾非接触）",
-    "active_read": { "topic": "circulation.digest", "subscribers": { "G5.risk": "警戒度 calm/elevated/high", "G1.executive": "資本姿勢 expand/hold/defend" }, "note": "助言(advisory)のみ・本番evolved_configs非接触・冪等(カーソル購読)" },
+    "active_read": {
+      "topic": "circulation.digest",
+      "subscribers": {
+        "G5.risk": "警戒度 calm/elevated/high",
+        "G1.executive": "資本姿勢 expand/hold/defend"
+      },
+      "note": "助言(advisory)のみ・本番evolved_configs非接触・冪等(カーソル購読)"
+    },
     "digest_file": "empire/data/circulation/circulation_digest.json",
-    "world": { "date": "2026-07-29", "regime": "crisis/range", "vol_score": 0.362, "stance": "defensive", "floor": 0.009 },
+    "world": {
+      "date": "2026-07-29",
+      "regime": "crisis/range",
+      "vol_score": 0.362,
+      "stance": "defensive",
+      "floor": 0.009
+    },
     "loops": [
-      { "id": "1", "name": "情報（世界モデル）", "breathing": true, "signal": "今日crisis+本が出血→守り。ETHの選別を0.005→0.009。金XAUの免除は手書きから“地合い別の親和性学習”へ置換（記録から危機×金=強いを覚える）。" },
-      { "id": "2", "name": "利益（paper資本の再配分）", "breathing": true, "signal": "paper実現損益で資本を再配分。勝ち頭XAU@0.339・隔離BTC/GBP@0.047・等分0.2から資本0.31移動。助言＋paper台帳のみ・実弾非接触。" },
-      { "id": "3", "name": "資本（単一化台帳・時間追跡）", "breathing": true, "signal": "複数枠(日足5301+4h4735)を単一総額10037へ集約。②ウェイトで各兵へ資本配分(XAU3406等)。日次で資本を記録しequity curve/最大DD/成長率を追跡。paper台帳のみ・実弾非接触。" },
-      { "id": "4", "name": "知識（慢性勝率→選別）", "breathing": true, "signal": "自分のpaper戦績で選別ノブを冪等に収束（EUR等）。" },
-      { "id": "5", "name": "失敗（免疫）", "breathing": true, "signal": "直近ウィンドウで隔離5銘柄（BTC/GBP/XRP/ADA/LTC）。回復すれば自動解除。" },
-      { "id": "9", "name": "自己進化（日次カデンツ）", "breathing": true, "signal": "同一write_backで毎朝1拍・冪等収束。" }
+      {
+        "id": "1",
+        "name": "情報（世界モデル）",
+        "breathing": true,
+        "signal": "今日crisis+本が出血→守り。ETHの選別を0.005→0.009。金XAUの免除は手書きから“地合い別の親和性学習”へ置換（記録から危機×金=強いを覚える）。"
+      },
+      {
+        "id": "2",
+        "name": "利益（paper資本の再配分）",
+        "breathing": true,
+        "signal": "paper実現損益で資本を再配分。勝ち頭XAU@0.339・隔離BTC/GBP@0.047・等分0.2から資本0.31移動。助言＋paper台帳のみ・実弾非接触。"
+      },
+      {
+        "id": "3",
+        "name": "資本（単一化台帳・時間追跡）",
+        "breathing": true,
+        "signal": "複数枠(日足5301+4h4735)を単一総額10037へ集約。②ウェイトで各兵へ資本配分(XAU3406等)。日次で資本を記録しequity curve/最大DD/成長率を追跡。paper台帳のみ・実弾非接触。 【残枝】利益の留保20%→研究予算2007を①進化に拠出し「研究サイクル起動可」を助言(reserve.py)。"
+      },
+      {
+        "id": "4",
+        "name": "知識（慢性勝率→選別）",
+        "breathing": true,
+        "signal": "自分のpaper戦績で選別ノブを冪等に収束（EUR等）。"
+      },
+      {
+        "id": "5",
+        "name": "失敗（免疫）",
+        "breathing": true,
+        "signal": "直近ウィンドウで隔離5銘柄（BTC/GBP/XRP/ADA/LTC）。回復すれば自動解除。"
+      },
+      {
+        "id": "9",
+        "name": "自己進化（日次カデンツ）",
+        "breathing": true,
+        "signal": "同一write_backで毎朝1拍・冪等収束。"
+      }
     ],
-    "production_owners": { "BTCUSD": "5-免疫", "ETHUSD": "1-情報", "EURUSD": "4-知識", "GBPUSD": "5-免疫", "XAUUSD": "base" }
+    "production_owners": {
+      "BTCUSD": "5-免疫",
+      "ETHUSD": "1-情報",
+      "EURUSD": "4-知識",
+      "GBPUSD": "5-免疫",
+      "XAUUSD": "base"
+    },
+    "reserve": {
+      "branch": "利益の留保→研究投資分岐（paper）",
+      "retention_rate": 0.2,
+      "research_unit": 1000.0,
+      "research_reserve": 2007.44,
+      "operating_capital": 8029.78,
+      "research_units": 2,
+      "authorized": true,
+      "target_loop": "9-self-evolution",
+      "note": "paperのみ・金ゼロ・助言のみ→進化ノブは単一書き手write_backのみ・本番/実弾非接触"
+    }
   },
   "recent_decisions": [
-    { "date": "2026-07-30", "decision": "【③資本循環をpaperで閉じた＝●が6/9へ・AUREL推進・検証PASS】②の対＝資本そのものを単一台帳へ集約し時間を通じて追跡。circulation/treasury.py＋run_treasury.py を新設：複数の資本枠(paper_book=日足枠 realized5301.9/peak20175.9 ＋ paper_book_4h=4h枠 realized4735.3/peak15428.5)を読取専用で単一資本総額10037.2へ集約＝地図の『資本台帳が単一化されていない・複数枠が一箇所に集約されない』を解消。②の資本ウェイト(capital.plan)を総額へ掛け各兵の資本(通貨単位)を配分(XAU3406/ETH2910/EUR2783/隔離BTC・GBP469)＝資本→Allocator→各事業。資本総額を専用台帳へ日次1点記録(capital_mark・同日ガード)＝equity curveが育つ。記録系列から running peak・最大ドローダウン・成長率を導く＝運用→利益→資本増加/減少→(②へ)再配分が時間を通じて閉じる。検証(run_treasury PASS)：2枠集約・配分・記録・合成系列(100→120→90で峰120/現在90/最大DD0.25)で時間軸DD計算・専用台帳連鎖OK(events18)。日次カデンツ auto_writeback に step5d(treasury.mark 同日ガード＋treasury.json公開)を追加＝毎朝自動。digest.py に③を追加(closed_loops=6・treasuryブロック・run_digest表示)＝共有面と会長command画面にも③が出る。単一化paper資本台帳＋記録のみ＝本番evolved_configsも実弾も一切非接触(実弾=本物の資金移動は最後・会長二重ロックGO後)。paperのみ・金ゼロ・専用台帳・live/プロップ/維持機/審査機非接触・既存資産無改変(circulation内モジュールのみ)。位置づけ：●=6/9(①②③④⑤⑨)。残：資本増加→留保→研究投資の分岐・助言→命令昇格・⑥AI連携・⑧人材。", "type": "fact" },
-    { "date": "2026-07-30", "decision": "【②利益循環をpaperで閉じた＝●が5/9へ・AUREL推進・検証PASS】地図でずっと○だった②利益を、実弾を使わず paper/助言で一周させた。血流の実体＝各兵が稼いだ/溶かしたpaper利益がその銘柄の資本の取り分を変える。circulation/capital.py＋run_capital.py を新設：本物paper帳簿(paper_book*.json)の生涯実現損益(sum_pnl・読取専用)→単一化したpaper資本口座で各兵の取り分を増減(equity=1+損益・下限0.10)→equity比例で資本ウェイトを再配分(下限MIN_W=0.05/上限MAX_W=0.40で暴走と餓死を防ぐ・monotone)→⑤免疫の隔離兵は最小ウェイトQ_WEIGHT=0.05へ(資本が免疫に従う)。実データ検証(run_capital PASS)：勝ち頭XAUUSD@0.339・ETH@0.290・EUR@0.277・隔離BTC/GBPは0.047へ縮小・等分0.2から資本が0.31移動(capital_moved)・同帳簿で冪等(同ウェイト)・専用台帳連鎖OK(events13)。日次カデンツ auto_writeback に step5c(capital.publish＝単一化paper資本台帳capital_book.json更新＋broadcastで共有神経へ心拍)を追加＝毎朝自動。digest.py に②を追加(closed_loops=5・capitalブロック・run_digest表示)＝共有面と会長command画面にも②が出る。助言＋paper資本台帳のみ＝本番evolved_configsも実弾も一切非接触(実弾=本物の資金移動は最後・会長二重ロックGO後)。paperのみ・金ゼロ・専用台帳・live/プロップ/維持機/審査機非接触・既存資産無改変(circulation内モジュールのみ)。位置づけ：●=5/9(①②④⑤⑨)＝生命体の血の再配分が金ゼロで回り始めた。残：利益の留保→研究投資分岐・③資本台帳の統合・助言→命令昇格。", "type": "fact" },
-    { "date": "2026-07-30", "decision": "【全部門共有を閉じた＝他Groupの“能動読取”・AUREL推進・検証PASS】公開(digest)は片方向だった＝血は流れたが、他の臓器が自分から取りに来て反応するまで共有は閉じない。その最後の一歩を実装。circulation/subscribe.py＋run_subscribe.py を新設。(1)broadcast()＝循環の心拍(digest)を既存の共有神経 SignalBus へ1メッセージとして流す（ファイルだけでなく本物の神経幹線に乗せる・既存エージェントと同じバス）。(2)他Group購読者が各自のカーソルで新しい心拍だけを pull し自分の観点で反応：G5 Risk/Audit＝地合い×隔離×口座防御→警戒度(calm/elevated/high)、G1 Executive＝閉ループ数×構え×本の体調→資本姿勢(expand/hold/defend)。(3)反応は助言(advisory)のみ＝本番evolved_configsは一切書かない（単一書き手write_backを侵さない）。実データ検証(run_subscribe PASS)：心拍を流す→G5=high(隔離5＋守り)・G1=defend(守り＋本が出血recent_pnl-0.066)＝各自が姿勢を変える→同じ心拍の再消化は n_new=0・無反応＝冪等(重複助言なし)・専用台帳連鎖OK(events8)。auto_writeback に step5b(broadcast＋consume_all)を追加＝毎朝カデンツ後、心拍を共有神経へ流し他Groupが自動で読み姿勢更新(失敗は非致命)。paperのみ・金ゼロ・専用バス/台帳・live/プロップ/維持機/審査機非接触・既存資産無改変(circulation内モジュールのみ)。位置づけ：地図の共通の『残』だった全部門共有が閉じた（公開→能動読取→他Groupの姿勢変化まで一周）。●=4/9維持だがG5/G1の帰還が助言レベルで流れ始めた。次：助言→命令への昇格・②③資本の実データ活性化。", "type": "fact" },
-    { "date": "2026-07-30", "decision": "【①の技術的負債を返済＝地合い別の銘柄親和性“学習”・AUREL推進・検証PASS】これまで『危機に強い金XAUUSDを守りの一律引き上げから外す』免除を手書き(clearly_healthy)で持っていた。この負債を自前記録から学ぶ親和性へ置換。worldmodel.py に regime_symbol_memory()（過去 world_update の(地合い×銘柄)集計）＋ symbol_affinity()（この地合いでこの銘柄は実証的に有利か favorable/unfavorable/unknown）を追加。記録様式を record_belief() へ一本化し銘柄別 symbols フィールドを毎日追記＝地合い×銘柄の実証が貯まる。run_info.py の手書きappendを record_belief 呼出へ差し替え。write_back の免除を加法的(exempt = clearly_healthy or learned_favorable)に改修＝単調安全・退行なし。合成多日検証(test_affinity.py・一時DB)：危機5日で金→favorable(+0.05/日)・BTC→unfavorable(-0.04/日)・記録n<5は unknown・別地合い range も unknown・専用DB連鎖OK＝全PASS。正直に：本番記録はまだ n=1〜2/地合い（paper帳簿に取引日付が無く遡及不可）なので学習は今日から前向きに貯まる。ゆえに今日の書き戻しは意図的に不変（DRY再確認：symbols_changed=0・金は clearly_healthy で免除・ETHは床0.009維持・run_info PASS）。auto_writeback に同日ガード付きの日次記録を追加＝毎朝1回、地合い×成績を世界モデルへ追記し親和性が育つ。paperのみ・金ゼロ・live/プロップ/維持機/審査機非接触・既存資産無改変(circulation内モジュールのみ)。位置づけ：●=4/9維持だが①の質が向上（手書き免除→経験から学ぶ免除）。残：全部門共有の能動読取。", "type": "fact" },
-    { "date": "2026-07-30", "decision": "【全部門共有＝循環ダイジェストを公開し会長command画面へ配線・AUREL推進・検証PASS】4本の●(①④⑤⑨)の判断が専用sqlite台帳とevolved_configsに埋もれ他Group・会長から読めない問題(全ループ共通の残)を解消。circulation/digest.py＋run_digest.py を新設し、生きた読取専用ソース(worldmodel/immune/evolved_configs/Ledger検証)から4ループの現在状態を束ねて単一の共有ファイル data/circulation/circulation_digest.json へ公開(単一書き手=digest)。目玉は『どのソルジャーを誰が決めたか』表＝BTC/GBP←⑤免疫・ETH←①情報・EUR←④知識・XAU←base。auto_writeback に digest.publish() を追加＝毎朝カデンツ後に共有面が自動更新(失敗は非致命)。会長command画面 aurelian_command.html に『循環-呼吸している帰還ループ』カードを追加描画(institution_state.json の新規 circulation ブロックを読む・埋め込みfallbackにも同梱・既存カードは無改変の追加のみ)。検証：run_digest PASS(4ループ○・連鎖OK・公開成功)・両HTML/JSON健全。paperのみ・金ゼロ・live/プロップ/維持機/審査機非接触。位置づけ：●=4/9のまま『閉じたループが初めて組織全体(会長含む)へ届く』＝地図の共通の残(全部門共有)の第一歩。残：他Group側の能動読取(自動購読)・地合い別の銘柄親和性学習。", "type": "fact" },
-    { "date": "2026-07-30", "decision": "【①情報ループを閉じた＝●が4/9へ・AUREL推進・検証PASS】まず正直な発見：①は当初のままだと砂上だった。paper cycle(run_trading_cycle.py)は世界モデル(regime/observatory)を一切読んでおらず、観測所が配線されているのはg4(プロップ/live＝触るな)だけ。検死官coroner.pyは既存だがpaper_bookが素のPnLしか持たず解剖できない。そこでpaper cycleを触らず circulation内に『世界モデル信念記録』を新設(worldmodel.py＋run_info.py)。一周：観測所がマクロCSV(SPY/VIX/GLD/DXY/TLT/BTC・読取専用/決定的/LLM非関与/金ゼロ)から今日の地合いを分類=世界理解→本物paper帳簿で機関の直近体調→(地合い×自分の成績)を専用Ledgerへ記録し自前の実証地図が育つ→荒れ地合い(高ボラ/リスクオフ)＋出血中なら選別フロアを上げる守り。実データ検証：今日raw=crisis/確定=range・vol_score+0.36・本の直近pnl-0.066/勝率0.31→stance=defensive→判断long→flat反転=day1で●。本番反映は単一書き手write_backに世界フロアを免疫フロアとmax(最も守り)で統合＝ETHUSD 0.005→0.009 commit(_source=circulation.worldmodel)。設計上の正直な工夫：『明確に勝つ』銘柄は一律引き上げから免除＝危機に強い金XAUUSD(勝率0.556/pnl+0.198)を手枷にしない(gold held 0.005)。台帳seq3鎖OK・backup(20260730_171426)・--restore復元可・独立検証済(BTC/GBP=immune,ETH=worldmodel,EUR=writeback,XAU=無改変)。①④⑤⑨が同一日次カデンツ(auto_writeback→write_back 毎朝07:00)で拍動。paperのみ・金ゼロ・live/プロップ/維持機/審査機非接触。位置づけ：●循環=4/9(①情報・④知識・⑤失敗・⑨自己進化)。残：地合い別の銘柄親和性の学習(金は危機で強い等)・全部門共有。", "type": "fact" },
-    { "date": "2026-07-30", "decision": "【⑤免疫を強化＝自己治癒＋口座レベル応答・AUREL推進・検証PASS】immune.py を v2 に改修。(1)自己治癒：判定を寿命累計から『直近K=10取引』へ切替＝“今の体調”で診る。早期の勝ちに隠れた現在の出血を検知でき、回復すれば隔離が自動で解ける。実測でBTCUSD(寿命pnl +0.007で健全に見えるが直近10で -0.096・勝率0.25)を新たに隔離＝隠れ出血を捕捉。隔離は5件に増(BTCUSD/GBPUSD/XRPUSD/ADAUSD/LTCUSD・全て直近合計<=-0.06)。(2)口座レベル応答：歴史的max_dd=25%は“抗体(記憶)”に留め、発火は現在状態(def_level/def_dd_trailing)で判断。現在は口座が回復済(def_level=NORMAL・trailing_dd≈0)のため account_defense は正しく“非発火”＝過剰防御しない(正直)。発火時は全ソルジャーに最低選別フロア0.008を課す配線を write_back に統合済(単調・引き上げのみ)。commit結果：BTCUSD 0.01→0.02(_source=circulation.immune・直近出血で隔離)・GBPUSD 0.02維持・ETH/XAU/EUR据置・backup(20260730_164736)・台帳seq11鎖OK・独立検証済(BTCUSD/GBPUSD=0.02/immune)。paperのみ・金ゼロ・live/プロップ/維持機/審査機非接触。位置づけ：●循環=3/9維持だが⑤の質が向上(急性検知＋自己治癒＋口座レベル武装)。残：検死の因果分析深化・全部門共有。", "type": "fact" },
-    { "date": "2026-07-30", "decision": "【⑤失敗ループ(免疫系)を本番へ閉じた・AUREL推進・検証PASS】circulation/immune.py＋run_immune.py を追加し、本物のpaper帳簿(paper_book*.json・読取専用)から事故を自動検知→検死→抗体(知識)を専用Ledgerへ記録→次の行動を守りに変える免疫ループを構築。実データ検知結果：口座事故2件(日足max_dd=25%のdrawdown_severe＋deadman過去3回発火 2024-03-19/2024-10-02/2025-01-19)・銘柄隔離2件(GBPUSD -8.6%/LTCUSD -6.0%の慢性出血=QUARANTINE)・監視4件(BTCUSD/ADAUSD急性ショック,EURUSD,LTC-4H)・抗体8件記録・隔離銘柄の次判断が long→flat に反転・連鎖検証OK。物理反映は単一書き手原則を守り write_back.py に免疫オーバーライドを統合(隔離銘柄は momentum_confirm_min を最大0.02へ強制＝実質エントリ凍結・単調で守りのみ)。commit結果：GBPUSD 0.009→0.02(_source=circulation.immune)・LTCUSDはソルジャー外で抗体記録のみ(正直)・BTCUSD/EURUSDは④収束継続・台帳鎖OK・バックアップ＋--restore復元可・独立検証済。日次カデンツ(auto_writeback→write_back)が毎朝④慢性学習と⑤急性免疫を自動同時適用。paperのみ・金ゼロ・live/プロップ/維持機/審査機非接触。位置づけ：●循環=3/9(④知識・⑨自己進化・⑤失敗)。残：検死の深さ(死因の因果分析)・口座レベル応答・全部門共有。", "type": "fact" },
-    { "date": "2026-07-30", "decision": "【カデンツ自動化＝運用●・会長GO済・検証PASS】④知識/⑨自己進化ループを本番で自律運転に。circulation/auto_writeback.py＋scripts/run_circulation_writeback.bat を追加し、Windowsタスク AUREL_Circulation_WriteBack（毎日07:00 JST・日次paperサイクル06:30の直後・Ready/NextRun 07/31 07:00）で無人実行。毎朝、機関自身のpaper戦績→本番evolved_configs.jsonへ自動帰還＝ループが毎日1周自律で閉じる。冪等化：write_backを『加算式』から『目標収束式』へ改修（目標=BASE-GAIN*(win-0.5)・1回最大STEP・中立帯据置）。純関数で収束証明＝win0.25→0.010で停止(天井0.02へ暴走せず)/win0.5不動/win0.75→0.001で停止＝同じ戦績の累積punishを排除。無人安全弁：キルスイッチ(data/circulation/DISABLE_AUTOWRITE を置けば即停止・検証で確認)＋クールダウン20h(直後再実行はskip・検証で確認)＋毎回バックアップ＋台帳＋--restore復元。初回ライブ実行で losers 0.007→0.009(BTCUSD/EURUSD/GBPUSD)・ETH/XAU据置・台帳seq39鎖OK・独立ファイル確認済。paperのみ・金ゼロ・live/プロップ/維持機/審査機非接触。位置づけ更新=機構●・実データ読取●・本番書き戻し●・運用(連続自動)●。残：全部門共有／evolution_cycle自体をpaper戦績連動へ／実弾はT10で別GO。", "type": "fact" },
-    { "date": "2026-07-30", "decision": "【本番へループを物理的に閉じた・会長GO済・検証PASS】circulation/write_back.py を追加し、機関自身のpaper戦績(paper_book.json・読取専用)から得た学習を、本番が実際に読む data/evolved_configs.json の単調安全ノブ momentum_confirm_min へ反映。結果=負けている3銘柄のみ選別を厳格化(BTCUSD win0.25/EURUSD win0.29/GBPUSD win0.27 を 0.005->0.007)、勝ち・中立(XAUUSD win0.56/ETHUSD win0.50)は据え置き。独立検証：本番ファイルに反映済・_source=circulation.writeback刻印・全KNOBS健在・JSON健全・専用Ledger連鎖(True)・バックアップ実在(evolved_configs.backup.20260730_160513.json)。安全機構=既定DRY/--commit必須/変化量上限(+0.002)/範囲[0.001,0.02]/1コマンド復元(--restore)/live・プロップ・維持機・審査機非接触・金ゼロ。重要発見：既存evolution_cycle.py(週次)は2年バックテストCSVを再最適化するだけで6週連続『採用変更0件＝静止画』、自分のpaper戦績を見ていなかった。今回この“自分の結果->設定”帰還を初めて本番に通した。位置づけ更新=機構●・実データ読取●・本番書き戻し●(手動1回GO)。残：毎サイクル自動で書き戻すカデンツ自動化＝次増分。", "type": "fact" },
-    { "date": "2026-07-30", "decision": "【プロップ二重の解消・調査完了】会長命『プロップの二重は解消しておけ』を受け診断。結論=機能的な二重起動は存在しない。真因はWindowsのstdlib venvランチャ構造：venv\\Scripts\\python.exe(268KB)は起点スタブで、実行時に基のPython312\\python.exe(100KB)を子プロセスとして生成し、子が__PYVENV_LAUNCHER__経由で実際のスクリプトを実行する。よってg4_dryrun=親スタブ2644→実働子12464の1組(実働1個)、g4_watchdog=親8888→実働子1568の1組(実働1個)。python.exe合計4=dryrun1+watchdog1の正常値。第3の独立ツリー無し。証跡：pyvenv.cfg home=Python312・親子が同一引数・親所有の単一子=ランチャ署名。対処=不要かつ不可（“重複”に見える子を殺すと実働そのものが停止）。プロップ本体・.envは非接触で診断完了。", "type": "fact" },
-    { "date": "2026-07-30", "decision": "本番設定書き戻しに実弾口座は不要と会長へ回答：(1)現・シャドウ設定学習=何も要らない (2)本番paper設定への書き戻し=会長GOのみ・口座不要・金ゼロ・paper挙動のみ変化 (3)将来のliveループ(T10)=実弾口座＋二重ロック(enable_live+arm_code=CHAIRMAN-GO)＋GOで初めて金が動く。口座が要るのはliveのみ。", "type": "fact" },
-    { "date": "2026-07-30", "decision": "実データ接続（会長GO後・読取専用）：circulation/result_source.py＋run_ingest.py を追加し、機関の本物のpaper帳簿(paper_book.json/paper_book_4h.json)を【読むだけ】で読み循環を一周。結果=19銘柄ingested・17銘柄が実測勝率で学習変異（勝率0.5+のETH/XAUは正しくhold）・専用Ledger連鎖検証(True,None)・独立読取確認。本番evolved_configs.json無改変（circulation内シャドウ設定で学習）・live/プロップ(ImperialFlow/g4_)非接触。behavior_changed=0はプローブ設計上の理由。位置づけ=機構●・実データ読取●・運用○（本番設定書き戻しは次のGO増分）。あわせて確認：circulationはプロップdryrun(g4_dryrun.py・ImperialFlow)と別DB・別ツリー・非参照で衝突しないことを検証。観察：g4_dryrunが2重起動中（ImperialFlow venv＋Python312）＝プロップ側の既存事象・非関与のため報告のみ・不介入。", "type": "fact" },
-    { "date": "2026-07-30", "decision": "最初の心拍（実装・会長GO後）：④知識/⑨自己進化の最小ループを実装し隔離環境で閉ループ検証OK。新規パッケージ empire/circulation/（topics.py・loop1.py・run_loop1.py）を【追加のみ】で作成、既存稼働コード・運用DB・*.jsonは無改変、専用DB(circ_bus/circ_ledger)使用、paperのみ・金ゼロ・凍結資産非接触。実証結果=paper結果→学習(閾値1.0→1.2)→次の判断がlong→flat反転(behavior_changed=true)→loop_closedを専用Ledgerに記録・ハッシュ連鎖検証(True,None)。独立読取でも確認。“機構●・運用○”＝実データ接続/連続運転/全部門共有は次増分。CIRCULATION-LOOP1-DESIGN.md / GAPMAP更新。", "type": "fact" },
-    { "date": "2026-07-30", "decision": "STEP2完了（設計のみ）：最初の1ループ＝知識/自己進化の最小“呼吸”を背骨上に詳細設計。既存の手動鎖(trading→ledger→evolution→evolved_configs)を新トピックresult.*/knowledge.*＋listener1個＋薄い後段フックでイベント駆動に繋ぎ替える。合格条件=loop_closed NOTEが連鎖検証OKで1件残る（結果が次の判断を実際に変えた証跡）。学習ループの安全弁（paper限定/変異上限/QUARANTINE関門/Audit監督/凍結非接続/listenerキルスイッチ）を設計に内蔵。実装GO待ち・金ゼロ。CIRCULATION-LOOP1-DESIGN.md 参照。", "type": "fact" },
-    { "date": "2026-07-30", "decision": "STEP1完了（設計のみ）：G2 Core単一背骨の配線設計。現物調査で判明＝bus(signal_bus.py)は在るが背骨未使用・institution_state.jsonは人手維持で運用実体(empire/data/*.json)と未接続・帰還ループ(知識)は既に鎖として存在するが手動分断。背骨=Core Hub(SignalBus神経+Ledger記憶+StateStore現在値)。循環契約をバストピック規約化(result.*新設で上流へ帰還)。実装はGO待ち・金ゼロ。CORE-BACKBONE-DESIGN.md 参照。", "type": "fact" },
-    { "date": "2026-07-30", "decision": "STEP0完了：循環の断裂地図(CIRCULATION-GAPMAP.md)。9循環で完全に閉じて回るものは現状ゼロ。完成度を箱でなく帰還ループの閉/開で測り直す方針を確立。", "type": "fact" },
-    { "date": "2026-07-30", "decision": "会長直達『Circulation Architecture（循環設計思想）』を最上位設計思想として登録。Aurelianは部署を並べた会社ではなく一つの生命体。今後の設計対象は組織図でなく循環そのもの。全部署は5点契約（受け取る/判断する/生み出す/渡す/戻ってくる）を定義してから設計完了とする。帰還ループの無い箱は禁止。組織図（FINAL-ARCHITECTURE）は骨格＝静止画で本思想が上位。CIRCULATION-ARCHITECTURE.md 参照。", "type": "fact" },
-    { "date": "2026-07-30", "decision": "会長裁定：プロップは方向性・目的が既に確定した独立事業であり、運用軸が機関と別。機関は関与・管理・資本配分・ロードマップ化をせず、組織図に置くだけ・さわらない。機関の完成率から除外（前決定『プロップは9 Divisionの一つ』を上書き）。", "type": "fact" },
-    { "date": "2026-07-30", "decision": "修正Stage 5：最終形を先に設計しその器へ既存資産を配置する方針へ転換。現存AssetEmpire/プロップ/EAを最終形の中心に据えない。旧Stage 5（実弾運用基盤・資本口座設計）は保留。", "type": "fact" },
-    { "date": "2026-07-30", "decision": "Aurelian 正式成立（Stage 1+2 監査合格・会長裁定）", "type": "fact" },
-    { "date": "2026-07-30", "decision": "ETH自律枠を口座衝突のため DISARMED。機関監査が初めて実際の資本・実行経路の衝突を発見し防止した成果として記録（後退ではない）。", "type": "fact" },
-    { "date": "2026-07-30", "decision": "維持機（合格後運用機）を FROZEN（MM0・別系統SHA256）", "type": "fact" },
-    { "date": "2026-07-30", "decision": "プロップは ACTIVE / DRY_RUN / READ_ONLY を維持", "type": "fact" },
-    { "date": "2026-07-30", "decision": "現在の機関フェーズ=統治・表示・監査基盤の構築", "type": "fact" },
-    { "date": "2026-07-30", "decision": "Stage 5 実弾利益源選定は Stage 3+4 完了後に行う", "type": "fact" },
-    { "date": "2026-06-16", "decision": "ETH自律枠 常時GO（枠内自律運用）※現在は衝突により武装解除", "type": "fact" }
+    {
+      "date": "2026-07-30",
+      "decision": "【③の残枝：利益の留保→研究投資分岐を閉じた・AUREL推進・検証PASS】③資本(treasury)は単一化・時間追跡まで閉じたが、稼いだ紙資本を『次に賢くなる投資』へ回す枝が未実装だった。reserve.pyで③資本→⑨自己進化を血管で接続：資本総額の正の実現利益から20%を研究予算へ留保・残80%は運転資本→予算がRESEARCH_UNIT(1000)を満たせば⑨へ「研究サイクル起動可」を助言→予算を専用台帳へ日次記録(同日ガード)。検証(run_reserve PASS)：総額10037→研究予算2007.44/運転8029.78/起動可2サイクル・合成累積(500→1500→2200で起動0→1→2)・連鎖OK・write_back DRY symbols_changed=0(本番無傷)。auto_writeback step5eで日次自動＋digestに③残枝表示。助言＋paper予算台帳のみ＝進化ノブは単一書き手write_backのみ・実弾非接触。●は6/9のまま(③の深化)。",
+      "type": "fact"
+    },
+    {
+      "date": "2026-07-30",
+      "decision": "【③資本循環をpaperで閉じた＝●が6/9へ・AUREL推進・検証PASS】②の対＝資本そのものを単一台帳へ集約し時間を通じて追跡。circulation/treasury.py＋run_treasury.py を新設：複数の資本枠(paper_book=日足枠 realized5301.9/peak20175.9 ＋ paper_book_4h=4h枠 realized4735.3/peak15428.5)を読取専用で単一資本総額10037.2へ集約＝地図の『資本台帳が単一化されていない・複数枠が一箇所に集約されない』を解消。②の資本ウェイト(capital.plan)を総額へ掛け各兵の資本(通貨単位)を配分(XAU3406/ETH2910/EUR2783/隔離BTC・GBP469)＝資本→Allocator→各事業。資本総額を専用台帳へ日次1点記録(capital_mark・同日ガード)＝equity curveが育つ。記録系列から running peak・最大ドローダウン・成長率を導く＝運用→利益→資本増加/減少→(②へ)再配分が時間を通じて閉じる。検証(run_treasury PASS)：2枠集約・配分・記録・合成系列(100→120→90で峰120/現在90/最大DD0.25)で時間軸DD計算・専用台帳連鎖OK(events18)。日次カデンツ auto_writeback に step5d(treasury.mark 同日ガード＋treasury.json公開)を追加＝毎朝自動。digest.py に③を追加(closed_loops=6・treasuryブロック・run_digest表示)＝共有面と会長command画面にも③が出る。単一化paper資本台帳＋記録のみ＝本番evolved_configsも実弾も一切非接触(実弾=本物の資金移動は最後・会長二重ロックGO後)。paperのみ・金ゼロ・専用台帳・live/プロップ/維持機/審査機非接触・既存資産無改変(circulation内モジュールのみ)。位置づけ：●=6/9(①②③④⑤⑨)。残：資本増加→留保→研究投資の分岐・助言→命令昇格・⑥AI連携・⑧人材。",
+      "type": "fact"
+    },
+    {
+      "date": "2026-07-30",
+      "decision": "【②利益循環をpaperで閉じた＝●が5/9へ・AUREL推進・検証PASS】地図でずっと○だった②利益を、実弾を使わず paper/助言で一周させた。血流の実体＝各兵が稼いだ/溶かしたpaper利益がその銘柄の資本の取り分を変える。circulation/capital.py＋run_capital.py を新設：本物paper帳簿(paper_book*.json)の生涯実現損益(sum_pnl・読取専用)→単一化したpaper資本口座で各兵の取り分を増減(equity=1+損益・下限0.10)→equity比例で資本ウェイトを再配分(下限MIN_W=0.05/上限MAX_W=0.40で暴走と餓死を防ぐ・monotone)→⑤免疫の隔離兵は最小ウェイトQ_WEIGHT=0.05へ(資本が免疫に従う)。実データ検証(run_capital PASS)：勝ち頭XAUUSD@0.339・ETH@0.290・EUR@0.277・隔離BTC/GBPは0.047へ縮小・等分0.2から資本が0.31移動(capital_moved)・同帳簿で冪等(同ウェイト)・専用台帳連鎖OK(events13)。日次カデンツ auto_writeback に step5c(capital.publish＝単一化paper資本台帳capital_book.json更新＋broadcastで共有神経へ心拍)を追加＝毎朝自動。digest.py に②を追加(closed_loops=5・capitalブロック・run_digest表示)＝共有面と会長command画面にも②が出る。助言＋paper資本台帳のみ＝本番evolved_configsも実弾も一切非接触(実弾=本物の資金移動は最後・会長二重ロックGO後)。paperのみ・金ゼロ・専用台帳・live/プロップ/維持機/審査機非接触・既存資産無改変(circulation内モジュールのみ)。位置づけ：●=5/9(①②④⑤⑨)＝生命体の血の再配分が金ゼロで回り始めた。残：利益の留保→研究投資分岐・③資本台帳の統合・助言→命令昇格。",
+      "type": "fact"
+    },
+    {
+      "date": "2026-07-30",
+      "decision": "【全部門共有を閉じた＝他Groupの“能動読取”・AUREL推進・検証PASS】公開(digest)は片方向だった＝血は流れたが、他の臓器が自分から取りに来て反応するまで共有は閉じない。その最後の一歩を実装。circulation/subscribe.py＋run_subscribe.py を新設。(1)broadcast()＝循環の心拍(digest)を既存の共有神経 SignalBus へ1メッセージとして流す（ファイルだけでなく本物の神経幹線に乗せる・既存エージェントと同じバス）。(2)他Group購読者が各自のカーソルで新しい心拍だけを pull し自分の観点で反応：G5 Risk/Audit＝地合い×隔離×口座防御→警戒度(calm/elevated/high)、G1 Executive＝閉ループ数×構え×本の体調→資本姿勢(expand/hold/defend)。(3)反応は助言(advisory)のみ＝本番evolved_configsは一切書かない（単一書き手write_backを侵さない）。実データ検証(run_subscribe PASS)：心拍を流す→G5=high(隔離5＋守り)・G1=defend(守り＋本が出血recent_pnl-0.066)＝各自が姿勢を変える→同じ心拍の再消化は n_new=0・無反応＝冪等(重複助言なし)・専用台帳連鎖OK(events8)。auto_writeback に step5b(broadcast＋consume_all)を追加＝毎朝カデンツ後、心拍を共有神経へ流し他Groupが自動で読み姿勢更新(失敗は非致命)。paperのみ・金ゼロ・専用バス/台帳・live/プロップ/維持機/審査機非接触・既存資産無改変(circulation内モジュールのみ)。位置づけ：地図の共通の『残』だった全部門共有が閉じた（公開→能動読取→他Groupの姿勢変化まで一周）。●=4/9維持だがG5/G1の帰還が助言レベルで流れ始めた。次：助言→命令への昇格・②③資本の実データ活性化。",
+      "type": "fact"
+    },
+    {
+      "date": "2026-07-30",
+      "decision": "【①の技術的負債を返済＝地合い別の銘柄親和性“学習”・AUREL推進・検証PASS】これまで『危機に強い金XAUUSDを守りの一律引き上げから外す』免除を手書き(clearly_healthy)で持っていた。この負債を自前記録から学ぶ親和性へ置換。worldmodel.py に regime_symbol_memory()（過去 world_update の(地合い×銘柄)集計）＋ symbol_affinity()（この地合いでこの銘柄は実証的に有利か favorable/unfavorable/unknown）を追加。記録様式を record_belief() へ一本化し銘柄別 symbols フィールドを毎日追記＝地合い×銘柄の実証が貯まる。run_info.py の手書きappendを record_belief 呼出へ差し替え。write_back の免除を加法的(exempt = clearly_healthy or learned_favorable)に改修＝単調安全・退行なし。合成多日検証(test_affinity.py・一時DB)：危機5日で金→favorable(+0.05/日)・BTC→unfavorable(-0.04/日)・記録n<5は unknown・別地合い range も unknown・専用DB連鎖OK＝全PASS。正直に：本番記録はまだ n=1〜2/地合い（paper帳簿に取引日付が無く遡及不可）なので学習は今日から前向きに貯まる。ゆえに今日の書き戻しは意図的に不変（DRY再確認：symbols_changed=0・金は clearly_healthy で免除・ETHは床0.009維持・run_info PASS）。auto_writeback に同日ガード付きの日次記録を追加＝毎朝1回、地合い×成績を世界モデルへ追記し親和性が育つ。paperのみ・金ゼロ・live/プロップ/維持機/審査機非接触・既存資産無改変(circulation内モジュールのみ)。位置づけ：●=4/9維持だが①の質が向上（手書き免除→経験から学ぶ免除）。残：全部門共有の能動読取。",
+      "type": "fact"
+    },
+    {
+      "date": "2026-07-30",
+      "decision": "【全部門共有＝循環ダイジェストを公開し会長command画面へ配線・AUREL推進・検証PASS】4本の●(①④⑤⑨)の判断が専用sqlite台帳とevolved_configsに埋もれ他Group・会長から読めない問題(全ループ共通の残)を解消。circulation/digest.py＋run_digest.py を新設し、生きた読取専用ソース(worldmodel/immune/evolved_configs/Ledger検証)から4ループの現在状態を束ねて単一の共有ファイル data/circulation/circulation_digest.json へ公開(単一書き手=digest)。目玉は『どのソルジャーを誰が決めたか』表＝BTC/GBP←⑤免疫・ETH←①情報・EUR←④知識・XAU←base。auto_writeback に digest.publish() を追加＝毎朝カデンツ後に共有面が自動更新(失敗は非致命)。会長command画面 aurelian_command.html に『循環-呼吸している帰還ループ』カードを追加描画(institution_state.json の新規 circulation ブロックを読む・埋め込みfallbackにも同梱・既存カードは無改変の追加のみ)。検証：run_digest PASS(4ループ○・連鎖OK・公開成功)・両HTML/JSON健全。paperのみ・金ゼロ・live/プロップ/維持機/審査機非接触。位置づけ：●=4/9のまま『閉じたループが初めて組織全体(会長含む)へ届く』＝地図の共通の残(全部門共有)の第一歩。残：他Group側の能動読取(自動購読)・地合い別の銘柄親和性学習。",
+      "type": "fact"
+    },
+    {
+      "date": "2026-07-30",
+      "decision": "【①情報ループを閉じた＝●が4/9へ・AUREL推進・検証PASS】まず正直な発見：①は当初のままだと砂上だった。paper cycle(run_trading_cycle.py)は世界モデル(regime/observatory)を一切読んでおらず、観測所が配線されているのはg4(プロップ/live＝触るな)だけ。検死官coroner.pyは既存だがpaper_bookが素のPnLしか持たず解剖できない。そこでpaper cycleを触らず circulation内に『世界モデル信念記録』を新設(worldmodel.py＋run_info.py)。一周：観測所がマクロCSV(SPY/VIX/GLD/DXY/TLT/BTC・読取専用/決定的/LLM非関与/金ゼロ)から今日の地合いを分類=世界理解→本物paper帳簿で機関の直近体調→(地合い×自分の成績)を専用Ledgerへ記録し自前の実証地図が育つ→荒れ地合い(高ボラ/リスクオフ)＋出血中なら選別フロアを上げる守り。実データ検証：今日raw=crisis/確定=range・vol_score+0.36・本の直近pnl-0.066/勝率0.31→stance=defensive→判断long→flat反転=day1で●。本番反映は単一書き手write_backに世界フロアを免疫フロアとmax(最も守り)で統合＝ETHUSD 0.005→0.009 commit(_source=circulation.worldmodel)。設計上の正直な工夫：『明確に勝つ』銘柄は一律引き上げから免除＝危機に強い金XAUUSD(勝率0.556/pnl+0.198)を手枷にしない(gold held 0.005)。台帳seq3鎖OK・backup(20260730_171426)・--restore復元可・独立検証済(BTC/GBP=immune,ETH=worldmodel,EUR=writeback,XAU=無改変)。①④⑤⑨が同一日次カデンツ(auto_writeback→write_back 毎朝07:00)で拍動。paperのみ・金ゼロ・live/プロップ/維持機/審査機非接触。位置づけ：●循環=4/9(①情報・④知識・⑤失敗・⑨自己進化)。残：地合い別の銘柄親和性の学習(金は危機で強い等)・全部門共有。",
+      "type": "fact"
+    },
+    {
+      "date": "2026-07-30",
+      "decision": "【⑤免疫を強化＝自己治癒＋口座レベル応答・AUREL推進・検証PASS】immune.py を v2 に改修。(1)自己治癒：判定を寿命累計から『直近K=10取引』へ切替＝“今の体調”で診る。早期の勝ちに隠れた現在の出血を検知でき、回復すれば隔離が自動で解ける。実測でBTCUSD(寿命pnl +0.007で健全に見えるが直近10で -0.096・勝率0.25)を新たに隔離＝隠れ出血を捕捉。隔離は5件に増(BTCUSD/GBPUSD/XRPUSD/ADAUSD/LTCUSD・全て直近合計<=-0.06)。(2)口座レベル応答：歴史的max_dd=25%は“抗体(記憶)”に留め、発火は現在状態(def_level/def_dd_trailing)で判断。現在は口座が回復済(def_level=NORMAL・trailing_dd≈0)のため account_defense は正しく“非発火”＝過剰防御しない(正直)。発火時は全ソルジャーに最低選別フロア0.008を課す配線を write_back に統合済(単調・引き上げのみ)。commit結果：BTCUSD 0.01→0.02(_source=circulation.immune・直近出血で隔離)・GBPUSD 0.02維持・ETH/XAU/EUR据置・backup(20260730_164736)・台帳seq11鎖OK・独立検証済(BTCUSD/GBPUSD=0.02/immune)。paperのみ・金ゼロ・live/プロップ/維持機/審査機非接触。位置づけ：●循環=3/9維持だが⑤の質が向上(急性検知＋自己治癒＋口座レベル武装)。残：検死の因果分析深化・全部門共有。",
+      "type": "fact"
+    },
+    {
+      "date": "2026-07-30",
+      "decision": "【⑤失敗ループ(免疫系)を本番へ閉じた・AUREL推進・検証PASS】circulation/immune.py＋run_immune.py を追加し、本物のpaper帳簿(paper_book*.json・読取専用)から事故を自動検知→検死→抗体(知識)を専用Ledgerへ記録→次の行動を守りに変える免疫ループを構築。実データ検知結果：口座事故2件(日足max_dd=25%のdrawdown_severe＋deadman過去3回発火 2024-03-19/2024-10-02/2025-01-19)・銘柄隔離2件(GBPUSD -8.6%/LTCUSD -6.0%の慢性出血=QUARANTINE)・監視4件(BTCUSD/ADAUSD急性ショック,EURUSD,LTC-4H)・抗体8件記録・隔離銘柄の次判断が long→flat に反転・連鎖検証OK。物理反映は単一書き手原則を守り write_back.py に免疫オーバーライドを統合(隔離銘柄は momentum_confirm_min を最大0.02へ強制＝実質エントリ凍結・単調で守りのみ)。commit結果：GBPUSD 0.009→0.02(_source=circulation.immune)・LTCUSDはソルジャー外で抗体記録のみ(正直)・BTCUSD/EURUSDは④収束継続・台帳鎖OK・バックアップ＋--restore復元可・独立検証済。日次カデンツ(auto_writeback→write_back)が毎朝④慢性学習と⑤急性免疫を自動同時適用。paperのみ・金ゼロ・live/プロップ/維持機/審査機非接触。位置づけ：●循環=3/9(④知識・⑨自己進化・⑤失敗)。残：検死の深さ(死因の因果分析)・口座レベル応答・全部門共有。",
+      "type": "fact"
+    },
+    {
+      "date": "2026-07-30",
+      "decision": "【カデンツ自動化＝運用●・会長GO済・検証PASS】④知識/⑨自己進化ループを本番で自律運転に。circulation/auto_writeback.py＋scripts/run_circulation_writeback.bat を追加し、Windowsタスク AUREL_Circulation_WriteBack（毎日07:00 JST・日次paperサイクル06:30の直後・Ready/NextRun 07/31 07:00）で無人実行。毎朝、機関自身のpaper戦績→本番evolved_configs.jsonへ自動帰還＝ループが毎日1周自律で閉じる。冪等化：write_backを『加算式』から『目標収束式』へ改修（目標=BASE-GAIN*(win-0.5)・1回最大STEP・中立帯据置）。純関数で収束証明＝win0.25→0.010で停止(天井0.02へ暴走せず)/win0.5不動/win0.75→0.001で停止＝同じ戦績の累積punishを排除。無人安全弁：キルスイッチ(data/circulation/DISABLE_AUTOWRITE を置けば即停止・検証で確認)＋クールダウン20h(直後再実行はskip・検証で確認)＋毎回バックアップ＋台帳＋--restore復元。初回ライブ実行で losers 0.007→0.009(BTCUSD/EURUSD/GBPUSD)・ETH/XAU据置・台帳seq39鎖OK・独立ファイル確認済。paperのみ・金ゼロ・live/プロップ/維持機/審査機非接触。位置づけ更新=機構●・実データ読取●・本番書き戻し●・運用(連続自動)●。残：全部門共有／evolution_cycle自体をpaper戦績連動へ／実弾はT10で別GO。",
+      "type": "fact"
+    },
+    {
+      "date": "2026-07-30",
+      "decision": "【本番へループを物理的に閉じた・会長GO済・検証PASS】circulation/write_back.py を追加し、機関自身のpaper戦績(paper_book.json・読取専用)から得た学習を、本番が実際に読む data/evolved_configs.json の単調安全ノブ momentum_confirm_min へ反映。結果=負けている3銘柄のみ選別を厳格化(BTCUSD win0.25/EURUSD win0.29/GBPUSD win0.27 を 0.005->0.007)、勝ち・中立(XAUUSD win0.56/ETHUSD win0.50)は据え置き。独立検証：本番ファイルに反映済・_source=circulation.writeback刻印・全KNOBS健在・JSON健全・専用Ledger連鎖(True)・バックアップ実在(evolved_configs.backup.20260730_160513.json)。安全機構=既定DRY/--commit必須/変化量上限(+0.002)/範囲[0.001,0.02]/1コマンド復元(--restore)/live・プロップ・維持機・審査機非接触・金ゼロ。重要発見：既存evolution_cycle.py(週次)は2年バックテストCSVを再最適化するだけで6週連続『採用変更0件＝静止画』、自分のpaper戦績を見ていなかった。今回この“自分の結果->設定”帰還を初めて本番に通した。位置づけ更新=機構●・実データ読取●・本番書き戻し●(手動1回GO)。残：毎サイクル自動で書き戻すカデンツ自動化＝次増分。",
+      "type": "fact"
+    },
+    {
+      "date": "2026-07-30",
+      "decision": "【プロップ二重の解消・調査完了】会長命『プロップの二重は解消しておけ』を受け診断。結論=機能的な二重起動は存在しない。真因はWindowsのstdlib venvランチャ構造：venv\\Scripts\\python.exe(268KB)は起点スタブで、実行時に基のPython312\\python.exe(100KB)を子プロセスとして生成し、子が__PYVENV_LAUNCHER__経由で実際のスクリプトを実行する。よってg4_dryrun=親スタブ2644→実働子12464の1組(実働1個)、g4_watchdog=親8888→実働子1568の1組(実働1個)。python.exe合計4=dryrun1+watchdog1の正常値。第3の独立ツリー無し。証跡：pyvenv.cfg home=Python312・親子が同一引数・親所有の単一子=ランチャ署名。対処=不要かつ不可（“重複”に見える子を殺すと実働そのものが停止）。プロップ本体・.envは非接触で診断完了。",
+      "type": "fact"
+    },
+    {
+      "date": "2026-07-30",
+      "decision": "本番設定書き戻しに実弾口座は不要と会長へ回答：(1)現・シャドウ設定学習=何も要らない (2)本番paper設定への書き戻し=会長GOのみ・口座不要・金ゼロ・paper挙動のみ変化 (3)将来のliveループ(T10)=実弾口座＋二重ロック(enable_live+arm_code=CHAIRMAN-GO)＋GOで初めて金が動く。口座が要るのはliveのみ。",
+      "type": "fact"
+    },
+    {
+      "date": "2026-07-30",
+      "decision": "実データ接続（会長GO後・読取専用）：circulation/result_source.py＋run_ingest.py を追加し、機関の本物のpaper帳簿(paper_book.json/paper_book_4h.json)を【読むだけ】で読み循環を一周。結果=19銘柄ingested・17銘柄が実測勝率で学習変異（勝率0.5+のETH/XAUは正しくhold）・専用Ledger連鎖検証(True,None)・独立読取確認。本番evolved_configs.json無改変（circulation内シャドウ設定で学習）・live/プロップ(ImperialFlow/g4_)非接触。behavior_changed=0はプローブ設計上の理由。位置づけ=機構●・実データ読取●・運用○（本番設定書き戻しは次のGO増分）。あわせて確認：circulationはプロップdryrun(g4_dryrun.py・ImperialFlow)と別DB・別ツリー・非参照で衝突しないことを検証。観察：g4_dryrunが2重起動中（ImperialFlow venv＋Python312）＝プロップ側の既存事象・非関与のため報告のみ・不介入。",
+      "type": "fact"
+    },
+    {
+      "date": "2026-07-30",
+      "decision": "最初の心拍（実装・会長GO後）：④知識/⑨自己進化の最小ループを実装し隔離環境で閉ループ検証OK。新規パッケージ empire/circulation/（topics.py・loop1.py・run_loop1.py）を【追加のみ】で作成、既存稼働コード・運用DB・*.jsonは無改変、専用DB(circ_bus/circ_ledger)使用、paperのみ・金ゼロ・凍結資産非接触。実証結果=paper結果→学習(閾値1.0→1.2)→次の判断がlong→flat反転(behavior_changed=true)→loop_closedを専用Ledgerに記録・ハッシュ連鎖検証(True,None)。独立読取でも確認。“機構●・運用○”＝実データ接続/連続運転/全部門共有は次増分。CIRCULATION-LOOP1-DESIGN.md / GAPMAP更新。",
+      "type": "fact"
+    },
+    {
+      "date": "2026-07-30",
+      "decision": "STEP2完了（設計のみ）：最初の1ループ＝知識/自己進化の最小“呼吸”を背骨上に詳細設計。既存の手動鎖(trading→ledger→evolution→evolved_configs)を新トピックresult.*/knowledge.*＋listener1個＋薄い後段フックでイベント駆動に繋ぎ替える。合格条件=loop_closed NOTEが連鎖検証OKで1件残る（結果が次の判断を実際に変えた証跡）。学習ループの安全弁（paper限定/変異上限/QUARANTINE関門/Audit監督/凍結非接続/listenerキルスイッチ）を設計に内蔵。実装GO待ち・金ゼロ。CIRCULATION-LOOP1-DESIGN.md 参照。",
+      "type": "fact"
+    },
+    {
+      "date": "2026-07-30",
+      "decision": "STEP1完了（設計のみ）：G2 Core単一背骨の配線設計。現物調査で判明＝bus(signal_bus.py)は在るが背骨未使用・institution_state.jsonは人手維持で運用実体(empire/data/*.json)と未接続・帰還ループ(知識)は既に鎖として存在するが手動分断。背骨=Core Hub(SignalBus神経+Ledger記憶+StateStore現在値)。循環契約をバストピック規約化(result.*新設で上流へ帰還)。実装はGO待ち・金ゼロ。CORE-BACKBONE-DESIGN.md 参照。",
+      "type": "fact"
+    },
+    {
+      "date": "2026-07-30",
+      "decision": "STEP0完了：循環の断裂地図(CIRCULATION-GAPMAP.md)。9循環で完全に閉じて回るものは現状ゼロ。完成度を箱でなく帰還ループの閉/開で測り直す方針を確立。",
+      "type": "fact"
+    },
+    {
+      "date": "2026-07-30",
+      "decision": "会長直達『Circulation Architecture（循環設計思想）』を最上位設計思想として登録。Aurelianは部署を並べた会社ではなく一つの生命体。今後の設計対象は組織図でなく循環そのもの。全部署は5点契約（受け取る/判断する/生み出す/渡す/戻ってくる）を定義してから設計完了とする。帰還ループの無い箱は禁止。組織図（FINAL-ARCHITECTURE）は骨格＝静止画で本思想が上位。CIRCULATION-ARCHITECTURE.md 参照。",
+      "type": "fact"
+    },
+    {
+      "date": "2026-07-30",
+      "decision": "会長裁定：プロップは方向性・目的が既に確定した独立事業であり、運用軸が機関と別。機関は関与・管理・資本配分・ロードマップ化をせず、組織図に置くだけ・さわらない。機関の完成率から除外（前決定『プロップは9 Divisionの一つ』を上書き）。",
+      "type": "fact"
+    },
+    {
+      "date": "2026-07-30",
+      "decision": "修正Stage 5：最終形を先に設計しその器へ既存資産を配置する方針へ転換。現存AssetEmpire/プロップ/EAを最終形の中心に据えない。旧Stage 5（実弾運用基盤・資本口座設計）は保留。",
+      "type": "fact"
+    },
+    {
+      "date": "2026-07-30",
+      "decision": "Aurelian 正式成立（Stage 1+2 監査合格・会長裁定）",
+      "type": "fact"
+    },
+    {
+      "date": "2026-07-30",
+      "decision": "ETH自律枠を口座衝突のため DISARMED。機関監査が初めて実際の資本・実行経路の衝突を発見し防止した成果として記録（後退ではない）。",
+      "type": "fact"
+    },
+    {
+      "date": "2026-07-30",
+      "decision": "維持機（合格後運用機）を FROZEN（MM0・別系統SHA256）",
+      "type": "fact"
+    },
+    {
+      "date": "2026-07-30",
+      "decision": "プロップは ACTIVE / DRY_RUN / READ_ONLY を維持",
+      "type": "fact"
+    },
+    {
+      "date": "2026-07-30",
+      "decision": "現在の機関フェーズ=統治・表示・監査基盤の構築",
+      "type": "fact"
+    },
+    {
+      "date": "2026-07-30",
+      "decision": "Stage 5 実弾利益源選定は Stage 3+4 完了後に行う",
+      "type": "fact"
+    },
+    {
+      "date": "2026-06-16",
+      "decision": "ETH自律枠 常時GO（枠内自律運用）※現在は衝突により武装解除",
+      "type": "fact"
+    }
   ],
   "source_map": {
     "eth_disarm": "autopilot_config.json（eth sleeve live:false）＋ institution_freeze_ledger.sqlite NOTE seq=2",
