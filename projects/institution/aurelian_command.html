@@ -74,6 +74,10 @@
   <h2>会長ナビゲーション</h2>
   <div class="grid cards" id="nav"></div>
 
+  <h2>循環 — 呼吸している帰還ループ（●=閉じて自律で回る）</h2>
+  <div class="grid cards" id="circulation"></div>
+  <div class="src" id="circulation-src"></div>
+
   <h2>保護・安全状態</h2>
   <div class="grid prot" id="prot"></div>
 
@@ -137,7 +141,20 @@ const SNAPSHOT = {
     {"date":"2026-07-30","decision":"維持機を FROZEN（MM0）"},
     {"date":"2026-07-30","decision":"プロップは ACTIVE / DRY_RUN / READ_ONLY を維持"},
     {"date":"2026-07-30","decision":"機関フェーズ=統治・表示・監査基盤の構築"}
-  ]
+  ],
+  "circulation":{
+    "closed_loops":4,"total_loops":9,
+    "cadence":"毎朝07:00 JST: auto_writeback -> write_back -> digest（読取専用の共有面を更新）",
+    "digest_file":"empire/data/circulation/circulation_digest.json",
+    "world":{"date":"2026-07-29","regime":"crisis/range","vol_score":0.362,"stance":"defensive","floor":0.009},
+    "loops":[
+      {"id":"1","name":"情報（世界モデル）","breathing":true,"signal":"今日crisis+本が出血→守り。ETHの選別を0.005→0.009。金XAUは危機に強く免除。"},
+      {"id":"4","name":"知識（慢性勝率→選別）","breathing":true,"signal":"自分のpaper戦績で選別ノブを冪等に収束（EUR等）。"},
+      {"id":"5","name":"失敗（免疫）","breathing":true,"signal":"直近ウィンドウで隔離5銘柄（BTC/GBP/XRP/ADA/LTC）。回復すれば自動解除。"},
+      {"id":"9","name":"自己進化（日次カデンツ）","breathing":true,"signal":"同一write_backで毎朝1拍・冪等収束。"}
+    ],
+    "production_owners":{"BTCUSD":"5-免疫","ETHUSD":"1-情報","EURUSD":"4-知識","GBPUSD":"5-免疫","XAUUSD":"base"}
+  }
 };
 
 function esc(s){return String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
@@ -202,6 +219,32 @@ function render(S){
      <div class="card"><h3>⚠ 会長判断待ち</h3><ul class="nav">${pend}</ul></div>
      <div class="card"><h3>次に何を（最優先）</h3><ul class="nav">${nxt}</ul></div>
      <div class="card dec"><h3>最近の重要決定</h3><ul>${dec}</ul></div>`;
+
+  // circulation (帰還ループの共有面。無ければ非表示)
+  const CIR = S.circulation;
+  const cirEl = document.getElementById('circulation');
+  if(CIR && cirEl){
+    const w = CIR.world||{};
+    const owners = CIR.production_owners||{};
+    const loopCards = (CIR.loops||[]).map(l=>{
+      const dot = l.breathing?'<span class="ok">●</span>':'<span class="muted">○</span>';
+      return `<div class="card">
+        <h3>${dot} 循環${esc(l.id)}：${esc(l.name)}</h3>
+        <p class="muted" style="margin:6px 0">${esc(l.signal||'')}</p></div>`;
+    }).join('');
+    const ownerRows = Object.keys(owners).map(k=>
+      `<div class="row"><span class="k">${esc(k)}</span><span class="v">${esc(owners[k])}</span></div>`).join('');
+    cirEl.innerHTML = loopCards +
+      `<div class="card" style="border-color:#2a3550">
+        <h3>今日の世界と本番反映</h3>
+        <div class="row"><span class="k">閉じた循環</span><span class="v ok">${esc(CIR.closed_loops)} / ${esc(CIR.total_loops||9)}</span></div>
+        <div class="row"><span class="k">地合い</span><span class="v">${esc(w.regime||'—')}（vol ${esc(w.vol_score)}）</span></div>
+        <div class="row"><span class="k">構え</span><span class="v">${esc(w.stance||'—')}${w.floor?`（floor ${esc(w.floor)}）`:''}</span></div>
+        ${ownerRows?`<div class="sleeves">${ownerRows}</div>`:''}
+        <p class="note" style="margin-top:8px">${esc(CIR.cadence||'')}</p></div>`;
+    const cs = document.getElementById('circulation-src');
+    if(cs) cs.textContent = `共有ダイジェスト: ${CIR.digest_file||''}　（読取専用・単一書き手 write_back/digest・金ゼロ）`;
+  }
 
   // protection
   const P = S.protection_boundaries||{};

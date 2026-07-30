@@ -35,6 +35,8 @@ principle: 完成度は「箱があるか」でなく「帰還ループ⑤が閉
 
 > **要約**: **●（閉じて回っている循環）は 4つに到達**＝①情報・④知識・⑤失敗（免疫）・⑨自己進化（2026-07-30、本番paperで日次自律・GO/AUREL推進済）。運用自動修復の⑦技術も部分●。⑥AIは「片方向は流れるが戻りが無い/手動」。②利益・③資本・⑧人材は流れていない。**「箱の完成度」でなく「●になった循環の数」で測る＝現在 4/9 が自律で呼吸（①④⑤⑨は同じ日次カデンツ write_back で拍動）。**
 >
+> **【2026-07-30 更新⑥】全部門共有の第一歩＝循環ダイジェスト公開（AUREL推進・検証PASS）**: 4本の●(①④⑤⑨)の判断が専用台帳とevolved_configsに埋もれ他Group・会長から読めない「全ループ共通の残」を解消。`digest.py`＋`run_digest.py` で生きた読取専用ソース(worldmodel/immune/evolved_configs/Ledger検証)から現在状態を束ね、単一共有ファイル `data/circulation/circulation_digest.json` へ公開(単一書き手=digest)。目玉＝**『どのソルジャーを誰が決めたか』表**(BTC/GBP←⑤免疫・ETH←①情報・EUR←④知識・XAU←base)。`auto_writeback` に digest.publish() を追加＝毎朝カデンツ後に共有面が自動更新。会長command画面 `aurelian_command.html` に「循環-呼吸している帰還ループ」カードを**追加描画**(institution_state.json の新規 circulation ブロックを読む・既存カード無改変)。＝閉じたループが初めて組織全体(会長含む)へ届いた。残：他Group側の**能動読取(自動購読)**。
+>
 > **【2026-07-30 更新⑤】①情報ループを閉じた（AUREL推進・検証PASS）**: 当初「①はpaper cycleが世界モデルを読んでいない＝砂上」と判明（run_trading_cycleにregime参照ゼロ・observatoryはg4/プロップ側のみ＝触れない）。そこで **circulation内に世界モデル信念記録を新設**（`worldmodel.py`＋`run_info.py`）。観測所でマクロCSVから今日の地合いを決定的分類（世界理解）→本物paper帳簿で機関の直近体調→(地合い×成績)を専用Ledgerへ記録し**自前の実証地図が育つ**→荒れ地合い＋出血で選別フロアを上げる守り。今日 raw=crisis/vol+0.36・本の直近pnl-0.066→stance=defensive→判断 long→flat 反転（day1で●）。本番は単一書き手write_backに世界フロアを免疫フロアと**max**で統合（最も守りを採る）・ETHUSD 0.005→0.009 commit・**明確に勝つ金XAUUSDは免除**（危機に強い銘柄を手枷にしない）・台帳seq3鎖OK・--restore復元可。①④⑤⑨が同一日次カデンツで拍動。残：地合い別の銘柄親和性の学習・全部門共有。
 > → **箱で見た完成度（G6:75%等）は“静止画としての完成度”。循環で見ると、まだ一周も自動で回っていない。** これが本当の現在地。
 >
