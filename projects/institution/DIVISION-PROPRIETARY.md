@@ -46,14 +46,20 @@ approver: 会長（KEIKI MAEDA）
 
 ### 機関外（会長個人裁量）— 機関の管理対象から分離
 - **Vantage $53 口座**: もともとETH実弾に使っていた口座。**現在は会長が裁量トレードで使用**。
-- → **機関（AUREL Capital）の管理・運用対象から分離**する。自己勘定Divisionの資産に含めない。AURELは干渉しない。
+- → **機関（Aurelian）の管理・運用対象から分離**する。自己勘定Divisionの資産に含めない。AURELは干渉しない。
 
-### ⚠️ 新たな会長確認待ち（重要）
-`empire/data/autopilot_config.json` は `live:true` のままで、`autopilot_state.json` の `day_start_equity = 25000.0`。
-- Vantage($53)が会長裁量に移った以上、**ETHAutopilot が現在どの口座に対してLIVEなのか要確認**。
-  - もし旧ETH口座（＝現・会長裁量Vantage）を今も指しているなら、**会長の手動裁量と自動発注が同一口座で衝突する**危険がある（要即確認）。
-  - $25,000 はプロップ・チャレンジ口座額と一致するが、同一口座参照かは不明。
-- **AURELは読取専用の原則により、これ以上口座を探らない**。口座同定と衝突有無の確認は会長の判断事項として INSTITUTION-STATUS.md に掲示。
+### ⚠️ ETH口座 衝突確認（2026-07-30 実測・機構確定）
+【確認済・読取専用】ETHAutopilot（`autopilot.py`）の接続先を特定した：
+- 接続先 = `C:\Users\user\ImperialFlow\.env` → **MT5ログイン 27972608 / サーバ VantageTradingLtd-Live**（パスワードは閲覧せず）。
+- `autopilot_config.json` eth sleeve `live:true`。`autopilot.py` は runtime armコード不要で、**config の live:true だけで実弾発注**（会長の常時GO 2026-06-16 がconfigに焼き込まれている）。
+- 挙動: 毎時、ETHにサインが出て資金可なら口座27972608に**本物の0.01ロットETH買い**（magic 770611・SL必須）。自分の建玉(magic770611)のみ管理し、会長の手動建玉は閉じない。
+- `autopilot_state day_start_equity=25000` はこの口座で観測した当日基準（max(残高,エクイティ)）。
+
+**⚠️ 会長への唯一の質問（J-2）**: ログイン **27972608** は、会長が今、手で（裁量で）取引しているVantage口座か？
+- **YES** → 衝突。自動botが会長の裁量口座に0.01ロットETHを入れ続ける＋床/日次計算を共有。→ eth sleeve を `live:false` に武装解除するのが安全（config変更＝会長GO必須・AURELは無断変更しない）。
+- **NO** → 別口座。衝突なし。現状維持でよい。
+
+**AURELは読取専用の原則により、口座の同定・衝突判定は会長の回答を待つ。無断でconfigを変更しない。**
 
 ---
 

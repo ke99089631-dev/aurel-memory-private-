@@ -9,7 +9,7 @@ owner: AUREL（統括CEO）
 approver: 会長（KEIKI MAEDA）
 ---
 
-# AUREL Capital — 最終組織図 v1
+# Aurelian — 最終組織図 v1
 
 > **本図の位置づけ**: 憲章 第5条「Build All, Activate Gradually」に基づき、**最終形を先に固定する**組織図。全枠を先に存在させ、権限と実資金は段階的に活性化する。
 > **凡例**: 【稼働】=実際に動いている / 【骨格】=コードは存在し活性化待ち / 【枠】=名前だけ先に確保。

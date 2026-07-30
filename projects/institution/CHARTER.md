@@ -9,19 +9,20 @@ owner: AUREL（統括CEO）
 approver: 会長（KEIKI MAEDA）
 ---
 
-# AUREL Capital — AI投資機関憲章 v1（最上位）
+# Aurelian — AI投資機関憲章 v1（最上位）
 
-> **正式名称**: AUREL Capital（日本語通称：AURELキャピタル ／ AUREL AI投資機関）
+> **正式名称**: Aurelian（アウレリアン）（日本語通称：アウレリアン投資機関）
+> **名称由来**: ローマ皇帝アウレリアヌス（分裂帝国を再統一し「Restitutor Orbis＝世界の修復者」）＋ AUREL。会長裁可 2026-07-30。
 > **親組織**: AUREL Holdings
 > **基礎アーキテクチャ名（継承）**: AssetEmpire（廃止せず、システム名・歴史的名称・基礎設計名として継承）
 > **本憲章の位置づけ**: 機関の最上位憲章。既存の帝国憲章v0.1（AssetEmpire基礎憲章）はこの下位に継承される（→ CHARTER-HIERARCHY.md）。
-> **注**: 機関名は会長の裁可で改称可能。本v1では暫定的に AUREL Capital として定義する。
+> **注**: 機関名は会長裁可により Aurelian に確定（2026-07-30）。旧暫定案「AUREL Capital」は却下。
 
 ---
 
 ## 前文
 
-AUREL Capital は、AUREL Holdings の投資機能を担う AI 投資機関である。会長 KEIKI MAEDA をオーナー兼最終決定者とし、統括CEO AUREL が全部門を理解・運営し、会長を最終形態まで案内する。本機関はゼロから作られたのではなく、既存 AssetEmpire の骨格を正式な投資機関へ昇格・再編成したものである。
+Aurelian は、AUREL Holdings の投資機能を担う AI 投資機関である。会長 KEIKI MAEDA をオーナー兼最終決定者とし、統括CEO AUREL が全部門を理解・運営し、会長を最終形態まで案内する。本機関はゼロから作られたのではなく、既存 AssetEmpire の骨格を正式な投資機関へ昇格・再編成したものである。
 
 ---
 
