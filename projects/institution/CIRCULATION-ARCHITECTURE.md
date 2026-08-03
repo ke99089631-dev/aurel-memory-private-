@@ -299,3 +299,45 @@ supersedes_priority: FINAL-ARCHITECTURE.md より上位（組織図は骨格・�
 **proposals ロスター堅牢化**: (a)detect_gaps(sources=None)/build(sources=None)/decide(...,sources=None) を追加＝実ロスターに依存せず合成名簿で叫び機構を決定的に検証可能に。(b)**会長決定の永続可視化**: build() は盲点が閉じても APPROVED/REJECTED を `gap_state:"resolved"` として履歴保持（決定はキューからも台帳からも消えない）。(c)selftest を実ファイルから完全隔離(退避→白紙→合成検証→一字一句復元)へ。(d)_proposal_for_gap の source_empty が SOURCES 未知キーで KeyError→ .get フォールバック。**インシデント**: 隔離実装前のテストクラッシュで proposals.json が空になり会長の PROP-regime-range APPROVED がファイルから消失(台帳には残存)→ range未カバーの合成名簿で正GO再記録→live正規化で resolved 復元。
 
 **最終検証（実カデンツ autowrite.log）**: "stat_arb stepped: held=3 total_pnl=0.008853 quarantined=[]" / "source_family published: breathing=**3/3** active=4 slots=2" / "proposals: open=0 approved=1"。digest: sources_breathing=3/3・arbitrage(o) stat_arb weight=1.0・**closed_loops=9/9**・**chain_verified=True(bad=None)**・dashboard.html=29731bytes。全selftest PASS(stat_arb/source_family/proposals)。改変は循環所有モジュールのみ・本番evolved_configs/paper_book/carry_book非改変・金ゼロ・実データ未接続(練習血液)。**残増分**: (a)実データ接続で3源泉を練習血液→本物の血へ。(b)残る単一障害点 trend_up/trend_down(breakout単独)は既存 trend_follow 枠の active 化で閉じる（新型提案でなく枠昇格）。(c)オプション源泉(vol_sell 保険を売る/tail_hedge 尻尾を買う)で high_vol の厚みを増す。
+
+---
+
+## 建設完了ログ B→C（2026-08-03）— 会長GO「実データはまだだ。席を埋めて建設をおえてから、BからC」
+
+会長判断: 実データ接続(A)は保留。まず全席を埋め構造を完成させてから実血へ。順番=B→C。
+
+### B（席を埋める）— trend_follow.py = 値動き源泉 cell #3 を active 昇格
+- 目的: trend_up/trend_down を breakout 1体だけで支える単一障害点(fragile)を解消。
+- 別の入り方で同じ相場を覆う2体目。死因が違う: breakout=ダマシ、trend_follow=往来(チョップ)で細かく削られる。
+- 専用ノブ TREND_CONFIRM_MIN=0.65（弱トレンドを外す）／免疫=recent_sum（勢い系・危険は往来出血）。
+- シンボル .tf（IDX/GOLD/JPY/EUR/GBP_TREND.tf）。25日で net +0.0153、cold-start 隔離なし。selftest PASS。
+
+### C（建設をおえる）— 第4の源泉『オプション』を新設（2細胞 active）
+- vol_sell.py「保険を売る」= options cell #1。定義リスク(スプレッド)のみ＝口座を吹き飛ばせない構造を
+  建付けとして刻む（裸売り不可）。ノブ VOL_SELL_MIN_IV=0.60／免疫=tail_cover（危険=ボラ急変）。
+  シンボル .vs。25日 net +0.018。selftest PASS（定義リスク=毎日損失が max_loss で頭打ちを検証）。
+- tail_hedge.py「尻尾を買う」= options cell #2。機関で【唯一“平時は小さく負けるのが健康”】な兵。
+  専用免疫『予算内出血 bleed-in-budget』を新規に発明: dry_multiple = 正味出血 / 予算窓(BUDGET×K)。
+  予算内→NORMAL / 予算超過気味→WATCH / 大幅超過→QUARANTINE(払い過ぎ=保険が割に合わない)。
+  危機の一撃回収が累積を戻す＝機能する保険は自然に予算内へ復帰。ノブ TAIL_BUDGET_BPS=2.5／シンボル .th。
+  40日挙動: 不発の1枚 WATCH・危機回収した2枚 NORMAL＝保険として正しい姿。selftest PASS。
+
+### 配線
+- source_family.py: TF/VS/TH_SURFACE 追加。trend_follow slot→active(book_kind trend_follow)。
+  options 源泉(vol_sell/tail_hedge)追加。`_TAIL_SURFACE`→`_ORGAN_SURFACE`に一般化（免疫の型を問わず
+  臓器の銘柄別 state を尊重＝単一権威）。
+- proposals.py: SOLDIER_REGIMES に tail_hedge={high_vol} 追加。
+- auto_writeback.py: 4c-4 trend_follow / 4c-5 vol_sell / 4c-6 tail_hedge を 4d source_family の前に追加。
+- digest/dashboard は *.json をファイル読みし源泉を動的走査＝無改変で反映。
+
+### 最終検証（全緑）
+- closed_loops = 9/9（10本目を作らない設計を維持）。chain_verified=True (bad_seq=None)。
+- sources_breathing = 4/4（値動き・キャリー・裁定・オプション）。active=7 cells / slots=1(pullback)。
+- 相場カバー: 全regime(trend_up/down/range/high_vol/calm)が現役2体以上で堅牢＝単一障害点ゼロ・盲点ゼロ。
+- proposals: 0 open / 1 approved(PROP-regime-range resolved) / 0 rejected＝開いた盲点なし＝建設完了。
+- selftest 5本(source_family/proposals/trend_follow/vol_sell/tail_hedge) 全 PASS。
+- dashboard.html 30935 bytes 再生成。金ゼロ・本番/実弾/聖域/凍結 非接触・練習血液(実データ未接続)。
+
+### 残（会長号令待ち）
+- A: 実データ接続＝4源泉7細胞を練習血液→本物の血へ（会長「実データはまだだ」で保留中）。
+- pullback スロット(値動き cell #4)は将来の遺伝子プール。今は盲点を生まないので昇格保留。
