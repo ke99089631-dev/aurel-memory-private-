@@ -273,3 +273,16 @@ supersedes_priority: FINAL-ARCHITECTURE.md より上位（組織図は骨格・�
 **BUILD（2026-08-03・PASS）**: `circulation/source_family.py`（新規・paper・金ゼロ・単一書き手 source_family.json）。SOURCES名簿＝price_action{breakout:active, trend_follow:slot, pullback:slot}／carry{carry_hold:active}／arbitrage{stat_arb:slot}。source_state()＝生きた兵1体でも居れば源泉は呼吸、_allocate()＝NORMAL満点/WATCH半分/QUARANTINE0/SLOT0を正規化（健康な戦法へ寄せ死んだ戦法隔離・枠は数えない）。自己テストPASS: (1)兵1体死でも源泉呼吸継続・重みが生存兵へ寄る (2)枠の注入は既存兵の重みを1文字も動かさない=遺伝子プール注入の隔離性 (3)全滅で幻の資本ゼロ。実測: sources_breathing=2/3（arbitrageは枠のみ）active=2 slots=3。読取のみ paper_book/carry_book、書込は source_family.json のみ。
 
 **次の増分**: (a)trend_follow を slot→active へ（実データ接続＝値動き源泉に2体目の細胞）。(b)source_family を auto_writeback カデンツ＋digest＋dashboard に配線（源泉別呼吸を日次共有面に出す）。(c)arbitrage源泉を carry と同じ作法で建てる。
+
+
+---
+
+## 統治構造確定＋窓口BUILD『社員が叫ぶ→AURELが設計→会長が承認』（2026-08-03・PASS）
+
+**会長確定の仕組み**: 社員（各源泉の臓器・兵）が戦い・研究し因果/盲点/新方向を"叫ぶ" → AURELに届き判断・戦法設計 → 会長が承認。会長は「AURELとの相談＋承認」だけで機関全体が賢く育つ。**戦法の型は勝手に自己増殖しない（癌の防止）＝人+AURELの注入門を残すのは弱さでなく免疫。**ただし機械は「どこが盲点か（カバーできていない相場）」を自律で叫べる＝進化圧は自律。知識ゼロ領域（スワップ/オプション等）の戦法はAURELが持ち込み提案する。
+
+**BUILD**: `circulation/proposals.py`（新規・paper・金ゼロ・単一書き手 proposals.json）。3機能: (A)盲点検出=機械の自律。CANONICAL_REGIMES{trend_up/trend_down/range/high_vol/calm}×SOLDIER_REGIMES地図で、カバー0=high・カバー1=single-point・源泉空=highを叫ぶ。(B)AUREL提案=RECOMMEND_FOR_REGIME（range→mean_reversion戻り, calm→vol_sell保険を売る/定義リスクのみ, high_vol→tail_hedge尻尾を買う）。(C)会長承認門=decide()は二重ロック(enable=True & arm_code=CHAIRMAN-GO)必須・承認しても実装されない・金ゼロ・台帳記録のみ（live_gate思想）。build()は会長決定(APPROVED/REJECTED)を永続マージ。
+
+**自己テストPASS**: (1)現状active=breakout+carry_holdで range未カバー(high)と arbitrage空源泉を必ず叫ぶ (2)既定全OPEN (3)部分ロックでは承認不可・金0 (4)正GOで status=APPROVED・implemented=False・money=0、再構築で永続保持。実測: 叫び6件・AUREL提案4件が会長GO待ち[ ]。
+
+**次の増分候補**: (a)proposals+source_family を auto_writeback カデンツ＋digest＋dashboard に配線（叫びと提案キューを日次共有面/UIへ）。(b)会長が実際に提案へGO/却下 → 承認された型を紙で建てる（例: mean_reversion を price_action 2細胞目に）。
