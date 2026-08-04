@@ -341,3 +341,46 @@ supersedes_priority: FINAL-ARCHITECTURE.md より上位（組織図は骨格・�
 ### 残（会長号令待ち）
 - A: 実データ接続＝4源泉7細胞を練習血液→本物の血へ（会長「実データはまだだ」で保留中）。
 - pullback スロット(値動き cell #4)は将来の遺伝子プール。今は盲点を生まないので昇格保留。
+
+---
+
+## 建設完了ログ 6→7（会長GO「次は6→7を進めよう」／2026-08-04）
+
+### 建てた2源泉（第5・第6＝これで市場地図8家系のうち1〜7が席入り）
+- **macro_causal.py（第5源泉＝機関の背骨『世界を読む/マクロ因果』）**
+  - 資産をまたぐ因果の鎖(原油↔株↔金利↔為替)の先行-遅行の収れんを取る血液型。他源泉が「1相場の動き」に賭けるのに対し【資産横断のファンダ因果】に賭ける＝別の血液型。
+  - ノブ MACRO_LINK_MIN=0.60（因果の歴史的強さの下限）。held=OIL_to_ENERGY/YIELDS_to_GOLD/RISKOFF_to_JPY（.mc接尾）。弱い鎖DXY/COPPERは自然に外れる。
+  - 免疫『因果カバー率 causal_cover』(tail_cover形／危険=因果の崩壊＝レジーム転換で歴史的因果が効かなくなる)。stat_arbの共和分崩壊と形は似るが危険源が別(統計 vs ファンダ因果)＝別免疫。
+  - 二役: 利益源泉＋世界読み(macro_read/causal_map)を公開＝**①情報循環を太らせる背骨**。
+  - 検証: selftest PASS。25日練習血液 net=+0.0078 / quarantine 0（cold-startなし）。
+- **event_driven.py（第6源泉『事件を取る/イベント駆動』）**
+  - 買収(M&A)・決算ドリフト・指数入替(リバランス)など事件周辺の歪みを取る。触媒(catalyst)と時間が主役＝別軸。
+  - ノブ EVENT_EDGE_MIN=0.55（イベント型の当たり率の下限）。held=EARNINGS_DRIFT/MA_ARB/INDEX_RECON（.ev接尾）。読みにくいMACRO_RELEASE/IPO_FLIPは外れる。
+  - 免疫『サプライズカバー率 surprise_cover』(tail_cover形／危険=想定外の一撃＝買収破談・ガイダンスショック)。
+  - **★data_gated=True**: 本質的に実イベント・カレンダー/ニュース/開示フィードが要る。現在は練習血液で機構(呼吸/免疫/帳簿)を確立中。本番稼働はA項(実データ)＋会長GO後。透明性のため公開サーフェスにフラグ明示。
+  - 検証: selftest PASS。25日練習血液 net=+0.0227 / quarantine 0 / watch 0。
+
+### 配線（既存を1行も壊さず追加のみ）
+- source_family.py: MC_SURFACE/EV_SURFACE定数、"macro"源泉(macro_causal active)・"event"源泉(event_driven active)、_ORGAN_SURFACEに2臓器を追加。
+- proposals.py: SOLDIER_REGIMES に macro_causal={trend_up,trend_down,high_vol} / event_driven={high_vol,range}。
+- auto_writeback.py: 4c-7 macro_causal / 4c-8 event_driven を 4d source_family の前に追加（非致命try/except）。
+- **digest.py: macro_causal.json を読取専用でロードし、①情報ループの心拍signalに `macro-read=Nchains causal_map=M` を連結＝背骨が①情報を太らせる（read-only・単一書き手不変）。**
+
+### 最終検証（全緑）
+- closed_loops = 9/9（10本目を作らない設計を維持）。chain_verified=True (bad_seq=None, events=268)。
+- sources_breathing = **6/6**（値動き・キャリー・裁定・オプション・マクロ・イベント）。active=**9 cells** / slots=1(pullback)。
+- 5ループ心拍 breathing=9/9。①情報signal に `macro-read=3chains causal_map=5` 反映＝背骨が効いている。
+- proposals: 0 open / 1 approved / 0 rejected＝開いた盲点なし。
+- selftest 4本(macro_causal/event_driven/source_family/proposals) 全 PASS。
+- dashboard.html **33713 bytes** 再生成（30935→拡大、2源泉反映）。金ゼロ・本番/実弾/聖域/凍結 非接触。
+
+### 市場地図8家系の現況（1〜7 席入り／8のみ後回し）
+1流れに乗る=price_action(breakout/trend_follow) ● / 2歪みを取る=arbitrage(stat_arb) ● / 3持って稼ぐ=carry ● /
+4戻りを取る=price_action(mean_reversion) ● / 5保険を売る=options(vol_sell/tail_hedge) ● /
+6世界を読む=macro(macro_causal)=背骨 ● / 7事件を取る=event(event_driven)★data_gated ● /
+8場を作る=market_making … 超高速インフラ必須＝**唯一の未席入り**（infra-gated・会長号令待ち）。
+
+### 残（会長号令待ち）
+- A: 実データ接続＝6源泉9細胞を練習血液→本物の血へ。特に**第7(event_driven)は実イベントフィードが無いと本番稼働不可**(data_gated)＝A項の中でも優先度の明示対象。
+- 第8(market_making): 超高速インフラ(低遅延・板情報)整備が前提＝infra-gated。席のみ将来確保。
+- pullback スロット(値動き cell #4)は将来の遺伝子プール。今は盲点を生まないので昇格保留。
