@@ -504,3 +504,39 @@ North Star思想を憲章へ正式刻印する前に、実装が設計原則と�
 
 ### 判定
 **整合性監査 PASS。CHARTER v2 刻印（North Star正式改定・追加のみ）に進む条件を満たす。**
+
+---
+
+## Stage 6-A: evidence.py — 実データ接続（会長GO「進めよう」2026-08-04）
+
+会長GO受領後、Stage 6+ のうち【最も安全な最初の一歩＝実データ接続】のみを実施。Project50/100・live は別GOのまま据置。
+
+### 何を建てたか
+- circulation/evidence.py 新規。読取専用の証拠供給器。単一書き手＝evidence.json のみ書込。
+- 候補仮説が参照する既存paperサーフェスの実記録(*_book.json の trades)から数値証拠
+  {samples, expectancy, gross_bps, oos_expectancy(時系列IS/OOS分割), hidden_tail, leverage} を決定的に算出。
+- 実在サーフェス(mean_reversion/trend_follow/stat_arb/carry/macro_causal/event_driven/vol_sell/tail_hedge)を
+  参照する候補にのみ証拠を与える。純粋未知(uncharted/cross_source/price_action 等)は証拠なし＝正直に HOLD。捏造しない。
+- book は _synthetic_practice=True ゆえ data_source="paper_synthetic_book"・low_confidence=True を透明開示。
+  外部実市場データへの格上げは _read_book_series の差替のみ＝将来の別ゲート（機械の配線は今日完成、血の質は後段分離）。
+
+### バグ修正（selftest で発見）
+- 隠れテール検出: 単発の大負けが std を膨らませ自分自身の検出を隠す欠陥。robust scale（最悪を除いた平均絶対値）
+  に対して測るよう修正。worst=-0.5 の一撃を正しく hidden_tail=True で検出。
+
+### 配線
+- validation.run: state=='candidate' に加え、【screened(データ待ち保留) は新しい実証拠が来たときだけ】再評価するよう拡張。
+  証拠の到着が保留案件を再オープンする（rejected/failed/promoted_candidate は不再評価）。selftest 4点 PASS 不変。
+- auto_writeback 4e: (ii-b) evidence.assess/publish/broadcast/mark → evidence_map を validation.run へ注入。非致命。
+
+### 検証（--force 実機）
+- evidence connected: books=8 with_evidence=6 sample_sufficient(>=60)=0 low_conf=6。
+- validation checked=**6**（以前は0＝何も評価できず）tally={REJECT:1, HOLD:5, PROMOTE_CANDIDATE:0}。
+- ★初の実記録による棄却: **H-0006（LEVEL B Hybrid: carry×macro_causal）を hidden_tail で REJECT**。
+  机上では尤もらしいHybridを、実記録のテール構造が殺した＝棄却優先の思想が実際に作動。屍は知識として保持(retained=1)。
+- 採用ゼロ不変: promoted(live)=0・awaiting_chairman=0。PROMOTE_CANDIDATE は会長二重ロック手前で必ず停止。
+- closed_loops=9/9・chain_verified=True 不変。既存戦略/憲章/凍結資産/プロップ 無改変。金1円も動かさず。
+
+### まだやっていない（別GOのまま据置）
+- 外部【実市場】データ接続（現状は paper_synthetic_book）。Project50 の実現可能性検証。Project100。live化。
+  いずれも会長の別GAが要る。sample_sufficient=0 が示す通り、合成血が積み上がるまで大半は正直に HOLD のまま。
