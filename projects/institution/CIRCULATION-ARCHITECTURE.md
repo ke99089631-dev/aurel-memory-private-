@@ -384,3 +384,28 @@ supersedes_priority: FINAL-ARCHITECTURE.md より上位（組織図は骨格・�
 - A: 実データ接続＝6源泉9細胞を練習血液→本物の血へ。特に**第7(event_driven)は実イベントフィードが無いと本番稼働不可**(data_gated)＝A項の中でも優先度の明示対象。
 - 第8(market_making): 超高速インフラ(低遅延・板情報)整備が前提＝infra-gated。席のみ将来確保。
 - pullback スロット(値動き cell #4)は将来の遺伝子プール。今は盲点を生まないので昇格保留。
+
+
+---
+
+## 建設完了ログ Stage 0-1（2026-08-04・会長GO「Stage 0->Stage 1着工」）
+
+### Stage 0（設計上の固定・完了）
+North Star を攻めの目的関数として固定（憲章v2刻印はStage 5へ後置・設計文書PROJECT-50-100-DISCOVERY-DESIGN v2に刻印）:
+「生存制約を絶対条件として、資本の複利成長と利益生成能力を積極的に最大化し、そのReturn/Risk Frontierを自己進化によって継続的に外側へ拡張する。」
+- HARD=生存(床-8/-12/-15%・Kill・出金権限なし) / OBJECTIVE=能力の積極的最大化(守りへ収束させない) / EVOLUTION=未知Edge/Cell/Source/Cross-Source＋未分類構造の発見 / MOONSHOT=Project50->100(非KPI)。
+- 建築順修正: Stage 5＝整合性監査->CHARTER v2刻印。Discovery非縮小(未分類利益構造=LEVEL Xまで対象)。Frontier=能力拡張の測定エンジン。
+
+### Stage 1（新規3モジュール・全paper・金ゼロ・単一書き手・追加のみ・採用経路なし）
+- hypothesis_ledger.py … 仮説の知的資本(④知識)。指紋で二重記録防止・構造類似検出(H-xxx類似)・failed/rejectedを消さず記憶。単一書き手 hypothesis_ledger.json。selftest PASS。
+- discovery.py … 未知Edge発見器(⑨第2ギア=拡張の感覚器)。研究空間=既存サーフェスのみ(Stage 1・_data_gated=True)。A/B/C/D/X 5段階候補を決定的生成・出自付き。discovery.json＋ledgerにのみ書込。selftest PASS。
+- validation.py … 決定的ガントレット(⑤失敗の門番・棄却優先)。段: falsification(死屍重複)/cost(Class-C)/hidden_tail(Class-C)/statistical/oos(過剰適合)/compare。Class-C即REJECT・データ不足HOLD・良候補+証拠PROMOTE_CANDIDATE(会長承認待ち・自動採用なし)。selftest PASS。
+
+### 配線（auto_writeback 4e・cadence末尾・非致命・読取のみ）
+source_family/proposals(4d)の後・digest公開(5)の前に研究レーンを追加。discovery.step->ledger記録->validation.run->公開。自動採用/自動Live化は一切なし(採用は proposals->会長二重ロック)。
+
+### 検証（--force 実行後）
+- closed_loops=9/9（10本目は作らない・⑨に「収束(既存)＋拡張(新設)」の二臓器）
+- chain_verified=True / sources_breathing=6/6 / active=9 / slots=1（既存不変）
+- 研究レーン点火: discovery cands=10 by_level={A:1,B:4,C:2,D:2,X:1} data_gated=True / validation checked=10 tally={REJECT:0,HOLD:10,PROMOTE:0} / ledger total=10 retained=0 awaiting_chairman=0
+- ＝Stage 1は実データ未接続ゆえ全候補が正しくHOLD(needs_data)。自動採用ゼロ・誤棄却ゼロ・本番/source_family/evolved_configs 非接触。

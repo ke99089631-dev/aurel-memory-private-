@@ -1,24 +1,38 @@
 ---
-doc_id: AURELIAN-EXPANSION-FRONTIER-DESIGN-v1
-tags: [institution, design, discovery, frontier, project50, project100, north-star, proposal]
+doc_id: AURELIAN-EXPANSION-FRONTIER-DESIGN-v2
+tags: [institution, design, discovery, frontier, project50, project100, north-star, approved]
 type: design-proposal
-rank: 設計提案（会長承認前・実装未着手）
+rank: 設計裁可済み（Stage 0固定・Stage 1着工）
 created: 2026-08-04
-status: proposed (awaiting chairman decision)
+updated: 2026-08-04
+status: approved — chairman GO, Stage 0 fixed, Stage 1 underway
 owner: AUREL（統括CEO）
 approver: 会長（KEIKI MAEDA）
 source: 会長＋ChatGPTアドバイザー「Profit Source Expansion × High Return Frontier / Project 50→100」
-constraint: 今回は設計のみ。Live化・資金移動・レバレッジ・既存改変・憲章改変・新戦略正式採用・自動Live化・KPI化はしない。プロップ非接触。
+constraint: 実装はpaper・金ゼロ・既存無改変・自動Live化なし・自動採用なし・KPI化なし・プロップ非接触。North Star思想はStage 0で設計上の固定目的として扱う（憲章v2刻印はStage 5）。
 ---
+
+> **会長裁可（2026-08-04）**: 本設計を裁可。ただし(1)North Starを攻めの方向へ固定（下記）、(2)North Star思想はStage 0で設計上の固定目的とし、CHARTER v2正式改定はStage 5（実装検証後）へ後置、(3)Discoveryを縮小解釈しない（未知Cell/Hybrid/未知Source/Cross-Source＋現在分類名すら持たない利益構造まで対象）、(4)Frontierは単なるリスク分析器でなく機関能力を外側へ拡張する測定エンジン。Stage 0→Stage 1着工GO。Live化・資金移動・Leverage変更・未知Edge自動採用は禁止。
 
 # Aurelian 拡張設計 — Discovery Engine × Return/Risk Frontier
 
 > 統括CEO AUREL による最適設計案。実装は会長承認後。既存9循環・憲章・源泉は破壊せず、**発見エンジン**と**限界測定エンジン**を追加・接続する。
 
+## Stage 0: North Star（設計上の固定目的・会長裁可 2026-08-04）
+> **「生存制約を絶対条件として、資本の複利成長と利益生成能力を積極的に最大化し、そのReturn/Risk Frontierを自己進化によって継続的に外側へ拡張する。」**
+
+この一文が本設計以降の全モジュールの上位目的として固定される（機械可読な階層は下記・憲章v2刻印はStage 5）。
+- **HARD CONSTRAINT（絶対条件・違反不可）**: 破産回避＝床(-8/-12/-15%)・Kill Switch・出金権限なしキー。生存は目的でなく全行動の前提。
+- **OBJECTIVE（積極的に最大化）**: 資本の複利成長能力と利益生成能力(Profit-Generation Capacity)。守りへ収束させない。制約の内側で**攻めて**能力を伸ばす。
+- **EVOLUTION（能力そのものを増やす）**: 未知Edge/未知Cell/Hybrid Cell/未知Source/Cross-Source構造、さらに**現在分類名すら持たない利益構造**を発見し、Return/Risk Frontierを外側へ押し広げる。
+- **MOONSHOT（非KPI）**: Project50→100は到達を強制する必達目標ではなく、Frontier拡張の到達可能性を測る研究命題。
+
+重要（会長明示）: Aurelianを「破綻しないが利益能力の低い機関」へ収束させない。生存は極めて重要だが最終目的ではない。生存を絶対条件に固定した上で、能力の限界を更新し続ける。
+
 ## 中心思想（この設計の背骨）
 現状のAurelianは「与えられた武器を磨く」機械（write_back収束／source_family淘汰／reserve留保／evolve加速）。
 不足は2つ:（1）**未知の武器を市場から発見する能力**（2）**自機の利益生成能力の限界を測り押し広げる能力**。
-本設計は、生存を**絶対制約**に固定したまま、この2能力を⑨自己進化の「第2ギア」として増設する。
+本設計は、生存を**絶対制約**に固定したまま、この2能力を⑨自己進化の「第2ギア」として増設し、North Star OBJECTIVE（能力の積極的最大化）を機械で追える形にする。
 **10本目のループは作らない。⑨自己進化に「収束(既存)＋拡張(新設)」の二臓器を持たせる。**
 
 ---
@@ -35,11 +49,12 @@ G4 Research & Intelligence（感覚器・学習器＝「未来を作る」）の
 | `hypothesis_ledger.py` | 仮説の知的資本。各仮説にID(例H-327)・指紋fingerprint・状態(active/failed/promoted)・失敗理由タグ | `hypothesis_ledger.json` | 新候補が過去仮説と構造類似かを照合して戻す |
 | `validation.py` | 決定的検証ガントレット（LLM非経由=憲章第7条）。統計→反証→コスト→OOS→Paper→既存Edge比較 | 候補ごとの合否＋等級 | 却下も知識化してledgerへ戻す |
 
-### 発見4段階の着地先（LEVEL A/B/C/D）
+### 発見4段階の着地先（LEVEL A/B/C/D）＋非縮小スコープ（会長明示）
 - **LEVEL A 未知Cell** → 既存源泉に新soldier枠（source_familyにstatus:slot追加）
 - **LEVEL B Hybrid Cell** → 複数源泉サーフェス(*.json)を関数合成する細胞。hybridフラグ付きsoldier
 - **LEVEL C 未知Source** → source_familyに**新源泉**を建てる提案（macro/eventと同じ建て方）
 - **LEVEL D Cross-Source Structure** → 関係そのもののEdge。structure細胞orメタ源泉。macro_causalのcausal_mapが種
+- **LEVEL X 未分類利益構造** → **現在の8-family地図にも4段階分類にも名前が無い利益構造**。Discoveryはこれを「分類不能ゆえ探索対象外」としない。名前が無い＝未踏という理由で優先的に記録する（ledgerに space="uncharted" として残し、後に分類名を与える）。Discoveryは既存戦略の候補生成器ではなく、**未踏の利益構造まで射程に入れる発見器**である。
 
 ### 発見と実弾化の分離（絶対）
 discoveryは**discovery.json/hypothesis_ledgerにしか書けない**。source_familyへ自動注入しない。
@@ -63,9 +78,10 @@ discoveryは**discovery.json/hypothesis_ledgerにしか書けない**。source_f
 
 ## 成果物5: Proposal B（High Return Frontier）の配置
 新規 `frontier.py`（測定・研究モジュール＝日々の配分ドライバではない）。
+**Frontierは単なるリスク分析器ではない（会長明示）**。機関能力そのものを外側へ拡張するための測定エンジンであり、「今どこに壁があるか」を測って⑨拡張ループへ研究要求を出す起点になる。
 機関全体のpaper能力を読み、要求Return帯[10,20,30,50,75,100,150]%で
 DD/Tail/ES/必要Leverage/Source集中/Edge数/相関/Capacity/Liquidity/破綻確率がどう変わるかを模擬。
-出力`frontier.json`= Aurelian自身のReturn/Risk Frontier ＋（a）壁の位置（b）最も資本効率の良い通常火力帯（c）Project50/100の実現可能性クラス。
+出力`frontier.json`= Aurelian自身のReturn/Risk Frontier ＋（a）壁の位置（b）最も資本効率の良い通常火力帯（c）Project50/100の実現可能性クラス（d）壁の診断（Edge不足/相関/Capacityのどれが律速か）→discoveryへの研究要求種。
 
 ### 高Return 3分類（CLASS A/B/C）
 - **A STRUCTURAL**（複数独立Edge・強Edge・良配分で構造的に残る）＝最重要
@@ -114,26 +130,30 @@ closed_loops=9/9 不変。⑨が高いギアを一段持つだけ。
 - **DIVERSIFICATION**: 源泉/Cell/Regime/相関構造の多様性
 North Starの目的関数がこれを読む: survival=絶対ゲート → 内側でGrowth×Evolutionを最大化、Diversification健全性を制約に。
 
-## 成果物12: North Star — AUREL推奨案と理由
-**推奨: 新設の競合North Star文書を作らず、既存憲章を改定(v2)して正式な目的関数条項を追加する。**
+## 成果物12: North Star — 会長裁可済み文言（2026-08-04固定）
+**方式: 新設の競合North Star文書は作らず、既存憲章を改定(v2)して正式な目的関数条項を追加する。ただし正式刻印はStage 5。Stage 0では設計上の固定目的として本文書に据える。**
 理由: CHARTER-HIERARCHYで最上位は憲章。別立てNorth Starは「どちらが最高規範か」の曖昧化を生む。憲章第1条は既に種（リスク調整後Return＋規模＋永続進化）を持つ。これを**精密な階層的(lexicographic)目的関数**へ昇華し、攻めの条項を足す。
 
-### 提案する目的関数（憲章 第1条-2 として追加する案・文言は会長裁可）
-> **絶対制約（HARD）**: 生存＝床(-8/-12/-15%)・キルスイッチ・出金権限なしを決して破らない。生存は目的でなく全行動の前提。
-> **目的（SOFT・制約の内側で最大化）**: リスク調整後の**利益生成能力(Profit-Generation Capacity)**の継続的拡大。
-> Capacityは Growth・Survival・Evolution・Diversification の合成で測り、Frontierが測定・Expansionが更新する。
-> **明示的非目標**: 単月/単年リターンの最大化、Project50/100の必達KPI化。
+### 固定North Star（会長裁可・Stage 0）
+> **「生存制約を絶対条件として、資本の複利成長と利益生成能力を積極的に最大化し、そのReturn/Risk Frontierを自己進化によって継続的に外側へ拡張する。」**
 
-＝「守るだけにしない・無謀に攻めない・生存しながら能力の限界を更新し続ける」を機械可読な羅針盤にする。
+### 機械可読な階層（憲章 第1条-2 として刻む案・Stage 5で正式改定）
+> **絶対制約（HARD・違反不可）**: 生存＝床(-8/-12/-15%)・キルスイッチ・出金権限なしを決して破らない。生存は目的でなく全行動の前提。
+> **目的（OBJECTIVE・制約の内側で積極的に最大化）**: 資本の複利成長能力と**利益生成能力(Profit-Generation Capacity)**の継続的拡大。守りへ収束させない。
+> **進化（EVOLUTION）**: 未知Edge/Cell/Hybrid/Source/Cross-Source＋未分類利益構造の発見で、Return/Risk Frontierを外側へ押し広げ、能力そのものを増やす。
+> Capacityは Growth・Survival・Evolution・Diversification の合成で測り、Frontierが測定・Discovery/Expansionが更新する。
+> **明示的非目標（MOONSHOT非KPI）**: 単月/単年リターンの最大化、Project50/100の必達KPI化。
 
-## 成果物13: 建築順序（Stage）
-- **Stage 0（今）**: 本設計の会長承認。
-- **Stage 1**: hypothesis_ledger＋discovery骨格（既存サーフェスのみを研究空間に・新データ無し）＋validationガントレット。全て自前JSONのみ書込・cadence末尾・読取専用・**採用経路まだ無し**。
-- **Stage 2**: frontier.py測定（paper能力を読みfrontier.json＋Project50実現可能性＋A/B/C分類）。純測定。
-- **Stage 3**: frontier→discovery研究要求の接続（⑨拡張ループ）。全paper/助言・採用はproposals→会長のまま。
-- **Stage 4**: scorecard（4軸）＋dashboardパネル。
-- **Stage 5**: North Star憲章改定（会長判断）。
-- **Stage 6+（会長ゲート）**: discovery用の実データ接続 → Project100 → （遥か後・別GO）live。
+＝「守るだけにしない・生存を絶対条件に固定した上で能力の限界を積極的に更新し続ける」を機械可読な羅針盤にする。
+
+## 成果物13: 建築順序（Stage・会長修正版 2026-08-04）
+- **Stage 0（固定済み）**: North Star思想・階層的目的関数を**設計原則として固定**（憲章の正式改定はStage 5へ後置。実装検証前でも設計上の目的として全モジュールが従う）。本設計文書v2に刻印。← **完了**
+- **Stage 1（着工）**: hypothesis_ledger＋discovery骨格（研究空間=既存サーフェスのみ・新データ無し）＋validationガントレット。全て自前JSONのみ書込・cadence末尾・読取専用・**採用経路まだ無し**。
+- **Stage 2**: frontier.py測定（paper能力を読みfrontier.json＋Project50実現可能性＋A/B/C分類）。純測定＝能力拡張の測定エンジン。
+- **Stage 3**: frontier→discovery研究要求の接続（⑨第2ギア拡張ループ）。全paper/助言・採用はproposals→会長のまま。
+- **Stage 4**: scorecard（Growth/Survival/Evolution/Diversification 4軸）＋dashboardパネル。
+- **Stage 5**: **整合性監査 → CHARTER v2刻印**。Stage 0で固定したNorth Star思想を、実装検証済みの状態で正式に憲章へ改定（会長裁可）。
+- **Stage 6+（会長ゲート）**: discovery用の実データ接続 → Project50 → Project100 → （遥か後・別GO）live。
 
 ## 成果物14: 現実機と最終構想の差分
 | 能力 | 現状 | 最終構想 |
