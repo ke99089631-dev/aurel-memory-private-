@@ -2,10 +2,10 @@
 doc_id: AURELIAN-EXPANSION-FRONTIER-DESIGN-v2
 tags: [institution, design, discovery, frontier, project50, project100, north-star, approved]
 type: design-proposal
-rank: 設計裁可済み（Stage 0固定・Stage 1着工）
+rank: 設計裁可済み（Stage 0-5完了・CHARTER v2刻印済み）
 created: 2026-08-04
 updated: 2026-08-04
-status: approved — chairman GO, Stage 0 fixed, Stage 1 underway
+status: approved & built — Stage 0-5 complete; North Star inscribed into CHARTER v2 (第1条-2). Stage 6+ chairman-gated.
 owner: AUREL（統括CEO）
 approver: 会長（KEIKI MAEDA）
 source: 会長＋ChatGPTアドバイザー「Profit Source Expansion × High Return Frontier / Project 50→100」
@@ -152,7 +152,7 @@ North Starの目的関数がこれを読む: survival=絶対ゲート → 内側
 - **Stage 2**: frontier.py測定（paper能力を読みfrontier.json＋Project50実現可能性＋A/B/C分類）。純測定＝能力拡張の測定エンジン。
 - **Stage 3**: frontier→discovery研究要求の接続（⑨第2ギア拡張ループ）。全paper/助言・採用はproposals→会長のまま。
 - **Stage 4**: scorecard（Growth/Survival/Evolution/Diversification 4軸）＋dashboardパネル。
-- **Stage 5**: **整合性監査 → CHARTER v2刻印**。Stage 0で固定したNorth Star思想を、実装検証済みの状態で正式に憲章へ改定（会長裁可）。
+- **Stage 5（完了 2026-08-04）**: **整合性監査PASS → CHARTER v2刻印**。Stage 0で固定したNorth Star思想を、循環実装（frontier/discovery/validation/hypothesis_ledger/scorecard）の整合性監査PASS後、CHARTER 第1条-2（階層的目的関数）として正式刻印（会長裁可「GOだ」）。既存12条・9循環・凍結資産・プロップ境界 無改変。← **完了**
 - **Stage 6+（会長ゲート）**: discovery用の実データ接続 → Project50 → Project100 → （遥か後・別GO）live。
 
 ## 成果物14: 現実機と最終構想の差分
