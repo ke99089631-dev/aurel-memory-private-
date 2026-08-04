@@ -444,3 +444,63 @@ source_family/proposals(4d)の後・digest公開(5)の前に研究レーンを�
 - closed_loops=9/9・chain_verified=True 不変（10本目なし・⑨に測定+発見の相互接続が乗る）。
 - 実機ループ点火: frontier wall=50%/yr binding=[leverage_bound] -> discovery wall_directed=1(LEVEL D cross_source) frontier_wall=50 -> validation checked=1 tally={HOLD:1}(実データ無ゆえ正しく保留) -> ledger total=11 awaiting_chairman=0。
 - ＝「壁を測る->壁の律速(今はレバ律速)を狙う候補を生む->知識化->証拠不足で保留」まで自動で一巡。採用はゼロ・会長二重ロックの手前で必ず停止。
+
+---
+
+## Stage 4: scorecard.py — North Star を4軸で読む測定器（会長GO「進めて」）
+
+### 目的
+North Star（HARD=生存 / OBJECTIVE=攻めの複利・利益生成力の最大化 / EVOLUTION=未知Edge発見）を、
+**単一の月利スカラーに潰さず**4つの別々の針で読む。数字は保証ではなく針。測定専用。
+
+### 4軸（絶対に合算しない）
+- GROWTH … paper equity の伸び（realized + 直近10取引）。indexのみ。
+- SURVIVAL … 床の余裕（DD-at-risk vs floor 0.15）・隔離Cell数。**硬いゲート（SURVIVAL_GATE=60）。他軸と掛け算しない。**
+- EVOLUTION … 能力容量（edges数・efficient band・仮説台帳総数/保持・収束深度）。
+- DIVERSIFICATION … breathing源泉数・active Cell数・(1-HHI)。
+
+### North Star 読み
+- SURVIVAL が gate 未達 -> posture=defend（床を最優先。攻めるな）。
+- gate 通過 -> posture=expand（床の内側で GROWTH×EVOLUTION を押す。安全だが弱い機関へ収束するな）。
+- ★SURVIVAL は決して他軸と乗算しない＝生存はトレードオフ対象にしない硬い前提。
+
+### 建設（既存無改変・新規のみ・paper・金ゼロ）
+- circulation/scorecard.py 新規。書込は scorecard.json のみ（capital/evolved_configs/実Leverage/live 非接触）。
+- 入力は読取専用: source_family.json / frontier.json / hypothesis_ledger.json / reserve.json / evolve.json / *_book.json。
+- 定数 SURVIVAL_GATE=60, DD_FLOOR=0.15。schema aurelian.scorecard/v1。
+- selftest 5点 PASS（4軸分離・単一スカラー無し・SURVIVAL gate・survival/evolution 単調・書込先が scorecard.json のみ）。
+
+### 配線
+- auto_writeback 4e 研究レーン末尾に (iv) scorecard を追加（frontier->discovery->validation の後・digest公開の前）。非致命 try/except。
+- digest: _load_scorecard() 追加・⑨signal に「North-Star(4 separate axes; NO single scalar): growth/survival(gate)/evolution/diversification/posture」を付す・トップに north_star ブロック追加。closed_loops=9 不変。
+
+### 検証（--force 実機）
+- scorecard: growth=0.0 survival=91.3(gate>=60 pass=True) evolution=100.0 diversification=100.0 posture=expand。
+  ＝生存ゲート通過・床余裕0.913（DD~0.013 vs 0.15）・隔離0。ただし frontier low_confidence（合成血がSharpe膨張）。
+- GROWTH=0 は正直な針: paper equity contracting（realized=-0.0103, recent10=-0.0213）。潰さず別軸で表示。
+- closed_loops=9/9・loops=9・breathing不変・chain_verified=True・events=396。10本目なし。採用ゼロ・会長二重ロック手前で停止不変。
+
+---
+
+## Stage 5-A: 整合性監査（CHARTER v2刻印の前提・会長GO「GOだ」2026-08-04）
+
+North Star思想を憲章へ正式刻印する前に、実装が設計原則と矛盾していないことを機械監査した。全項目クリア。
+
+### 監査結果（read-only・実機データ）
+- **A. 単一書き手** … 各モジュールの io.open("w") 書込先は自分のJSON1本のみ:
+  hypothesis_ledger→hypothesis_ledger.json / discovery→discovery.json / validation→validation.json /
+  frontier→frontier.json / scorecard→scorecard.json。
+  台帳(hypothesis_ledger.json)への変更は discovery/validation が **hypothesis_ledger のAPI(record/update_state)経由**でのみ行い、ファイル直書きしない＝単一書き手不変。
+- **B. 禁止操作なし** … 新規5モジュールに enable_live=True / arm_code / order_send / capital直書き / evolved_configs直書き は皆無。
+- **C. 9循環/連鎖** … closed_loops=9・loops=9（10本目なし）・chain_verified=True。
+- **D. 採用ゼロ・会長ゲート手前で停止** … ledger total=11・by_state=screened11のみ・promoted(live)=0・awaiting_chairman=0。自動採用/自動Live化は構造的に不能（採用経路を持たない）。
+- **E. Discovery非還元 & Frontier測定専用** … discovery by_level に **LEVEL X=1 在存**（未分類利益構造を捨てない）。frontier ok=True wall=50%/yr binding=[leverage_bound] low_conf=True（合成血ゆえ正直に低信頼）。
+- **F. Scorecard硬ゲート** … axes=[growth,survival,evolution,diversification]・**total_score無し**（単一スカラーへ潰さない）・survival_gate=60 pass=True・SURVIVAL index=91.3を他軸と乗算しない。
+
+### 設計⇔実装の整合
+- 設計(成果物12)の North Star 階層(HARD/OBJECTIVE/EVOLUTION/MOONSHOT) が、scorecard.py の4軸＋survival硬ゲート＋posture(defend/expand)＋「安全だが弱い機関へ収束するな」文言に一致。
+- Capacity = Growth·Survival·Evolution·Diversification の合成（Frontierが測定・Discovery/Expansionが更新）＝実装の frontier→discovery→scorecard 連鎖に一致。
+- 既存憲章12条・9循環・凍結資産・プロップ境界 いずれも無改変。
+
+### 判定
+**整合性監査 PASS。CHARTER v2 刻印（North Star正式改定・追加のみ）に進む条件を満たす。**

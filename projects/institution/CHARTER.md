@@ -1,15 +1,16 @@
 ---
-doc_id: AURELIAN-CHARTER-v1
-tags: [institution, charter, foundational, top-level]
+doc_id: AURELIAN-CHARTER-v2
+tags: [institution, charter, foundational, top-level, north-star]
 type: charter
 rank: 最上位（AI投資機関憲章）
 created: 2026-07-30
+updated: 2026-08-04
 status: active
 owner: AUREL（統括CEO）
 approver: 会長（KEIKI MAEDA）
 ---
 
-# Aurelian — AI投資機関憲章 v1（最上位）
+# Aurelian — AI投資機関憲章 v2（最上位）
 
 > **正式名称**: Aurelian（アウレリアン）（日本語通称：アウレリアン投資機関）
 > **名称由来**: ローマ皇帝アウレリアヌス（分裂帝国を再統一し「Restitutor Orbis＝世界の修復者」）＋ AUREL。会長裁可 2026-07-30。
