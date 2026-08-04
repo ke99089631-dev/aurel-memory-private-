@@ -409,3 +409,38 @@ source_family/proposals(4d)の後・digest公開(5)の前に研究レーンを�
 - chain_verified=True / sources_breathing=6/6 / active=9 / slots=1（既存不変）
 - 研究レーン点火: discovery cands=10 by_level={A:1,B:4,C:2,D:2,X:1} data_gated=True / validation checked=10 tally={REJECT:0,HOLD:10,PROMOTE:0} / ledger total=10 retained=0 awaiting_chairman=0
 - ＝Stage 1は実データ未接続ゆえ全候補が正しくHOLD(needs_data)。自動採用ゼロ・誤棄却ゼロ・本番/source_family/evolved_configs 非接触。
+
+
+## 建設完了ログ Stage 2（2026-08-04・会長GO「進めてOKだ」）
+
+### frontier.py … Return/Risk Frontier 測定エンジン（⑨第2ギア・測定専用）
+- 各源泉の紙帳簿(*_book.json)を源泉の1日能力に畳み、正の期待値源泉=Edgeを等ウェイト集約(相関前提0.20)。
+- 要求Return帯[10,20,30,50,75,100,150]%ごとに 必要Leverage / DD / ES / 破綻確率 を測り、生存制約(床-15%・レバ上限3x・破綻予算5%)で feasible 判定 → 壁の位置。
+- 高Return 3分類: A STRUCTURAL(壁の内側)/B REGIME(楽観相関でのみ到達)/C ARTIFICIAL(過剰レバ・床割れ=経路として自動棄却)。
+- 壁の診断(Edge不足/集中/低Sharpe相関/レバ律速)→ discovery への研究要求種(⑨相互接続の起点)。
+- ★測定専用: capital / evolved_configs / 実Leverage / live を一切書かない・触れない。紙履歴が薄い間は _low_confidence=True を透明開示。
+- 定数: ANN=252, HARD_FLOOR=0.15, LEV_CAP=3.0, RUIN_BUDGET=0.05, ASSUMED_CORR=0.20, _DD_K=2.0。selftest PASS（壁検出・Class-C棄却・効率帯・edge_shortage診断）。
+
+### 配線・検証
+- auto_writeback 4e研究レーン末尾に frontier.step/publish/broadcast/mark を追加（非致命・測定専用）。
+- digest ⑨自己進化 signal に「2nd-gear(expansion): frontier wall / efficient / edges / P50 class / low_conf」を追記（読取専用・FRONTIER_FILE単一書き手はfrontier）。
+- --force 実行: closed_loops=9/9・chain_verified=True 不変。実機測定 wall=50%/yr efficient=30%/yr edges=7 sharpe=22.01(練習血液ゆえ人工的に高い→low_conf=True) p50=C p100=C binding=[leverage_bound]。
+- ★所見: 現状の壁はレバ上限律速＝「攻めるにはレバでなくEdgeを発見せよ」を機械が示している（North Star EVOLUTIONの動機付けとして正しい向き）。実データ接続後に真の壁が出る。
+
+
+## 建設完了ログ Stage 3（2026-08-04・会長GO「OKだ」）— ⑨拡張ループを閉じる
+
+### Frontier -> Discovery 接続（壁の診断が発見を駆動する）
+- discovery.py に frontier.json 読取を追加。wall_diagnosis.binding を研究要求に写像する _BINDING_DIRECTIVES:
+  edge_shortage->LEVEL C 新源泉(mu上げてレバ不要に) / concentration->LEVEL B 分散細胞 / low_sharpe_correlation->LEVEL B 脱相関 / leverage_bound->LEVEL D クロス源泉(capacity拡大)。
+- _directed_probes(frontier) が「壁を狙う」方向付き候補を生成し、出自=frontier.wall_diagnosis・motivation・priority='wall-directed' を付与。generate() の先頭に差し込む（律速点を優先）。
+- assess() に wall_directed 件数と frontier_wall_pct を追加。selftest に Stage3 検証(壁50%,edge_shortage+concentration -> 方向付き2件・動機タグ付き)を追加。PASS。
+
+### カデンス再順序（auto_writeback 4e）
+- (i) frontier測定 -> (ii) discovery(直前公開の壁診断を読み壁を狙う) -> (iii) validation。frontierを【先に】回すことでdiscoveryが最新の壁を研究要求として消費。
+- ★測定専用/採用経路なし/実Leverage非接触は不変。自動採用・自動Live化・レバ変更なし。
+
+### 検証（--force）
+- closed_loops=9/9・chain_verified=True 不変（10本目なし・⑨に測定+発見の相互接続が乗る）。
+- 実機ループ点火: frontier wall=50%/yr binding=[leverage_bound] -> discovery wall_directed=1(LEVEL D cross_source) frontier_wall=50 -> validation checked=1 tally={HOLD:1}(実データ無ゆえ正しく保留) -> ledger total=11 awaiting_chairman=0。
+- ＝「壁を測る->壁の律速(今はレバ律速)を狙う候補を生む->知識化->証拠不足で保留」まで自動で一巡。採用はゼロ・会長二重ロックの手前で必ず停止。
