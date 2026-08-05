@@ -540,3 +540,78 @@ North Star思想を憲章へ正式刻印する前に、実装が設計原則と�
 ### まだやっていない（別GOのまま据置）
 - 外部【実市場】データ接続（現状は paper_synthetic_book）。Project50 の実現可能性検証。Project100。live化。
   いずれも会長の別GAが要る。sample_sufficient=0 が示す通り、合成血が積み上がるまで大半は正直に HOLD のまま。
+
+---
+
+## Stage 6-B: evidence.py — 実【市場】データ接続（会長GO「GO」2026-08-05）
+
+Stage 6-A の合成book血に代えて、**58本の実市場日足OHLC(bars_*.csv)** を証拠の第一血流として接続。
+機械の配線は6-Aで完成済み。今回は「血の質」を合成→実市場へ格上げした。live・Project50/100 は別GAのまま据置。
+
+### 何を接続したか
+- data/bars_*.csv = 58本の実日足OHLC(date,open,high,low,close, 約500〜6430行)。読取専用参照。凍結コードでもプロップでも.envでもない。
+  FX(EURUSD/USDJPY/GBPUSD/AUDUSD/USDCHF/USDCAD/NZDUSD)・金属(XAUUSD/XAGUSD/GLD)・商品(WTI/NATGAS/COPPER/CORN)・
+  株/ETF(SPY/QQQ/IWM/XLK〜XLY sector/EW* country)・暗号(BTC/ETH/SOL 他)・金利/信用/VOL(TLT/IEF/HYG/DXY/VIX)。
+- evidence.py 拡張: BARS_GLOB, _MARKET_ENABLED=True, _bar_cache, MIN_MARKET_SAMPLES=60, _MKT_TAIL_K=6.0, _SURFACE_BASKET。
+  _SURFACE_BASKET が space/provenance.source → 楽器バスケットを写像（trend_follow→SPY/QQQ/BTC/XAUUSD…, macro_causal→DXY/TLT/IEF/VIX…等）。
+  uncharted は意図的に未写像＝証拠なし＝正直に HOLD。捏造しない。
+- build_map 優先順位: (1) 実市場 rets>=60 → market証拠, (2) book フォールバック, (3) なし。
+  market証拠は data_source="market_daily_ohlc"・low_confidence=False。ただし _proxy を明示:
+  「surface-universe realized daily returns (per-strategy backtestではない)」＝正直な代理指標である旨をコードに刻む。
+
+### バグ修正（実市場で発見・正直に潰した）
+- テール過敏: 6-A の robust-scale 閾値だと実市場で全バスケットが hidden_tail=True（-3%普通日でも発火）。
+  market経路を std ベース _MKT_TAIL_K=6.0 に再校正 → 判別が効く（大半 -3〜-5σでFalse、H-0008 -7σ/H-0009 -9σ のみTrue）。
+- 系列捏造: 日付積集合が空のとき最長単一系列を返す欠陥（n=6430 等、時間軸混在の誤誘導）。
+  空積集合は [] を返す＝市場証拠を正直に辞退するよう修正。
+- 不誠実なログ固定文字列（"src=paper_synthetic_book" 決め打ち）を market primary+book fallback を反映するよう auto_writeback / broadcast / main() 全て修正。
+
+### 検証（--force 実機）★マイルストーン
+- validation checked=**9** tally={REJECT:6, HOLD:0, PROMOTE_CANDIDATE:3}。
+  awaiting_chairman=**3**・promoted(live)=**0**・retained=7。
+- ★初の実市場血流でゲートが実候補を会長ゲートまで通し、そこで停止:
+  - promoted_candidate(会長二重ロック待ち): H-0002/H-0003(LEVEL D macro_causal×cross_source)・H-0007(LEVEL B mean_reversion×event_driven)。
+  - rejected overfit_oos_decay: H-0001/H-0004/H-0005/H-0011(price_action系・cross_source)。実OOS減衰が机上の見かけを殺した。
+  - rejected hidden_tail: H-0006(carry×macro_causal)・H-0008(liquidity_flow)・H-0009(time_structure)。病的テールで棄却。
+  - screened(uncharted・未写像・証拠なし): H-0010。正直にHOLD。屍7体を知識として保持。
+- 不変確認: closed_loops=9/9・chain_verified=True・live_gate LOCKED=True eligible=False（自動アーム無し・executor無し）。
+  既存戦略/憲章/凍結資産/プロップ 無改変。金1円も動かさず。bars は読取専用。
+
+### 正直に言うと（透明開示）
+- market証拠は per-strategy backtest ではなく「サーフェス母集団の実現日次リターン」の代理指標(_proxy)。
+  実運用の期待値そのものではない。会長判断はこの限界込みで。
+- 2回目の--force同一コマンド内では with_evidence=0/checked=0（既に状態遷移済＝candidate/screenedのみ証拠付与対象）。
+  マイルストーンは ledger に永続（by_state: promoted_candidate:3, rejected:7, screened:1）。
+
+### まだやっていない（別GAのまま据置）
+- dashboard 4軸North Star専用パネル。CCI-1(PSR×Tail in capital.py)。Project50/100 実現可能性検証(非KPIの研究命題)。live化。
+  いずれも会長の別GAが必要。特に **3件の promoted_candidate は会長二重ロック手前で必ず停止・自動採用しない**。
+
+---
+
+## 原則メモ: 「10本目のループ」について（会長との合意 2026-08-05）
+
+会長の問い「10本目を作らないのは、必要/強化のためならよいのでは?」に対する整理。
+
+**結論: 「10本目は作らない」は禁忌(宗教)ではなく、高いハードル。今は要らないだけ。**
+
+### なぜ今まで9のままか（本当の理由）
+1. 9(①情報〜⑨自己進化)は「あらゆる機能はこのどれかに必ず入る」完全分類として設計。
+   これまでの discovery/validation/evidence/scorecard は全て ⑨自己進化 の中の器官として収めた。
+2. 「生きているかは9つの閉じた循環で測る」＝機関の体温計の目盛り。本数が動くと健康状態が読めなくなる（最大コスト）。
+3. スコープ膨張・基礎憲章階層の汚染から守るため。既存ループ内モジュール追加の方が安全・可逆・安価。
+
+### 10本目を作ってよい判定テスト（1つ）
+> その機能は、9のどれかの中の「新しい臓器」か? それとも、どれにも属さない「新種の血流」か?
+> - 前者 → 既存ループ内モジュール（今まで通り）
+> - 後者 → 10本目を作る正当な理由がある
+
+「新種の血流」候補（現時点では存在しない＝9で足りる）:
+- ⑩対外関係/信頼の循環（規制・カウンターパーティ・評判。①情報の受信とは別の外界双方向）
+- ⑩流動性/資金調達の循環（③資本の自己内配分とは別の、外から資金を引く/返す血流）
+
+### 発火条件と手続き
+live化・外部資金・対外信頼に踏み込むと9で取りこぼす血流が出る可能性あり。
+その時は上テストに通れば10本目を推奨。ただし体温計の目盛りが変わるため、
+**憲章(North Star測定軸)とscorecardの基準線改定を同時に行う＝会長裁可事項。ワンセット。**
+無理やり9に押し込むのは水増しと同じ不誠実ゆえ禁止。
