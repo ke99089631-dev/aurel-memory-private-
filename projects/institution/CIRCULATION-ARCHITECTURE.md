@@ -651,3 +651,54 @@ Project50深化＝「50%の壁は金を賭けず頭(新Edge発見)で突破で�
 - market base は per-strategy backtest でなく代理指標(_proxy)。数値の精度でなく「形と壁」を読む。会長判断はこの限界込みで。
 - 手2(壁の実律速の診断＝drawdown_bound は本手で実装済)・手3(frontier→discovery ループを実血で閉じ、壁が実際に外へ動くか時系列観測)は
   継続の別ステップ。live化・レバ変更は依然 別ゲート（現momentumでは進めない）。
+
+---
+
+## 運用モード確定: 自律実行＋事後報告（会長指示 2026-08-06）
+
+会長「毎回確認GOを待つのか? 自律的にやり報告を受ける形ではないのか?」に対する恒久ルール。
+
+**原則: AUREL は研究・建設・測定・改良を自律で回し、会長は報告を受ける。節目ごとのGO確認は不要（過剰にやっていたのを是正）。**
+
+### 自律でやる（GO不要・事後報告）— 全て paper・可逆・金ゼロ・採用ゼロ
+- discovery/validation/frontier/evidence/scorecard の研究・測定・改良、手2/手3の続行、壁の観測、
+  見える化パネル、記憶更新、selftest、バグ修正、整合性監査。
+
+### 構造的に会長GOが要る（AUREL は絶対に自走しない・二重ロックの壁）— 不可逆/金/対外
+1. live化（実弾）  2. 戦略の正式採用(promote→live)  3. レバレッジ変更
+4. 憲章改定  5. プロップ接触  6. Project50/100 の必達KPI化
+
+「自由に考える能力」は自律、「自由に金を動かす権限」は会長ゲート。研究がゲートに到達したら必ず止まって報告する。
+報告形式は Fable5（★節/警告節/正直に言うと節）。「続けますか?」で毎回止めない。
+
+---
+
+## Project50 手3: frontier→discovery 拡張ループを実血で閉じる（自律実行・報告 2026-08-06）
+
+手1で frontier を実市場血に差し替えた結果、壁が drawdown_bound（DD/ボラ律速）で立つと判明。
+だが discovery 側にそのラベルの研究指令が無く、ループが切れていた（wall_directed=0）。手3で繋ぎ直した。
+
+### 何を変えたか（全て paper・測定/研究のみ・採用ゼロ・金ゼロ・レバ非接触）
+- discovery.py `_BINDING_DIRECTIVES` に新ラベルを追加:
+  - drawdown_bound → LEVEL B・space=[decorrelated, low_tail]・動機 reduce_sigma_under_floor
+    （レバは上げない。σを下げる低相関・低テールEdgeの発見で壁を外へ動かす正しい方向）
+  - ruin_bound → LEVEL B・space=[tail_aware]・動機 reduce_tail_risk
+- frontier.py `_counterfactual_projection` 新設（測定のみ・採用ゼロ）:
+  現Edge群に【低相関(corr=0)・中庸(平均μ/σ)の新Edgeをk本発見できたら】壁がどこへ動くかを射影。
+  出力 wall_projection: ladder(k=1,2,3,5) と edges_needed_to_move_wall。
+
+### 実データでの発見（正直に）
+- 壁射影: +1→壁20%(sh2.52)・+2→20%(sh2.65)・**+3→壁30%(sh2.78)**・+5→30%(sh3.01)。
+  **低相関Edgeを3本発見できれば壁が20%→30%へ動く**。ただし+5本でも30%止まり＝50%(Project50)は遥かに遠い。
+  ＝壁は「粘る」。1本では動かない。Project50=Class C を実データ射影が裏付けた（レバでなく分散不足が本質）。
+- 拡張ループ実血確認（auto_writeback --force）:
+  frontier binding=['drawdown_bound'] → discovery cands=11 by_level B=5 **wall_directed=1（0→1に修復）**
+  → validation checked=1 tally={HOLD:1}（[decorrelated,low_tail]空間は市場バスケット未写像＝証拠なしで正直にHOLD）。
+  ledger total 11→12・awaiting_chairman=3 不変・採用ゼロ。
+- 不変: closed_loops=9/9・live_gate LOCKED=True/eligible=False/practice=7/30・chain_verified=True・killfile無し。
+  capital/evolved_configs/レバ/live/プロップ 非接触。金1円も動かさず。frontier/discovery selftest PASS。
+
+### 意味／次
+- 拡張ループ(⑨第2ギア)が実市場血で機能: frontierが壁を測る→discoveryが律速点(σ)を狙う→validationが実証拠で選別。
+- 壁が実際に外へ動くには、この wall-directed 候補が(a)証拠を得てガントレット通過し(b)会長が二重ロックで採用して base に入る必要がある＝正しくゲート済み。自律では base は動かさない。
+- 次の自律候補: [decorrelated/low_tail/tail_aware] 空間を evidence の市場バスケットへ写像し、wall-directed候補に実証拠を与える（HOLD→検証可能化）。見える化パネルでの壁/射影の可視化も自律範囲。
