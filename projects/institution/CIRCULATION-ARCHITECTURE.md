@@ -615,3 +615,39 @@ live化・外部資金・対外信頼に踏み込むと9で取りこぼす血流
 その時は上テストに通れば10本目を推奨。ただし体温計の目盛りが変わるため、
 **憲章(North Star測定軸)とscorecardの基準線改定を同時に行う＝会長裁可事項。ワンセット。**
 無理やり9に押し込むのは水増しと同じ不誠実ゆえ禁止。
+
+---
+
+## Project50 手1: frontier の土台を実市場の血に差し替え（会長GO「進めよう。GOだ」2026-08-06）
+
+Project50深化＝「50%の壁は金を賭けず頭(新Edge発見)で突破できるのか、構造的行き止まりか」を実データで正直に答える研究。
+その最小の一歩＝frontier の base(源泉能力) を合成book(min_samples=2・sharpe17.3の幻)から実市場OHLCへ差し替える。
+
+### 何を変えたか（frontier.py・測定のみ・金ゼロ・レバ非接触）
+- evidence.py の実bars読取(_SURFACE_BASKET/_read_bar_returns)を再利用し、`read_source_capabilities_market()` を新設。
+  各サーフェス族の等ウェイトlongバスケットの実日次リターンから μ/σ を算出（cross_source は関係ゆえEdge除外）。
+- `_portfolio_base(caps, real_corr=True)` 拡張: dated系列を持つ源泉間の【実相関行列】(_pairwise_corr/_corr)で分散を測る。
+  ASSUMED_CORR=0.20 の仮定を、実データがある時は実相関に置換。
+- build_frontier: 実市場(primary, m_edges>=2)→合成book(fallback)。data_source/_proxy を出力に明示。
+  _proxy="surface-universe realized daily returns (equal-weight long baskets); NOT a per-strategy backtest"。
+- selftest 合成注入経路(caps明示)は無改変＝市場を経由せず決定的。市場テスト(7)を追加。
+
+### バグ修正（実データで発見・正直に潰した）
+- 壁診断の不正確: 実市場では壁(20%)が【レバ律速でなくDD床律速】(lev1.32x<cap, DD16.8%>床15%)なのに
+  ラベルが leverage_bound のままだった。`_diagnose_wall` に壁バンドの実律速(drawdown_bound/leverage_bound/ruin_bound)
+  を反映。discovery への研究要求が「低相関・低テールEdgeでσを下げよ」と正しく出るよう修正。
+
+### 検証（selftest PASS / 実機）
+- 合成 sharpe17.3 → 実市場 **sharpe 2.387**(現実的)・実相関 mean 0.092・min_samples 462・**_low_confidence=False**。
+- 実frontier: edges=11・mu 15.17%/yr・sigma 6.35%/yr・hhi 0.128。
+  **効率帯 30%→10%・壁 50%→20%** に締まった(実データは合成より遥かに厳しい)。
+- 壁診断: **drawdown_bound**（レバではなくDD/ボラが律速）→ 研究要求「LOW-correlation/lower-tail edges (LEVEL B/C/D) でσを下げ、同じReturnを-15%床の内側に収めよ」。
+- Project50=Class C・Project100=Class C（過剰レバ+床割れで経路棄却）＝現状の合成血でも実市場でも「今の武器では50%は行き止まり」。
+  ただし壁が【DD律速】と判明した意味は大きい: レバ(禁止)ではなく【新しい低相関Edgeの発見】で壁が動きうる＝discoveryに明確な標的。
+- 不変: closed_loops=9/9・chain_verified=True(live_gate checklist)・live_gate locked=true/eligible=false(practice 7/30)・killfile無し。
+  採用ゼロ(awaiting_chairman=3・promote(live)=0)。capital/evolved_configs/レバ/live 非接触。金1円も動かさず。bars読取専用。
+
+### 正直に言うと / 次
+- market base は per-strategy backtest でなく代理指標(_proxy)。数値の精度でなく「形と壁」を読む。会長判断はこの限界込みで。
+- 手2(壁の実律速の診断＝drawdown_bound は本手で実装済)・手3(frontier→discovery ループを実血で閉じ、壁が実際に外へ動くか時系列観測)は
+  継続の別ステップ。live化・レバ変更は依然 別ゲート（現momentumでは進めない）。
