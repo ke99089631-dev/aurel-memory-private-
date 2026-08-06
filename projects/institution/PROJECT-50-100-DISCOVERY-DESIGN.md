@@ -12,6 +12,20 @@ source: 会長＋ChatGPTアドバイザー「Profit Source Expansion × High Ret
 constraint: 実装はpaper・金ゼロ・既存無改変・自動Live化なし・自動採用なし・KPI化なし・プロップ非接触。North Star思想はStage 0で設計上の固定目的として扱う（憲章v2刻印はStage 5）。
 ---
 
+## 【位置づけ・最優先／不可侵】Project 50→100 は "別軸・非従属" である（会長指示 2026-08-06）
+
+> 本セクションは本文書・実装・全循環における Project 50/100 の位置づけを規定する。以下に反する解釈・実装・伝播は禁止。
+
+**Project 50→100 を、Aurelian の North Star / 最上位目的 / 中央目的 / 通常運用目標として扱ってはならない。**
+
+- Project 50→100 は、**Aurelian の研究能力(Discovery/Frontier/Validation/Hypothesis Ledger 等)を"利用する"独立した Moonshot Research Program の一つ**にすぎない。
+- **Aurelian 本体は Project 50→100 の達成に従属しない。別軸である。** 機関の目的関数は憲章 第1条-2 の North Star（生存を絶対条件に、複利成長と利益生成能力を最大化し、自機のReturn/Risk Frontierを継続拡張する）であって、Project 50→100 ではない。
+- Project 50→100 が永遠に月間50%へ届かなくても、**Aurelian 本体は失敗ではない**。機関の成功は自身の4軸(Growth/Survival/Evolution/Diversification)で測り、Moonshotの到達可否に縛られない。
+- 構造的思想はプロップと同じ「別軸・非従属」。ただし差分: プロップは「触るな・置いてあるだけ」＝機関非接触。Project 50→100 は「機関の**研究器官を借りてよい**独立プログラム」＝研究能力の利用は可、しかし**本体の目的関数を乗っ取らない・通常運用を歪めない・必達KPI化しない**。
+- したがって Project 50→100 は Aurelian を"駆動する"ものではなく、Aurelian の研究能力を"消費する"側。方向は一方通行（本体→研究能力提供、Moonshot←利用）。逆に本体が Moonshot に引きずられて過剰レバ/過学習/通常運用の歪みへ向かうこと(Class C 誘惑)は禁止。
+
+---
+
 ## 【認識修正・最優先】Project 50→100 の正式意図（会長修正指示書 2026-08-06）
 
 > 本セクションは本文書内および実装のあらゆる「Project 50/100」解釈に優先する。以前の年利解釈・一回検証解釈を上書きする。

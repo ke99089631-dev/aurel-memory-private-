@@ -705,3 +705,28 @@ Project50深化＝「50%の壁は金を賭けず頭(新Edge発見)で突破で�
 - 拡張ループ(⑨第2ギア)が実市場血で機能: frontierが壁を測る→discoveryが律速点(σ)を狙う→validationが実証拠で選別。
 - 壁が実際に外へ動くには、この wall-directed 候補が(a)証拠を得てガントレット通過し(b)会長が二重ロックで採用して base に入る必要がある＝正しくゲート済み。自律では base は動かさない。
 - 次の自律候補: [decorrelated/low_tail/tail_aware] 空間を evidence の市場バスケットへ写像し、wall-directed候補に実証拠を与える（HOLD→検証可能化）。見える化パネルでの壁/射影の可視化も自律範囲。
+
+---
+## 建設ログ: Project50/100 年利→月利 修正（会長GO「1をGO」 2026-08-07）
+
+### 背景（会長の認識修正）
+Project 50→100 = **月利**+50%/+100% region（年利ではない）。frontier.py が RETURN_BANDS を年率で組み、`projects` が年率50/100帯に対応していたのは**定義違反**。会長が建設候補#1「年利→月利修正」を明示GO。建設なので会長確認の上で着工（運用モード順守）。
+
+### 変更（frontier.py のみ・測定のみ・金/レバ/live非接触）
+- 定数追加 `MONTH = 21`（=ANN/12 営業日）。
+- 新関数 `_to_period_base(base, days)`: 年率baseを月次ホライズンへスケール（mu×days/ANN, sigma×√(days/ANN)）。返り値は mu_annual/sigma_annual スロットに月次μ/σを格納（_band_pointが汎用に読む）。
+- `_classify(target_pct, cbase)` に引数化。projects は **month_base 上で** `project_50`/`project_100` を分類。年率の一般Frontier帯は据え置き（通常能力の壁＝年率で妥当）。
+- `projects` に透明開示追加: horizon="monthly", trading_days_per_month, monthly_mu_pct, monthly_sigma_pct, monthly_wall_return_pct, monthly_efficient_band_pct, note（別軸・非従属・非KPI明記）。
+- docstring / note / main() 出力を「一般帯=年率／Project50/100=月利」に明記。
+
+### 測定結果（実市場OHLC・corr=real）
+- 一般Frontier: μ=15.2%/yr, σ=6.35%/yr, sharpe=2.39, 壁=20%/yr（drawdown_bound）, 効率帯=10%/yr。※前回と不変（一般帯は年率のまま）。
+- **月次**: μ=1.264%/mo, σ=1.834%/mo, 月次壁=10%/mo（10%/moすら現状不成立→efficient=None）。
+- **Project50(+50%/mo)=Class C**（要39.56x・床割れ・ruin0.185）／**Project100(+100%/mo)=Class C**（要79.13x）。
+- ＝月利50/100は現状**深いClass C**。会長言「そんなすぐにみつけるものではない」を正直に反映。Moonshotの正しい出発点。
+
+### 不変条件（検証済み）
+- frontier selftest PASS（7帯・壁検出・Class-C棄却・実市場土台ok・書込先frontier.jsonのみ）。
+- discovery selftest PASS（下流ループ健全・wall-directed生成・adoptionなし）。
+- 書込は frontier.json のみ。capital/evolved_configs/実レバ/live 非接触。9/9ループ・adoption=0 不変。金1円も動かさず。
+- 建設候補#2(長期進捗トラッキング)・#3(Market Memory=保留)は未着手・会長GO待ち。
