@@ -4,12 +4,35 @@ tags: [institution, design, discovery, frontier, project50, project100, north-st
 type: design-proposal
 rank: 設計裁可済み（Stage 0-5完了・CHARTER v2刻印済み）
 created: 2026-08-04
-updated: 2026-08-04
-status: approved & built — Stage 0-5 complete; North Star inscribed into CHARTER v2 (第1条-2). Stage 6+ chairman-gated.
+updated: 2026-08-06
+status: approved & built (Stage 0-5) — BUT Project50/100 definition CORRECTED 2026-08-06 (see 認識修正 below). Stage 6+ chairman-gated.
 owner: AUREL（統括CEO）
 approver: 会長（KEIKI MAEDA）
 source: 会長＋ChatGPTアドバイザー「Profit Source Expansion × High Return Frontier / Project 50→100」
 constraint: 実装はpaper・金ゼロ・既存無改変・自動Live化なし・自動採用なし・KPI化なし・プロップ非接触。North Star思想はStage 0で設計上の固定目的として扱う（憲章v2刻印はStage 5）。
+---
+
+## 【認識修正・最優先】Project 50→100 の正式意図（会長修正指示書 2026-08-06）
+
+> 本セクションは本文書内および実装のあらゆる「Project 50/100」解釈に優先する。以前の年利解釈・一回検証解釈を上書きする。
+
+**AUREL の従前の誤解（是正済）**: 「既存Aurelianで、すぐバックテストして【年利】50%→100%が出るか一度検証するプロジェクト」と解釈していた。**これは誤り。**
+
+**正しい定義（会長）**:
+1. **50/100 は【月間】+50%領域 / +100%領域**を指す（年利ではない）。ただし「毎月必ず達成」を要求する通常運用KPIには**しない**（KPI化は禁止）。
+2. Project 50→100 は **Aurelian という機関そのものの利益生成能力を長期で進化させ続ける LONG-TERM MOONSHOT PROGRAM**。一回のバックテストで達成可否を判定するものでも、既存戦略のパラメータ調整で数字を作るものでもない。
+3. **研究命題**: 「破綻前提の過剰レバや過学習に依存せず、月間50%級（Project100は100%級）のReturn領域を**構造的に**実現可能にできるか。現在できないなら、できる機関へ**進化できるか**」。
+4. **今できなくても失敗ではない**。例: 実測して現実的Frontierが月8%だったら、そこから Project50 が**始まる**。「なぜ8%が壁か」を分解（独立Edge不足/Source不足/Cell間相関/Regime消失/Capacity/Tail/コスト/配分非効率/Cross-Source不足/Macro-Event弱/未知構造要）→研究要求→発見→検証→採用→Frontier再測定→8%→12%…と何度も壁を外へ動かす。前進そのものが成果。壁の理由が判明すること自体も価値。
+5. **Frontier は合否判定器ではない**。役割は(a)機関の現在の能力限界を測る(b)その限界を作る原因を発見し Discovery へ研究要求として返す。
+6. **3分類を厳守**: STRUCTURAL（恒常的・構造的高Return＝本命）／REGIME（特定環境でのみ出現する高火力領域も研究対象）／ARTIFICIAL（過剰レバ・隠れTail・Overfit・Leak・生存者バイアス・コスト/滑り/流動性無視・一点集中・一撃破綻＝Class C＝成功ではない、棄却）。
+7. **長期循環**: Frontier(壁発見)→Discovery(未知Cell/Hybrid/未知Source/Cross-Source で武器発明)→**Market Memory(過去Regimeで幻を疑う＝新規追加コンポーネント)**→Validation(幻殺し)→Hypothesis Ledger(失敗を知識化)→AUREL設計→会長採用→9循環が能力を育てる→Frontier再測定。何度でも回す。
+8. **進捗はReturnだけで測らない**: 効率的Frontier・前回比・律速最大要因・独立Edge数・Source数・Cross-Source Edge数・Edge間相関・Regime Coverage・Capacity・Tail・Failure Prob・突破した壁・未解決研究課題・Class A/B/C構成 で「能力そのものの成長」を見る。
+9. **Project100 は Project50 の延長でレバ倍化ではない**。50領域と100領域は成立構造（必要Edge数/Source数/相関/Regime依存/Capacity/Execution/Liquidity）が全く異なりうる。それ自体を研究する。
+
+**時間軸**: Aurelianが存在する限り継続可能な超長期プログラム。Stageを一度実行して終わりではない。
+
+**実装への含意（要・会長GOの上で建設）**: 現 frontier.py は Return帯を【年率】でモデル化しており、project_50/project_100 は年利50/100%帯に対応＝**定義違反**。月間領域への是正と Market Memory 新設は建設案件として会長確認の上で実施する（本修正時点では設計・定義の是正のみ。コード・実弾・既存戦略・9循環は無改変）。
+
 ---
 
 > **会長裁可（2026-08-04）**: 本設計を裁可。ただし(1)North Starを攻めの方向へ固定（下記）、(2)North Star思想はStage 0で設計上の固定目的とし、CHARTER v2正式改定はStage 5（実装検証後）へ後置、(3)Discoveryを縮小解釈しない（未知Cell/Hybrid/未知Source/Cross-Source＋現在分類名すら持たない利益構造まで対象）、(4)Frontierは単なるリスク分析器でなく機関能力を外側へ拡張する測定エンジン。Stage 0→Stage 1着工GO。Live化・資金移動・Leverage変更・未知Edge自動採用は禁止。
