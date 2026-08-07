@@ -973,3 +973,37 @@ mean_reversion / trend_follow / stat_arb / macro_causal / carry / vol_sell / tai
 ### 正直な総括
 - 第2ギアは**回っている**が、Stage1の研究空間=既存サーフェスのみ・生成は決定的ゆえ、回すたびに“同じ12件”を確認する段階。**真に新しい血は (a)候補への実データ配線 (b)新プローブ (c)Stage2外部データ のいずれかで初めて増える。**
 - 中央はあくまで第1ギア(既知Edgeで複利)。discovery は評価軸を分けたまま(採用KPIにしない・Project50/100を通常運用目標にしない)。金ゼロ・adoption=0・9/9循環・境界無改変。
+
+---
+
+## 建設ログ: validation に実バー証拠を配線＝暫定昇格を実データで裁く（会長「GOだ」 2026-08-07）
+
+会長GO「H-0002/H-0003 に実バー証拠を配線」を着工。**発見器の“無データ昇格”を、横展開で得た実データで正直に裁き直す**。
+
+### 発見していた欠陥（正直開示）
+- **evidence.py（Stage 6-A/B の証拠供給器）は建っていたが、validation から一度も import されていなかった**＝ガントレットは証拠ゼロで回り、実質「何も裁けない」状態だった。
+- promoted 3件は why=['data_insufficient','passed_gauntlet_awaiting_chairman']＝**実データ無しで昇格した仮免**。
+- しかも evidence.py の既存写像は Level-D を「銘柄バスケットの地合いproxy(等加重ロング)」に落としていた＝「DXY↑→EEM↓」のlead-lag主張に**不忠実**。
+
+### 建設（循環所有モジュールのみ・読取専用・金ゼロ）
+- **evidence.py**: `_leadlag_evidence(chain)` 追加。provenance.chain（=macro_causal `_MAP` キー）から、その関係そのものの**実lead-lag損益**を macro_causal 実機構(`_real_trades`, point-in-time)を読取専用で再利用して算出。data_source=`market_leadlag_real`（proxyではない・忠実）。build_map を「(0)Level-D因果→(1)実市場バスケット→(2)book→(3)HOLD」の優先順に。**暫定昇格(data_insufficient)は忠実証拠(lead-lag)が来たときだけ再オープン**（proxy/bookでは動かさない）。
+- **validation.py**: `main()` で **evidence.build_map() を run() に配線**（＝欠けていた実データ接続を接続）。run() に「暫定昇格の再判定」経路を追加（仮免の理由を捨て、実証拠の判定を権威に）。
+- evidence/validation 両 selftest **PASS**（無回帰）。単一書き手・採用経路なし・source_family非注入は不変。
+
+### 実データの判定（決定的・棄却優先が機能）
+| id | 関係 | 実窓 | 判定 | 理由 |
+|---|---|---|---|---|
+| **H-0002** | DXY→EEM | 455日(DXY∩EEM) | **REJECT** | overfit_oos_decay（IS期待値0.00027→OOS 0.000038＝**oos/is=0.14**、標本外で崩壊） |
+| **H-0003** | COPPER→AUD | 5024日(≈20yr, COPPER∩AUDUSD) | **REJECT** | hidden_tail（最悪日次 **-12σ**＝一撃破綻の芽 Class-C） |
+
+- **両方とも実データが殺した。** 「無データで promoted」だった2件は、実バーを当てた瞬間に片方は過剰適合(OOS崩壊)、片方は隠れテール(-12σクラッシュ日)で棄却。屍は knowledge_retained として台帳に保存（消さない）。
+- H-0003 の窓が5024日と長いのは per-pair 共通履歴を全て使うため（macro_causal live窓457日より**厳しいOOS**＝2008/2020のテールも試験に含む）。忠実さのため意図的にフル履歴で裁く。
+
+### 台帳の現状（ledger 権威）
+- by_state: **rejected=9（うち今回2件が実データ棄却）/ screened=2(HOLD) / promoted_candidate=1**。awaiting_chairman=**1**（H-0007 reversion×event。event_driven休眠ゆえ忠実証拠が存在せず、正直に data_insufficient のまま＝触れていない）。
+- 純粋未知（uncharted H-0010・低相関 H-0012）は写像を持たず HOLD 継続＝捏造しない。
+
+### 正直な総括
+- 会長GOの核心は達成: **発見器の“仮免昇格”を実データで裁く回路が繋がり、実際に2件を棄却した。** ガントレットが初めて実データで機能した。
+- これは「未知Edgeが見つかった」ではなく「**未知Edge候補を実データで正しく殺せるようになった**」段階＝棄却優先の設計思想どおり。残る昇格候補は1件のみ（会長承認待ち・event_driven依存で今は証拠なし）。
+- 不変: 金ゼロ・adoption=0・実弾/レバ/live非接触・9/9循環・凍結資産/プロップ(g4_)/.env 非接触・bars/rates読取専用。編集は循環所有(evidence.py/validation.py)のみ。
