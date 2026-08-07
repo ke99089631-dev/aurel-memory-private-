@@ -942,3 +942,34 @@ mean_reversion / trend_follow / stat_arb / macro_causal / carry / vol_sell / tai
 
 ### 不変（再掲）
 - 金ゼロ・実弾/レバ/live/adoption 非接触・9循環9/9・凍結資産/プロップ(g4_)境界 無改変・.env 非接触。bars/rates は読取専用。編集は循環所有モジュールのみ(stat_arb/macro_causal/carry/vol_sell/tail_hedge/event_driven/mean_reversion/trend_follow)。
+
+---
+
+## 観測ログ: discovery を回す（第2ギア・会長「discovery を回してくれ」 2026-08-07）
+
+横展開完了直後、会長号令で第2ギア(未知Edge発見)を実走。**測定/観測=自律**なので実行のみ（採用経路は無い）。
+
+### 手順
+- 全8兵＋source_family のサーフェスを実データ状態に更新 → discovery selftest PASS → discovery 本走。
+
+### discovery が回った結果（決定的・冪等）
+- **候補12件**（A1/B5/C2/D3/X1）。fingerprint dedup が効き、今回の再生成は新規0＝同じ12件を確認（決定的生成の設計通り）。
+- 書込先は discovery.json + hypothesis_ledger のみ。source_family 非注入・自動採用経路なし（proposals.py→会長二重ロックが唯一の道）。
+
+### 検証ガントレット（validation）は既に適用済みの状態
+- 台帳 by_state: **rejected=7（知識として保持）/ held=2（data_insufficient）/ promoted_candidate=3（会長待ち）**。今回 checked=0＝新規候補なしのため再検証は走らず（同一fingerprint）。
+- **正直な限界**: promoted 3件はいずれも `why:['data_insufficient','passed_gauntlet_awaiting_chairman']`・evidence=None。＝**構造審査(コスト/重複/OOS)は通ったが、実データの証拠はゼロ**。「promoted」は「殺されず・構造的に妥当」であって「実データで証明済み」ではない。
+
+### ★重要な発見（横展開との接続）
+- promoted 3件のうち2件は、私が今日実バー化した macro_causal のリード×フォローと**同一**:
+  - **H-0002 LD** usd_up→em_weakness ＝ macro_causal `DXY_to_EM.mc`（DXY→EEM・実バー化済）。
+  - **H-0003 LD** copper_up→aud_strength ＝ macro_causal `COPPER_to_AUD.mc`（COPPER→AUDUSD・実バー化済）。
+- つまり **discovery が data_insufficient とした候補に、いま実データが在る**。ゲートが部分的に解けた＝次の正直な一手は「validation にこれら Level-D 候補の実バー証拠を配線する」こと。ただしそれは**建設→会長GO必須**（自律で建てない）。残る1件 H-0007 LB は reversion×event 近接＝event_driven が休眠のため今は実データ無し（正直に data_insufficient のまま）。
+
+### 壁の現状（frontier / scorecard）
+- frontier: **WALL=20%/yr・drawdown_bound（レバではない）**。corr=実0.0915（既に低相関）。20→30%へ動かすには **低相関の新Edge3本**が構造的に必要（what-if・未採用）。data_source=実OHLCのプロキシ（equal-weight long baskets／per-strategy backtestではない＝形と壁として読む）。
+- scorecard: growth100 / evolution100 / diversification100 だが **SURVIVAL=15.3（gate60未満）＝posture:defend**。生存が律速＝成長/進化は生存余裕回復まで従属。
+
+### 正直な総括
+- 第2ギアは**回っている**が、Stage1の研究空間=既存サーフェスのみ・生成は決定的ゆえ、回すたびに“同じ12件”を確認する段階。**真に新しい血は (a)候補への実データ配線 (b)新プローブ (c)Stage2外部データ のいずれかで初めて増える。**
+- 中央はあくまで第1ギア(既知Edgeで複利)。discovery は評価軸を分けたまま(採用KPIにしない・Project50/100を通常運用目標にしない)。金ゼロ・adoption=0・9/9循環・境界無改変。
