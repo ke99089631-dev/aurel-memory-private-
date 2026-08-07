@@ -62,7 +62,9 @@ source: 会長＋アドバイザーがまとめた提案資料（未確定）
   - live: n_days=480（2024-09〜2026-08）tail_events=8。API: current_state / similar_regimes / tail_regimes / stress_edge。
   - 週次サイクル run_progress_cycle.bat に相乗り（既存 AURELIAN_progress_weekly で溜まり続ける）。
   - selftest PASS(7)。
-- **未実施（次候補）**: ダッシュボード搭載（現在の地合い＋類似過去局面＋過去最悪局面パネル）。IV/ニュース/流動性データの器（実機に該当データ無し→ロードマップ）。類似検索のローリング正規化格上げ。Discovery/Validation への stress_edge 配線。
+- **ダッシュボード搭載 = 済**（2026-08-07・会長GO「1から2だ」）。market_memory_summary.json → dashboard パネル「市場の記憶」。
+- **Validation 配線 = 済**（2026-08-07）。validation.run() が候補バスケットを過去最悪局面にぶつけ regime_stress を添付。★advisory のみ・判定不変（誤殺回避）。
+- **未実施（次候補）**: IV/ニュース/流動性データの器（実機に該当データ無し→ロードマップ）。類似検索のローリング正規化格上げ。regime_stress のダッシュボード可視化。fragile 候補の proposals 連携。
 - **Strategy Foundry**: 未着工・公式Future Conceptとして席のみ確保。11節の拒絶原則は今ある器官の設計思想に反映。
 
 ## 不変条件（2026-08-07時点）

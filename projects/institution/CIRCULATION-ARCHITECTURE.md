@@ -827,3 +827,45 @@ frontier.json（能力の壁）と scorecard.json（4軸）は毎回【上書き
 - 類似検索のz正規化は全アーカイブ統計を使う＝照合ステップに軽い先読みが入る（指紋の値自体は厳密Point-in-Time）。診断用途では許容・将来ローリング正規化に格上げ可。
 - まだダッシュボード未搭載（次候補）。採用経路なし・会長二重ロックのみが正式採用。
 - 不変: 金ゼロ・実弾/レバ/live/adoption 非接触・9循環9/9・凍結資産/プロップ(g4_)境界 無改変・.env 非接触。
+
+---
+## 建設ログ: Market Memory ①ダッシュボード搭載 ②Validation配線（会長GO「1から2だ」 2026-08-07）
+
+### ① ダッシュボード搭載
+- market_memory.py に **publish_summary()** 追加。publish() が フル棚(market_memory.json) を書いた後、コンパクト要約 **market_memory_summary.json**（coverage/current_state/nearest_past_regimes/worst_historical_regimes）を自動生成（480行のフル棚はHTMLに焼かない）。
+- dashboard.py: MARKETMEM_FILE=market_memory_summary.json をロード、JS const MARKETMEM 追加、パネル「市場の記憶 / Market Memory（資料庫・読取専用）」を progress の後・proposals の前に挿入、build_html に __MARKETMEM__ 置換追加。
+- 検証: dashboard 45874字、パネル present・placeholder 解消。表示: 棚の厚み480営業日(2024-09〜2026-08)・tail 8件・今の地合い(2026-08-06 calm)・**今に似た過去=2025-02-05→その後20日 -12.5%**（警告）・過去最悪局面表。週次バッチは publish() 経由で summary も自動更新。
+
+### ② Discovery/Validation 配線（★助言のみ・判定不変）
+- 設計判断（正直な核心）: 「暴落で下げたら即REJECT」は**しない**。ロング型バスケットは危機で当然下げる→機械的棄却は本物Edgeの誤殺。よって**advisory**（情報添付）に留め、既存Class-C硬ゲートは無改変。
+- market_memory.py: basket_series(symbols)→{date:ret}（union被覆最大）、stress_basket(symbols,k,pad)→stress_edge ラッパ 追加。
+- validation.py: market_memory を guarded import（無くても従来動作）。REGIME_FRAGILE_RATE=0.20。_regime_stress(ev): ev['basket'] があれば過去最悪5局面での生存率を計算し {survival_rate, fragile, regimes_tested, advisory_only:True} を返す。run() で evaluate 後に添付（val_blob['regime_stress'] と results と ledger に記録）、集計 n_regime_stressed/n_regime_fragile を返す。**verdict は一切変えない**。
+- 検証: 両selftest PASS。生の識別: trend_follow(SPY/QQQ/BTC) 生存2/5=0.4 / tail_hedge(GLD/TLT) 3/5=0.6 / mean_reversion(FX) 4/5=0.8（危機同期の高いリスクオン系ほど低い＝正しい）。誰も0.20を割らず誤殺ゼロ。エンドツーエンド: 注入候補→evidence がバスケット付与→validation が regime_stress{rate0.4,fragile False,advisory True} 添付。**MM無効時と tally 完全一致＝決定性ガントレット不変を証明**。
+- 実台帳は現在 candidate 段ゼロ（discovery 未実行）ゆえ live の stress 対象は0（正常）。discovery が候補を出せば自動で過去の地獄に照らされる。
+
+### 不変
+- 金ゼロ・実弾/レバ/live/adoption 非接触・9循環9/9・凍結資産/プロップ(g4_)境界 無改変・.env 非接触。既存ファイルは追加のみ（dashboard.py/validation.py は循環所有＝編集可）。
+
+---
+## 建設ログ: Market Memory 次の三点 ①regime_stress可視化 ②fragile→proposals ③IV/news/liquidity 器（会長GO「１２３を進めてくれ」 2026-08-07）
+
+### ③ 特徴量スキーマ拡張の器（血は捏造しない）
+- market_memory.py に **FEATURE_SCHEMA** 定数追加。active 6特徴（vol/corr/risk_off/trend/drawdown/vix・各データ源明記）＋ roadmap 4特徴（implied_vol/news_sentiment/liquidity/breadth・"needs"=実機に該当データ無し）＋ how_to_extend 注記。assess() に feature_sources ブロック追加。**器とロードマップだけ・存在しないIV/ニュース/流動性は入れない**（正直＝空きソケット）。summary(market_memory_summary.json)にも feature_sources を出力。
+
+### ① regime_stress 可視化（Validationパネル）
+- validation.py: **_advisory_from_run(r)** 追加（run結果→公開用サマリ regime_advisory{generated,n_regime_stressed,n_regime_fragile,fragile:[{id,verdict,survival_rate,regimes_tested,basket}],threshold,note}）。_load() ヘルパ追加。assess() に regime_advisory を carry-forward（過去のを保持）。main() で直近runの助言に上書きし publish 前に格納・print。
+- dashboard.py: VALIDATION_FILE=validation.json ロード、JS const VALIDATION 追加、**検証ガントレット・パネル**を proposals の前に挿入（by_verdict REJECT/HOLD/PROMOTE/PENDING ＋ regime advisory: n_regime_stressed・fragile pill・fragile table）。__VALIDATION__ 置換追加。
+
+### ② fragile 候補 → proposals 連携（★助言・判定不変）
+- proposals.py: VALIDATION_FILE(読取のみ)追加。**_fragile_proposals()** 追加＝validation.json regime_advisory.fragile を提案化。id=PROP-fragile-<hid> / kind=caution_regime_fragile / fills_regime=high_vol / aurel_confidence=0.4 / severity=medium / survival_rate・basket 携行。aurel_plain=「暴落で過去に持ちこたえていない→単独採用は危険・tail_hedgeと対で建てるか見送りが安全・判定は変えていない」。
+- build(): authored = gap提案 + _fragile_proposals() を同じ会長決定マージ規律で並べる（APPROVED/REJECTED永続・seen重複除外・resolved履歴保持）。**盲点(gap)ではなく昇格候補への注意喚起**。実データ無/検証未実行なら空（血を捏造しない）。
+
+### 検証
+- market_memory selftest PASS(7)・live n_days=480 added=0・feature_sources present。
+- validation selftest PASS(4)・main: by_verdict(ledger)={REJECT7,HOLD2,PROMOTE3,PENDING0} awaiting_chairman=3・regime advisory stressed=0 fragile=0（実候補ゼロ＝正直な空）。
+- proposals selftest PASS。**隔離テスト**（validation.jsonに合成fragile H-TEST-9注入→build→復元）: PROP-fragile-H-TEST-9 生成確認（kind=caution_regime_fragile status=OPEN conf=0.4 sev=medium survival_rate=0.1 basket=[SPY,QQQ,BTCUSDT]）・validation.json 一字一句復元。
+- dashboard rebuild 48171字・placeholder(__VALIDATION__/__MARKETMEM__/__PROPOSALS__)全解消・by_verdict/regime present。
+- 週次バッチ run_progress_cycle.bat 手動フルラン: market_mem 480 added=0 → frontier → scorecard → progress(deduped) → dashboard 全OK。
+
+### 不変
+- 金ゼロ・実弾/レバ/live/adoption 非接触・9循環9/9・凍結資産/プロップ(g4_)境界 無改変・.env 非接触。既存ファイルは循環所有モジュールのみ編集（proposals/validation/dashboard/market_memory）。regime_stress は終始 advisory＝deterministicガントレット不変。
