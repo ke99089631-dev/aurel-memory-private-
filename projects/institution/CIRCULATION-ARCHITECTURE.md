@@ -803,3 +803,27 @@ frontier.json（能力の壁）と scorecard.json（4軸）は毎回【上書き
 - 同日多重実行はprogress側でdedup（1日1レコード）。曲線が伸びるのは日付が変わる翌週から。
 - 停止/変更はいつでも: `schtasks /delete /tn "AURELIAN_progress_weekly" /f`（または /change）。
 - 不変: 金ゼロ・実弾/レバ/live/adoption 非接触・既存9循環/凍結資産/プロップ境界 無改変。
+
+---
+## 建設ログ: Market Memory 資料庫 v0（会長構想＋GO「実装しよう」 2026-08-07）
+
+### 会長の構想（原文の芯）
+「新しいエッジだけでなく過去チャート・dataからも見比べる。たまたまか本物かの発見精度が上がる。時が流れるにつれ蓄積していく資料庫的な存在。今ある数年分を先に入れ今から使え、今からも溜め続ける。」
+→ 難しい横文字（Fingerprint/類似検索/アーカイブ）は同じことの言い換え。会長の平場の理解が本質。AURELの意見: 長期循環の空白「Frontier→Discovery→???→Validation」の??? を埋める。**賢さの器官であって強さの器官ではない**（壁=Frontierは動かさない。Discovery精度を上げ偽陽性Edge=Class-BをA誤認を採用前に炙り出す＝⑤失敗循環強化）。会長問答で「機関全体（発見・検証・床較正・相関記憶・レジーム判定・失敗非再発）に効く共有地層」と合意。
+
+### 作ったもの: circulation/market_memory.py（新規・追加のみ・読取専用・paper・金ゼロ・単一書き手 market_memory.json）
+- **指紋（Point-in-Time厳守）**: 各営業日を {vol実現ボラ, corr相関, risk_offリスクオフ度, trendトレンド, drawdownDD, vix} のベクトルで表現。窓W=21営業日の【過去のみ】で計算＝未来を一滴も混ぜない（look-ahead/leakage排除）。パネル= RISKY[SPY,QQQ,IWM,HYG,BTCUSDT,ETHUSDT] / SAFE[TLT,IEF,GLD,DXY] / VIX。anchor=SPY営業日。
+- **append-only（過去は二度と書き換えない）**: _merge は既存日付の行を一切改変せず新規日付だけ追加＝正直な歴史（都合よく美化しない＝Class-C棄却と同じ魂）。
+- **照会API**: current_state()今の地合い / similar_regimes()今に似た過去局面k件＋その後FWD_H=20日の成果 / tail_regimes()過去最悪局面（新エッジの拷問台）/ stress_edge(rets_by_date)新エッジ候補を過去の地獄窓にぶつけ生死判定（会長の狙いの核心）。
+- 読み方は evidence._read_bar_returns と同一（bars_*.csv 日足close→日次リターン）。既存ファイル1バイトも改変せず。
+
+### 検証
+- selftest PASS(7): point-in-time不変 / tail検知 / 危機で相関・risk_off上昇（意味） / append-only既存不変 / 類似検索k件自明一致除外 / stress_edge / 書込先 market_memory.json のみ。**selftestは実ファイル非接触**（tail_regimes/stress_edgeにrows注入）。
+- live build: **n_days=480（2024-09-06〜2026-08-06）tail_events=8 added=480**。現在(2026-08-06): risk_off=-0.0005 vol=0.022 corr=0.49 drawdown=-0.053 tail=False。**今に最も似た過去=2025-02-05, その後20日=-12.5%**（過去類似が警告）。過去最悪=2026-02-05(-5.6%,corr0.63)/2025-04-10(corr0.81危機同期)。
+- 週次サイクル相乗り: run_progress_cycle.bat の先頭に market_memory を追加（market_memory→frontier→scorecard→progress→dashboard）。手動実行PASS `market_mem ok -> 480 days added= 0`（append-only正常・既存日不変）。既存タスク AURELIAN_progress_weekly でそのまま溜まり続ける。
+
+### 正直な限界
+- coverageはanchor=SPY全パネル共通の約2年（暗号は2023-11から在るがSPY基準で揃える＝正直な下限）。IV/ニュース/流動性の専用データは実機に無い→v0は器だけ・ロードマップ。
+- 類似検索のz正規化は全アーカイブ統計を使う＝照合ステップに軽い先読みが入る（指紋の値自体は厳密Point-in-Time）。診断用途では許容・将来ローリング正規化に格上げ可。
+- まだダッシュボード未搭載（次候補）。採用経路なし・会長二重ロックのみが正式採用。
+- 不変: 金ゼロ・実弾/レバ/live/adoption 非接触・9循環9/9・凍結資産/プロップ(g4_)境界 無改変・.env 非接触。

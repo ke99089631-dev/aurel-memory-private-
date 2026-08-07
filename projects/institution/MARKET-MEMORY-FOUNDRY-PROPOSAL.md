@@ -2,7 +2,7 @@
 doc_id: AURELIAN-MARKET-MEMORY-FOUNDRY-PROPOSAL-v1
 tags: [institution, reference, market-memory, strategy-foundry, future-concept, proposal]
 type: reference
-status: proposal (not adopted, not built)
+status: Market Memory v0 BUILT (2026-08-07, 会長GO「実装しよう」); Strategy Foundry = future concept (未着工・席のみ確保)
 created: 2026-08-07
 owner: AUREL（統括CEO）
 approver: 会長（KEIKI MAEDA）
@@ -55,10 +55,15 @@ source: 会長＋アドバイザーがまとめた提案資料（未確定）
 
 ---
 
-## 次の一手（会長判断待ち）
+## 実装状況（2026-08-07 更新）
 
-- AUREL提案: **12点の実機確認＋Market Memory設計レポート**を自律で作成し提出（読取・設計のみ、コードは書かない）。会長はそれを読んで着工GOを判断。
-- **着工GOはまだ無い。** Market Memory/Foundry ともに未着工。
+- **Market Memory v0 = 構築済み**（会長GO「実装しよう」）。詳細は CIRCULATION-ARCHITECTURE.md の建設ログ「Market Memory 資料庫 v0」。
+  - `circulation/market_memory.py`（読取専用・単一書き手 market_memory.json・append-only・Point-in-Time）。
+  - live: n_days=480（2024-09〜2026-08）tail_events=8。API: current_state / similar_regimes / tail_regimes / stress_edge。
+  - 週次サイクル run_progress_cycle.bat に相乗り（既存 AURELIAN_progress_weekly で溜まり続ける）。
+  - selftest PASS(7)。
+- **未実施（次候補）**: ダッシュボード搭載（現在の地合い＋類似過去局面＋過去最悪局面パネル）。IV/ニュース/流動性データの器（実機に該当データ無し→ロードマップ）。類似検索のローリング正規化格上げ。Discovery/Validation への stress_edge 配線。
+- **Strategy Foundry**: 未着工・公式Future Conceptとして席のみ確保。11節の拒絶原則は今ある器官の設計思想に反映。
 
 ## 不変条件（2026-08-07時点）
 - 9循環 9/9・採用0・live LOCKED・金ゼロ・凍結資産/プロップ非接触。
