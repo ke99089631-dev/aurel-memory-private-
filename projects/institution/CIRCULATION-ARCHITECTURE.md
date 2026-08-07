@@ -741,3 +741,26 @@ Project 50→100 = **月利**+50%/+100% region（年利ではない）。frontie
 
 **構造的真実（正直開示）**: 第1ギアは必ず飽和する。既存源は互いにリスクを共有(相関≠0)するため、配分/テールでσを削っても共有リスクの底までしか下がらない。→ **遠距離（壁を大きく外へ/Moonshot）は第2ギアの新・低相関の血が構造的に必須**。実測(2026-08-07)が裏付け: 壁20%/yr(drawdown律速)は既存組み替えでは動かず、低相関の新Edge3本で初めて20→30%へ動いた。
 - 対応: frontier は「効率帯=第1ギアの現在地」「壁=第2ギアの到達点」を測り分けている。近距離調整は発見不要、遠距離は発見必須。
+
+---
+## 建設ログ: 長期進捗トラッキング progress.py（建設候補#2・会長GO「GOだ」 2026-08-07）
+
+### 背景
+frontier.json（能力の壁）と scorecard.json（4軸）は毎回【上書き】で軌跡が残らない＝「自己進化が動いたか／停滞したか」を証明できない。Project50/100は長期Moonshot＝進捗は"点"でなく"曲線"。その曲線を残す器が欠けていた。
+
+### 作ったもの（新規 circulation/progress.py・測定/日記専用・金ゼロ）
+- frontier.json + scorecard.json を【読むだけ】。再計算しない。append-only `progress.json`（単一書き手）へ日次スナップショットを積む。
+- スナップショット: data_source/low_conf, base(n_edges/edges顔ぶれ/μ/σ/sharpe/hhi/平均相関corr_used), annual(wall=第2ギア/efficient=第1ギア/binding), monthly(μ/σ/wall/Project50・100 class), axes(growth/survival/evolution/diversification), governance(gate_pass/posture)。
+- 推移(_trend): 発足来のΔ(wall/efficient/n_edges/平均相関/月次μ/evolution)、**ギア判定**（wall↑=second_gear／efficient↑&wall不変=first_gear／後退=regression／不変=no_movement）、**Class遷移**(C→B→A追跡)、**停滞検知**(wallがSTALL_K=4本連続横ばい&律速残存→第1ギア飽和・新Source型が必要)。
+- 冪等: 1日1レコード（同日重複は畳む、--forceで置換）。_KEEP=500上限。
+- 起動: `python -m circulation.progress`（単体）。frontier/scorecard は再改変せず（両者の published surface を読むのみ）。定期自動運用は別途 /schedule で会長判断（未実施）。
+
+### 検証
+- selftest PASS（ギア判定/停滞検知/同日dedup/Class遷移/書込先progress.jsonのみ・7チェック）。
+- live記録: baseline [2026-08-07] appended = wall20%/yr, efficient10%/yr(drawdown_bound), 月次μ1.264%/mo, Project50/100=C, edges11, sharpe2.39, 平均相関0.092。2回目実行=deduped_same_day（冪等確認）。
+- 不変条件: 書込は progress.json のみ。capital/leverage/live/adoption 非接触。frontier/scorecard 無改変。9/9ループ・adoption=0・金ゼロ 不変。
+- **正直な限界**: 実bars静的＋adoption=0のため当面この曲線は横ばい。横ばい=「まだ自己進化していない」を偽らず映す設計上の誠実さ。市場データ蓄積 or 検証済みEdジの会長採用で初めて動く＝長期戦の計器。
+
+### 残り建設候補
+- #3 Market Memory（会長「またはなす」=保留・未着手）。
+- 付随候補（未GO）: progressの定期測定運用（/schedule 週1）／ダッシュボードへの4軸・壁・曲線パネル。
