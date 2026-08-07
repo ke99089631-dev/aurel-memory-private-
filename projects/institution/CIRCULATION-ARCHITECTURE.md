@@ -869,3 +869,36 @@ frontier.json（能力の壁）と scorecard.json（4軸）は毎回【上書き
 
 ### 不変
 - 金ゼロ・実弾/レバ/live/adoption 非接触・9循環9/9・凍結資産/プロップ(g4_)境界 無改変・.env 非接触。既存ファイルは循環所有モジュールのみ編集（proposals/validation/dashboard/market_memory）。regime_stress は終始 advisory＝deterministicガントレット不変。
+
+---
+## 建設ログ: 素振り→本物 第1兵 mean_reversion を実相場データに配線（会長GO「GOだ」 2026-08-07）
+
+### 会長の号令（機関全体の方針転換）
+- 「素振りをやめて本物に動かそう。それもやりつつ未知のエッジのdiscoveryもやればよい。機関全体の話をしている。」
+- 重要な設計訂正: 機関の中央は「未知Edge発見(discovery)」ではない。背骨は三層＝①生存(絶対)②既知Edgeで複利を回す(中央・本業)③未知Edge発見(進化・第2ギア)。AURELが直近説明でdiscoveryを中央に誤配置していた→会長が「なんかおかしい」と正しく検知→訂正。
+
+### 素振りの正体（実機確認）
+- 9兵は毎日帳簿を進めるが `_synthetic_practice: true`。損益は `sha256(sym|date)` から生成した偽値＝相場を一切見ていない練習血液。各兵が自前の `_one_day_pnl/_rand01` を持つ（相互import無し＝1体ずつ本物化可能）。
+
+### mean_reversion 本物化（pilot・1体で見せてから横展開の方針）
+- 撤去: `_rand01/_one_day_pnl/_STEAM_BASE/hashlib`（合成血液を削除＝素振り終了）。
+- 追加: `_bar_closes`(bars_*.csv 実日足close読取専用・遅延キャッシュ) / `_real_price_series`(器→実価格。FXクロスは実メジャーから実算出) / `_real_trades`(Point-in-Time戻り取り) / `_common_window` / `rebuild_from_bars`(丸ごと実導出)。`step()` は合成1日追記を撤去し実bars再導出に置換（決定的・冪等）。
+- 実データ写像 `_CROSS`: EURCHF=EURUSD×USDCHF / EURGBP=EURUSD÷GBPUSD / AUDCAD=AUDUSD×USDCAD / USDJPY=直物 / NAS100=QQQ(実ETF代理)。値は全て実在の相場（捏造でなく実メジャーの実合成）。
+- 戦法(Point-in-Time): 遡及W=20営業日の平均/標準偏差に対する前日終値のz。z≤-2.0=売られ過ぎ→買い / z≥+2.0=買われ過ぎ→売り / 当日実リターンで確定。**判定は前日までの実値のみ（先読み無し）。** 行き過ぎ日のみ建玉＝実取引台帳。
+
+### 発見した落とし穴と正直な処置
+- bars のヒストリ長が銘柄でバラバラ（EURUSD 518日≈2yr / AUDUSD 5222日≈20yr / USDJPY 7680 / QQQ 6857）。放置すると AUDCAD が2006年の玉、EURCHF が2024年の玉を1つのtotal_pnlに混ぜる＝時代ズレの不正合算。
+- 処置: `_common_window`＝保有器が全て存在する共通暦窓に揃えて合算（時代を揃える）。結果: 共通窓 2024-08-06〜2026-06-11・各器 65/67/70玉の整合ポートフォリオ。
+- z分布は std≈1.5・|z|≥2が約15%（正規の~5%より厚い）＝実相場のファットテールthat's honest。合成でない証拠。
+
+### 検証
+- selftest 更新 PASS: ノブ選別 / 免疫=尻尾カバー(勝率でない) / ★本物データ(real_flag・実玉>0) / 決定的(2度導出一致) / **Point-in-Time(末尾バー削除で過去の玉不変＝未来を見ていない)**。
+- live 実書込: mean_reversion_book.json → `_synthetic_practice:false _real_data:true` window 2024-08〜2026-06。3クロス全て NORMAL・正のsum・健全tail_cover(EURCHF11.6/EURGBP10.0/AUDCAD3.6) total_pnl=0.1247。step() 冪等(changed=False on rerun)。
+
+### 正直な限界・次
+- これは1兵の実データ紙バックテストが「呼吸した」段階。**まだ検証ガントレット(OOS/コスト/反証)未通過・未採用・金ゼロ。** 良く見える数字も採用の意味を持たない。
+- 横展開待ち: trend_follow/stat_arb/vol_sell/tail_hedge/carry/macro_causal/event_driven の7兵はまだ素振り。ロールアウト中は集計が「実MR＋合成7兵」の混在＝過渡状態（会長へ明示）。
+- USDJPY.mr/NAS100.mr はノブで除外中（typical_z_reach<2.0）。将来ノブ調整で実データ検証可能。
+
+### 不変
+- 金ゼロ・実弾/レバ/live/adoption 非接触・9循環9/9・凍結資産/プロップ(g4_)境界 無改変・.env 非接触。bars は読取専用。編集は循環所有 mean_reversion.py のみ。
