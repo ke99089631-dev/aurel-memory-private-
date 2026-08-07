@@ -64,7 +64,8 @@ source: 会長＋アドバイザーがまとめた提案資料（未確定）
   - selftest PASS(7)。
 - **ダッシュボード搭載 = 済**（2026-08-07・会長GO「1から2だ」）。market_memory_summary.json → dashboard パネル「市場の記憶」。
 - **Validation 配線 = 済**（2026-08-07）。validation.run() が候補バスケットを過去最悪局面にぶつけ regime_stress を添付。★advisory のみ・判定不変（誤殺回避）。
-- **未実施（次候補）**: IV/ニュース/流動性データの器（実機に該当データ無し→ロードマップ）。類似検索のローリング正規化格上げ。regime_stress のダッシュボード可視化。fragile 候補の proposals 連携。
+- **次の三点 = 済**（2026-08-07・会長GO「１２３を進めてくれ」）。①regime_stress 可視化（dashboard 検証ガントレット・パネル：by_verdict＋regime advisory＋fragile table）②fragile 候補→proposals 連携（PROP-fragile-<hid> kind=caution_regime_fragile・会長決定マージ規律・実候補ゼロなら空＝血捏造せず）③IV/news/liquidity 器（FEATURE_SCHEMA：active6＋roadmap4"needs=実機データ無"・空きソケットのみ）。全selftest PASS・隔離テストで fragile 提案生成確認・週次バッチ フルラン OK。
+- **未実施（次候補・GATED）**: IV/ニュース/流動性の実データ取得（データ源相談要）。類似検索のローリング正規化格上げ。
 - **Strategy Foundry**: 未着工・公式Future Conceptとして席のみ確保。11節の拒絶原則は今ある器官の設計思想に反映。
 
 ## 不変条件（2026-08-07時点）
