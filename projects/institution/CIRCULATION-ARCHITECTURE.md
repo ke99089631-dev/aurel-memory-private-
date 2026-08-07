@@ -902,3 +902,43 @@ frontier.json（能力の壁）と scorecard.json（4軸）は毎回【上書き
 
 ### 不変
 - 金ゼロ・実弾/レバ/live/adoption 非接触・9循環9/9・凍結資産/プロップ(g4_)境界 無改変・.env 非接触。bars は読取専用。編集は循環所有 mean_reversion.py のみ。
+
+---
+
+## 建設ログ: 素振り→本物 横展開 残7兵を実相場データに配線（会長GO「横展開だ」 2026-08-07）
+
+会長「横展開だ」を受け、pilot(mean_reversion)に続き残7兵を実バーへ配線。方針は**コピペ禁止＝各兵の経済的意味に忠実**、かつ**データの有無で正直に3階層**に分ける。
+
+### 共通の作り（各兵で踏襲）
+- 実バー読取 `_bar_closes(sym)`（読取専用・キャッシュ）→ 系列ビルダー →`_real_trades(...start,end)`→`_common_window(held)`（各建玉を `[max(firsts),min(lasts)]` に整列＝時代混在を防ぐ正直さ）→`rebuild_from_bars(save=True)`（決定的・冪等）→`step()`は窓末更新時のみrebuild。
+- **Point-in-Time厳守（先読み無し）**: 信号は t-1 までの trailing window のみ、損益は t-1→t のリターンで実現。全兵で「最後のバーをtrim→過去trade不変」を検証。
+- `_load_book` は `_synthetic_practice:false`。`assess` は `_real_data/_data_source/_window` を明示。撤去: 各兵の `_rand01/_one_day_pnl/hashlib`（合成血液を削除）。
+
+### 3階層（データが語る正直な限界）
+**A. 完全実データ**（バー/レートが在る）
+- **stat_arb** 5ペアの log-spread を実バーでフェード（z_entry=1.5,W=20）。窓 2024-08-06→2026-06-12・172/156/129 trades・total_pnl=0.265・全NORMAL・PIT検証。
+- **macro_causal** 5リード×フォロー(OIL→XLE等)を実バーで先導→追随(lookback=5)。窓 2024-08-07→2026-06-12・464/457/457 trades・total_pnl=0.104・PIT検証。
+
+**B. 部分実データ**（データが限界を露呈）
+- **carry** AUDJPY/NZDJPY のみ実スポット化(AUDUSD×USDJPY 合成クロス)＋2024-01時点の静的キャリー日次加算（ラベル明示）。rates_*.csv は**月次かつ2024-01で途切れ**＝バー窓と重ならないため。窓を直近~2yr(520日)にクランプし静的レートを期間相応に。**MXN/ZAR/BTCは機体にデータ無し→gate（張らない）**。総 total_pnl=0.277(520/520)・both NORMAL。carryは元々 main/selftest 欠落→新設。
+
+**C. プロキシのみ**（オプション/IVデータが機体に無い→実原資産で近似・ラベル必須）
+- **vol_sell** ショートvol theta をSPY/EURUSD/QQQ/GLD/BTC の実現ボラ(20日σ)＋ウィング(1.5σ)で近似。バンド内=クレジット/外=定損上限までの損。定損フロア保持。442/457/463 trades・total_pnl=0.217。`_real_data="proxy"`。
+- **tail_hedge** 長コンベクシティを SPY/VIX/HYG/IWM の実現で近似(2σトリガ・payoff_cap4.0)。各建玉の宣言 `crisis_payoff_bps` に payoff を係留（当初 lever=4.0 で VIX に掛け total_pnl 10.59 の暴走→撤去し 1.38 に是正）。プレミアム上限＋PIT検証。`_real_data="proxy"`。
+
+**D. データ・ゲート（捏造しない＝素振り撤収）**
+- **event_driven** 実イベントカレンダー/ニュース/開示フィードが機体に**存在しない**。本物化できるデータが無いので**合成の練習血液を撤収**：`_rand01/_one_day_pnl/hashlib` 削除、`step()`は**P&Lを一切生成しない休眠**（`_purge_synthetic` で過去の合成血も一掃、total_pnl=0）。機構(選別ノブ・サプライズカバー免疫・帳簿)は生存、`event_read` は proximity=None/posture="gated"。助言ウェイトも空。=「無いデータを在るふりにしない」正直な休眠。実接続は会長GO・データ整備後(A項)。
+
+### trend_follow（前回session済み・記録補完）
+- モメンタム符号で実バー追随。実データ化・PIT検証済み・selftest PASS。
+
+### 検証（8兵一括 selftest = 全PASS 2026-08-07）
+mean_reversion / trend_follow / stat_arb / macro_causal / carry / vol_sell / tail_hedge / event_driven → **8/8 PASS**。全兵 PIT(先読み無し)検証込み。
+
+### 正直な限界・次
+- **7兵とも「実データ紙バックテストが呼吸した」段階に過ぎない。検証ガントレット(OOS/コスト/反証)未通過・未採用・金ゼロ・adoption=0。** 良い数字も採用の意味を持たない。
+- 集計の混在は解消: 素振り(sha256偽血)は機関から**全廃**。残るのは実データ(A/B/C)＋正直な休眠(D)のみ。プロキシ2兵(vol_sell/tail_hedge)と部分実データ(carry)は**ラベルで区別**して集計を読むこと。
+- 次: mandate後半「未知Edgeのdiscovery並走」(2ギア)。ただし discovery は中央ではない＝既知Edgeで複利(第1ギア)が本業。
+
+### 不変（再掲）
+- 金ゼロ・実弾/レバ/live/adoption 非接触・9循環9/9・凍結資産/プロップ(g4_)境界 無改変・.env 非接触。bars/rates は読取専用。編集は循環所有モジュールのみ(stat_arb/macro_causal/carry/vol_sell/tail_hedge/event_driven/mean_reversion/trend_follow)。
