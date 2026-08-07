@@ -1007,3 +1007,31 @@ mean_reversion / trend_follow / stat_arb / macro_causal / carry / vol_sell / tai
 - 会長GOの核心は達成: **発見器の“仮免昇格”を実データで裁く回路が繋がり、実際に2件を棄却した。** ガントレットが初めて実データで機能した。
 - これは「未知Edgeが見つかった」ではなく「**未知Edge候補を実データで正しく殺せるようになった**」段階＝棄却優先の設計思想どおり。残る昇格候補は1件のみ（会長承認待ち・event_driven依存で今は証拠なし）。
 - 不変: 金ゼロ・adoption=0・実弾/レバ/live非接触・9/9循環・凍結資産/プロップ(g4_)/.env 非接触・bars/rates読取専用。編集は循環所有(evidence.py/validation.py)のみ。
+
+---
+
+## 建設ログ: 表示ラベル真実化（A）＋無人放置の堅牢化（B） 2026-08-07
+会長号令「AとBをたのむ」。素振り→本物 転換後に**嘘になっていた表示ラベル**を実態へ揃え（A）、無人放置に耐えるよう**書込の例外保護**とHealthMonitor検証を実施（B）。すべて循環所有モジュール内・測定/表示のみ・コード挙動の実質は不変。
+
+### A: 死語となった「synthetic/未接続」ラベルの真実化（表示のみ・挙動不変）
+- **evidence.py** 冒頭docstring: 「book は現状 _synthetic_practice=True」→ 素振り撤収済み（各兵士False）。血の質を階層別に正直記述（real/partial/proxy/休眠gated）＋Level-D は _leadlag で関係自身の実バーP&Lを優先注入、と明記。
+- **evidence.py** 出力ラベル4箇所: `synthetic_book(fallback)` / `paper_synthetic_book_fallback` → `leadlag+market_daily_ohlc(primary)+paper_book(fallback)` に統一。publish_signal に `n_leadlag` も追加。
+  - ※ 動的判定(`_synthetic_practice` フラグ読取・`paper_synthetic_book` の条件分岐)は実フラグを反映する正しいコードゆえ非改変。
+- **auto_writeback.py** 注釈＋ログ文字列: 「book は _synthetic_practice=True ゆえ…」「src=…+synthetic_book(fallback)」→ 実paper P&L／`src=leadlag(Level-D)+market_daily_ohlc(primary)+paper_book(fallback)` に。
+- **validation.py** HOLD detail: 「Stage 1は実データ未接続ゆえ保留」→「実証拠は接続済みだが実バーが不足ゆえ保留（貯まれば再判定）」。
+- **frontier.py** fallbackラベル: `paper_synthetic_book` → `paper_book`、note の `synthetic_book(fallback)` → `paper_book(fallback, real paper P&L)`。
+- **discovery.py** `_DATA_GATED` 注釈: 「外部データ未接続」は候補【生成】側のゲート（news/IV/流動性/breadth未接続）であり、証拠【評価】側(evidence→validation)は接続済み・別軸、と誤読防止の明記。
+- 検証: evidence / validation / frontier / discovery **selftest 4本すべて PASS**（回帰なし）。
+
+### B: 無人放置の堅牢化
+- **auto_writeback._log**: Windowsのファイルロック(PermissionError/OSError)で**日次サイクル本体を落とさない**よう、最大4回・微バックオフ(0.2/0.4/0.6s)でリトライ→全滅時は stderr へ退避し例外を投げない（監査ログは落ちても生命維持=1周閉じを優先）。07:00 の PermissionError 事象への恒久対策。
+- **auto_writeback._save_state**: 原子的書込(tmp→os.replace)＋同じ微リトライ。全滅時は警告ログのみ残し False を返す（クールダウン状態が保存できなくてもクラッシュしない）。
+- **HealthMonitor 検証結果**:
+  - タスクは State=Ready、約5分毎に実行、LastResult=0＝健全。過去に mother daemon を**実際に2回自己蘇生**（health-monitor.log, 2026-06-25）。daemon は現在 `{"ok":true}` で生存。**自己治癒は機能している。**
+  - ⚠ **警告（未閉のアラート経路）**: 蘇生時に `state/last-death.json`（reported:false）を書くが、**それを読んで会長(Master)へ通知する消費側が存在しない**（grep で参照は writer=health-monitor.ps1 のみ）。Jun-25 の死亡イベントが reported:false のまま放置＝**「daemonが死んで蘇生した」事実が会長に届かない**。自己治癒はするが“無言”。
+  - この消費側の実装は daemon/surfacing 領域（循環所有外・aurel_life UI規約あり）ゆえ、本建設(A/B=循環所有内)には含めず。**別GO案件**として保留。
+
+### 正直な総括
+- A は「機械の挙動を変えた」のではなく「**表示の嘘を消した**」＝転換後に実態と食い違っていた語（synthetic/未接続）を実データ実態へ真実化。selftest 全緑で回帰なし。
+- B は無人放置の“転倒しにくさ”を上げた（ログ/状態書込がロックで落ちない）。HealthMonitor は自己治癒◎だが**会長への無言問題**が残存＝正直に警告として記録。放置度は上がったが「死んでも黙って直る」段階で、「死んだら会長に知らせる」は未閉。
+- 不変: 金ゼロ・adoption=0・実弾/レバ/live非接触・9/9循環・凍結資産/プロップ(g4_)/.env 非接触・bars/rates読取専用。編集は循環所有(evidence/auto_writeback/validation/frontier/discovery)のみ。
