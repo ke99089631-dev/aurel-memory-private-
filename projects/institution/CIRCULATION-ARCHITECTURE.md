@@ -763,4 +763,43 @@ frontier.json（能力の壁）と scorecard.json（4軸）は毎回【上書き
 
 ### 残り建設候補
 - #3 Market Memory（会長「またはなす」=保留・未着手）。
-- 付随候補（未GO）: progressの定期測定運用（/schedule 週1）／ダッシュボードへの4軸・壁・曲線パネル。
+
+---
+## 建設ログ: ダッシュボードに能力パネル3枚を追加（会長GO 2026-08-07）
+
+### 背景
+会長「乗ってないなら長期進捗はどこで確認する？」＝計器を作ったのに会長向けの窓が無い穴。dashboard.py は frontier/scorecard/progress を読んでおらず、能力の壁・4軸・進捗曲線が盤面から見えなかった。会長GO「能力パネルと長期進捗をダッシュボードに乗せよう」。
+
+### 変更（dashboard.py のみ・追加のみ・読取専用・金ゼロ・既存11パネル無改変）
+- FRONTIER_FILE/SCORECARD_FILE/PROGRESS_FILE 定数追加。build_html で3本を _load し __FRONTIER__/__SCORECARD__/__PROGRESS__ に注入。
+- パネル3枚を「自己進化の中心＝利益源泉」直後に挿入:
+  1. **能力の壁/Frontier**: 血の源・年率wall・効率帯(第1ギア)・律速binding・土台(edges/sharpe/相関/hhi) ＋ 月次μ・月次wall・Project50/100 class（A=緑/B=黄/C=赤）。「月利region・別軸Moonshot」明記。
+  2. **North Star 4軸/Scorecard**: SURVIVAL(硬ゲートPASS/BINDING)・GROWTH・EVOLUTION・DIVERSIFICATION・姿勢(expand/defend)。
+  3. **長期進捗トラッキング**: 期間・Δ壁(第2ギア)・Δ効率帯(第1ギア)・Δedges/Δ相関・Δ月次μ・ギア判定pill・Project50遷移・停滞フラグ。記録<2件は「baseline set」表示。
+
+### 検証（dashboard.html 再生成・実データ焼込確認）
+- 3パネルのラベル全て存在・プレースホルダ全て置換済み・42,358字。
+- 焼込値: Frontier wall=20%/yr eff=10 p50/p100=C 月次μ1.264 ／ Scorecard survival=15.3 growth=0 evo=100 div=100 gate=False posture=defend ／ Progress records=1 baseline=2026-08-07。
+- ※scorecard gate=False/defend は既存scorecardの正直な読み（紙履歴薄→SURVIVALゲート未達→守勢）。本改修が触ったのは表示のみ。
+- 不変: dashboard.html 生成のみ。実弾/秘匿/本番設定 非接触。aurel_life.html 等の既存UIは無改変。金ゼロ。9/9ループ不変。
+
+---
+## 建設ログ: progress 定期測定運用（Windowsタスクスケジューラ・会長GO 2026-08-07）
+
+### 判断
+会長「progressの定期測定運用を組もう」。**/schedule（リモート・クラウド）は不可**＝progressは会長ローカルのbars/循環JSONを読むため、クラウドのエージェントからファイルが見えない。正しい実装は**ローカルのWindowsタスクスケジューラ**。頻度確認の質問は会長がdismiss→推奨デフォルト（毎週 月曜 朝9時）で着工。
+
+### 作ったもの（新規2点・追加のみ・測定/日記専用・金ゼロ）
+- **circulation/run_progress_cycle.bat**: venv python で `frontier→scorecard→progress→dashboard` を4連実行。各段は build+publish を -c で直呼び（main()のJapanese print回避のため）。書込は各json/htmlのみで、書込は各print前に完了。ログ= data/circulation/progress_cron.log。PYTHONIOENCODING=utf-8。
+- **タスク登録**: `schtasks /create /tn "AURELIAN_progress_weekly" /tr "...run_progress_cycle.bat" /sc WEEKLY /d MON /st 09:00 /f`。カレントユーザ・ログオン時実行（パスワード保存なし・管理者不要）。
+
+### 検証
+- 手動1回実行 PASS: frontier ok / scorecard ok / progress ok(deduped_same_day, records=1) / dashboard ok。ログ確認済み。
+- タスク登録 SUCCESS。`schtasks /query`: **Next Run 2026/08/10(月) 9:00, Status Ready**。
+
+### 正直な限界・運用メモ
+- タスクは**マシン起動＋ユーザログオン中**のみ走る（家庭機がOFFだとその週はスキップ）。
+- 実bars静的＋adoption=0の間は**毎回同値スナップショット**＝進捗曲線は横ばい同点列。意味を持つのは市場データ更新 or 会長採用の時から。それでも「変化の瞬間を正しい時間軸で自動捕捉する土台」を先置きする価値。
+- 同日多重実行はprogress側でdedup（1日1レコード）。曲線が伸びるのは日付が変わる翌週から。
+- 停止/変更はいつでも: `schtasks /delete /tn "AURELIAN_progress_weekly" /f`（または /change）。
+- 不変: 金ゼロ・実弾/レバ/live/adoption 非接触・既存9循環/凍結資産/プロップ境界 無改変。
