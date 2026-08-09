@@ -1035,3 +1035,31 @@ mean_reversion / trend_follow / stat_arb / macro_causal / carry / vol_sell / tai
 - A は「機械の挙動を変えた」のではなく「**表示の嘘を消した**」＝転換後に実態と食い違っていた語（synthetic/未接続）を実データ実態へ真実化。selftest 全緑で回帰なし。
 - B は無人放置の“転倒しにくさ”を上げた（ログ/状態書込がロックで落ちない）。HealthMonitor は自己治癒◎だが**会長への無言問題**が残存＝正直に警告として記録。放置度は上がったが「死んでも黙って直る」段階で、「死んだら会長に知らせる」は未閉。
 - 不変: 金ゼロ・adoption=0・実弾/レバ/live非接触・9/9循環・凍結資産/プロップ(g4_)/.env 非接触・bars/rates読取専用。編集は循環所有(evidence/auto_writeback/validation/frontier/discovery)のみ。
+
+---
+
+## 2026-08-10 — ①S1点火（実戦ペーパー起動）＝会長GO「1からいこう」
+
+**症状（会長の実感）**: 「各利益源泉の数字が動かない／ただの研究室になる」。
+**診断（一次ソース）**: 8兵士の book が **2026-06-11/12 で凍結**。step() は毎日回っていた（コード正常）が、
+`rebuild_from_bars` が伸びるバーを見つけられず changed=False → 曲線が前進しなかった。
+**真因（データ供給）**: 日次 `run_trading_cycle.bat` は `fetch_prices.py`(主要9)＋`fetch_crypto_daily/hourly` しか
+呼んでおらず、**`fetch_universe.py`(広域24戦場)・`fetch_etf_universe.py`(EWx/XLx) が一度もスケジュールされていなかった**。
+兵士が bind する USDCHF/AUDUSD/USDCAD/USDJPY/NZDUSD/金属/エネ等は fetch_universe 専属 → 6/12の手動シード以降フリーズ。
+common-window は「最も早く終わる建玉」で決まるため、凍結建玉1本が窓全体を6/11に固定していた。
+
+**建設（会長GO内で実施・非循環1ファイル）**:
+- `scripts/run_trading_cycle.bat` step1b の直後に **1b2** を追加：`fetch_universe.py`＋`fetch_etf_universe.py`。
+  read-only・金ゼロ・失敗時は旧CSV温存（fetch_one は空/例外なら書込前にreturn）。可逆（2行削除で戻る）。
+- 即時点火：`fetch_universe.py`(27/27・171,311本)＋`fetch_etf_universe.py`(23/23・151,846本)を今すぐ実行→全戦場 2026-08-07/09 へ。
+- `python -m circulation.auto_writeback --force` で8兵士を強制step。
+
+**検証（一次ソース・before→after）**:
+- 全 book last_step が **Jun11/12 → Aug06/07**（event_driven=Aug10）へ前進。common-window end=2026-08-07。
+- 累積P&L（紙・無単位・金ゼロ）: mean_reversion +2.18 / trend_follow +1.79 / macro_causal +1.59 / stat_arb +0.90（real=True 4兵）、
+  carry +0.41(partial) / vol_sell +2.66・tail_hedge +17.20(proxy) / event_driven 0(休眠)。
+- 以後、毎日06:30 バー前進 → 07:00 step → **各源泉の曲線が1日ずつ動く**（＝会長の要望「数字が動く」を満たす）。
+
+**意味づけ**: これは「兵を強くした」のではなく「**止まっていた血流を通した**」。S0 Lab から **S1 実戦ペーパー**へ点火。
+昇格ゲートは v1 モノリシック120営業日 → **v2 源泉ごとラダー(S0→S1→S2→S3)** へ改訂（[[LIVE-GATE-CRITERIA]] v2）。
+**不変**: 金ゼロ・adoption=0・実弾/レバ/live非接触・出金なし・9/9循環・凍結資産/プロップ(g4_)/.env 非接触・bars読取専用。
