@@ -54,9 +54,12 @@ S3 増量          実弾で生存×優位が実証された源泉のみ増量�
 ## 現在地（2026-08-10 時点）
 - **S1点火 済み**（2026-08-10）。データ凍結（6/12〜）を解消し、8兵士が Jun11/12 → **Aug06/07** へ前進。
   以後、毎日バーが伸び各源泉の曲線が動く。
-- S1→S2 に最も近い候補: **real=True の4兵士**（macro_causal / mean_reversion / stat_arb / trend_follow）。
+- S1→S2 に最も近い候補: **real=True の5兵士**（macro_causal / mean_reversion / stat_arb / trend_follow / **carry**）。
   ただし S1前進日数はまだ0（本日点火）。30営業日フロアはこれから積む。
-- 格上げ待ち: carry(partial) / vol_sell・tail_hedge(proxy) / event_driven(休眠) → real化が S2 の前提。
+- **②血の格上げ 第1弾 済み(2026-08-10)**: carry partial→**real**。キャリー取り分を静的定数(OECD2024-01打切り)から
+  **IMF政策金利の時変・先読み無し差**へ。real=True 兵士 4→5。（[[CIRCULATION-ARCHITECTURE]] 2026-08-10 ②参照）
+- 格上げ待ち（正直な難度）: vol_sell・tail_hedge(proxy＝option/IV源が要る／VIXで指数レッグのみ半格上げ可) /
+  event_driven(休眠＝イベントfeedが機体に無い) → real化が S2 の前提。取れない器は proxy/dormant のまま S2非対象で正直に留め置く。
 - 結論: **今日から数字は毎日動く。S2（極小実弾）の袖はフロア充足後に会長GOで検討。**
 
 ## 変更履歴

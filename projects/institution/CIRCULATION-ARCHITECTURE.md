@@ -1063,3 +1063,38 @@ common-window は「最も早く終わる建玉」で決まるため、凍結建
 **意味づけ**: これは「兵を強くした」のではなく「**止まっていた血流を通した**」。S0 Lab から **S1 実戦ペーパー**へ点火。
 昇格ゲートは v1 モノリシック120営業日 → **v2 源泉ごとラダー(S0→S1→S2→S3)** へ改訂（[[LIVE-GATE-CRITERIA]] v2）。
 **不変**: 金ゼロ・adoption=0・実弾/レバ/live非接触・出金なし・9/9循環・凍結資産/プロップ(g4_)/.env 非接触・bars読取専用。
+
+---
+
+## 2026-08-10 — ②血の格上げ 第1弾: carry partial→real（会長GO「着工しよう」）
+
+**狙い**: S2(極小実弾)の前提＝血の質。proxy/partial/休眠 を real=True へ。まず一番熟れた果実 carry から。
+
+**carry の元の傷**: スポットは実バーから本物(real)だったが、キャリー取り分(金利差)が
+**OECD MEI 3ヶ月物の最終既知＝2024-01 の"静的定数"**だった。捏造ではないが「止まった血」。
+真因調査で判明: **OECD IR3TIB01 系列は 2024-01 で打切り(discontinued)**。定数は怠慢でなく源が死んでいた。
+
+**正直な代替源の発見**: **IMF IFS 政策金利 `M.{国}.FPOLM_PA`(月次)** が DBnomics 経由・APIキー不要で
+**2025-07 まで生きている**。US/JP/AU/NZ/CA/CH をカバーし、**JPYの利上げ(2023≈-0.1% → 2025=0.5%)も反映**。
+＝carry が実際に建てる AUDJPY/NZDJPY(高金利ロング vs JPY) の"生きた金利差"が取れる。
+
+**建設（新規1・循環1・非循環バッチ1／全て read-only・金ゼロ・可逆）**:
+- 新規 `research/fetch_policy_rates.py`: IMF IFS 政策金利6通貨 → `data/policy_rates_{CCY}.csv`(既存 rates_*.csv 非破壊)。
+- `circulation/carry.py`(循環所有): `_POLICY_LEGS`＋`_policy_series`/`_rate_on`(月次forward-fill・先読み無し)を追加。
+  `_real_trades` のキャリー取り分を **静的定数 → 時変・PIT政策金利差÷252** へ。ファイル欠損時のみ静的フォールバック。
+  `_real_data` は held全器が時変で取れれば **True**、欠損時 partial。carry_source を器ごとに正直表示。
+- `scripts/run_trading_cycle.bat` に `fetch_policy_rates.py` を追加(日次・月次データゆえ安価)。
+
+**検証（一次ソース）**:
+- `carry --selftest` = **PASS**（held選別/尻尾カバー免疫/実データ/**先読み無し**/**血の格上げ(JPY利上げをPITで拾う)**/real=True全緑）。
+- carry_book.json: `_real_data=True`・last_step=2026-08-09・carry_note=time-varying IMF policy-rate diff(PIT)。
+- 正直な副作用: total_pnl 0.408 → **0.398**（JPY利上げで AUD/NZD−JPY 金利差が実際に縮んだ分だけ減）。凍結定数の嘘が消えた。
+- `auto_writeback --force` rc=0・回帰なし。
+
+**成果**: **real=True 兵士 4→5**（macro_causal / mean_reversion / stat_arb / trend_follow ＋ **carry**）。
+**残り血の格上げ**（正直な難度）:
+- vol_sell / tail_hedge (proxy): 真の option/IV データは機体に無い。**VIX(実IV)で株指数レッグのみ半格上げ**は可能、FXレッグは proxy 残。全real化は options 源が要る。
+- event_driven (休眠): 決算/M&A/指数入替の**イベント・カレンダー feed が機体に無い**。feed調達＝別プロジェクト。捏造はしない。
+- 方針: 取れる血だけ正直に上げ、取れない器は proxy/dormant のまま**S2非対象**として正直に留め置く。
+
+**不変**: 金ゼロ・adoption=0・実弾/レバ/live非接触・出金なし・9/9循環・凍結資産/プロップ(g4_)/.env 非接触・bars/rates読取専用。
