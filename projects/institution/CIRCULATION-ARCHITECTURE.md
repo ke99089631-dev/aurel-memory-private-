@@ -1098,3 +1098,43 @@ common-window は「最も早く終わる建玉」で決まるため、凍結建
 - 方針: 取れる血だけ正直に上げ、取れない器は proxy/dormant のまま**S2非対象**として正直に留め置く。
 
 **不変**: 金ゼロ・adoption=0・実弾/レバ/live非接触・出金なし・9/9循環・凍結資産/プロップ(g4_)/.env 非接触・bars/rates読取専用。
+
+---
+
+## 2026-08-10 — ②血の格上げ #1 VIX半格上げ ＋ #2 event_driven feed調査（会長「１．２をやって一旦区切ろう」）
+
+### #1 VIX半格上げ（vol_sell / tail_hedge: proxy → **partial**）着工済み
+- **思想**: short-vol の優位＝implied vol − realized vol。VIX は株指数の**実 implied vol**。
+  従来 wing/threshold を realized_vol（proxy）で近似していた株指数レッグを、**VIX(実IV)で価格付け**。
+  = 正直な格上げ かつ モデルとして忠実（捏造ゼロ）。
+- **vol_sell.py**: `_IV_SOURCE={IDX_PUTSPREAD.vs:VIX, IDX_CALLSPREAD.vs:VIX}`、`_vix_map()`（bars_VIX.csv キャッシュ）、
+  `_iv_daily_sigma_on = VIX/100/sqrt(252)`。`band = wing_k*sigma`（sigma=VIX日次IV、無ければ realized sd に fallback）。
+  book positions に `wing_source`。`_real_data = "partial" if has_real_iv else "proxy"`。selftest test(7) PASS。
+  held = IDX_PUTSPREAD.vs / FX_IRONCONDOR.vs(proxy) / IDX_CALLSPREAD.vs。最新日次IVσ≈0.00939。
+- **tail_hedge.py**: `_IV_SOURCE={IDX_TAILPUT.th:VIX}`、同 `_vix_map/_iv_daily_sigma_on`。
+  `thr = k*sigma`、`over_sigma = (signed-thr)/sigma`（σ基準を統一）。positions に `crisis_threshold_source`。
+  `_real_data = "partial"`。selftest test(9) PASS。held = IDX_TAILPUT.th(SPY→VIX実IV) / VOL_CALL.th(原資産VIXだが realized proxy 据置) / CREDIT_HEDGE.th(HYG proxy)。
+- **正直な限界**: FXレッグ(FX_IRONCONDOR)・crypto・metal・HYG・VOL_CALL は VIX で価格付けできないため **proxy 残**。
+  よって両兵は **partial**（=株指数レッグのみ実IV、他は proxy）。全real化には各原資産の option/IV源が必要（機体に無い）。
+- 検証: auto_writeback --force rc=0（回帰なし）。books: vol_sell=partial / tail_hedge=partial / carry=True / event_driven=False。
+
+### #2 event_driven イベントfeed調査 → **結論: 休眠のまま正直に据え置き（着工せず）**
+- 保有3イベント型と必要feed:
+  - **EARNINGS_DRIFT.ev**: 決算カレンダー＋**サプライズ（実績 vs アナリスト予想）**。
+    - yfinance get_earnings_dates → **ImportError（lxml未導入）**でブロック。
+    - SEC EDGAR（data.sec.gov submissions / efts full-text 425）は **到達可(200)**。だが EDGAR にあるのは提出書類のみで、
+      **アナリスト予想（=サプライズの本体・実際の edge 信号）は無料に存在しない**（予想データは有料）。
+      到達可でも「edge の素」が無料に無い → 実質不可。
+  - **MA_ARB.ev**: M&A ディール条件/スプレッドの**構造化無料フィード無し**（425 全文検索は到達可だが構造化されず）。
+  - **INDEX_RECON.ev**: 指数入替は各指数のプレスリリースのみ、**構造化無料フィード無し**。
+- **判断**: 捏造しない原則に従い、無料の清潔な源が無い以上 **event_driven は _DATA_GATED=True の休眠を維持**。
+  唯一 earnings_drift が「部分的に可能性あり」だが (a) lxml導入 or SEC parser 自作、(b) 予想データ（有料）が別途必要 →
+  edge の核が無料に存在しないため **現時点は正直に休眠**。将来 live化は**別GO案件**（本セッションでは着工しない）。
+
+### 現在地（この区切り時点）
+- real=True: 5（macro_causal / mean_reversion / stat_arb / trend_follow / carry）。
+- **partial: 2（vol_sell / tail_hedge）** ← 株指数レッグに実VIX-IV。FX/crypto/metal/HYGレッグは proxy 残。
+- dormant: 1（event_driven）＝無料の清潔イベント源が無い → 正直に休眠。
+- **一旦区切り**（会長指示「一旦区切ろう」）。次の候補: ③ S2極小実弾の袖＋安全足場の設計（＝会長の鍵、別GO）。
+
+**不変**: 金ゼロ・adoption=0・実弾/レバ/live非接触・出金なし・9/9循環・凍結資産/プロップ(g4_)/.env 非接触・bars/rates読取専用。捏造ゼロ。

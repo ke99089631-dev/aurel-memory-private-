@@ -58,8 +58,12 @@ S3 増量          実弾で生存×優位が実証された源泉のみ増量�
   ただし S1前進日数はまだ0（本日点火）。30営業日フロアはこれから積む。
 - **②血の格上げ 第1弾 済み(2026-08-10)**: carry partial→**real**。キャリー取り分を静的定数(OECD2024-01打切り)から
   **IMF政策金利の時変・先読み無し差**へ。real=True 兵士 4→5。（[[CIRCULATION-ARCHITECTURE]] 2026-08-10 ②参照）
-- 格上げ待ち（正直な難度）: vol_sell・tail_hedge(proxy＝option/IV源が要る／VIXで指数レッグのみ半格上げ可) /
-  event_driven(休眠＝イベントfeedが機体に無い) → real化が S2 の前提。取れない器は proxy/dormant のまま S2非対象で正直に留め置く。
+- **③#1 VIX半格上げ 済み(2026-08-10)**: vol_sell・tail_hedge の**株指数レッグ**を realized_vol(proxy)→**VIX(実IV)**で価格付け。
+  両兵 proxy→**partial**（IDX_PUTSPREAD/IDX_CALLSPREAD/IDX_TAILPUT=実VIX-IV、FX/crypto/metal/HYG/VOL_CALLレッグは proxy 残）。selftest PASS。
+- **③#2 event_driven feed調査 済み(2026-08-10)→休眠据置**: 決算サプライズの本体＝アナリスト予想が無料に存在せず（yfinance=lxml未導入でブロック／SEC EDGARは到達可だが予想データ無し）、M&A・指数入替も構造化無料フィード無し。
+  捏造しない原則に従い **event_driven は休眠維持**。live化は別GO案件。
+- 全real化の残課題（正直な難度）: vol_sell/tail_hedge の**非指数レッグ**は各原資産の option/IV源が要る（機体に無い）→ partial 据置。
+  event_driven は無料の清潔イベント源が無い → dormant 据置。取れない器は proxy/dormant のまま S2非対象で正直に留め置く。
 - 結論: **今日から数字は毎日動く。S2（極小実弾）の袖はフロア充足後に会長GOで検討。**
 
 ## 変更履歴
