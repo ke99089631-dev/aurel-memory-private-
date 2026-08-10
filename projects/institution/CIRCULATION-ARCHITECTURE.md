@@ -1170,3 +1170,35 @@ S1点火(2026-08-10)後、各利益源泉が **S2(極小実弾)フロアにど�
 ### 境界（不変・再掲）
 金ゼロ・adoption=0・実弾/レバ/live非接触・出金なし・9/9循環・凍結資産/プロップ(g4_)/.env非接触・bars/rates読取専用・発注器なし。
 計器は arm しない。S2解錠＝会長二重ロック（別GO・鍵は会長）。
+
+---
+
+## 2026-08-10 — 会長向け『毎朝の進捗ブリーフ』自動配信 着工済み（会長「毎朝7時に分かりやすく報告を送れ」）
+
+### 目的
+会長は日々操作しない設計。だが「機関が今どこにいて・昨日何をして・会長の判断待ちが有るか」を
+毎朝7時に平易な日本語で1枚受け取りたい、との号令。観測専用・金ゼロ・読取専用・発注器なし。
+
+### 実装
+- **新規 circulation/chairman_brief.py**（circulation所有・observe専用）:
+  既公開の読取専用JSON（circulation_digest / scorecard / **s2_floor_status** / hypothesis_ledger / validation）を束ね、
+  平易な日本語ブリーフを生成。段構成: 一言(健康/注意＝posture)／S2昇格の進み(real兵の X/30・自動フロア到達数)／
+  血の質(実5半実2代理0休眠1)／生存(ゲート可否・隔離・床余裕)／昨日の紙の動き(book_pulse)／研究レーン(保留知見・承認待ち・判定)／
+  **会長の操作(判断待ちが有れば列挙・無ければ「本日は不要」)**。末尾に金ゼロ免責。
+  出力: `data/circulation/briefs/brief_YYYY-MM-DD.txt` ＋ `chairman_brief_latest.txt`。
+  配信: 既存 `observatory/notifier.py` 経由（webhook/SMTP が在れば会長のスマホへ、無くても alerts.jsonl とファイルに必ず残る）。
+  失敗は握って本処理を壊さない。--no-send / --selftest 完備。selftest PASS。
+- **新規 scripts/run_chairman_brief.bat**（run_circulation_writeback.bat と同流儀・UTF-8・cwd=empire・brief.log 追記）。
+- **新規スケジュールタスク AUREL_Chairman_Brief**: 毎日 **07:05**（07:00 writeback の直後＝当日数値が新鮮）、UserId=user / Interactive / Limited、
+  daily。手動実行でエンドツーエンド完走確認済み（ブリーフ保存・alerts.jsonl記録）。
+
+### 配信チャネル（会長の1回設定・秘匿はAUREL非接触）
+現状 **webhook/SMTP 未設定**＝ローカルのファイルと alerts.jsonl にのみ残る（スマホには未達）。
+スマホへ届けるには会長が ImperialFlow\.env 等に **どちらか1つ**を設定（値はAURELが読まない/書かない）:
+- メール（推奨・会長Gmail宛）: `EMPIRE_SMTP_HOST=smtp.gmail.com` `EMPIRE_SMTP_PORT=587`
+  `EMPIRE_SMTP_USER=<gmail>` `EMPIRE_SMTP_PASS=<Gmailアプリパスワード>` `EMPIRE_SMTP_TO=ke99089631@gmail.com`
+- 通知アプリ: `EMPIRE_WEBHOOK_URL=<LINE/Discord/Slack等のwebhook>`
+設定後は次の07:05から自動でスマホに届く。未設定でも報告自体は毎朝ファイルに残る。
+
+### 境界（不変）
+金ゼロ・観測専用・発注器なし・鍵なし・実弾/レバ/live/プロップ(g4_)/凍結資産/.env(値) 非接触・9/9循環・bars/rates読取専用。
