@@ -1138,3 +1138,35 @@ common-window は「最も早く終わる建玉」で決まるため、凍結建
 - **一旦区切り**（会長指示「一旦区切ろう」）。次の候補: ③ S2極小実弾の袖＋安全足場の設計（＝会長の鍵、別GO）。
 
 **不変**: 金ゼロ・adoption=0・実弾/レバ/live非接触・出金なし・9/9循環・凍結資産/プロップ(g4_)/.env 非接触・bars/rates読取専用。捏造ゼロ。
+
+---
+
+## 2026-08-10 — ③-a 監視フェーズの計器（S1→S2 昇格フロア 充足度メーター）着工済み（会長「③-a いこう」）
+
+### 目的
+S1点火(2026-08-10)後、各利益源泉が **S2(極小実弾)フロアにどれだけ近づいたか** を毎日1目盛りずつ測る計器。
+会長が「あと何日で袖に手が届くか」を一枚で見る盤。**観測専用・金ゼロ・読取専用・発注器なし**（arm しない）。
+実弾解錠は従来どおり live_gate.py の会長二重ロック領域（本計器は一切触れない）。
+
+### 実装（新規 circulation所有モジュール1本のみ・既存ファイル無改変で完結…＋日次配線1点）
+- **新規 circulation/s2_floor_monitor.py**（observe専用）:
+  - LIVE-GATE-CRITERIA v2 の S1→S2 フロア7条件を源泉ごとに判定。
+    1) 前進日数≥30 2) 血=real 3) 生存(S1床未接触＋免疫稼働) 4) ガントレット(共有) / 5-7) 会長手動ゲート。
+  - **前進日数**: 各 book の `last_step_date` を点火baselineと比較し、点火以降に到達した相異なる新バー日を
+    永続台帳 `data/circulation/s1_forward.json` に **monotonic 積算**（複数バー跳躍は保守的アンダーカウント＝過大計上しない）。
+  - **生存(条件3)**: 全史DDではなく **S1期間の紙・累積リターン曲線DD**（点火以降のスナップ列）で床(-8/-12/-15%)判定。
+    ＋免疫稼働(quarantine/antibodies)。全史・最悪単一建玉DDは **文脈情報のみ**（生存判定に使わない＝過度な赤旗を出さない）。
+  - **ガントレット(条件4)**: validation/hypothesis_ledger から `knowledge_retained>0 かつ (PROMOTE_CANDIDATE+HOLD)>0` を機関共有で判定。
+  - 出力: `data/circulation/s2_floor_status.json`（盤面）＋コンソール表。--peek(非破壊観測) / --selftest。
+  - selftest PASS: 二重計上せず・monotonic・金ゼロ・発注器なし・読取専用。前進+1挙動も実証（baseline巻戻し試験）。
+- **日次配線（circulation/auto_writeback.py に1点追加）**: 兵8体 step＋digest公開の直後(5a-2)で `s2_floor_monitor.assess()+publish()`。
+  兵が進んだ最新状態で毎日1目盛り。失敗は非致命（本処理の成否に影響させない）。autowrite.log に1行サマリ。
+
+### 現盤面（2026-08-10・点火当日＝前進0日）
+- 自動フロア充足 **0/8**（全源泉フロア前・当然）。real5兵は **[前進x / 血o / 生存o / 芽o]** ＝前進日数だけが唯一の壁。
+  → 毎日の writeback で 1/30, 2/30… と積み上がる。partial2兵は血でも×、event_driven は血=dormantで×。
+- baseline: 各源泉の点火時 last_step_date（macro/stat/trend/vol/tail=08-07, mean/carry=08-09, event=08-10）。前進0。
+
+### 境界（不変・再掲）
+金ゼロ・adoption=0・実弾/レバ/live非接触・出金なし・9/9循環・凍結資産/プロップ(g4_)/.env非接触・bars/rates読取専用・発注器なし。
+計器は arm しない。S2解錠＝会長二重ロック（別GO・鍵は会長）。
