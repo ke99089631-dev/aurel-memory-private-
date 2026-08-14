@@ -24,6 +24,22 @@ updated: 2026-08-14
 - ゆえに `_event_near_dates()` は**空集合**を返す＝ゲートは今は**発火ゼロ・P&Lへの影響ゼロ**。「機構は装填済み・血は通さない」正直な休眠。**イベントを捏造しない**（機関の憲章「血を捏造しない」を厳守）。
 - 実フィードを接続した日から、このゲートは自動で効き始める（A項＝データ接続は別作業・会長判断）。
 
-## 状態
-- `data/circulation/mean_reversion_book.json` の `_event_gate`: armed=True, active=False, near_dates=0, gate_days=1。
-- 次に効かせるには「実イベントカレンダー接続」という別のデータ作業が要る（会長に提示済み）。
+## 実イベントカレンダー接続（2026-08-14 会長GO「つなごう」）— 完了
+- 新モジュール `circulation/event_calendar.py`: ForexFactory 週次カレンダー（faireconomy ミラー XML・**APIキー不要・実データ**）を読取専用で取得→ `data/circulation/event_calendar.json` に公開。
+  - 対象は **High重要度のみ**（大きな予定＝サプライズ源）。国(通貨)・日付・時刻付き。
+  - ★制約: 無料フィードは**今週分（約7日）のみ**（nextweek は404）。→ 毎日取り直して直近1週間を最新化（rolling）。
+  - 取得失敗時は前回良データを `stale=True` で保持。**でっち上げない**（selftest で検証）。
+- ゲート配線: `mean_reversion._event_near_dates(currencies)` がカレンダーを読み、器の通貨に関係する High イベントの前後 `MR_EVENT_GATE_DAYS(=1)` 日を接近日に。`rebuild_from_bars` が器ごと通貨一致で近接日を計算し戻りを見送る。
+  - 器→通貨: EURCHF=EUR/CHF, EURGBP=EUR/GBP, AUDCAD=AUD/CAD, USDJPY=USD/JPY, NAS100=USD。
+- 毎日更新: `mean_reversion.step()` 冒頭で `event_calendar.refresh()` を best-effort 呼び出し（ネット不通でも非致命・前回保持で続行）。
+- selftest 全通過: 接近日展開(±1日)・通貨絞り・gate_days<=0無効・注入で戻り1件抑制・既定パス不変。
+
+## 現在の状態（2026-08-14）
+- カレンダー: fetched_ok=True, stale=False, n_high=11, high_dates=[08-11,08-12,08-13]。
+- `mean_reversion_book.json` の `_event_gate`: armed=True, **active=True**, near_dates=4 (08-10〜08-13), gate_days=1。
+- total_pnl は不変(2.177791)=その接近日には held器の戻り建玉が無かっただけ。**機構は稼働中**で、今後 High イベント日に戻りシグナルが出れば自動で見送る。
+- 台帳: seq976 承認 / seq978 実装 / seq981 カレンダー接続。すべて paper・金ゼロ・プロップ非接触。
+
+## 運用メモ
+- カレンダー鮮度は日次 step 依存。指令室/PCが動いていない日は前回保持(stale)。復帰時に最新化。
+- 効きを強めたい時のノブ: `MR_EVENT_GATE_DAYS`（前後日数）、`GATE_IMPACTS`（Highに加えMedium等）。変更は会長GO後。
