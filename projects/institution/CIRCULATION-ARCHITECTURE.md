@@ -1326,3 +1326,12 @@ paper・金ゼロ・観測/発見のみ・discovery は discovery.json＋台帳�
 - H-0014（外の大きな経済の流れから「危ない窓」を先読みして手を引く／5局面中3生存=60%）→ chairman_approved
 - 会長「両方とろう」。台帳の各記録に chairman_approval 印を付与（paperのみ・Live化せず・二重ロック未接触・金銭不動）。
 - 注: 台帳の最終状態は promoted_candidate 止まり（設計）。実弾は enable_live+arm_code の会長二重ロックが別途必要でAURELは触れない。
+
+
+## 2026-08-16 AUREL世界新聞（会長の趣味・世界理解の便り／機関とは完全独立）
+- 会長構想:「私に届く世界の理解」＝毎朝のオリジナル世界新聞。三本立て=お金と景気の空気／人と社会の流れ／その日の世界の出来事。
+- 置き場: C:/Users/user/.aurel/worldnews/（機関 AssetEmpire/circulation とは一切import/接触なしの独立小部屋。read-only・金銭不動・捏造しない）。
+- 実データ源（無料・鍵不要・実在のみ）: お金=FRED公開CSV(T10Y2Y/BAMLH0A0HYM2/STLFSI4)、人の流れ=Wikipedia最も読まれた記事(pageviews all-access)、世界の出来事=Wikipedia Current Events Portal(出典付きの深い箇条書きのみ採用)。
+- gather.py: 材料を集め pack_YYYY-MM-DD.json/latest.json を書き、さらに日本語の新聞本文 edition_*.txt/latest_edition.txt を書き起こす(閾値判定のみ・捏造なし)。世界の出来事は英語原文のまま(意訳しないのは捏造回避)。
+- 毎朝の配信: (1)Windowsタスク AUREL-WorldNews 毎日07:05 → 材料と新聞ファイルを自動生成(私が不在でも残る恒久バックボーン)。(2)CronCreate 07:06(セッション内・7日で自動失効) → 私が起きている朝は latest.json から日本語の肉声版を書いて会長に届ける。
+- 注意: 肉声版アラームはセッション依存＋7日失効。継続には随時再アーム要。Windowsタスク側は恒久。
