@@ -1249,10 +1249,28 @@ S1点火(2026-08-10)後、各利益源泉が **S2(極小実弾)フロアにど�
 発見器が初めて「①自分の過去の知恵を掛け合わせ、②壁の鍵を別分野・別の答えの形でも探し、③世界の荒れを全源泉へ問い/源泉の異変を世界へ戻す」を回すようになった。
 全て純追加・決定的・出自付き・自動採用なし・discovery.json＋台帳のみ書込・floor/信念ストア/source_family/実弾/レバ/プロップ 非接触・9/9循環無傷・血の捏造なし。
 
-### 残り（未着工・会長の“門”承認が要る＝自律で着工しない）
-- **失敗復活の慎重サブ段**: 死んだ仮説を新局面/新証拠で再検証（validation stage2の屍ガード DUP_JACCARD=0.60 と共設計が必須）。
-  ⚠これは**審査の門(validation.py)**に触れる＝聖域に近い。**会長へ設計を見せてGOを得てから**着手（自律で門は触らない）。
-- 毎朝ブリーフに「世界の動き（市場が映す影として・ニュース物語ではない）」節（会長要望・要明示GO）。
+### 第4段の実装（validation.py＋auto_writeback.py、2026-08-15・会長GO「両方GO」・完了）＝失敗復活
+死んだ仮説を、局面/データが物的に変わったとき【一度だけ丁寧に】再挑戦させる。屍ガードは弱めない:
+- `evaluate(..., allow_revival=False)` 追加。`allow_revival=True` のとき段2の屍ガード(dead_kin即棄却)【のみ】迂回。
+  **実力ゲート（コスト死/隠れテール/期待値/OOS崩壊）は復活でも満額**。新規候補は常に allow_revival=False＝屍ガード不変。
+- `revive(led, evidence_map, regime)` 追加。対象=死んだ記録のみ。条件（全満たし）: 死因が全て局面/データ依存(_REVIVABLE_DEATHS=
+  overfit_oos_decay/data_insufficient/no_positive_expectancy) ／ 復活回数<MAX_REVIVALS=2 ／ 物的変化あり（新証拠 or 死後に地合い変化）。
+  **Class-C破綻死(hidden_tail_or_excess_leverage/killed_by_cost)は永久復活しない**（隠れテールは地合いが変わっても安全にならない）。
+  再審査結果で rejected/screened/promoted_candidate へ遷移＋revival_history に履歴（from/to regime・trigger・prior_why・outcome）。自動採用なし。
+- `run(..., regime=)` に地合い刻印を追加（死後の地合い比較の材料を将来に残す）。`_current_regime()`（worldmodel読取専用・floor非接触）追加。
+- daily cadence（auto_writeback）に `revive()` を run() 直後へ配線（main経由でなく run 直呼びのため）。非致命。
+- 検証: `--selftest` PASS（E1 兄弟の屍を迂回して良証拠で復活→PROMOTE／E2 破綻死は証拠+地合い変化でも復活0／E3 物的変化なし→屍のまま／
+  E4 死んだ仮説そっくりの【新規】は今も即REJECT＝屍ガード新規不変）。実台帳 end-to-end：checked=14・revival=0（今日は死後地合い未記録＋新証拠なし＝正しく蘇生せず）。
+
+### 第5段の実装（chairman_brief.py、2026-08-15・会長GO「両方GO」・完了）＝毎朝ブリーフに『今日の世界』
+- `_world_section()` 追加。worldmodel.current_world（読取専用・floor非接触）から今日の地合いを平易な言葉へ（晴れ/曇り/もみ合い/乱高下/荒天）
+  ＋波の荒れ具合、さらに macro_causal の“採用中”の連鎖を A→B 最大3本。**「市場が映す影・ニュースではない・予言ではない」と明示**。
+- `compose()` の一言直後に挿入。読取専用・金ゼロ・発注器なし。`--selftest` PASS。実出力に「今日の世界: 曇り…／市場内部で今きいている連動: crude_oil→energy_equity 等」を確認。
+
+### 総括（会長構想「知識の複利＋壁の鍵＋世界双方向＋失敗復活」＝全5段 完了・2026-08-15）
+機関が「与えられた武器を磨くだけ」から、①過去の知恵を掛け合わせ ②壁の鍵を別分野・別の答えの形で探し ③世界の荒れを全源泉へ問い/源泉の異変を世界へ戻し
+④死んだ失敗も局面が変われば一度だけ復活挑戦させ ⑤会長へ毎朝“市場が映す世界の影”を報告する——までを回すようになった。
+全て純追加・決定的・出自付き・自動採用なし・paper/金ゼロ・floor/信念ストア/source_family/実弾/レバ/プロップ(g4_)/凍結 非接触・9/9循環無傷・血の捏造なし・LLMを注文/採用経路に入れない。**鍵を回すのは会長のみ（不変）。**
 
 ### 境界（不変・第1段）
 paper・金ゼロ・観測/発見のみ・discovery は discovery.json＋台帳にしか書かない・source_family非注入・自動採用なし・
