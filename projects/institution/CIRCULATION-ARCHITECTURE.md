@@ -1226,10 +1226,32 @@ S1点火(2026-08-10)後、各利益源泉が **S2(極小実弾)フロアにど�
 - 検証: `--selftest` PASS。実台帳(生存3件=H-0007/H-0010/H-0012)で読取専用 assess → 再結合11候補
   （Edge×Edge 3ペア＋Edge×領域 8）を親IDつきで生成。既定のA/B/C/D/X＝22候補・冪等・data_gated 透明を確認。
 
-### 残り（未着工・会長GO済みだが段階施工）
-- 第2段: 壁の鍵を“別領域”からも探す（_BINDING_DIRECTIVES を同一領域縛りから解放、答えの形も enter/回避/ヘッジ/再配分/時間ずらし に拡張）。
-- 第3段: 世界観の双方向（源泉異変→世界観への戻り路＋世界観→全源泉への研究ブロードキャスト）。
-- 失敗復活の慎重サブ段: 死んだ仮説を新局面/新証拠で再検証（validation stage2の屍ガード DUP_JACCARD=0.60 と共設計が必須）。
+### 第2段の実装（discovery.py、2026-08-15・完了）＝壁の鍵は別領域にも在る
+同じ壁に対し、鍵を【別領域】かつ【新Edge以外の答えの形】でも探す純追加:
+- `_ANSWER_SHAPES`（new_edge_elsewhere/hedge/reallocate/shift_time/stand_aside）＋`_CROSS_DOMAIN_KEYS`（壁理由→(答えの形,相手領域)の小集合）を追加。
+- `_cross_domain_keys(frontier)` を追加し `generate()` の壁方向候補の直後に連結、`assess()` に `cross_domain_keys` 露出、`_selftest()` に検証(8)追加。
+- 出自 origin="frontier.cross_domain_key"（binding/answer_shape/domain/wall_pct 付き）、priority="cross-domain-key"。採用経路なし＝門へ candidate として流れる。
+- 検証: `--selftest` PASS。実の壁(drawdown_bound)で読取専用 assess → 3鍵を実提案：
+  **hedge(vol_sell)／shift_time(macro_causal)／stand_aside(event_driven)**。「入らないことが答え」も候補として出る。既定挙動無傷・冪等。
+
+### 第3段の実装（discovery.py、2026-08-15・完了）＝世界観の双方向（floor非接触）
+①情報ループに欠けていた「世界⇄源泉」の帰還と配信を、**discovery側の研究候補としてのみ**配線（worldmodelのfloor/信念ストアには一切触れない・読むだけ）:
+- `_safe_world()`（worldmodel.current_world を読取専用でlazy import・失敗は握る）を `_observe()` に追加。
+- **世界→源泉** `_world_broadcast(world, sf)`: 荒れ地合い(crisis/stormy_bull or vol≥0.25)のとき、breathing 中の各源泉へ「この地合いを生き抜くか」を Level B 研究候補として配信。平穏なら配信0（ノイズ抑制）。出自 origin="worldmodel.broadcast"。
+- **源泉→世界** `_source_anomaly_to_world(sf)`: 源泉の異変(verdict∉{NORMAL,SLOT})を「地合い転換の予兆かも」と Level D 研究候補で世界へ戻す。出自 origin="source_anomaly.to_world"。健全なら0。
+- `generate()` 連結・`assess()` に `world_broadcast`/`anomaly_to_world` 露出・`_selftest()` 検証(9)追加。
+- 検証: `--selftest` PASS。実データ(今日=cloudy・vol -0.327＝平穏／全源泉verdict=NORMAL)で world_broadcast=0・anomaly=0（＝荒れた日/異変時にのみ発火する正しい沈黙）。
+  荒れ地合いを注入すると breathing 源泉数だけ配信、STRESSED 注入で1件戻すことを確認。
+- **端から端まで実行確認**：`python -m circulation.discovery` で25候補（新規14=再結合11＋領域横断鍵3、既知11）を台帳へ記録・discovery.json 公開。全て candidate として門へ流れ、採用0。実台帳に
+  「H-0007×H-0010 の再結合」「H-0007 を macro 局面で条件づけ」等の“知識の複利”候補が実エントリとして出現。
+
+### まとめ（第1〜3段：知識の複利ループ 完了）
+発見器が初めて「①自分の過去の知恵を掛け合わせ、②壁の鍵を別分野・別の答えの形でも探し、③世界の荒れを全源泉へ問い/源泉の異変を世界へ戻す」を回すようになった。
+全て純追加・決定的・出自付き・自動採用なし・discovery.json＋台帳のみ書込・floor/信念ストア/source_family/実弾/レバ/プロップ 非接触・9/9循環無傷・血の捏造なし。
+
+### 残り（未着工・会長の“門”承認が要る＝自律で着工しない）
+- **失敗復活の慎重サブ段**: 死んだ仮説を新局面/新証拠で再検証（validation stage2の屍ガード DUP_JACCARD=0.60 と共設計が必須）。
+  ⚠これは**審査の門(validation.py)**に触れる＝聖域に近い。**会長へ設計を見せてGOを得てから**着手（自律で門は触らない）。
 - 毎朝ブリーフに「世界の動き（市場が映す影として・ニュース物語ではない）」節（会長要望・要明示GO）。
 
 ### 境界（不変・第1段）
