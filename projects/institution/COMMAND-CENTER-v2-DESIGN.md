@@ -1,9 +1,17 @@
 ---
-tags: [project/institution, dashboard, design, awaiting-chairman]
+tags: [project/institution, dashboard, design, built]
 type: design-proposal
-status: PROPOSAL — 会長承認前・全面実装は凍結
+status: PHASE1 BUILT — 会長「きみに推進ですすめてくれ」でGO (2026-08-17)
 created: 2026-08-16
 ---
+
+> **[2026-08-17 UPDATE] Phase 1 着工完了。**
+> 会長GO「きみに推進ですすめてくれ」を受け、別モジュール `circulation/command_center.py` を新規作成（現行v1 `dashboard.py` は無傷）。
+> ETLはPython側で全導出→JSは描画のみ（血の捏造を構造的に不可能に）。自己完結HTML `command_center.html`（59KB, プレースホルダ残0）を生成、ダブルクリックで開く。
+> 5画面: COMMAND(中央ノード網) / MARKET(源泉別P&L曲線) / INTELLIGENCE(世界観・未実装はFUTURE表示) / RESEARCH(発見フィード) / CHAIRMAN(要判断)。
+> 改善#5「日次スナップショット」も本日開始: `snapshots/2026-08-17.json`（Knowledge Universeの種）。
+> 読取専用・金ゼロ・二重ロック/Live Gate/会長承認権限は一切触らず。プロップ非接触。
+> 残: Phase2(自動更新ローカルサーバ) / Phase3(承認ボタン, 二重ロック不変) は会長判断待ち。
 
 # AURELIAN COMMAND CENTER v2 — 監査＋設計案
 
