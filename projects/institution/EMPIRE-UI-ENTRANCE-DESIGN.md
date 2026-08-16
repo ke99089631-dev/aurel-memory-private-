@@ -1,9 +1,11 @@
 ---
 tags: [project/institution, ui, design, awaiting-chairman]
 type: design-proposal
-status: PROPOSAL — 起案のみ（会長GOで着工）
+status: WITHDRAWN — 会長「忘れてくれ」(2026-08-17)。玄関/帝国UI構想は取り下げ。追わない。
 created: 2026-08-17
 ---
+
+> [2026-08-17] 会長が「UIと言ったのは間違い、忘れてくれ」。この設計は取り下げ。着工しない。以下は記録のみ。
 
 # 帝国UI「玄関」— 設計起案
 
