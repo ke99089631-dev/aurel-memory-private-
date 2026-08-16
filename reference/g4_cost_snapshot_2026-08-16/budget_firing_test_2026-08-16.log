@@ -1,0 +1,9 @@
+[2026-08-16 21:06:06+0900] ===== G4 予算門 発火テスト 開始 (実弾なし/order_send呼ばない) =====
+[2026-08-16 21:06:06+0900] 凍結モジュール: research.session_breakout_trackA (import/実行のみ・無改変)
+[2026-08-16 21:06:06+0900] 既定門: DAILY_BUDGET=0.02  WEEKLY_BUDGET=0.04
+
+Traceback (most recent call last):
+  File "C:\Users\user\AppData\Local\Temp\g4_budget_firing_test.py", line 26, in <module>
+    print(f"[{TS()}] 実データ: {os.path.basename(fn)}  NYセッション {len(sessions)}本  片道コスト={side_bps:.4f}bps")
+                                                                                                  ^^^^^^^^^^^^^^
+TypeError: unsupported format string passed to dict.__format__
