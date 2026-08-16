@@ -1,0 +1,523 @@
+{
+  "generated_at": "2026-08-16T11:59:05.397119+00:00",
+  "generated_jst": "2026-08-16 20:59:05",
+  "ny_date": "2026-08-16",
+  "heartbeat": {
+    "status": "ALIVE",
+    "color": "#16a34a",
+    "label": "生存（心拍が新鮮）",
+    "age_s": 68,
+    "age": "1分8秒",
+    "ts_jst": "2026-08-16 20:57:56 JST",
+    "detail": "pid 11384 / host DESKTOP-D4KRHAU / phase live_idle / cycle 3595",
+    "extra": {
+      "phase": "live_idle",
+      "cycle": 3595,
+      "done": 25,
+      "srv_skew_s": -130137.505
+    }
+  },
+  "connection": {
+    "color": "#6b7280",
+    "label": "オフアワー（休場・tick凍結）",
+    "detail": "サーバ時刻ズレ -130138s は休場中のtick凍結アーティファクト（異常ではない）。NY開場で正常帯へ復帰。",
+    "skew_s": -130137.505
+  },
+  "expiry": {
+    "trial_no": 1,
+    "expiry_date": null,
+    "days_left": null,
+    "status": "active",
+    "color": "#16a34a",
+    "big": "有効",
+    "label": "期限日は会長確認待ち",
+    "note": "1本目=有効。MT5がlogin=40000162046 server=FundingPips-Trialで認証成功を継続・停止0件・07-27に健全な+3hサーバオフセットで接続確認。正確な期限日は会長のポータル表示待ち。"
+  },
+  "calendar": {
+    "days": [
+      {
+        "date": "2026-08-03",
+        "md": "08/03",
+        "dow": "月",
+        "status": "ok_entry",
+        "color": "#16a34a",
+        "tip": "観測OK・ENTRY sell 0.1lot"
+      },
+      {
+        "date": "2026-08-04",
+        "md": "08/04",
+        "dow": "火",
+        "status": "ok_entry",
+        "color": "#16a34a",
+        "tip": "観測OK・ENTRY buy 0.12lot"
+      },
+      {
+        "date": "2026-08-05",
+        "md": "08/05",
+        "dow": "水",
+        "status": "ok_entry",
+        "color": "#16a34a",
+        "tip": "観測OK・ENTRY buy 0.13lot"
+      },
+      {
+        "date": "2026-08-06",
+        "md": "08/06",
+        "dow": "木",
+        "status": "ok_entry",
+        "color": "#16a34a",
+        "tip": "観測OK・ENTRY sell 0.12lot"
+      },
+      {
+        "date": "2026-08-07",
+        "md": "08/07",
+        "dow": "金",
+        "status": "ok_entry",
+        "color": "#16a34a",
+        "tip": "観測OK・ENTRY buy 0.15lot"
+      },
+      {
+        "date": "2026-08-08",
+        "md": "08/08",
+        "dow": "土",
+        "status": "closed",
+        "color": "#334155",
+        "tip": "休場（週末）"
+      },
+      {
+        "date": "2026-08-09",
+        "md": "08/09",
+        "dow": "日",
+        "status": "closed",
+        "color": "#334155",
+        "tip": "休場（週末）"
+      },
+      {
+        "date": "2026-08-10",
+        "md": "08/10",
+        "dow": "月",
+        "status": "ok_entry",
+        "color": "#16a34a",
+        "tip": "観測OK・ENTRY sell 0.16lot"
+      },
+      {
+        "date": "2026-08-11",
+        "md": "08/11",
+        "dow": "火",
+        "status": "ok_entry",
+        "color": "#16a34a",
+        "tip": "観測OK・ENTRY buy 0.16lot"
+      },
+      {
+        "date": "2026-08-12",
+        "md": "08/12",
+        "dow": "水",
+        "status": "ok_watch",
+        "color": "#16a34a",
+        "tip": "観測OK・見送り（ブレイク無し）"
+      },
+      {
+        "date": "2026-08-13",
+        "md": "08/13",
+        "dow": "木",
+        "status": "ok_entry",
+        "color": "#16a34a",
+        "tip": "観測OK・ENTRY buy 0.21lot"
+      },
+      {
+        "date": "2026-08-14",
+        "md": "08/14",
+        "dow": "金",
+        "status": "ok_entry",
+        "color": "#16a34a",
+        "tip": "観測OK・ENTRY buy 0.26lot"
+      },
+      {
+        "date": "2026-08-15",
+        "md": "08/15",
+        "dow": "土",
+        "status": "closed",
+        "color": "#334155",
+        "tip": "休場（週末）"
+      },
+      {
+        "date": "2026-08-16",
+        "md": "08/16",
+        "dow": "日",
+        "status": "closed",
+        "color": "#334155",
+        "tip": "休場（週末）"
+      }
+    ],
+    "uptime_pct": 100,
+    "gap_count": 0,
+    "biz_days": 10,
+    "ok_days": 10
+  },
+  "live_tally": {
+    "count": 19,
+    "target": 10,
+    "from": "2026-07-14"
+  },
+  "tasks": [
+    {
+      "name": "AUREL_G4_Runner",
+      "exists": true,
+      "state": "Running",
+      "last_run": "2026-08-14 20:16:16",
+      "last_result": "2147946720"
+    },
+    {
+      "name": "AUREL_G4_Watchdog",
+      "exists": true,
+      "state": "Running",
+      "last_run": "2026-08-16 20:55:55",
+      "last_result": "2147946720"
+    },
+    {
+      "name": "AUREL_G4_Keepalive",
+      "exists": true,
+      "state": "Ready",
+      "last_run": "2026-08-16 20:55:55",
+      "last_result": "0"
+    },
+    {
+      "name": "AUREL_G4_Dashboard",
+      "exists": true,
+      "state": "Running",
+      "last_run": "2026-08-16 20:59:59",
+      "last_result": "267009"
+    }
+  ],
+  "decisions": [
+    {
+      "date": "2026-06-24",
+      "mode": "preflight",
+      "entered": true,
+      "side": "sell",
+      "lots": 1.62,
+      "risk": "—",
+      "reason": "ブレイク成立→発注プラン生成(--dry・未送信)",
+      "stage": "planned",
+      "finalized": false
+    },
+    {
+      "date": "2026-06-25",
+      "mode": "preflight",
+      "entered": true,
+      "side": "sell",
+      "lots": 1.41,
+      "risk": "—",
+      "reason": "ブレイク成立→発注プラン生成(--dry・未送信)",
+      "stage": "planned",
+      "finalized": false
+    },
+    {
+      "date": "2026-06-26",
+      "mode": "preflight",
+      "entered": true,
+      "side": "buy",
+      "lots": 1.19,
+      "risk": "—",
+      "reason": "ブレイク成立→発注プラン生成(--dry・未送信)",
+      "stage": "planned",
+      "finalized": false
+    },
+    {
+      "date": "2026-06-29",
+      "mode": "preflight",
+      "entered": true,
+      "side": "sell",
+      "lots": 1.59,
+      "risk": "—",
+      "reason": "ブレイク成立→発注プラン生成(--dry・未送信)",
+      "stage": "planned",
+      "finalized": false
+    },
+    {
+      "date": "2026-06-30",
+      "mode": "preflight",
+      "entered": true,
+      "side": "buy",
+      "lots": 1.71,
+      "risk": "—",
+      "reason": "ブレイク成立→発注プラン生成(--dry・未送信)",
+      "stage": "planned",
+      "finalized": false
+    },
+    {
+      "date": "2026-07-13",
+      "mode": "live",
+      "entered": false,
+      "side": "—",
+      "lots": "—",
+      "risk": null,
+      "reason": "監視窓内にブレイク無し=機械は入らない判断",
+      "stage": "watch",
+      "finalized": true
+    },
+    {
+      "date": "2026-07-14",
+      "mode": "live",
+      "entered": true,
+      "side": "buy",
+      "lots": 0.13,
+      "risk": 0.9736,
+      "reason": "ブレイク成立→発注プラン生成(--dry・未送信)",
+      "stage": "planned",
+      "finalized": true
+    },
+    {
+      "date": "2026-07-15",
+      "mode": "live",
+      "entered": true,
+      "side": "sell",
+      "lots": 0.13,
+      "risk": 0.9575,
+      "reason": "ブレイク成立→発注プラン生成(--dry・未送信)",
+      "stage": "planned",
+      "finalized": true
+    },
+    {
+      "date": "2026-07-16",
+      "mode": "live",
+      "entered": true,
+      "side": "sell",
+      "lots": 0.11,
+      "risk": 0.9896,
+      "reason": "ブレイク成立→発注プラン生成(--dry・未送信)",
+      "stage": "planned",
+      "finalized": true
+    },
+    {
+      "date": "2026-07-17",
+      "mode": "live",
+      "entered": true,
+      "side": "buy",
+      "lots": 0.09,
+      "risk": 0.9684,
+      "reason": "ブレイク成立→発注プラン生成(--dry・未送信)",
+      "stage": "planned",
+      "finalized": true
+    },
+    {
+      "date": "2026-07-20",
+      "mode": "live",
+      "entered": false,
+      "side": "—",
+      "lots": "—",
+      "risk": null,
+      "reason": "M1履歴が監視窓に未同期(充填待ち・再試行する)",
+      "stage": "pending_sync",
+      "finalized": true
+    },
+    {
+      "date": "2026-07-21",
+      "mode": "live",
+      "entered": false,
+      "side": "—",
+      "lots": "—",
+      "risk": null,
+      "reason": "M1履歴が監視窓に未同期(充填待ち・再試行する)",
+      "stage": "pending_sync",
+      "finalized": true
+    },
+    {
+      "date": "2026-07-22",
+      "mode": "live",
+      "entered": false,
+      "side": "—",
+      "lots": "—",
+      "risk": null,
+      "reason": "M1履歴が監視窓に未同期(充填待ち・再試行する)",
+      "stage": "pending_sync",
+      "finalized": true
+    },
+    {
+      "date": "2026-07-23",
+      "mode": "live",
+      "entered": false,
+      "side": "—",
+      "lots": "—",
+      "risk": null,
+      "reason": "M1履歴が監視窓に未同期(充填待ち・再試行する)",
+      "stage": "pending_sync",
+      "finalized": true
+    },
+    {
+      "date": "2026-07-24",
+      "mode": "live",
+      "entered": true,
+      "side": "sell",
+      "lots": 0.1,
+      "risk": 0.954,
+      "reason": "ブレイク成立→発注プラン生成(--dry・未送信)",
+      "stage": "planned",
+      "finalized": true
+    },
+    {
+      "date": "2026-07-27",
+      "mode": "live",
+      "entered": true,
+      "side": "sell",
+      "lots": 0.11,
+      "risk": 0.9746,
+      "reason": "ブレイク成立→発注プラン生成(--dry・未送信)",
+      "stage": "planned",
+      "finalized": true
+    },
+    {
+      "date": "2026-07-28",
+      "mode": "live",
+      "entered": true,
+      "side": "sell",
+      "lots": 0.1,
+      "risk": 0.9898,
+      "reason": "ブレイク成立→発注プラン生成(--dry・未送信)",
+      "stage": "planned",
+      "finalized": true
+    },
+    {
+      "date": "2026-07-29",
+      "mode": "live",
+      "entered": true,
+      "side": "sell",
+      "lots": 0.06,
+      "risk": 0.9798,
+      "reason": "ブレイク成立→発注プラン生成(--dry・未送信)",
+      "stage": "planned",
+      "finalized": true
+    },
+    {
+      "date": "2026-07-30",
+      "mode": "live",
+      "entered": true,
+      "side": "buy",
+      "lots": 0.07,
+      "risk": 0.985,
+      "reason": "ブレイク成立→発注プラン生成(--dry・未送信)",
+      "stage": "planned",
+      "finalized": true
+    },
+    {
+      "date": "2026-07-31",
+      "mode": "live",
+      "entered": true,
+      "side": "sell",
+      "lots": 0.09,
+      "risk": 0.9596,
+      "reason": "ブレイク成立→発注プラン生成(--dry・未送信)",
+      "stage": "planned",
+      "finalized": true
+    },
+    {
+      "date": "2026-08-03",
+      "mode": "live",
+      "entered": true,
+      "side": "sell",
+      "lots": 0.1,
+      "risk": 0.9264,
+      "reason": "ブレイク成立→発注プラン生成(--dry・未送信)",
+      "stage": "planned",
+      "finalized": true
+    },
+    {
+      "date": "2026-08-04",
+      "mode": "live",
+      "entered": true,
+      "side": "buy",
+      "lots": 0.12,
+      "risk": 0.9709,
+      "reason": "ブレイク成立→発注プラン生成(--dry・未送信)",
+      "stage": "planned",
+      "finalized": true
+    },
+    {
+      "date": "2026-08-05",
+      "mode": "live",
+      "entered": true,
+      "side": "buy",
+      "lots": 0.13,
+      "risk": 0.9751,
+      "reason": "ブレイク成立→発注プラン生成(--dry・未送信)",
+      "stage": "planned",
+      "finalized": true
+    },
+    {
+      "date": "2026-08-06",
+      "mode": "live",
+      "entered": true,
+      "side": "sell",
+      "lots": 0.12,
+      "risk": 0.965,
+      "reason": "ブレイク成立→発注プラン生成(--dry・未送信)",
+      "stage": "planned",
+      "finalized": true
+    },
+    {
+      "date": "2026-08-07",
+      "mode": "live",
+      "entered": true,
+      "side": "buy",
+      "lots": 0.15,
+      "risk": 0.957,
+      "reason": "ブレイク成立→発注プラン生成(--dry・未送信)",
+      "stage": "planned",
+      "finalized": true
+    },
+    {
+      "date": "2026-08-10",
+      "mode": "live",
+      "entered": true,
+      "side": "sell",
+      "lots": 0.16,
+      "risk": 0.9416,
+      "reason": "ブレイク成立→発注プラン生成(--dry・未送信)",
+      "stage": "planned",
+      "finalized": true
+    },
+    {
+      "date": "2026-08-11",
+      "mode": "live",
+      "entered": true,
+      "side": "buy",
+      "lots": 0.16,
+      "risk": 0.9807,
+      "reason": "ブレイク成立→発注プラン生成(--dry・未送信)",
+      "stage": "planned",
+      "finalized": true
+    },
+    {
+      "date": "2026-08-12",
+      "mode": "live",
+      "entered": false,
+      "side": "—",
+      "lots": "—",
+      "risk": null,
+      "reason": "レンジ広すぎフィルタ除外(width_atr=2.718)",
+      "stage": "width_filter",
+      "finalized": true
+    },
+    {
+      "date": "2026-08-13",
+      "mode": "live",
+      "entered": true,
+      "side": "buy",
+      "lots": 0.21,
+      "risk": 0.9556,
+      "reason": "ブレイク成立→発注プラン生成(--dry・未送信)",
+      "stage": "planned",
+      "finalized": true
+    },
+    {
+      "date": "2026-08-14",
+      "mode": "live",
+      "entered": true,
+      "side": "buy",
+      "lots": 0.26,
+      "risk": 0.9972,
+      "reason": "ブレイク成立→発注プラン生成(--dry・未送信)",
+      "stage": "planned",
+      "finalized": true
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "date": "2026-07-27",
+  "exported_at": "2026-07-27T17:33:49.534507+00:00",
+  "config": "us100",
+  "mode": "live",
+  "symbol": "NDX100",
+  "login": 40000162046,
+  "equity": 25000.0,
+  "effective_risk_pct": 0.9746,
+  "spread_obs": {
+    "n": 48,
+    "typical_pt": 160.0,
+    "worst_pt": 160.0,
+    "best_pt": 160.0
+  },
+  "finalized": true,
+  "entered": true,
+  "stage": "planned",
+  "reason": "ブレイク成立→発注プラン生成(--dry・未送信)",
+  "width_atr": 1.0348660939868746,
+  "intent": {
+    "side": "short",
+    "ep": 28491.7,
+    "sl": 28602.45,
+    "tp": 28159.45,
+    "rdist": 110.75,
+    "notional_frac": 2.5726139954853275
+  },
+  "order_plan": {
+    "actionable": true,
+    "reason": "ok",
+    "side": "sell",
+    "lots": 0.11,
+    "sl": 28602.45,
+    "tp": 28159.45,
+    "ep": 28491.7,
+    "notional_usd": 64315.34988713319
+  },
+  "divergence": {
+    "ts": "2026-07-27T17:33:49.518917+00:00",
+    "symbol": "US100",
+    "side": "short",
+    "session": "NY",
+    "bid": 27891.09,
+    "ask": 27892.69,
+    "mid": 27891.89,
+    "intended_price": 28491.7,
+    "model_side_bps": 0.407,
+    "half_spread_bps": 0.28682172488105767,
+    "slippage_bps": 0.0,
+    "actual_side_bps": 0.28682172488105767,
+    "divergence_bps": -0.1201782751189423,
+    "extra": {
+      "day": "2026-07-27",
+      "spec_measured": true
+    }
+  },
+  "note_no_send": "order_send は runner から呼ばない。実弾は enable_live+CHAIRMAN-GO+会長GO。",
+  "clock": {
+    "local_utc": "2026-07-27T17:33:49.487679+00:00",
+    "ok": true,
+    "server_epoch": 1785184429,
+    "server_dt_asif_utc": "2026-07-27T20:33:49+00:00",
+    "server_minus_local_s": 10799.512,
+    "watch_end_utc": "2026-07-27T17:30:00+00:00",
+    "last_bar_utc": "2026-07-27T17:32:00+00:00",
+    "last_bar_minus_watch_end_s": 120.0
+  }
+}

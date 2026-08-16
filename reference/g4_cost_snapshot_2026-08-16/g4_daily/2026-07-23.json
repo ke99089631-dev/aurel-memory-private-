@@ -1,0 +1,26 @@
+{
+  "date": "2026-07-23",
+  "exported_at": "2026-07-24T12:16:17.293570+00:00",
+  "config": "us100",
+  "mode": "live",
+  "symbol": "NDX100",
+  "login": 40000162046,
+  "equity": 25000.0,
+  "effective_risk_pct": null,
+  "spread_obs": {
+    "n": 0,
+    "market_closed_or_no_ticks": true
+  },
+  "finalized": true,
+  "entered": false,
+  "stage": "pending_sync",
+  "reason": "M1履歴が監視窓に未同期(充填待ち・再試行する)",
+  "clock": {
+    "local_utc": "2026-07-24T12:16:17.291578+00:00",
+    "ok": true,
+    "server_epoch": 1784906176,
+    "server_dt_asif_utc": "2026-07-24T15:16:16+00:00",
+    "server_minus_local_s": 10798.708,
+    "watch_end_utc": "2026-07-23T17:30:00+00:00"
+  }
+}

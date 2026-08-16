@@ -1,0 +1,31 @@
+{
+  "date": "2026-08-12",
+  "exported_at": "2026-08-12T17:34:05.294573+00:00",
+  "config": "us100",
+  "mode": "live",
+  "symbol": "NDX100",
+  "login": 40000162046,
+  "equity": 25000.0,
+  "effective_risk_pct": null,
+  "spread_obs": {
+    "n": 48,
+    "typical_pt": 160.0,
+    "worst_pt": 160.0,
+    "best_pt": 160.0
+  },
+  "finalized": true,
+  "entered": false,
+  "stage": "width_filter",
+  "reason": "レンジ広すぎフィルタ除外(width_atr=2.718)",
+  "width_atr": 2.7181910336483157,
+  "clock": {
+    "local_utc": "2026-08-12T17:34:05.207346+00:00",
+    "ok": true,
+    "server_epoch": 1786566844,
+    "server_dt_asif_utc": "2026-08-12T20:34:04+00:00",
+    "server_minus_local_s": 10798.793,
+    "watch_end_utc": "2026-08-12T17:30:00+00:00",
+    "last_bar_utc": "2026-08-12T17:32:00+00:00",
+    "last_bar_minus_watch_end_s": 120.0
+  }
+}

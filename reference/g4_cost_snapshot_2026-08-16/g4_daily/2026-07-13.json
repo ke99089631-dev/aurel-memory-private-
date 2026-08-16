@@ -1,0 +1,31 @@
+{
+  "date": "2026-07-13",
+  "exported_at": "2026-07-13T21:30:45.319180+00:00",
+  "config": "us100",
+  "mode": "live",
+  "symbol": "NDX100",
+  "login": 40000162046,
+  "equity": 25000.0,
+  "effective_risk_pct": null,
+  "spread_obs": {
+    "n": 48,
+    "typical_pt": 160.0,
+    "worst_pt": 160.0,
+    "best_pt": 160.0
+  },
+  "finalized": true,
+  "entered": false,
+  "stage": "watch",
+  "reason": "監視窓内にブレイク無し=機械は入らない判断",
+  "width_atr": 1.4510245901639185,
+  "clock": {
+    "local_utc": "2026-07-13T21:30:45.311125+00:00",
+    "ok": true,
+    "server_epoch": 1783987139,
+    "server_dt_asif_utc": "2026-07-13T23:58:59+00:00",
+    "server_minus_local_s": 8893.689,
+    "watch_end_utc": "2026-07-13T17:30:00+00:00",
+    "last_bar_utc": "2026-07-13T17:32:00+00:00",
+    "last_bar_minus_watch_end_s": 120.0
+  }
+}

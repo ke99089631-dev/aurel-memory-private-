@@ -1,0 +1,30 @@
+{
+  "date": "2026-06-29",
+  "exported_at": "2026-07-12T22:12:15.387060+00:00",
+  "config": "us100",
+  "mode": "preflight",
+  "entered": true,
+  "stage": "planned",
+  "reason": "ブレイク成立→発注プラン生成(--dry・未送信)",
+  "width_atr": 0.9882148200164721,
+  "intent": {
+    "side": "short",
+    "ep": 29257.036,
+    "sl": 29414.250399999997,
+    "tp": 28785.39280000001,
+    "rdist": 157.2143999999971,
+    "notional_frac": 1.8609641356008442
+  },
+  "order_plan": {
+    "actionable": true,
+    "reason": "ok",
+    "side": "sell",
+    "lots": 1.59,
+    "sl": 29414.250399999997,
+    "tp": 28785.39280000001,
+    "ep": 29257.036,
+    "notional_usd": 46524.103390021104
+  },
+  "divergence": null,
+  "note_no_send": "order_send は runner から呼ばない。実弾は enable_live+CHAIRMAN-GO+会長GO。"
+}
