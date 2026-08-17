@@ -11,7 +11,16 @@ created: 2026-08-16
 > 5画面: COMMAND(中央ノード網) / MARKET(源泉別P&L曲線) / INTELLIGENCE(世界観・未実装はFUTURE表示) / RESEARCH(発見フィード) / CHAIRMAN(要判断)。
 > 改善#5「日次スナップショット」も本日開始: `snapshots/2026-08-17.json`（Knowledge Universeの種）。
 > 読取専用・金ゼロ・二重ロック/Live Gate/会長承認権限は一切触らず。プロップ非接触。
-> 残: Phase2(自動更新ローカルサーバ) / Phase3(承認ボタン, 二重ロック不変) は会長判断待ち。
+> 残: Phase3(承認ボタン, 二重ロック不変) は会長判断待ち。
+
+> **[2026-08-17 UPDATE] Phase 2（生中継化）着工完了。** 会長GO「第二段に進んでいい」。
+> `command_center.py` に `serve()` を追加（localhost 127.0.0.1:8787 のみ・GETのみ・書込API無し・POSTは405で拒否）。
+> `/` でページ配信＋`__LIVE__={url,every}`注入、`/model.json` で毎回 build_model() し直した最新値を返す。ページは既定30秒ごとに自分で取り直し、全画面を描き直す。
+> 上部LIVEバッジに「更新 HH:MM:SS」を表示（画面ストリームの生存＝meta.built）。「最終呼吸」は機関が実際に動いた時刻（autowrite）で別表示＝正直な区別。
+> 静的ファイル(ダブルクリック)は `LIVE=null` のまま＝従来どおり一枚の写真。二重ロック/Live Gate/会長承認は不変。金ゼロ・秘密なし・プロップ非接触。
+> 起動: `python -m circulation.command_center --serve [--port 8787] [--interval 30]`。停止: Ctrl+C（=生中継停止・静的ファイルは残る）。
+> 検証済: index 60KB(live注入OK) / model.json 31KB(loops=9) / POST=405拒否。
+> 注意: サーバは前景プロセス。閉じれば生中継停止。常時起動は将来タスク（Windowsタスク/常駐）で会長判断。
 
 # AURELIAN COMMAND CENTER v2 — 監査＋設計案
 
