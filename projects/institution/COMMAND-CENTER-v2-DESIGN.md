@@ -22,6 +22,15 @@ created: 2026-08-16
 > 検証済: index 60KB(live注入OK) / model.json 31KB(loops=9) / POST=405拒否。
 > 注意: サーバは前景プロセス。閉じれば生中継停止。常時起動は将来タスク（Windowsタスク/常駐）で会長判断。
 
+> **[2026-08-19 UPDATE] 日次自動撮り直しを採用（会長「君に任せる／このまま使い始める」）。**
+> 判明: `build_model()` は約**52秒**かかる。→ 生中継サーバ(serve)は表示ごとに52秒再構築で固まり実用不可。撤退。
+> 採用方針: **静的publishを毎朝自動化**。新規 `scripts/run_command_center_publish.bat`（ASCIIのみ・ログ追記）が
+> `python -m circulation.command_center --snapshot` を実行→ `data\circulation\command_center.html`(59KB) を最新化＋日付つきsnapshot保存。
+> Windowsタスク **`AUREL_CommandCenter_Publish`** 毎日07:10（`AUREL_Circulation_WriteBack` 07:00の直後）。試走 LastResult=0 で確認済。
+> 運用: 会長は朝このHTMLを開くだけで昨日からの成長が見える（待ち時間ゼロ）。生中継サーバは常用しない。
+> 安全線不変: 紙のみ・金ゼロ・読取専用・二重ロック/Live Gate/会長承認は非接触・プロップ非接触。
+> 将来の改善案（着工は会長GO要）: 「52秒を一瞬にする」= build結果を裏でキャッシュ→軽い生中継。今は不要と判断。
+
 # AURELIAN COMMAND CENTER v2 — 監査＋設計案
 
 > 会長号令（2026-08-16）: 現ダッシュボードを「複数パネル監視画面」から「機関そのものがリアルタイムで
