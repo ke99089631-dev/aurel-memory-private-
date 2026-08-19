@@ -30,3 +30,9 @@ updated: 2026-08-14
 
 ## 補足
 - aurel.mjs 側の `postToMother` バグ修正はディスク上に済（sseListeners＋assistant_text/done＋appendMessage）。ただし未再起動のため未ロード。B は /send 経路で proactive に依存しないため、この修正の要否とは独立。
+
+## [2026-08-19] 修正: 「承認待ち」カウントのズレ
+- 症状: 朝ブリーフ「研究レーン 会長承認待ち 2」だが、その2件(H-0007/H-0014)は8/16に会長承認済み(chairman_approval.approved=true)。
+- 原因: `circulation/hypothesis_ledger.py` `_summarize()` が `awaiting_chairman = by_state["promoted_candidate"]` と“棚上げ候補”を全数カウントし、承認済みを差し引いていなかった。
+- 修正: promoted_candidate のうち `chairman_approval.approved` が真の分を除外して数える。再生成で awaiting_chairman=0 を確認。chairman_brief はこの summary を読むだけなので連動して0に。
+- 安全: 数え方のみ。戦略/鍵/金/プロップ非接触。紙のみ。
