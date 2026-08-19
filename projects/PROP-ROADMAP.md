@@ -534,3 +534,19 @@ NY=全0.81bps/p90 1.25bps（片道 typ0.407/p90 0.624）、LON=全1.53bps/p90 2.
   2. **§2-2の通知先チャネル未投入**: dead-man URL(healthchecks.io等・秘密不要・マシン死の本命) / Gmailアプリパスワード(SMTP) / webhook のいずれか。
   3. **trial .env未投入**: MT5_LOGIN/PASSWORD/SERVER=FundingPips-Trial(会長の手で)。
 - 報告: 上記を会長へ1通(起動確認は実起動時に別途)。実弾は会長GO(--arm CHAIRMAN-GO)まで無し。
+
+---
+## [2026-08-20] プロップ ドライラン 一時停止（会長指示「今は使わない・審査はまだ先」）
+状態: **STOPPED / 自動起動 無効化済み**（削除なし・全て可逆）。
+停止したもの:
+- スケジュールタスク4つを Disable: `AUREL_G4_Watchdog` `AUREL_G4_Runner` `AUREL_G4_Keepalive` `AUREL_G4_Dashboard`
+- スタートアップbatを改名: `Startup\aurel_g4_dryrun.bat` → `.disabled` / `g4_dashboard_open.bat` → `.disabled`
+- プロセス停止: g4_watchdog.py×2, hidden_run.vbs(wscript), run_g4_watchdog.bat(cmd), FundingPips-MT5\terminal64.exe
+確認: g4プロセス残存なし・MT5なし・再生なし。mother-autostart.ps1 はg4非参照（安全）。
+プロップ本体(設定/凍結backtester/口座)は無傷。触ったのは「動作」と「自動起動」のみ。
+
+### 審査再開時の戻し手順（AURELが実行可）
+1. `Enable-ScheduledTask` で4タスクを有効化（Watchdog/Runner/Keepalive/Dashboard）
+2. Startupの `*.bat.disabled` を `.bat` に戻す（2ファイル）
+3. `schtasks /run /tn AUREL_G4_Runner`（またはログオンし直し）→ Watchdogが端末を維持
+注意: 実弾/鍵/口座購入は会長のみ。ドライランでもログイン情報(.env)は読まない/出さない。
