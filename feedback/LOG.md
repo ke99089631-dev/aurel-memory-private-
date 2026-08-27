@@ -426,3 +426,26 @@ Interactiveセッションで powershell.exe -WindowStyle Hidden を起動 → �
 旧レイアウト規則は #left--hidden にリネームして無効化・温存。
 バックアップ: AUREL会社_sample_v4.before-hide-left.20260827-232000.bak.html。
 戻す時: この規則を消すだけ。ページ再読み込みで反映。
+
+## 2026-08-27 司令室UI 追撃修正（凡例削除＋ニュース欄はみ出し）
+会長指示: (1)左下の凡例ウインドウ(〇稼働/〇検証/開発/承認待ち/計画)を削除。(2)右の「世界の動き」が画面に収まらない→修正。
+対象: C:\Users\user\AssetEmpire\AUREL会社_sample_v4.html
+(1) #legend{display:none !important} で凡例を非表示。
+(2) 原因: #right に下端制約が無く、ニュース増加で画面下へはみ出し（#leftはbottom:66pxで制限済みだった）。
+   対処: #right に bottom:16px を付与し高さを画面内に制限。
+   #right>.panel.pad を flex:1・min-height:0 に、#news を overflow-y:auto でパネル内スクロール化。
+   → 猫パネルは上部固定、世界の動きは残り高さに収まり内部スクロール。
+方式: CSSのみ・HTML/JS不変・可逆。バックアップ: AUREL会社_sample_v4.before-right-fix.<ts>.bak.html。反映はページ再読み込み。
+
+## 2026-08-27 司令室UI ウインドウを自由移動＋リサイズ＋記憶（汎用）
+会長要望「世界の動きなどの窓を自由に動かせて・サイズ変更もできるように。今後増やす窓も同じに」。
+対象: C:\Users\user\AssetEmpire\AUREL会社_sample_v4.html （</body>直前に自己完結モジュール追加）。
+仕様:
+ - 対象は #left>.panel と #right>.panel（＝今後この2コンテナに足す窓も自動で同じ挙動）。
+ - タイトル(.ttl)をドラッグで移動（avatar猫は本体ドラッグ）。掴むと position:fixed の「浮き窓」化。
+ - 角つまみ(resize:both)でサイズ変更。
+ - 位置とサイズを localStorage(auwin.geom.v1)に保存→リロードしても維持。
+ - タイトルをダブルクリックでその窓だけ元の位置に戻す。
+ - 保険: コンソールで au_resetWindows() を叩くと全窓リセット。
+ - ドラッグ中は input/button/news-tab等の操作を除外（誤爆防止）、画面外に出ないようクランプ、リサイズ時に自動保存。
+方式: CSS+JSの追記のみ・既存HTML/JS不変・可逆。反映はページ再読み込み。
