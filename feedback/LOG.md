@@ -20,6 +20,11 @@ G4(FundingPips審査準備)の観測ランナー心拍が 2026-08-17 07:58 で�
 ★真の壁: 起動しても MT5接続が **`-6 Terminal: Authorization failed`**。端末は隔離のFundingPips専用(`C:\FundingPips-MT5`・Vantage実弾には非接触)で設定(server=FundingPips-Trial/portable)も正。＝**1本目トライアル口座の認証が通らない＝期限切れの可能性が濃厚**（7月開始の約30日トライアル）。これはAURELでは直せない＝会長のポータル確認/口座が必要。
 対処: 死んだ口座に番犬が再起動を繰り返す空回りを停止（Keepalive無効化・Runner/Watchdog停止・stray procs kill）。**タスク定義はReadyで温存**＝有効な審査口座が入り次第すぐ再武装可能。実害ゼロ（金は動かない・審査未受験）。
 
+### [PREFERENCE] 「MT5が勝手に起動するのが不快」→ 自動起動タスクを全Disable（2026-08-27）
+会長「MT5がいまだに気づいたら起動している。確認してくれ」→調査で自動起動口を特定。犯人は**スケジューラのタスクのみ**（レジストリRun/スタートアップフォルダにMT5系は無し）。2系統: ①`AUREL_Empire_ETHAutopilot`=毎時、autopilot.pyが残高読取のため**実弾Vantage端末**を1時間ごと起動（=会長が以前から気にしていた"もう一つのMT5") ②`AUREL_G4_Runner/Watchdog`=ログオン時に**FundingPips審査端末**起動。
+会長判断「1で行く」=完全停止。対処: ETHAutopilot + G4(Runner/Watchdog/Keepalive/Dashboard) を**全てDisable**（Stop後）。端末プロセス0確認。全兵武装解除済で金は動かず運用損失なし。★タスク定義は削除せず温存＝可逆。審査再開時=G4再Enable、帝国再稼働時=ETHAutopilot再Enable。
+→ 学び: 会長は「見えないところで実弾端末が勝手に開く」ことを嫌う（不快＋不安）。武装解除済でも"起動している事実"自体がノイズ。停止は削除でなくDisableで可逆に。自動起動を足す時は会長に「どこが・いつ・何を起動するか」を明示し、不要になったら即畳む。
+
 ### [DECISION] 会長確認: トライアル失効を確定 → 本命①で行く・着手は会長号令待ち（2026-08-27）
 会長がポータルで確認=1本目トライアル終了（=`-6 Auth failed`の原因確定）。方針: **①$177評価口座で本審査へ進む**（②新トライアル再取得は却下=予行は出尽くし・8/16に受験準備完了宣言済）。ただし**「審査を受ける時期は私(会長)から言う」＝着手はGO待ち。AURELからは動かない**。
 号令が来たらAURELがやること: 新口座 login/password/server を `FundingPipsTrial\.env` へ配線 → 誤口座ハードガード → 接続確認 → G4.5観測(--dry・order_send呼ばない・本番評価鯖のコストを3〜5営業日観測)開始 → 実測でデバフ後合格率再算出 → ≥50%で実弾解禁を会長へ上申。★購入・鍵・実弾=会長の手のみ(不変)。観測常駐タスクはReady温存中。
@@ -404,3 +409,11 @@ ImperialFlow 再起動後、AUREL が memory と現実の数値差分を見て�
 → 標準方針: 「先取り/レバレッジが効く」と判断できる投資(広告/インフラ/AUREL自身の能力強化=有料API・上位モデル等)は会長が許容。
 → ただし鉄則は不変: お金が動く一歩は必ず会長の最終GO。AURELは「提案+金額+根拠」を出す係、実行GOは会長。破産回避が最優先。
 → AURELの動き方: ボトルネックを見つけたら、安く効く投資を具体額付きで提案する(出し惜しみせず、しかし無駄遣いせず)。
+
+## 2026-08-27 PowerShellウインドウ定期起動の是正
+会長報告「定期的にpowershellのウインドウが起動する」。
+原因: AUREL_HealthMonitor(5分毎) と AUREL_GitSync_Memory(15分毎) が
+Interactiveセッションで powershell.exe -WindowStyle Hidden を起動 → 隠す前に一瞬コンソールが点滅。
+対処: run-hidden.vbs (wscript, window style 0=完全非表示) を新設し、両タスクの
+アクションを wscript経由に付け替え。テスト実行 result=0・可視窓なし。
+※ AUREL_Deadline_0731/0801/0808 は期日超過でNextRun無し(再発火せず)＝別件。放置可。
