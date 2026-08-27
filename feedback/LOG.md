@@ -449,3 +449,19 @@ Interactiveセッションで powershell.exe -WindowStyle Hidden を起動 → �
  - 保険: コンソールで au_resetWindows() を叩くと全窓リセット。
  - ドラッグ中は input/button/news-tab等の操作を除外（誤爆防止）、画面外に出ないようクランプ、リサイズ時に自動保存。
 方式: CSS+JSの追記のみ・既存HTML/JS不変・可逆。反映はページ再読み込み。
+
+## 2026-08-27 司令室UI 浮き窓が画面を超えてリサイズつまみに届かない不具合を修正
+症状: 「世界の動き」を浮き窓化後、保存高さが画面より大きく、右下のresizeつまみが画面外で触れない。
+対処(AUREL会社_sample_v4.html):
+ - .panel.auwin-pinned に max-width:calc(100vw-24px)/max-height:calc(100vh-24px) を追加（窓が画面を超えない）。
+ - clampInView を強化: 幅高さを画面内に縮小＋右下まで収まる位置へ再配置。
+ - init時に復元窓へ clampInView→persist を実行（既存の壊れた保存値をリロードで自動修復）。
+可逆・CSS/JS追記のみ。反映は再読み込み。詰まったら au_resetWindows()。
+
+## 2026-08-27 司令室UI 浮き窓が上端外へ→タイトル掴めない を修正
+症状: 窓が画面上端から外れ、移動用カーソル(タイトル)に届かない。
+対処(AUREL会社_sample_v4.html):
+ - 読込80ms後に reclampAll() を実行し全浮き窓を画面内へ強制（top>=12 保証）。
+ - resize時も reclampAll。
+ - 脱出策: Alt+R で au_resetWindows()（全窓を初期位置へ・マウス不要）。
+可逆・JS追記のみ。反映は再読み込み。
