@@ -7,6 +7,19 @@
 
 ---
 
+## 2026-08-27
+
+### [PREFERENCE] 携帯窓口は会話を残せ／自律レポート2種は廃止
+会長: 「この携帯からの窓口は毎回、閉じると会話履歴がリセットされてしまう。残すようにできるか？」＋「Future Lab先読み／朝の巡回レポート、もう必要ないから廃止してよい」。
+実施: (1) `aurel_phone_server.py` 改修=`--resume`でsession継続／発言を messages.jsonl に追記／開いた時 `/history` で直近40件を再表示（新サーバ再起動で反映確認・pid入替）。session_id保存=`.aurel\phone\session.json`。(2) proactive daemon(:7878) API経由で `morning_patrol`/`future_lab` を enabled:false（ディスクにも永続確認）。chairman_brief(07:06)は残す。
+→ 学び: 会長は「毎朝12:07/12:10の定型自動レポート」に価値を感じていない＝ノイズ。残すのは会長が明示指示した07:06朝ブリーフのみ。自律発報は"数を出す"より"会長が本当に読むものだけ"に絞る。常駐プロセスの設定変更は直接JSON編集でなく稼働デーモンのAPIで（上書き競合を避ける）。
+
+### [OBSERVATION] プロップ観測ランナーが再び沈黙（要復旧判断・未GO）
+G4(FundingPips審査準備)の観測ランナー心拍が 2026-08-17 07:58 で停止、常駐ログも 08-20 以降更新なし。会長「復旧させてくれ」→着手。
+判明: AUREL_G4_Runner/Watchdog タスクは消滅ではなく**無効(Disabled)化されて残存**していた（非昇格でも Enable-ScheduledTask で有効化成功）。Keepalive/Dashboard は新規Register（非昇格OK）。全4タスクを Task Scheduler所有・hidden_run.vbs 経由で再構築＝**私のセッションから独立**（前回の同時死パターンを回避）。
+★真の壁: 起動しても MT5接続が **`-6 Terminal: Authorization failed`**。端末は隔離のFundingPips専用(`C:\FundingPips-MT5`・Vantage実弾には非接触)で設定(server=FundingPips-Trial/portable)も正。＝**1本目トライアル口座の認証が通らない＝期限切れの可能性が濃厚**（7月開始の約30日トライアル）。これはAURELでは直せない＝会長のポータル確認/口座が必要。
+対処: 死んだ口座に番犬が再起動を繰り返す空回りを停止（Keepalive無効化・Runner/Watchdog停止・stray procs kill）。**タスク定義はReadyで温存**＝有効な審査口座が入り次第すぐ再武装可能。実害ゼロ（金は動かない・審査未受験）。会長待ち=FundingPipsポータルでトライアル口座の生死確認 or $177評価口座購入。
+
 ## 2026-08-16
 
 ### [PRAISE] 「つねに驚かされている、君は優秀だ」— 0→1の節目
