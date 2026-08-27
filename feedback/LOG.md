@@ -482,3 +482,12 @@ Interactiveセッションで powershell.exe -WindowStyle Hidden を起動 → �
  - resize時も reclampAll。
  - 脱出策: Alt+R で au_resetWindows()（全窓を初期位置へ・マウス不要）。
 可逆・JS追記のみ。反映は再読み込み。
+
+## 2026-08-28 — qlib Phase 1 完了（プロ級バックテスト＋US市場データ）
+- 会長指示「①と②」: ①VC++ redist導入→プロ級バックテスト1本 ②US市場データ投入。両方達成。
+- ① lightgbm有効化: VC_redist.x64.exe を /quiet 導入→vcomp140.dll解決→lightgbm 4.7.0ロードOK。
+  Alpha158+LGB(csi300,テスト2020,Topk50/Drop5,コスト込): IC0.0236/RankIC0.0239, 年率+15.80%/情報比1.98/最大DD-2.20%。
+  Win注意2件: 新MLflowはファイルストア拒否→MLFLOW_ALLOW_FILE_STORE=true; qlib.backtest.backtest()はexecutor必須(SimulatorExecutor)。
+- ② US: yfinance 1.7.0で15銘柄(SPY/QQQ/AAPL/NVDA等)×1760日取得→dump_bin.pyでqlibバイナリ化→us_data。REG_USで読込SMOKE-US-OK。
+- 安全: 全工程 金ゼロ・鍵ゼロ・読取専用・プロップ非接触・隔離venv(qlib-lab)。hermes venv非汚染。
+- ファイル: qlib-lab/{backtest_lgb.py, us_collect.py, smoke_us.py, dump_bin.py, STATUS.md, bt_result.txt}, .qlib/qlib_data/us_data。
