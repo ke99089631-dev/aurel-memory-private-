@@ -417,3 +417,12 @@ Interactiveセッションで powershell.exe -WindowStyle Hidden を起動 → �
 対処: run-hidden.vbs (wscript, window style 0=完全非表示) を新設し、両タスクの
 アクションを wscript経由に付け替え。テスト実行 result=0・可視窓なし。
 ※ AUREL_Deadline_0731/0801/0808 は期日超過でNextRun無し(再発火せず)＝別件。放置可。
+
+## 2026-08-27 司令室UI 左パネル群を非表示
+会長指示「左にある会社全体像などのウインドをすべてなくしてくれ。もう使ってない」。
+対象ファイル: C:\Users\user\AssetEmpire\AUREL会社_sample_v4.html （司令室 sample v2(3D)。file://で開く静的HTML）。
+対処: #left{display:none !important} を追加し左スタック全体（会社全体像ボタン/資金/安全装置/資産帝国部署/会長のタスク/決裁履歴/部門レポート/LIVE稼働中）を非表示。
+方式: HTML/JSは削らずCSS一行で隠す（getElementById参照が残るのでnullエラー無し・完全に可逆）。
+旧レイアウト規則は #left--hidden にリネームして無効化・温存。
+バックアップ: AUREL会社_sample_v4.before-hide-left.20260827-232000.bak.html。
+戻す時: この規則を消すだけ。ページ再読み込みで反映。
