@@ -18,7 +18,11 @@
 G4(FundingPips審査準備)の観測ランナー心拍が 2026-08-17 07:58 で停止、常駐ログも 08-20 以降更新なし。会長「復旧させてくれ」→着手。
 判明: AUREL_G4_Runner/Watchdog タスクは消滅ではなく**無効(Disabled)化されて残存**していた（非昇格でも Enable-ScheduledTask で有効化成功）。Keepalive/Dashboard は新規Register（非昇格OK）。全4タスクを Task Scheduler所有・hidden_run.vbs 経由で再構築＝**私のセッションから独立**（前回の同時死パターンを回避）。
 ★真の壁: 起動しても MT5接続が **`-6 Terminal: Authorization failed`**。端末は隔離のFundingPips専用(`C:\FundingPips-MT5`・Vantage実弾には非接触)で設定(server=FundingPips-Trial/portable)も正。＝**1本目トライアル口座の認証が通らない＝期限切れの可能性が濃厚**（7月開始の約30日トライアル）。これはAURELでは直せない＝会長のポータル確認/口座が必要。
-対処: 死んだ口座に番犬が再起動を繰り返す空回りを停止（Keepalive無効化・Runner/Watchdog停止・stray procs kill）。**タスク定義はReadyで温存**＝有効な審査口座が入り次第すぐ再武装可能。実害ゼロ（金は動かない・審査未受験）。会長待ち=FundingPipsポータルでトライアル口座の生死確認 or $177評価口座購入。
+対処: 死んだ口座に番犬が再起動を繰り返す空回りを停止（Keepalive無効化・Runner/Watchdog停止・stray procs kill）。**タスク定義はReadyで温存**＝有効な審査口座が入り次第すぐ再武装可能。実害ゼロ（金は動かない・審査未受験）。
+
+### [DECISION] 会長確認: トライアル失効を確定 → 本命①で行く・着手は会長号令待ち（2026-08-27）
+会長がポータルで確認=1本目トライアル終了（=`-6 Auth failed`の原因確定）。方針: **①$177評価口座で本審査へ進む**（②新トライアル再取得は却下=予行は出尽くし・8/16に受験準備完了宣言済）。ただし**「審査を受ける時期は私(会長)から言う」＝着手はGO待ち。AURELからは動かない**。
+号令が来たらAURELがやること: 新口座 login/password/server を `FundingPipsTrial\.env` へ配線 → 誤口座ハードガード → 接続確認 → G4.5観測(--dry・order_send呼ばない・本番評価鯖のコストを3〜5営業日観測)開始 → 実測でデバフ後合格率再算出 → ≥50%で実弾解禁を会長へ上申。★購入・鍵・実弾=会長の手のみ(不変)。観測常駐タスクはReady温存中。
 
 ## 2026-08-16
 
