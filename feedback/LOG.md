@@ -26,6 +26,11 @@
 実施(`AUREL会社_sample_v4.html`, backup=before-catwatch.20260828-002538): 猫を飾りから実用の番猫へ。connectReal(橋7891, 30秒毎)の末尾に `catWatch(d)` をフック。前回スナップショット(catPrev)と差分比較し"本当に起きた変化だけ"を吹き出しでしゃべる。優先度: 緊急停止(killSwitch)>新規/承認待ち決裁>実弾残高変動>注目ニュース更新>平常。①決裁あり→「承認待ちが◯件にゃ」＋猫/吹き出しクリックで #trayWin へ smooth scroll＋シアン点滅(cat-flash)。②killSwitch ON→枠が赤脈動(cat-warn)＋表情alert＋見回り欄「⚠緊急停止 作動中」。③ニュース更新→#newsWin へジャンプ。ゲージ(けいかい/げんき/きげん)も実データ連動(pend数・停止・petMood)。catReal=trueでサンプル文言(catReport 6秒)は停止。左パネル(#moneyPanel/#killState)は非表示なので飛び先は表示中の #trayWin / #newsWin に限定、kill/資金は"赤く知らせるだけ"(catJumpはoffsetParent nullの非表示要素へ飛ばないガード付き)。module script は node --check exit0。反映は司令室リロード。
 → 学び: 「役立つUI」を作る時は"既に流れている本物データ(橋7891)"に載せるのが最短で本物になる。会長好み=飾りより実益＋ワンクリックで現物へ辿り着く導線。非表示化した窓へジャンプ導線を張らない配慮(表示中の窓のみ飛び先)。猫の見張りも読むだけ・お金は動かさない原則を維持。
 
+### [PREFERENCE] GitHub調査→Aurelian強化: qlib導入・動作確認（Phase 0完了）
+会長: GitHubの公開/有償の仕組みを説明→会長事業(ImperialFlow/CYPHER/CONDUITは眠らせ中と判明)に合わせ再調査→本命=Microsoft製 **qlib(★4.8万,MIT)＋RD-Agent(Q)(★1.4万,MIT)**＝AIが勝ち筋を自動発見する研究基盤。会長「まずqlibだけ先に入れて動作確認。これはAurelianが強化されるだろ？」→GO。
+実施(`C:\Users\user\qlib-lab\`): base(uv cpython3.11)から**専用venv隔離**(hermes調査部隊のvenvを汚さない)→pyqlib 0.9.7導入→無料プレビルドCN市場データ(chenditc,536MB)を`~/.qlib/qlib_data/cn_data`へ→スモークテストで **csi300=949銘柄・SH600000等の2020 OHLCVを実読込=SMOKE-OK**。金ゼロ・鍵ゼロ・読取専用・プロップ非接触を厳守。Aurelian位置づけ=S0/S1(紙研究)の検証エンジンをプロ級に格上げ、本命RD-Agent(Q)の土台。ハマり所2件を記録: (1)Windowsは multiprocessing(spawn)のため qlib実行スクリプトは必ず `if __name__=='__main__'` で保護(未保護でbootstrappingエラー)。(2)lightgbmが `vcomp140.dll`(OpenMP)不足で未ロード=マシンにDLL無し→ML学習(qrun)にはVC++ Redist導入(=会長GO/UAC案件)が要る。データ検証だけならlightgbm不要。詳細=`C:\Users\user\qlib-lab\STATUS.md`。
+→ 学び: 新ツールは"金ゼロ・鍵ゼロ・隔離venv"で足場だけ先に固めると会長の大原則を1つも侵さず前進できる。Windows×Pythonネイティブ拡張の2大地雷=①multiprocessing main-guard ②VC++ランタイム(vcomp140/vcruntime140)不足。既存の常駐venv(hermes等)に相乗りせず必ず隔離。RD-Agent(Q)は有料LLM鍵＋WSL2＝会長GO必須なので段階を切って先送りが正解。
+
 ### [OBSERVATION] プロップ観測ランナーが再び沈黙（要復旧判断・未GO）
 G4(FundingPips審査準備)の観測ランナー心拍が 2026-08-17 07:58 で停止、常駐ログも 08-20 以降更新なし。会長「復旧させてくれ」→着手。
 判明: AUREL_G4_Runner/Watchdog タスクは消滅ではなく**無効(Disabled)化されて残存**していた（非昇格でも Enable-ScheduledTask で有効化成功）。Keepalive/Dashboard は新規Register（非昇格OK）。全4タスクを Task Scheduler所有・hidden_run.vbs 経由で再構築＝**私のセッションから独立**（前回の同時死パターンを回避）。
