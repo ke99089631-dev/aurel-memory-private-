@@ -19,6 +19,13 @@
 実施(`AUREL会社_sample_v4.html`ほか、backup有): (1)#left/#legend を display:none。(2)ニュースはflexで画面内に収める。(3)可動ウインドウ機構 auFloatingWindows()=position:fixed+resize:both+localStorage(auwin.geom.v1)保存、clampInView()でviewport内に強制（つまみ到達・上端はみ出し防止）、ダブルクリックで固定解除、Alt+Rで全リセット。(4)決裁トレイ #trayWin 新設=会社全体・会長待ちの決裁を種別バッジ(発見🔎/採用🤝/事業🏢/昇格⬆️/実弾💰/その他•)付きで表示、承認/却下/保留ボタン、手動起票フォーム(spine add cat=<種別>経由)、履歴＝答え合わせ。パイプライン: 橋7891→spine→decisions.json（source=spine実データ）。end-to-end動作確認済み(spine add cat=発見→橋がcategory:"発見"を配信→resolveで撤去、テスト痕跡もdecisions.jsonから除去)。moduleスクリプトはnode --checkでexit0。
 → 学び: 会長は"使っていないUIは即消す・散らかりを嫌う"＋"自分で触って動かせる自由度"を強く好む。UIの窓は必ずviewport内へclampしないと操作不能になる（会長が2回連続で報告=致命傷）。決裁トレイは会社全体（発見/採用/事業…）を1箇所に集約する会長の意思決定ハブ。実弾種別の決裁でも実行はDRY_RUN厳守・お金は1円も動かさない・鍵は回さない=CHAIRMAN-GO二重ロック前提。
 
+## 2026-08-28
+
+### [PREFERENCE] 番猫ニャルに「本物の見張り番」役を付与（実データ通知）
+会長: 「この猫ウインドウに何か役割・機能を付けたい。役に立つ／エンタメ／遊びごころ」→選択肢提示→会長「1（本物の見張り番＝実データ通知）」。
+実施(`AUREL会社_sample_v4.html`, backup=before-catwatch.20260828-002538): 猫を飾りから実用の番猫へ。connectReal(橋7891, 30秒毎)の末尾に `catWatch(d)` をフック。前回スナップショット(catPrev)と差分比較し"本当に起きた変化だけ"を吹き出しでしゃべる。優先度: 緊急停止(killSwitch)>新規/承認待ち決裁>実弾残高変動>注目ニュース更新>平常。①決裁あり→「承認待ちが◯件にゃ」＋猫/吹き出しクリックで #trayWin へ smooth scroll＋シアン点滅(cat-flash)。②killSwitch ON→枠が赤脈動(cat-warn)＋表情alert＋見回り欄「⚠緊急停止 作動中」。③ニュース更新→#newsWin へジャンプ。ゲージ(けいかい/げんき/きげん)も実データ連動(pend数・停止・petMood)。catReal=trueでサンプル文言(catReport 6秒)は停止。左パネル(#moneyPanel/#killState)は非表示なので飛び先は表示中の #trayWin / #newsWin に限定、kill/資金は"赤く知らせるだけ"(catJumpはoffsetParent nullの非表示要素へ飛ばないガード付き)。module script は node --check exit0。反映は司令室リロード。
+→ 学び: 「役立つUI」を作る時は"既に流れている本物データ(橋7891)"に載せるのが最短で本物になる。会長好み=飾りより実益＋ワンクリックで現物へ辿り着く導線。非表示化した窓へジャンプ導線を張らない配慮(表示中の窓のみ飛び先)。猫の見張りも読むだけ・お金は動かさない原則を維持。
+
 ### [OBSERVATION] プロップ観測ランナーが再び沈黙（要復旧判断・未GO）
 G4(FundingPips審査準備)の観測ランナー心拍が 2026-08-17 07:58 で停止、常駐ログも 08-20 以降更新なし。会長「復旧させてくれ」→着手。
 判明: AUREL_G4_Runner/Watchdog タスクは消滅ではなく**無効(Disabled)化されて残存**していた（非昇格でも Enable-ScheduledTask で有効化成功）。Keepalive/Dashboard は新規Register（非昇格OK）。全4タスクを Task Scheduler所有・hidden_run.vbs 経由で再構築＝**私のセッションから独立**（前回の同時死パターンを回避）。
