@@ -14,6 +14,11 @@
 実施: (1) `aurel_phone_server.py` 改修=`--resume`でsession継続／発言を messages.jsonl に追記／開いた時 `/history` で直近40件を再表示（新サーバ再起動で反映確認・pid入替）。session_id保存=`.aurel\phone\session.json`。(2) proactive daemon(:7878) API経由で `morning_patrol`/`future_lab` を enabled:false（ディスクにも永続確認）。chairman_brief(07:06)は残す。
 → 学び: 会長は「毎朝12:07/12:10の定型自動レポート」に価値を感じていない＝ノイズ。残すのは会長が明示指示した07:06朝ブリーフのみ。自律発報は"数を出す"より"会長が本当に読むものだけ"に絞る。常駐プロセスの設定変更は直接JSON編集でなく稼働デーモンのAPIで（上書き競合を避ける）。
 
+### [PREFERENCE] 司令室UIの整理＋可動ウインドウ＋決裁トレイ新設
+会長: 左の会社全体像ウインドウ全廃／左下の凡例(〇稼働〇検証)削除／右「世界の動き」ニュースが画面外→修正／「ウインドウを自由に動かせてサイズ変更・位置保存もできるように（今後増やす窓も同じ）」／はみ出してつまみが届かない・上画面から出て移動カーソルが出ない→clampで修正。最後に「新しく追加するなら？」→決裁トレイを提案→会長「aurelianの発見/採用/事業など会社全体のトレイかな？」→intake方式「3（AUREL自動起票＋手動起票の両方）」を選択。
+実施(`AUREL会社_sample_v4.html`ほか、backup有): (1)#left/#legend を display:none。(2)ニュースはflexで画面内に収める。(3)可動ウインドウ機構 auFloatingWindows()=position:fixed+resize:both+localStorage(auwin.geom.v1)保存、clampInView()でviewport内に強制（つまみ到達・上端はみ出し防止）、ダブルクリックで固定解除、Alt+Rで全リセット。(4)決裁トレイ #trayWin 新設=会社全体・会長待ちの決裁を種別バッジ(発見🔎/採用🤝/事業🏢/昇格⬆️/実弾💰/その他•)付きで表示、承認/却下/保留ボタン、手動起票フォーム(spine add cat=<種別>経由)、履歴＝答え合わせ。パイプライン: 橋7891→spine→decisions.json（source=spine実データ）。end-to-end動作確認済み(spine add cat=発見→橋がcategory:"発見"を配信→resolveで撤去、テスト痕跡もdecisions.jsonから除去)。moduleスクリプトはnode --checkでexit0。
+→ 学び: 会長は"使っていないUIは即消す・散らかりを嫌う"＋"自分で触って動かせる自由度"を強く好む。UIの窓は必ずviewport内へclampしないと操作不能になる（会長が2回連続で報告=致命傷）。決裁トレイは会社全体（発見/採用/事業…）を1箇所に集約する会長の意思決定ハブ。実弾種別の決裁でも実行はDRY_RUN厳守・お金は1円も動かさない・鍵は回さない=CHAIRMAN-GO二重ロック前提。
+
 ### [OBSERVATION] プロップ観測ランナーが再び沈黙（要復旧判断・未GO）
 G4(FundingPips審査準備)の観測ランナー心拍が 2026-08-17 07:58 で停止、常駐ログも 08-20 以降更新なし。会長「復旧させてくれ」→着手。
 判明: AUREL_G4_Runner/Watchdog タスクは消滅ではなく**無効(Disabled)化されて残存**していた（非昇格でも Enable-ScheduledTask で有効化成功）。Keepalive/Dashboard は新規Register（非昇格OK）。全4タスクを Task Scheduler所有・hidden_run.vbs 経由で再構築＝**私のセッションから独立**（前回の同時死パターンを回避）。
