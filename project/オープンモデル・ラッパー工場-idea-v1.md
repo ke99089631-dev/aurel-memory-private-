@@ -2,7 +2,7 @@
 tags: [project/idea, revenue/new, status/reconstructed]
 type: project-idea
 created: 2026-08-29
-status: idea（未着手・要・会長と数字詰め）
+status: parked（2026-08-29 会長判断=棚上げ。今は既存事業に集中。手が空くor既存事業と噛み合った時に再開）
 ---
 
 # オープンモデル・ラッパー工場（2026 新しい稼ぎ口）
