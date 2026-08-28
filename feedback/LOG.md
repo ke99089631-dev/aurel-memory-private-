@@ -15,6 +15,13 @@
 実施: `~/.claude/skills/` に GitHub スキル3系統を導入・監査済(安全)。①**stop-slop**(AI臭排除, md/依存なし/即動作)②**task-observer**(作業中に会長の訂正/繰り返し手順を観測→スキル化候補を蓄積, "One Skill to Rule Them All")③**ui-ux-pro-max**+6サブ(banner-design/brand/design/design-system/slides/ui-styling)。設計/スタイリングはキー無しで動くが、ロゴ/アイコン/画像の高機能生成のみ Python依存+Gemini APIキー(`~/.claude/.env`)要。グローバル `~/.claude/CLAUDE.md` 新規作成: task-observerは description一致だけでは自動起動しない(作者明記)ため「全ツール呼出前に起動」を明記して実効化＋安全境界(実弾二重ロック/秘密非開示/g4_読取のみ)を全セッション共通ルール化。staging削除済。
 次: X/SNS投稿とHP制作の実務でstop-slop/designを既定で引く。画像生成を使う時はGeminiキー設定を私が行う。
 
+### [PREFERENCE] 能力拡張の土台調査＝X課金APIは却下・無料Playwright主砲で待機。SNSはまだ未launch
+会長:「他に機能性や君のスキル向上になるものは？ 現在の事業は投資機関Aurelian/プロップ試験/今後のX運用・英語圏コンテンツ販売/車販売はSNS集客」。私推奨=手足を生やす層(MCP/自走/Playwright)。会長「君の推奨で進めよう」→着手。
+重要判明1(課金): X API は2026-02-06に無料枠廃止→従量課金(投稿$0.015、リンク付き$0.20、読取$0.005)。投稿が課金=会長の「実弾二重ロック」に抵触。→**X課金APIは却下**。武器庫の Playwright(Phase A-F完了・post-draft承認制・DPAPI・rate-limit・無料)を主砲に据える方針。allowlistのx.com/twitter.comは過去の私が意図的にPhase Eゲートで未追加=会長GO待ちのまま。
+重要判明2(現況): **会長「SNSはまだ動かしてない、これから。まだ検証できない。先にやることがある」**。→ 投稿系(X login/Sheets結線)は棚上げ、装置は建てたまま0円待機。launch時に会長が声かけ→その場で結線。
+今回の実施: (1)mcp-gsheets受け皿 `C:\Users\user\.aurel\integrations\gsheets\SETUP.md` 設置(サービスアカウント方式=共有シートのみ可視・秘密は会長がJSONを置くだけでAURELを通さない)。(2)task-observer記録先 `C:\Users\user\.claude\skill-observations\` 初期化＋観察#0001記録(外部連携を組む前に現行課金を必ず確認する原則)。
+→ 学び: 会長の事業には順序がある。今の主軸はSNSではない(先にやることがある)。SNS立ち上げは将来フェーズ=その時に英語圏販売or車販売の「立ち上げ設計」から一緒に組む(stop-slop/brand/design + ネイティブ英語ボイス固定)。急かさない。装置完成済みなので待機コスト0。
+
 ### [PREFERENCE] 外出先=本番。携帯からフル稼働で事業を進めたい（読取専用は却下）
 会長: 「外にいる時こそ君と事業を進めたい。いきなりアイデアが浮かぶ。履歴が共有されないと見返せない。携帯が読み取り専用ではダメ。外からでもシステム構築できるようにしたい」。
 → 学び: 携帯窓口は"軽い相談用"ではなく**外出先の本番作業環境**。読取専用は却下。会長の思いつきは即記録して後で見返せる状態を保つのが必須要件。
