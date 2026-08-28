@@ -501,3 +501,11 @@ Interactiveセッションで powershell.exe -WindowStyle Hidden を起動 → �
 - Stage B: バックアップ後 HL.record(level=C未知Source, space=[decorrelated,cross_source,price_action], state=candidate)。→ H-0031登録。台帳 total30→31, candidate=1。
 - 判定はAurelian自身のガントレットが下す(私は判定しない)。昇格は会長二重ロックのみ。全工程 紙のみ・金ゼロ・prop非接触。
 - ファイル: qlib-lab/{equity_neutral_probe.py, register_to_aurelian.py, handoff/qlib_equity_neutral.json}。台帳backup: hypothesis_ledger.pre-qlib.20260828-130502.bak.json。
+
+## 2026-08-28 — 朝の機関報告に「qlib源」枠を常設（会長指示）
+- 会長「qlibが機関に追加された→関連も機関報告に混合すれば問題ない」。
+- chairman_brief.py の compose() に qlib源セクション追加（研究レーン行の直後）。
+  provenance.origin が "qlib." で始まる知見を集計: 件数・状態内訳(候補/選別済/昇格候補/却下…)・最良のsharpe/corr_spy。
+- 出力例: 「■ qlib源(機関の新リサーチ源): 知見 1件（候補1）／最良 H-0031: シャープ 0.7644・対SPY相関 0.0157（判定はガントレット）」。
+- 非破壊: 既存行無改変、compose()完走確認、ファイル未書込テスト。backup: chairman_brief.pre-qlib.*.bak.py。
+- 明朝07:06の自動配信から常設表示。qlib候補が増えれば自動更新。
