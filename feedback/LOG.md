@@ -13,8 +13,13 @@
 会長: リモートデスクトップは重い→スマホのブラウザから「指令室」と「車販売事業の部屋」を軽く使いたい。「B（2部屋一気に）」＋「携帯から画像を送って読み取る機能」。
 確認事項の回答: 部屋が違えば履歴は別（共有はメモのみ）。同じ部屋なら PC/スマホで同一履歴（今回は各部屋 `claude --continue` で同一セッション継続）。
 実施: (1) `C:\Users\user\.aurel\web\` に ttyd.exe(1.7.7 win32, SHA256照合済) 配置。(2) `start-rooms.ps1`=Tailscale IP(100.73.107.61)のみバインド・basic認証(user=aurel, pass=`room_pass.txt`)・writable(-W)・max2client。指令室:7681=`C:\Users\user\.aurel\projects\home\workdir`、車販売:7682=`C:\Users\user\CarSales`。(3) ログオン自動起動=Startupに`aurel-rooms.cmd`。(4) 画像=Taildrop受信→`getimg.ps1`で`C:\Users\user\.aurel\inbox`へ取込み最新画像パスをRead。動作検証: 未認証401/認証200、両ポートTailscale IPのみListen確認。Pixel 8 ProはTailnet加入済(100.78.223.54)。
-既知の重複: 既存 `aurel_phone_server.py`（単一窓・--resume）と機能が被る。ttyd版は両部屋＋フルターミナル＋画像対応の上位版。統合/廃止は会長判断待ち。
-→ 学び: 「本体とつながっていないと意味がない」の教訓と同系＝会長の狙いは"軽く・実運用で使える"入口。映像転送(RDP)でなく文字ストリーム(ttyd)＋tailnet限定で軽さと安全を両立。既存資産(Tailscale導入済・Pixel加入済)を先に点検すれば構築が速い。
+→ 学び: 「本体とつながっていないと意味がない」の教訓と同系＝会長の狙いは"軽く・実運用で使える"入口。既存資産(Tailscale導入済・Pixel加入済)を先に点検すれば構築が速い。
+
+### [CORRECTION] ターミナルではなくLINE型チャットUIにせよ
+会長: ttydを開いたら「ターミナルで開いたやつが映っている、これではなくてLINEのチャット型にしてくれ」。
+反省: 既存 `aurel_phone_server.py` が既にLINE型チャットUI（吹き出し・青=会長/濃紺=AUREL）だったのに、私はttyd(端末そのまま)を新規構築してしまった。会長は"端末を触りたい"のではなく"チャットで事業を進めたい"。既存資産の点検が甘かった。
+実施: 既存チャットサーバを土台に `aurel_chat_server.py`（多部屋対応・画像送信対応）を新規作成。room引数で切替。指令室=8788(観測ツールRead/Grep/Glob)・車販売=8789(Read/Write/Edit/Grep/Glob=資料の読み書き可、実弾/Bash無し)。各部屋 --resume でセッション継続、messages.jsonl台帳。画像=📷ボタン→base64で`C:\Users\user\.aurel\inbox`保存→claudeが`--add-dir`経由でReadし説明。起動=`start_chat_rooms.vbs`（両部屋隠し起動）。自動起動をStartupの`aurel-rooms.cmd`でttyd→このvbsへ差替え。検証: 両ポートTailscale IPのみListen・UIタイトル/画像ボタン確認・/chatエンドツーエンド「動作OK」返信確認。ttydは停止・不使用（ファイルは残置）。
+→ 学び: UXの型（チャット vs 端末）は会長の体感に直結。新規構築の前に必ず既存の窓口資産を開いて確認する。会長は"文字ターミナル"でなく"会話UI"。安全境界(実弾二重ロック/鍵/秘密/プロップ)はheadlessのsystem promptとallowedToolsで維持。
 
 ## 2026-08-27
 
