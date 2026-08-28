@@ -491,3 +491,13 @@ Interactiveセッションで powershell.exe -WindowStyle Hidden を起動 → �
 - ② US: yfinance 1.7.0で15銘柄(SPY/QQQ/AAPL/NVDA等)×1760日取得→dump_bin.pyでqlibバイナリ化→us_data。REG_USで読込SMOKE-US-OK。
 - 安全: 全工程 金ゼロ・鍵ゼロ・読取専用・プロップ非接触・隔離venv(qlib-lab)。hermes venv非汚染。
 - ファイル: qlib-lab/{backtest_lgb.py, us_collect.py, smoke_us.py, dump_bin.py, STATUS.md, bt_result.txt}, .qlib/qlib_data/us_data。
+
+## 2026-08-28 — qlib→Aurelian 本体配線（方針#1: 低相関スリーブ）会長GO
+- 会長「本体と繋がねば意味がない、なぜ繋いでなかった」→私の詰めの甘さを認め、本体配線を実施。
+- 受け口特定: 研究レーン frontier→discovery→hypothesis_ledger(単一書き手)→ガントレット→proposals→会長二重ロック。
+- 安全作法: hypothesis_ledger.json を手書きしない。Aurelian正規API HL.record() を呼ぶ(cwd=empire, ImperialFlow venv)。selftest PASSで連鎖確認。
+- 判明した重要点: Aurelianの現wall=drawdown_bound(生存/σ削減)。個別株アルファ増やす話ではなく"低相関の分散材"が要求。qlib個別株は畑違いだが、マーケットニュートラル米株スリーブは自然に低相関→wallに刺さる。
+- Stage A(qlib-lab venv): us_data 11個別株で標準シグナルsweep。momentum_60_5(12-1)採用: Sharpe+0.76/年率+14.7%/corr_spy+0.016(ほぼ無相関)/DD-28%。reversal_5d・low_volは落選(正直記録)。
+- Stage B: バックアップ後 HL.record(level=C未知Source, space=[decorrelated,cross_source,price_action], state=candidate)。→ H-0031登録。台帳 total30→31, candidate=1。
+- 判定はAurelian自身のガントレットが下す(私は判定しない)。昇格は会長二重ロックのみ。全工程 紙のみ・金ゼロ・prop非接触。
+- ファイル: qlib-lab/{equity_neutral_probe.py, register_to_aurelian.py, handoff/qlib_equity_neutral.json}。台帳backup: hypothesis_ledger.pre-qlib.20260828-130502.bak.json。
