@@ -1335,3 +1335,31 @@ paper・金ゼロ・観測/発見のみ・discovery は discovery.json＋台帳�
 - gather.py: 材料を集め pack_YYYY-MM-DD.json/latest.json を書き、さらに日本語の新聞本文 edition_*.txt/latest_edition.txt を書き起こす(閾値判定のみ・捏造なし)。世界の出来事は英語原文のまま(意訳しないのは捏造回避)。
 - 毎朝の配信: (1)Windowsタスク AUREL-WorldNews 毎日07:05 → 材料と新聞ファイルを自動生成(私が不在でも残る恒久バックボーン)。(2)CronCreate 07:06(セッション内・7日で自動失効) → 私が起きている朝は latest.json から日本語の肉声版を書いて会長に届ける。
 - 注意: 肉声版アラームはセッション依存＋7日失効。継続には随時再アーム要。Windowsタスク側は恒久。
+
+
+## 2026-08-29 現状スナップショット（AUREL 記憶同期・会長「aurelianの状態を聞こう」への追記）
+> 目的: この記憶は 2026-08-03 頃で止まっており(源泉3-4体想定)、実体との乖離があった。実ファイルを読み現状を刻む。append-only・観測のみ・金ゼロ。
+
+**心拍(Windowsタスク)＝健康**: 全て State=Ready / LastResult=0x0。日次連鎖 06:30 TradingCycle → 07:00 Circulation_WriteBack → 07:05 Chairman_Brief → 07:10 CommandCenter_Publish。Evolution は週次(次 08-30)。停止・詰まりなし（08-29 は当時刻 06:30 前で未実行＝正常）。
+
+**姿勢**: 注意モード＝守り(生存優先)。North Star の survival_gate=60 未達(gate_pass=false)＝床防衛が拘束条件、成長/進化は従属。
+
+**源泉と兵（source_family, 生成 08-28 07:01）**: 呼吸する源泉=6 / active兵=9 / 空枠=1。
+- price_action（値動き）: breakout / mean_reversion(pnl 2.18) / trend_follow(pnl 1.84) が active、pullback は枠のみ(注入待ち)。
+- carry: carry_hold(pnl 0.38)。
+- arbitrage: stat_arb(pnl 0.96)。
+- options: vol_sell(pnl 3.46) / tail_hedge(pnl 13.69＝最強セル)。
+- macro: macro_causal(pnl 1.56, 細胞 2NORMAL/1WATCH)。
+- event: event_driven（枠配備済だが実データ未蓄積＝練習血液まだ）。
+
+**S2 実弾フロア(30日前進)＝0/8 源泉到達**（s2_floor, 生成 08-28 07:02）。前進日数: carry 16 / macro_causal・stat_arb・trend_follow・vol_sell・tail_hedge 13 / event_driven 17(休眠) / mean_reversion 5。血の質: 実5(carry, macro_causal, stat_arb, trend_follow, mean_reversion) / 半実2(vol_sell, tail_hedge) / 休眠1(event_driven)。executor_present=false（実弾解錠経路は会長二重ロックのみ・AUREL非接触）。
+- ⚠️ 注意点1: macro_causal が s1_dd=-8.86% で自動床 BREACH<=-8%（免疫on・観測のみ・金不動だが、唯一の床抵触ラインとして監視）。
+- 免疫隔離セル: ADAUSD/BTCUSD/GBPUSD/LTCUSD/XRPUSD（5隔離・抗体10）。
+
+**スコアカード(生成 08-28 07:02, paper)**: growth index 100(realized paper pnl 24.05) / survival index 2.8(床余裕 0.028, DD~0.146 vs 床 0.15, 隔離0) / evolution index 100(edges 15, 仮説30 保持27, 収束深度3) / diversification index 100(6源泉・9セル・HHI 0.097=分散良好)。
+
+**研究レーン**: 保留知見 27 / 会長承認待ち **0** / 判定 {REJECT:27, HOLD:1, PROMOTE_CANDIDATE:2}。提案(proposals.json): n_open **0**（PROP-fragile-H-0012 は REJECTED、PROP-regime-range は APPROVED/resolved）。
+
+**昨日の紙(08-27→28配信)**: P&L -0.023524 / 勝率 0.2957 / 19銘柄・186トレード。
+
+**結論（会長へ）**: たまっている承認案件は**ゼロ**。会長の手を要する操作は本日不要。機関は守りモードで健康に回り続けており、実弾フロアはまだ全源泉が30日に未達＝時間が育てる段階。唯一の監視点は macro_causal の床抵触（観測のみ・金不動）。
