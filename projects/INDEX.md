@@ -9,6 +9,7 @@
 | ImperialFlow / CYPHER | p_850f5e35 | [A] | 2026-06-10 | `imperialflow.md` / `cypher.md` |
 | └ 旧 CONDUIT (AI受託) | p_962e3092 | [Z] | 2026-06-16 | LocalBoostへ統合(ココナラ=LB集客)→`conduit.md`保存 |
 | 資産帝国部門（投資部門/正式設立中） | (新設) | [A] | 2026-06-11 | `asset-empire.md` |
+| 集客部（全事業横断・流通エンジン） | home | [A] | 2026-08-30 | `acquisition.md` |
 | └ 旧 資産帝国部門 | p_682ef895 | [Z] | 2026-06-11 | 思想のみ継承→asset-empireへ統合・部屋は畳む |
 | └ 旧 金融装置 | p_a986d306 | [Z] | 2026-06-11 | 思想のみ継承→asset-empireへ統合・部屋は畳む |
 
