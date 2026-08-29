@@ -13,7 +13,12 @@ Concept confirmed to chairman: all "rooms" share one warehouse (memory/files on 
 - RDP enabled: `fDenyTSConnections=0`, NLA on (`UserAuthentication=1`), port 3389, `fEnableWinStation=1`.
 - **Firewall scoped to Tailscale-only**: rules `RemoteDesktop-UserMode-In-TCP/UDP`, `RemoteDesktop-Shadow-In-TCP` RemoteAddress = `100.64.0.0/10`. So RDP reachable ONLY from the tunnel (not Wi-Fi/internet).
 
-## OPEN ISSUE
+## 2026-08-30 — 実運用は「チャット窓口方式」に決着（会長一次情報）
+会長「直った。今は携帯から送信している」＝**携帯からのフル稼働チャット窓口が稼働**。
+経路: Tailscale内 hub `http://100.73.107.61:8787` → 各部屋（指令室/車販売/集客部 8790）。`start_chat_rooms.vbs` 自動起動。
+∴ 携帯からの指揮は**この窓口が本線**。下のRDP(Option A)は画面が要る作業向けの予備線として残す（未解決のまま持越し可）。
+
+## OPEN ISSUE (RDP・予備線)
 - TermService Running but **no listener on 3389** (qwinsta shows no rdp-tcp; netstat no 3389). Restart-Service TermService did NOT bring it up.
 - **Fix = REBOOT** (config all correct; listener just needs a clean boot). After reboot, verify: `Get-NetTCPConnection -LocalPort 3389 -State Listen` should show a listener; `qwinsta` should list rdp-tcp.
 
