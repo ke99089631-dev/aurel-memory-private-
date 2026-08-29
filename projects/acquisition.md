@@ -35,11 +35,12 @@ SNS基本管理 / 戦略 / ツール連携（Playwright武器庫・design/brand/
 - 現状1枚: `C:\Users\user\Acquisition\STATE.md`
 - ロードマップ: `C:\Users\user\Acquisition\ROADMAP.md`
 
-## 専用部屋
-- 携帯窓口: `http://100.73.107.61:8790`（Tailscale内のみ）。ノードID=`p_acquisition`。
-- ルームキー=`acquisition`（`aurel_chat_server.py` ROOMS、`start_chat_rooms.vbs` で自動起動）。
-- 履歴台帳: `C:\Users\user\.aurel\projects\p_acquisition\messages.jsonl`。ノード記憶: 同フォルダ `memory\MEMORY.md`。
-- 本体部屋(指令室8788)から分離した理由: 本体は投資/車販売で渋滞するため、集客は独立部屋で回す。
+## 専用部屋（PC＋携帯で同一台帳）
+- **ノードID=`p_2488d8dd`**（表示名「集客部」）。車販売と同じくランダムID方式。
+- **PCコンソール**: `http://127.0.0.1:7878` の上部タブ「集客部」（`C:\Users\user\aurel\aurel.mjs` が projects/ を走査してタブ化。API `POST /api/projects` でライブ追加＝再起動不要）。boundCwd=`C:\Users\user\Acquisition`、model=opus。
+- **携帯窓口**: `http://100.73.107.61:8790`（Tailscale内のみ）。ルームキー=`acquisition`（`aurel_chat_server.py` ROOMS、`start_chat_rooms.vbs` で自動起動）。
+- 履歴台帳: `C:\Users\user\.aurel\projects\p_2488d8dd\messages.jsonl`（PC・携帯で共有）。ノード記憶: 同フォルダ `memory\MEMORY.md`。
+- 本体部屋(指令室)から分離した理由: 本体は投資/車販売で渋滞するため、集客は独立部屋で回す。
 
 ## 変更履歴
-- 2026-08-30：新設。名前確定＝集客部。器一式作成。専用部屋(8790/p_acquisition)を開設し本体から分離。
+- 2026-08-30：新設。名前確定＝集客部。器一式作成。PCコンソール(タブ p_2488d8dd)＋携帯(8790)を開設し本体から分離。両者は同一台帳を共有。
