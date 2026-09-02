@@ -1397,3 +1397,29 @@ paper・金ゼロ・観測/発見のみ・discovery は discovery.json＋台帳�
 **起案（着工=会長GO待ち・小）**: `frontier.py` の壁算出を細刻み or 解析解へ。粗い目盛りは**機関が自分の実力と進歩を測り損ねる**測定器の欠陥（設計の作り直しではない）。∴ 8/29「勘で触らない」の規律には抵触しないと判断するが、コード変更は着工なので起案に留める。
 
 **境界**: paper・金ゼロ・読取専用・自動採用なし・実弾/レバ/live/プロップ(g4_)/凍結資産/.env 非接触・9/9循環無傷・血の捏造なし。鍵は会長のみ（不変）。
+
+### 2026-09-02（続）— 会長GO「GOだ」→ frontier.py の壁算出を修正・着工完了
+**変更（backup= `circulation/frontier.pre-fine-wall.20260902.bak.py`）**
+- `_fine_wall(base)` 追加: 壁を **RETURN_BANDS の目盛りではなく `_band_point` の可否そのものを二分探索**して挟み込む（分解能 `WALL_TOL=0.01%`）。可否の判定は `_band_point` ただ一つを真とし、生存制約の定義を二重化しない。
+- `_analytic_dd_wall_pct(base)` 追加: DD律速時の閉じた式 `wall% = (HARD_FLOOR/_DD_K) × Sharpe × 100 = 7.5 × Sharpe`。二分探索の答え合わせ＋法則の明示。
+- `RETURN_BANDS` は**表示専用へ降格**（`frontier` 配列は従来どおり7帯を出す＝画面の形は不変）。
+- 出力に追加: `wall_return_pct_coarse` / `efficient_band_pct_coarse`（過去記録との突き合わせ用・判断には使わない）、`wall_resolution_pct`、`wall_analytic_dd_pct`、`wall_law`。
+- `_counterfactual_projection` の梯子も細壁化。段を (1,2,3,5) → **(1,2,3,5,8,10,15)** へ拡張し、`caveats`（楽観仮定・正規近似）を出力に明記。
+- 月次側（Project50/100 の `monthly_wall_return_pct` / `monthly_efficient_band_pct`）も同じく細壁化。
+- 丸めは**安全側**: 壁は切り上げ・効率帯は切り捨て（`round()` だと両者が同値に潰れ「効率帯<壁」の不変条件が壊れる。selftestで実際に踏んだ）。
+- `dashboard.py`: 年率の壁/効率帯/月次の壁の表示桁を 0→2 桁（13.17% が「13%」に丸められては修正の意味がない）。
+
+**検証**
+- `frontier._selftest()` = **PASS**。既存7項目に加え新規3項目: (8)細壁が粗い目盛りの挟む区間内に入る (9)DD律速時に二分探索と閉じた式が0.05%以内で一致 (10)梯子が単調に外へ動き `edges_needed_to_move_wall` が非None。
+- 下流 selftest 全PASS: `discovery` / `scorecard` / `progress`。`digest`/`command_center`/`dashboard` は selftest 無しのため実描画で確認（HTML生成成功・`scorecard.evolution.efficient_band_pct` 10→13.15 に更新・index=100 不変）。
+- 台帳/バス(`circ_ledger`/`circ_bus`)への書込は**していない**（`mark`/`broadcast` 未呼出）。書込は `frontier.json` と表示HTMLのみ。
+
+**修正後の実測値（2026-09-02・実市場ベース 15edges/sharpe 1.755/実相関 0.1427）**
+- **年率の壁 = 13.17%（旧報告 20%）／効率帯 = 13.15%（旧報告 10%）**。閉じた式 7.5×1.755=13.16 と一致。律速= `drawdown_bound`。
+- 月次の壁 = 3.21%/mo（Project50/100 は依然 Class C＝経路として棄却・不変）。
+- 梯子（低相関Edgeを足したとき）: +1→13.85 / +2→14.51 / +3→15.16 / +5→16.42 / +8→18.21 / +10→19.35 / +15→22.03（%）。**`edges_needed_to_move_wall` は null → 1** に変わった（1本足せば壁は動く）。
+- ※プローブの 0.5%刻み走査は 13.5% と出したが、本体の二分探索での**真値は 13.17%**。以後こちらを正とする。
+
+**意味**: 機関が初めて**自分の実力と、その進歩を正しい解像度で測れるようになった**。旧実装は火力を約30%過小に報告し、かつ低相関Edgeを足しても壁が動かないという**誤った結論**を毎日出力し続けていた（＝Discoveryの研究要求の優先度判断を歪め得た）。
+
+**境界**: paper・金ゼロ・測定のみ・自動採用なし・実弾/レバ/live/プロップ(g4_)/凍結資産/.env 非接触・9/9循環無傷・血の捏造なし。鍵は会長のみ（不変）。
