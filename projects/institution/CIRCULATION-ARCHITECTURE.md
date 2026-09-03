@@ -1518,3 +1518,16 @@ paper・金ゼロ・観測/発見のみ・discovery は discovery.json＋台帳�
 **ここが読取専用の限界＝一線**: この先（恒久サーフェス化＝evidence.pyへのサーフェス追加＋循環配線、proposals.jsonへの起案書込）は**機関コードへの書込＝着工＝会長判断**。AURELはここまで（3候補が本ガントレットを生存することを実データで確認）で停止し会長へ上申。
 **次段の推奨（着工=会長GO待ち）**: 本命=A逆ボラを恒久サーフェス化(walk-forwardウェイトで毎期リバランス)。Bは併走可だがコスト薄を明記。Cは見送り可。
 **境界**: paper・金ゼロ・読取専用・無改変・自動採用なし・9/9循環無傷・実弾/レバ/live/g4_/凍結非接触・鍵は会長のみ。
+
+## 2026-09-03（続5）会長GO「その他は任せる」→ 逆ボラを恒久サーフェス化・着工完了
+Tier0本命=逆ボラ(Sensor #10)を機関の恒久の血として組込。純追加・単一書き手・自動採用なし・拡張口付き。
+**backup**: `frontier.pre-sensor.20260903.bak.py` / `auto_writeback.pre-sensor.20260903.bak.py`
+**変更**:
+1. 新規 `circulation/sensor_inv_vol.py`（単一書き手）: 既存58barから**完全walk-forward**の逆ボラ・バスケット日次を生成（各日tのウェイト=過去126日σの逆数・未来非参照・σのみ・ロング）。`sensor_inv_vol.json` に cap 公開。selftest付き。
+2. `frontier.py` に `_load_sensor_caps()` フック追加＝`data/circulation/sensor_*.json` の cap を血として合流（**新センサーはJSONを置くだけで測定に乗る拡張口**）。mu<=0/薄い履歴は取り込まない（血の捏造なし）。測定専用・capital/leverage/live非接触。
+3. `auto_writeback.py` (i-0) に sensor refresh を frontier測定の前へ配線（非致命・毎朝再生成）。
+**実測反映**: 壁 **13.17→13.75%/yr**、Sharpe 1.755→1.832、σ 7.29→6.95%、edges 15→16、HHI 0.097→0.090(分散改善)。frontier.json/scorecard/dashboard に反映済(efficient 13.15→13.73)。
+**検証**: sensor_inv_vol/frontier/discovery/scorecard/progress/validation **全selftest PASS**。auto_writeback import OK。逆ボラサーフェス days=556(全銘柄共通日交差でやや保守)・σ日次0.005(低ボラ健全)。
+**性質の明示**: これは`_measured_potential`＝測定上の潜在能力（既存15サーフェスと同じ代理）。まだpaper戦略として建ってはいない。**実弾化は proposals→会長二重ロックのみ**（AURELは鍵を回さない）。frontierは測定専用で金を動かさない。
+**残(完了定義)**: 明朝07:00 `AUREL_Circulation_WriteBack` 実循環での通し確認（sensor refresh→frontier合流が本番cadenceで回るか）。それまでは手動検証パス済み。
+**境界**: paper・金ゼロ・読取専用サーフェス・自動採用なし・9/9循環無傷・実弾/レバ/live/g4_/凍結/.env非接触・鍵は会長のみ。

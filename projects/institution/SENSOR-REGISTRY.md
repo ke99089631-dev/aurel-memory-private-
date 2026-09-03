@@ -41,7 +41,7 @@ status: draft-v1（会長GOで着工・紙のみ・金ゼロ）
 | ⑦ | Crowd(節目/Stop集中) | 🟡 | 既存barから推定 | 無 | 日次 | 有 | 中 | 易 | 2 |
 | ⑧ | Open Interest | ⬜ | 先物/暗号OI | 無〜鍵 | 日次 | 中 | 中 | 中 | 2 |
 | ⑨ | Options(IV/skew/gamma) | ⬜ | オプション連鎖 | $ | 日次 | 中 | **低** | 難($) | 3 |
-| ⑩ | Volatility(RV) | 🟡→**Tier0** | **既存barで算出** | 無 | 日次 | 有 | 中 | 易 | **0** |
+| ⑩ | Volatility(RV/逆ボラ) | ✅**恒久接続(2026-09-03)** | sensor_inv_vol.py(walk-forward) | 無 | 日次 | 有 | 中 | 易 | **済** |
 | ⑪ | Futures Curve | ⬜ | 期先価格 | 無〜$ | 日次 | 中 | 中 | 中 | 2 |
 | ⑫ | Funding/Basis | ⬜ | 暗号取引所API | 無 | 日次 | 有 | 中 | 易(暗号) | 2 |
 | ⑬ | Interest Rates | 🟡 | FRED拡張 | 無 | 日次 | 有 | 中 | 易 | 1 |
