@@ -1438,3 +1438,27 @@ paper・金ゼロ・観測/発見のみ・discovery は discovery.json＋台帳�
 - (b) Sensor Discovery は**既存フローにそのまま乗る**: 機関は既に frontier.wall_diagnosis→discovery.research_requests で「壁の律速を狙う研究要求」を自動生成し、proposals.py（起案→会長二重ロック）の器も持つ。H-0010(uncharted/data_insufficient) が Sensor Request の原始形。∴「データ要求」への拡張は新規発明でなく**既存配線の自然な延長**。
 
 **合意した最初の一手（着工=会長GO待ち・紙・金ゼロ）**: **Sensor Registry**（材料の棚卸し台帳）。37系統×[入手経路/無料or有料/頻度(RT/日次)/過去履歴の有無/品質/現在接続済みか]。まず現状を正直にマップ（今接続済み=Price 58銘柄・FRED 3系列のみ＝37のうち約2系統）。次に「相関の低さ×入手の易しさ」で拡張優先度を付ける。②FRED深掘り(無料・配線済)→無料の別市場→…の順。
+
+## 2026-09-03（続）会長GO「GOだ」→ Sensor Registry v1 起草・完了（紙のみ・金ゼロ）
+成果物= `projects/institution/SENSOR-REGISTRY.md`。実ファイルで現状の視界を確認して棚卸し。
+- **現状の接続=実質3系統**: ①Price(58銘柄OHLC) / ㉒Macro(FRED 3系列・無料鍵不要) / ㉖Event(ForexFactory週次・無料鍵不要)。視界の約9割は未接続。
+- **★発見=Tier 0**: ⑩Volatility(RV)・⑲Correlation・⑳Dispersion・㉑CrossAsset は**既存58barから新規データ取得ゼロ・金ゼロで算出可能**。値段の生データと負け方が違う相関構造のメタ情報＝σを下げる「準・新しい血」。買わずに4本試せる＝最初の実験対象。
+- 拡張順=相関の低さ×入手の易しさ: Tier0(既存barで算出)→Tier1(FRED深掘り/COT/EconSurprise/Breadth・無料)→Tier2(Funding/OnChain/OI・別市場無料)→Tier3(Options/News/Earnings/板/Alt-data・有料or難)。
+- **Sensor Discovery** は既存 frontier.wall_diagnosis→discovery.research_requests→proposals(会長二重ロック) の自然な延長。data_insufficient を SENSOR REQUEST 起案へ拡張。H-0010が原始形。着工はTier0/1が回り始めてから。
+- **会長判断が要る3点**: ①偽陽性の門(材料増と同時に棄却率/採用率の計器を足すか=AUREL推奨足す) ②Tier3の有料投資はTier0/1の実測後 ③最初の1本=AUREL推奨は⑲Correlation(相関最低見込み・算出容易・レジーム先行)。
+- 規律(不変): 一度に全部入れない。1本ずつ→ガントレット→**壁が何%動いたか実測**→動いた分だけ残す。紙・金ゼロ・読取専用・鍵は会長のみ。
+
+## 2026-09-03（続）Sensor #19 Correlation — Tier 0 最初の1本を実測・壁が動いた（読取専用・金ゼロ）
+成果物= `empire/research/correlation_edge_probe.py`（frontier無改変・内部関数を組合せ・状態ファイル非書込）。証拠log= `research/correlation_edge_probe_2026-09-03.log`
+> ★実装中の発見: `build_frontier(caps)` は caps注入時に相関を ASSUMED_CORR=0.2 固定にする（実相関を使わない）。∴ 実測は `_portfolio_base(caps, real_corr=True)`＋`_fine_wall` を直接呼んで実相関ベースで測った。
+
+**結果（実データ・実相関）**:
+- 基準の壁（既存15サーフェス）= **13.17%/yr**。
+- **候補A（相関最小5銘柄の等ウェイトロング＝DXY/LTCUSDT/XLF/USDCAD/EWJ）**: バスケットの対base実相関 **-0.1439（実際に負相関）** → 壁 **13.17→13.75%（+0.58%）**。σ年率 7.29→6.90% に低下＝Sharpe 1.755→1.832。
+- 楽観上限（frontierのcorr=0中庸+1本）= +0.68%。∴ **実物0.58% は楽観0.68%の約85%**＝買わずに手持ちだけで理論上限の大半を取れた。
+- **候補B（市場ニュートラルLS＝DXYロング×VIXショート）**: spread対base相関 **-0.4743**（さらに低い）だが μ<0（VIXショートは負キャリー）＝edge条件を満たさず壁に寄与せず。→ **LSは相関を大きく落とせるがμの符号設計が要る＝次の宿題**。
+
+**意味**: Sensor Registryの規律「1本入れ→ガントレット→壁が何%動いたか実測→動いた分だけ残す」を実データで初回実証。**新しいデータを1円も買わず、既存58barの相関構造の選別だけで壁を+0.58%動かせた**（＝DXYは株と逆相関という経済的に妥当な低相関源）。壁はSharpe比例（7.5×Sharpe）なので、この積み上げがそのまま実弾解禁ラインへの前進になる。
+
+**今回の位置づけ**: これは**実測プローブ**（恒久組込ではない）。恒久化＝相関選別サーフェスを `evidence._SURFACE_BASKET` 等へ正式サーフェスとして組込むのはコード変更＝別途着工判断。今日は「効くことの実証」まで。
+**境界**: paper・金ゼロ・読取専用・自動採用なし・frontier無改変・9/9循環無傷・実弾/レバ/live/g4_/凍結非接触・鍵は会長のみ。
