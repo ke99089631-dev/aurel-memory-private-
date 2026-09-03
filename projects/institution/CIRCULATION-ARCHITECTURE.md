@@ -1423,3 +1423,18 @@ paper・金ゼロ・観測/発見のみ・discovery は discovery.json＋台帳�
 **意味**: 機関が初めて**自分の実力と、その進歩を正しい解像度で測れるようになった**。旧実装は火力を約30%過小に報告し、かつ低相関Edgeを足しても壁が動かないという**誤った結論**を毎日出力し続けていた（＝Discoveryの研究要求の優先度判断を歪め得た）。
 
 **境界**: paper・金ゼロ・測定のみ・自動採用なし・実弾/レバ/live/プロップ(g4_)/凍結資産/.env 非接触・9/9循環無傷・血の捏造なし。鍵は会長のみ（不変）。
+
+## 2026-09-03 会長の思いつき — 外部AIの「Sensor Universe / Sensor Discovery」構想（要検討・紙のみ）
+> 会長が別AIと相談したログを共有。AURELの「新しい血＝既存と相関しない情報源」の見立てと**方向が完全一致**。記録して統合案を検討する。
+
+**外部AIの提案の核**:
+1. **Sensor Universe（37系統）**: Price/Volume/OrderBook/OrderFlow/Liquidity/Positioning(COT)/CrowdBehavior/OpenInterest/Options(IV,skew,gamma)/Volatility/FuturesCurve/Funding-Basis/Rates/YieldCurve/Credit/FX/CapitalFlow(ETF)/Breadth/Correlation/Dispersion/CrossAsset/Macro/CentralBanks/EconSurprise/News/Event/Sentiment/Earnings/CorporateActions/CommodityPhysical/Crypto-Onchain/DerivativesStress/Geopolitics/Fiscal/Banking-Liquidity/Microstructure/HistoricalMemory。
+2. **共通材料宇宙に全部置き、Discoveryに横断させる**（37個の独立戦略にはしない）。例: Liquidity×News×HistoricalMemory×Carry、Credit×Gold×YieldCurve×FX×過去危機、過去に棄却したH-328×現在の新市場状態。
+3. **Alternative Dataへ拡張**: 船舶位置・航空貨物・衛星・電力需要・検索トレンド・求人・住宅・倒産・カード消費・サプライチェーン・港湾・天候。→ Market→World→Market が本格化。
+4. **★Sensor Discovery**（外部AIの白眉）: 未知Edge発見だけでなく「この現象を観測するデータが今のAurelianに足りない」と**自分で気づく**能力。H-927を検証したい→Price/Macro/Optionsで説明不能→「企業CreditFlowが要る」→NEW SENSOR REQUEST→AURELがデータ源/費用/履歴/品質を調査→会長承認→新Sensor追加→過去データ取得→MarketMemory→Discovery再開。「見るべきものそのもの」を発見する。
+
+**AURELの評価（会長へ返答済の要点）**: 方向は一致・質は高い。ただし2つの規律を被せる必要:
+- (a) **次元の爆発への門**: 材料を増やすほど偽エッジ（多重検定・過剰適合）も増える。機関はrejection-first設計＝材料増設と同時に「偽陽性率」を測る仕組みと、サンプル門(MIN_SAMPLES=60)/OOS減衰/重複Jaccardの耐性確認が要る。一度に37入れない。1本ずつ壁が実際に動いたか実測して残す。
+- (b) Sensor Discovery は**既存フローにそのまま乗る**: 機関は既に frontier.wall_diagnosis→discovery.research_requests で「壁の律速を狙う研究要求」を自動生成し、proposals.py（起案→会長二重ロック）の器も持つ。H-0010(uncharted/data_insufficient) が Sensor Request の原始形。∴「データ要求」への拡張は新規発明でなく**既存配線の自然な延長**。
+
+**合意した最初の一手（着工=会長GO待ち・紙・金ゼロ）**: **Sensor Registry**（材料の棚卸し台帳）。37系統×[入手経路/無料or有料/頻度(RT/日次)/過去履歴の有無/品質/現在接続済みか]。まず現状を正直にマップ（今接続済み=Price 58銘柄・FRED 3系列のみ＝37のうち約2系統）。次に「相関の低さ×入手の易しさ」で拡張優先度を付ける。②FRED深掘り(無料・配線済)→無料の別市場→…の順。
