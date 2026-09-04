@@ -148,7 +148,6 @@ updated: 2026-07-28
 
 ### 🔧 2026-09-04 全系統スイープ の残タスク
 - **[修理済・検証待ち] FRED**: リトライ+成功実績記録+ALARM を実装、実取得3/3成功を確認済。**完了の定義=明朝07:00の実循環ログで `fetched_ok=3/3` を実見**すること。それまでOPEN。
-- **[復帰済・検証待ち] Future Lab / 朝の巡回**: 8/27に無効化されていたものを再ONし、triggerNowで実出力を確認済。**完了の定義=明日12:07/12:10に自動で発火し daily-intel.md に追記されるのを実見**すること。それまでOPEN。
-- **[要会長確認] 8/27夜のOFF操作の意図**: morning_patrol/future_lab/ETHAutopilotタスクが同じ晩に無効化。記録なし。意図的な消音だったなら再OFFは1コマンド。
+- **[CLOSED] Future Lab / 朝の巡回**: 会長回答「意図的に私が止めた・機関の循環報告だけにしたので問題ない」→ AURELの再ONを撤回し `enabled=false` へ復帰済。**穴ではない**。MEMORY.md に「点検で再ONするな」を明記。教訓=feedback/LOG.md 2026-09-04。
 - **[起案・未着工] revival_alertのログ洪水**: アクション無返却tickをログに書かない条件追加。着工=会長GO。
 - **[軽微] 期限切れDeadlineタスク3件の削除 / inbox未処理画像9件 / MODULE-ASSIGNMENT.mdのETHAutopilot記述更新 / 07:06二重配信の要確認。**
