@@ -131,3 +131,17 @@ updated: 2026-07-28
 | C-000a | 2026-07-25 22:25 | テスト①a runner手動kill→watchdog自動復帰 | 22:24:54 kill pid16740 → 22:25:39 newpid21476（祖父svchost）。`reports/killtest_2026-07-25.txt` |
 | C-000b | 2026-07-25 22:30 | テスト①b watchdog手動kill→keepalive自動復帰 | 22:25:57 kill pid11756 → 22:30:07 newpid16764（祖父svchost）。同上ログ |
 | C-001 | 2026-07-25 22:40 | テスト② **PC再起動→自動立ち上げ** | 再起動 LastBoot=22:39:31 → 無操作で全新pid(Runner12080/12168・WD12068/5036) が22:40:18(boot+47s)にTask Scheduler起動。task LastRun=22:40:40・心拍ts=22:40:40 いずれもboot後。`reports/killtest_2026-07-25.txt`／`prereboot_snapshot_2026-07-25.txt` |
+
+---
+
+## 機関(Aurelian) — 2026-09-04 更新
+
+### ✅ CLOSED: 逆ボラSensor 実循環の通し確認（9/3宣言 →9/4検証で完了）
+9/4 07:00 の `AUREL_Circulation_WriteBack` 実循環で sensor refresh→frontier合流を実ログで確認。wall=13.75%/yr・edges=16・Sharpe=1.833、手動検証と一致（差=新規2営業日ぶん）。下流(evidence/discovery/validation/scorecard/digest/dashboard)まで通過。live_gate LOCKED・auto承認0・chain_verified=True。**「実装した」でなく「実循環で動作確認した」を満たしたのでクローズ**。証拠= autowrite.log 2026/09/04 07:00:03-07:01:46 / projects/institution/CIRCULATION-ARCHITECTURE.md 2026-09-04。
+
+### 🔴 OPEN: FRED外部マクロが自動循環で一度も成功していない（会長判断待ち・2026-09-04 発見）
+- 事実: autowrite.log の `external macro` 行は **8/16以降の全20行が `fetched_ok=0/3`（成功ゼロ）**。値は配線時の手動キャッシュのまま＝機関は**3週間ずっと2026-08-14の地合い**で防御判断している。
+- 原因: コード/URLは正常（対話セッションでは取得成功）。START→FRED行=41秒 ≒ timeout12秒×3系統＝**全滅タイムアウト**＝07:00にネットワーク未起床が最有力。
+- 影響: 用途が「守りの一票」のみのため**壁13.75%・Sensorの数字は無汚染**。汚染しているのは防御判断の入力鮮度のみ。
+- 起案（着工=会長GO待ち・小・読取専用・金ゼロ）: ①失敗時60-120秒後に2-3回リトライ ②**鮮度アラート**（asofがN日超過/ok=0連続でダッシュ+会長ブリーフに明示）③任意で後追い一拍。
+- **完了の定義**: 「実装した」ではなく **翌朝以降の実循環ログで `fetched_ok=3/3` と asof更新を実見**すること。
