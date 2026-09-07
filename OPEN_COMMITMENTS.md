@@ -217,4 +217,13 @@ updated: 2026-07-28
 - **[2026-09-07 会長号令「君の推しで」＝(a)受領 → 起案書面 完成]**: `projects/institution/SOLDIER-SELECTION-REWIRE-PROPOSAL.md` 作成。
   stat_arb と同一作法（選別層のみ差し替え・損益エンジン無改変・fail-closed=screen欠時0器・LEGACY退役・可逆バックアップ）。
   差し替え後の期待held＝トレンドBTC(1)／戻り取り8器。(c)コスト実測差替は捨てず**ライブ前の必須ゲート**として第2段に配置（第1段=paperは(c)を待たずに進む）。
-  **★ここから先は「選別層差し替え（第1段）への着工GO」待ち**＝会長GOが出るまで器に一行も触れない。器のコード・お金・鍵は未接触。paper/adoption0/LOCKED/prop非接触。
+
+### [2026-09-08 会長「GOだ」＝第1段（選別層差し替え）着工GO受領 → 実装＋selftest＋実rebuild 完了]
+- **両兵の選別層を実測（soldier_screen.json）へ差し替え完了**。損益エンジン・ノブの意味・出力スキーマは不変。
+  - `trend_follow.py`: 手書き `TF_INSTRUMENTS` → `LEGACY_TF_INSTRUMENTS` 退役。`_build_from_screen()` が screen を読み選別。fail-closed（screen欠時0器）。バックアップ `trend_follow.py.bak_20260907_measured_selection`。
+  - `mean_reversion.py`: 手書き `MR_INSTRUMENTS`/`_CROSS` → `LEGACY_*` 退役。選別ノブは新設 `MR_CONFIRM_MIN=0.0`（実測の強さの追加下限）。**器の建玉しきい値 `MR_Z_ENTRY=2.0`/`MR_W=20` は soldier_screen が測った値なので不変**（選別と建玉を分離した）。`_SPEC`(id/mul/div)へ配線。data/→arb_universe/ の棚フォールバック追加（EZA用）。バックアップ `mean_reversion.py.bak_20260907_measured_selection`。
+- **selftest 両PASS**。検査は銘柄名でなく**性質**（ノブ単調・上限0・床=全生存・手書きマーカー混入ゼロ・fail-closed・選別の出所が公開面に出る・point-in-time=True）。※初回FAIL1件＝自作の名前一致漏れ検査が「同じ銘柄名が実測でも生き残る」現実に不整合→**値の出所（手書きマーカー無し）で測る正しい検査へ修正**（trend側も同修正で両立）。
+- **実rebuild で held の入れ替わりを実見（紙帳簿への保存のみ・金ゼロ）**: 戻り取り=8器（XLK/EURGBP/EWA/QQQ/XLP/EURCHF/EZA/EWU・各~1000建玉・2003-2026）／トレンド=BTC(1・4322建玉・2014-2026)。real_data=True・決定的。旧手書きheldは理由つきで自然に入れ替わった。
+- **金ゼロ・paper のみ・adoption 0・live_gate LOCKED・プロップ(g4_)非接触**。書込は各兵の自前 `*_book.json` のみ。
+- **★残るOPEN（唯一）**: 明朝以降の**実循環（AUREL_Circulation）ログで held が実測どおり（戻り8/トレンドBTC）に入れ替わるのを実見**すること。これを見るまでクローズしない（＝完了の定義）。
+- **第2段（後日・別の会長GO）**: ライブ前必須ゲート＝株ETFのコストを本番口座で実測差替→採用リスト再算出。第1段はこれを待たず進めた（paperのため）。
