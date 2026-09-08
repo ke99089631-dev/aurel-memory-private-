@@ -188,7 +188,7 @@ updated: 2026-07-28
 - **修正**: `external_macro.py` L86 に `"Accept": "*/*"` 追加。バックアップ `external_macro.py.bak_20260907_accepthdr`。可逆・ゼロ金・読取専用。
 - **本番実証**: 後追い beat --force → 3/3 RECOVERED・last_success=2026-09-07・fetched_date=2026-09-07。共通取得部なので明朝07:00も直接取れる見込み。後追い4拍は間欠障害用の保険として残置。
 - **見立て訂正2回**: 「07:00ネット未起床」(誤)→「FRED気まぐれ」(方向のみ可・不完全)→ 決定論的タールピット(=こちらで直せた)。
-- **残OPEN**: 明朝 2026-09-08 の実循環ログで「07:00がヘッダ修正後に直接3/3を取る」を実見（後追い不要になったことの最終確認）。
+- **✅ CLOSED 2026-09-08**: 07:00:11 実循環ログ `external macro (FRED): fetched_ok=3/3 last_success=2026-09-08`＝**07:00で直接3/3**。後追い4拍は 07:30/08:30 とも `SKIP already fresh today (3/3)`＝保険として正しく無動作。8/16以降初めて07:00で取れた。
 
 ---
 ## [CLOSED 2026-09-07] stat_arb の組の選別が実データに基づいていない（9/6 OPEN → 会長GO「AからBで」で決着）
@@ -225,5 +225,5 @@ updated: 2026-07-28
 - **selftest 両PASS**。検査は銘柄名でなく**性質**（ノブ単調・上限0・床=全生存・手書きマーカー混入ゼロ・fail-closed・選別の出所が公開面に出る・point-in-time=True）。※初回FAIL1件＝自作の名前一致漏れ検査が「同じ銘柄名が実測でも生き残る」現実に不整合→**値の出所（手書きマーカー無し）で測る正しい検査へ修正**（trend側も同修正で両立）。
 - **実rebuild で held の入れ替わりを実見（紙帳簿への保存のみ・金ゼロ）**: 戻り取り=8器（XLK/EURGBP/EWA/QQQ/XLP/EURCHF/EZA/EWU・各~1000建玉・2003-2026）／トレンド=BTC(1・4322建玉・2014-2026)。real_data=True・決定的。旧手書きheldは理由つきで自然に入れ替わった。
 - **金ゼロ・paper のみ・adoption 0・live_gate LOCKED・プロップ(g4_)非接触**。書込は各兵の自前 `*_book.json` のみ。
-- **★残るOPEN（唯一）**: 明朝以降の**実循環（AUREL_Circulation）ログで held が実測どおり（戻り8/トレンドBTC）に入れ替わるのを実見**すること。これを見るまでクローズしない（＝完了の定義）。
+- **✅ CLOSED 2026-09-08（実循環で実見・完了の定義を満たした）**: 07:00 の `AUREL_Circulation` 自動循環（autowrite.log 2026/09/08 07:00:06 START〜07:01:10 END・rc=0）で `mean_reversion stepped: held=8` / `trend_follow stepped: changed=True held=1`。帳簿は自動循環が 07:00:17／07:00:19 に書いたもの（mtime実測）で、中身＝戻り取り **XLK/EURGBP/EWA/QQQ/XLP/EURCHF/EZA/EWU の8器**／トレンド **BTC.tf の1器**＝起案どおり。`_data_source` に「measured survivors from soldier_screen.json」・real_data=True・手書き混入なし。**第1段は完了。**
 - **第2段（後日・別の会長GO）**: ライブ前必須ゲート＝株ETFのコストを本番口座で実測差替→採用リスト再算出。第1段はこれを待たず進めた（paperのため）。
