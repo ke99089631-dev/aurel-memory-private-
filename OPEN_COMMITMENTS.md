@@ -248,5 +248,6 @@ updated: 2026-07-28
 ### [2026-09-09 会長GO「1〜5から着工していこう」→ 第3波（外の血 #1-4）＋ 5番コスト実測差替 完了]
 - **#1-4 血の接続=完了**（`circulation/blood_fetch.py`・無料・鍵不要・`data/blood/`のみ書込）: COT 41市場 / FOMC日程 / FRED 10系列 / Binance資金調達率 8通貨。edge_screen v3 で検定 → COT 0・FRED 0・FOMC 3（EWI/EWW）・FUNDING_CARRY はSOLのみ（他はG0で落ち）。
 - **#5 コスト実測差替=完了（影の走行・兵は無改変）**: `circulation/cost_table.py`（FX実測／ETF・CFD日足推定／暗号は＋公開手数料）→ edge_screen **28→6器**、soldier_screen 影 **9→4器**（EURCHF.mr/EURGBP.mr/EWA/EWU）。selftest 3本PASS。詳細= episodic 2026-09-09。
-- 🔴 **OPEN（会長判断待ち）**: 影の結果を兵の選別（`soldier_screen.json`）へ差し替えるか。差し替えると held が 9→4 に減る（QQQ/XLK/XLP/EZA/BTC が外れる）。AUREL推奨＝差し替え（安いコストで張り続けるのは偽の血流）。ただしETF推定は過大側なので**本番口座で実測できた行から順次差し替え**が本筋。
+- **✅ 2026-09-09 14:45 会長GO「GOだ」→ 差し替え完了（実見済）**: soldier_screen の既定＝銘柄別コスト（fail-closed）→ 採用4器 → 兵 rebuild で **戻り取り held=4（EURGBP/EWA/EURCHF/EWU）・トレンド held=0**。selftest 全PASS。
+- **🔴 OPEN（実見待ち）: 板の実測で推定行を上書き**（`quote_sampler.py`＋タスク `AUREL_Quote_Sampler` 平日NY時間5拍＋`auto_writeback` 4c-1b）。**完了の定義**＝(a) 明朝 quotes.jsonl に ETF の in_rth=True 行 (b) 9/12頃 cost_table に measured_quote_rows が現れ、循環ログに `soldier_screen re-measured (measured rows changed)` を実見。CFD商品は無料の気配源が無く推定のまま（正直に unmeasured）。
 - 🔴 **OPEN（検証待ち・機関外）**: 携帯チャット中継の打ち切り修正（TIMEOUT 15→45分・打ち切り時は再実行せずセッション保持）。**完了の定義＝15分超の仕事が正常に返るのを実見**。12:14の「返答なし」の死因は episodic 参照。
