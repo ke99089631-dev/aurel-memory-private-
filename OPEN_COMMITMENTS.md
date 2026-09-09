@@ -244,3 +244,9 @@ updated: 2026-07-28
 - 通った型: overnight(5・コストに最弱)/rsi2(6)/gap_fade(4)/santa(3)/tsmom250・20(BTC)/lowvol_trend(EWW)/vt_tsmom50(BTC)/str_rev5(XLP)。落ちた: ダブルボトム・ローソク足・MA/MACD/ボリンジャー・RSI14・月替わり(ドリフト差引後)・曜日・ハロウィン・横断全種・キャリー(弱＋)・レジーム全種。
 - **★第1波で通った tom EWY/EWC/EWW と tsmom50 BTC は第2波で不通過**（前者=ドリフトだった／後者=家族サイズでFDRが厳しくなった）。
 - **次＝別GO待ち**: 血の追加（CFTC COT・FOMC過去日程・FRED接続・Binance funding＝いずれも無料）／FXCARRY通貨追加／採用器の組み込みはコスト実測差替の後。
+
+### [2026-09-09 会長GO「1〜5から着工していこう」→ 第3波（外の血 #1-4）＋ 5番コスト実測差替 完了]
+- **#1-4 血の接続=完了**（`circulation/blood_fetch.py`・無料・鍵不要・`data/blood/`のみ書込）: COT 41市場 / FOMC日程 / FRED 10系列 / Binance資金調達率 8通貨。edge_screen v3 で検定 → COT 0・FRED 0・FOMC 3（EWI/EWW）・FUNDING_CARRY はSOLのみ（他はG0で落ち）。
+- **#5 コスト実測差替=完了（影の走行・兵は無改変）**: `circulation/cost_table.py`（FX実測／ETF・CFD日足推定／暗号は＋公開手数料）→ edge_screen **28→6器**、soldier_screen 影 **9→4器**（EURCHF.mr/EURGBP.mr/EWA/EWU）。selftest 3本PASS。詳細= episodic 2026-09-09。
+- 🔴 **OPEN（会長判断待ち）**: 影の結果を兵の選別（`soldier_screen.json`）へ差し替えるか。差し替えると held が 9→4 に減る（QQQ/XLK/XLP/EZA/BTC が外れる）。AUREL推奨＝差し替え（安いコストで張り続けるのは偽の血流）。ただしETF推定は過大側なので**本番口座で実測できた行から順次差し替え**が本筋。
+- 🔴 **OPEN（検証待ち・機関外）**: 携帯チャット中継の打ち切り修正（TIMEOUT 15→45分・打ち切り時は再実行せずセッション保持）。**完了の定義＝15分超の仕事が正常に返るのを実見**。12:14の「返答なし」の死因は episodic 参照。
