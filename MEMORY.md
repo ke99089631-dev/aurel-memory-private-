@@ -26,6 +26,7 @@ updated: 2026-06-03
 
 ## 📌 PINNED — 会長の全人生目標（North Star・2026-09-14）
 - **[projects/LIFE-GOAL-DAILY-100M.md](projects/LIFE-GOAL-DAILY-100M.md)** — 会長宣言「まずは日給1億」。桁の階段と経路判断。全提案はこの北極星に向いているかで評価する。
+- **[projects/AUREL-PRODUCT.md](projects/AUREL-PRODUCT.md)** — AUREL製品化の起案（A: AUREL OS月額 / B: Aurelian測定機関 / C: 導入代行）。登り順C→A→B。金商法の壁あり。
 
 ## 📌 PINNED — プロップ戦略ロードマップ（司令室・常設パネル）
 - **[projects/PROP-ROADMAP.md](projects/PROP-ROADMAP.md)** — 会長がいつでも開く「全体像＋決定事項＋ロードマップ」1枚。現在地=Phase 7（$25k×1本の実弾GO待ち）。大きな決定・GO・数値が変わるたびにここを更新すること。
