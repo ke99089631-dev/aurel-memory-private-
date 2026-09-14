@@ -3,7 +3,7 @@ tags: [project, product, north-star-path]
 type: project
 created: 2026-09-14
 updated: 2026-09-14
-status: 起案（会長「前から考えていた」2026-09-14・着工は会長GO待ち）
+status: 起案・凍結保存（会長 2026-09-14「まだ検証段階だから先」。催促しない。再開は会長の号令のみ）
 ---
 
 # AUREL 製品化 — 北極星（日給1億）への事業経路
