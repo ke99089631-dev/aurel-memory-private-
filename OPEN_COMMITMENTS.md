@@ -277,3 +277,8 @@ updated: 2026-07-28
 ### 🔴 OPEN（実循環での実見待ち・2026-09-16 12:30）: 世界読み（macro_causal）を sensor_only へ降格
 - 実装・selftest PASS・digest 手動再構築で実見済（詳細 CIRCULATION-ARCHITECTURE 第4手）。**完了の定義＝明朝 09-17 07:00 の実循環で macro_causal step（role=sensor_only）・digest macro-read 残存・frontier の壁が macro 抜きで再測定されるのを実見**。
 - ★本日の4件（vol_sell監視修理／carry v2／trend v2／vol_sell v2／macro降格）は**全部 明朝の同じ実循環で一括実見**してクローズする。
+
+### 🔴 OPEN（実循環5営業日の実見待ち・2026-09-16 13:00）: 発注器 段1『影の発注』
+- 実装・selftest 9項目PASS・実走1回OK（詳細 CIRCULATION-ARCHITECTURE 2026-09-16 段1）。配線＝auto_writeback 5m（非致命）。
+- **完了の定義＝09-17〜 5営業日、autowrite.log に `executor_shadow stepped ... rejected=0 chain_verified=True` を実見し、executor_divergence.jsonl に below_min 以外の skip/reject が無いこと**。異常が出たら段を戻す（G0思想）。
+- 段2/段3 は別GO（会長: 機関用口座の準備が段2の前提）。

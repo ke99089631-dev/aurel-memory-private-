@@ -3,7 +3,7 @@ doc_id: AURELIAN-EXECUTOR-PROPOSAL-v1
 tags: [institution, executor, proposal, live-gate, pinned]
 type: build-proposal
 created: 2026-09-16
-status: 起案（会長「いいよ。進めて」＝起案の執筆GO。**着工GOはまだ**）
+status: 段1 着工GO（会長「GOだ」2026-09-16）→ executor_shadow.py 実装・selftest PASS・cadence 配線済（5営業日の実見待ち）。段2/段3 は別GO
 owner: AUREL
 approver: 会長（KEIKI MAEDA）
 source: AURELIAN-REVIEW-2026-09.md §3-A「畑の鍬」

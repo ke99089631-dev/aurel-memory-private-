@@ -1604,3 +1604,19 @@ Tier0本命=逆ボラ(Sensor #10)を機関の恒久の血として組込。純�
 **検証（全緑）**: macro_causal/source_family/proposals selftest PASS。run_digest: closed_loops=9/9・chain_verified=True・macro-read=3chains・sources_breathing=5/6。s2 monitor は7兵表示。dashboard 再生成。
 **残る7つの稼ぎ手の現況**: carry v2 / trend_follow v2 / vol_sell v2（本日教科書化）／mean_reversion（教科書に近い・コスト実測済・据置）／stat_arb（実測で0組・休止中）／tail_hedge（partial・見習い）／event_driven（dormant）。
 **完了の定義**: 明朝 2026-09-17 07:00 実循環で `macro_causal` の step が sensor_only で通り、digest の macro-read が残り、frontier が macro_causal 抜きで再測定されるのを実見。
+
+## 2026-09-16 発注器 段1『影の発注』着工・完了（会長「GOだ」／EXECUTOR-PROPOSAL.md 段1）
+**建てたもの**: `circulation/executor_shadow.py`（新規・1本に E1〜E4/E6〜E8 を節として実装。起案の分割名は将来の段で分ける）
+- E1 翻訳器: carry.json（通貨→対USDペア・USDJPY等は向き反転）／trend_follow.json（53脚・側と重み）／mean_reversion（公開面に向きが無いので器と同じ z 規則で当日の建玉を決定的に再計算）→ 3源泉に等分（各1/3）・名目合計 ≤ 元本×1.0（超過は比例縮小）。オプション兵は対象外。
+- E2 鏡: 紙の口座 `executor_shadow_state.json`（元本 100,000・現金・建玉・equity・高値・日次/週次の起点）。equity を DefenseCommand へ。
+- E3 差分発注: 目標−現在の差分だけ。元本の0.2%未満は発注しない。`TradeGateway`（防衛 pretrade → PaperBroker 滑り1bps → 専用台帳 `executor_shadow_ledger.sqlite` の hash chain）。
+- E4 予算門: 日次 −2%／週次 −4% で「増やす注文」だけ停止（減らす注文は通る）。床は DefenseCommand（−8/−12/−15）。**KILL 時は防衛が決済も REJECT する設計なので、決済だけは KILL 執行として broker へ直接（台帳に KILL_CLOSE_ALL と記録）**。
+- E6 鍵: `LIVE_ARM.json` は読むだけ（存在を報告・段1では効かない・AUREL は書かない）。`DISABLE_EXECUTOR` で即停止。executor_present=False 固定。
+- E7 ガード: 期待口座 PAPER/PAPER。拒否リスト＝会長裁量 27972608・プロップ 40000162046・PROP-EVAL。paper 以外の broker は拒否。
+- E8 乖離台帳: `executor_divergence.jsonl`（目標・要求量・約定量・約定価格・滑りbps・拒否理由・源泉）。
+- 配線: `auto_writeback.py` 5m（末尾・非致命）。backup `auto_writeback.post-executor-shadow.20260916.bak.py`。
+**検証**: selftest 9項目 **PASS**（目標どおり建つ/gross=1・冪等・予算門で増やす注文だけ止まる・KILLで全決済・LIVE_ARM.json があっても紙のまま・裁量口座と live broker を拒否・killswitch・台帳の鎖・実面からの翻訳 n=53 gross≤1）。**実走1回**（2026-09-16）: 注文36・拒否0・小口スキップ17・equity 99,993（滑り分）・gross 0.68・level NORMAL・chain_verified=True。主な持ち高＝AUDUSD 買い／USDCHF・USDJPY 買い（=CHF/JPY 売り）／HYG／EWA／GBPUSD。
+**修正1件（実装中）**: DefenseCommand の KILL 通知が Windows コンソールの cp932 で落ちる（`≥`）→ 防衛は無改変のまま、SafeExecutor(logger=list.append) を渡して画面に出さない。
+**完了の定義（段1）**: 明朝から **5営業日** 実循環で `executor_shadow stepped` が rc=0 で通り、紙の目標と紙の口座の乖離（rejected=0・below_min 以外の skip なし）・chain_verified=True・LIVE locked を実見。並行して予算門/KILL は selftest 済（紙口座での「閉じるのを見た」は selftest (3)(4) が該当）。
+**次の段（別GO）**: 段2＝機関用口座（会長が用意）の読取接続（E2 を実口座に）／段3＝極小実弾（会長二重ロック・bracket発注＋SL照合＝mt5_live.py 既存機構）。
+**境界**: 金ゼロ・紙の口座・単一書き手・本番/凍結/プロップ/裁量口座/.env 非接触・LLM非介在・鍵は会長のみ。
