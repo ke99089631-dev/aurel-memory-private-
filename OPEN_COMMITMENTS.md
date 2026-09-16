@@ -268,3 +268,8 @@ updated: 2026-07-28
 ### 🔴 OPEN（実循環での実見待ち・2026-09-16 11:30）: トレンド兵 v2（教科書TSMOM）の載せ替え＋carry コスト読取の正修正
 - 実装・selftest PASS・盤面実見済（詳細 CIRCULATION-ARCHITECTURE 2026-09-16）。**完了の定義＝明朝 09-17 07:00 の autowrite.log で trend_follow v2 step（`tsmom_v2`）と carry v2 step を実見**、frontier/digest/dashboard が rc=0 で通ること。壁の数字が変わるのは正直な変化（記録する）。
 - 副起案（検討・別GO）: 逆ボラ重みの銘柄別上限（例10%）／ETFの重複（セクター/国別）の扱い。
+
+### 🔴 OPEN（実循環での実見待ち・2026-09-16 11:55）: 保険売り兵 v2（教科書VRP・SPXコンドル）の載せ替え
+- 実装・selftest PASS・盤面実見済（詳細 CIRCULATION-ARCHITECTURE 2026-09-16 第3手）。**完了の定義＝明朝 09-17 07:00 の autowrite.log で vol_sell v2 step（`vrp_condor_v2`）を実見**、rc=0。
+- **本日の載せ替え3本（carry/trend_follow/vol_sell）は全て明朝の同じ実循環で一括実見してクローズ**。frontier の壁は3帳簿が変わったので数字が動く＝正直な変化として記録する。
+- 留保（実弾前の必須ゲート・別GO）: オプションの板コストと IV スキューの実測差替。
