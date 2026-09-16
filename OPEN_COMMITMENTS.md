@@ -251,3 +251,11 @@ updated: 2026-07-28
 - **✅ 2026-09-09 14:45 会長GO「GOだ」→ 差し替え完了（実見済）**: soldier_screen の既定＝銘柄別コスト（fail-closed）→ 採用4器 → 兵 rebuild で **戻り取り held=4（EURGBP/EWA/EURCHF/EWU）・トレンド held=0**。selftest 全PASS。
 - **✅ CLOSED 2026-09-12（実見完了）: 板の実測で推定行を上書き**（`quote_sampler.py`＋タスク `AUREL_Quote_Sampler` 平日NY時間5拍＋`auto_writeback` 4c-1b）。完了の定義を両方満たした： (a) quotes.jsonl に ETF `in_rth=True` 行を **3529行/3日分（9/9・9/10・9/11）** 実見。(b) cost_table に **measured_quote_rows=125**（154行中）が現れ、今朝 07:00 の実循環ログで **`soldier_screen re-measured (measured rows changed 0->125): survivors=8`** を実見。ETF実測中央コストが推定2.43bps→**実測1.03bps**へ低下し、採用が **4器→8器**（mr:EURCHF/EURGBP/EWA/EWU/QQQ/XLK/XLP・trend:BTC）に増えた（実コストが推定より安く、より多くの器が関門を通過）。CFD商品は無料の気配源が無く推定のまま（正直に unmeasured）。
 - 🔴 **OPEN（検証待ち・機関外）**: 携帯チャット中継の打ち切り修正（TIMEOUT 15→45分・打ち切り時は再実行せずセッション保持）。**完了の定義＝15分超の仕事が正常に返るのを実見**。12:14の「返答なし」の死因は episodic 参照。
+
+### 🔴 OPEN（起案・着工=会長GO・2026-09-16）: 保険売り兵(vol_sell)の「S1紙DD -73%」は計測の一点ノイズ＝実損ではない
+- **事実（読取のみ・無改変）**: `s1_forward.json` の vol_sell 累積列は 26点中25点が 3.45〜3.47 で滑らか。**2026-09-10 07:03 の1点だけ 2.7277**（前日3.4631→翌日3.4648）。1日で -0.735 落ちて翌日 +0.737 戻る。帳簿の1日最大損失は約 -0.002（3器）＝実損では物理的に不可能。autowrite.log 9/10 `vol_sell stepped: total_pnl=2.727729` が証拠（9/10は 07:03 と遅く、9/9のコスト表差替直後＝帳簿の部分読み/再構築中の読取が最有力）。
+- **影響**: `s2_floor_monitor._s1_dd` は最悪落ちを永久記憶する設計＝vol_sell は**この1点のせいで永久 BREACH**。他7源泉に同種の一点ノイズは無し（各源泉の最悪1日落ちは -0.04 以内・確認済）。carry(-16%)・macro_causal(-16%)は連続的な下落＝本物の紙DD。
+- **副次の指摘**: `_s1_dd` は「2003年からの累積リターン合計(3.47=+347%)」の差分を資本床(-15%)と直接比べている。単位が揃っていないため、帳簿の読取り事故がそのまま「資本-73%」に化ける。
+- **起案（小・可逆）**: ①一点ノイズ除外＝スナップの落ちが「帳簿の1日最大損失×器数×安全係数」を超え、かつ翌点で全戻りなら異常として記録しDDから除外（隠さず `anomalies` に残す） ②vol_sell の 9/10 点を異常マーク ③DD単位を「点火時の累積を1.0とした比率」に揃える。
+- **完了の定義**: 翌朝の実循環で vol_sell の `floor_status` が正しい値（clear 見込み）で出て、`anomalies` に 9/10 が残っているのを実見。
+- **[2026-09-16 10:50 会長「OK」＝GO受領 → 実装＋selftest PASS＋盤面で実見]** `s2_floor_monitor.py` に一点ノイズ門を追加（定数 ANOMALY_MIN_DROP=0.10 / ANOMALY_RECOVER_FRAC=0.90・`_split_anomalies`・除外点は `s1_anomalies` として盤面に残す・台帳 s1_forward.json の生データは無改変）。バックアップ `s2_floor_monitor.py.bak_20260916_anomaly_guard`。selftest 新4項目（一点ノイズ除外／本物の暴落は残す／部分回復は残す／末尾点は残す）全PASS。`--peek` 実見: **vol_sell s1_dd -73.54% → -0.10% clear**、他7源泉の値は不変（carry -16.08% / macro_causal -15.96% は本物の落ちなので BREACH のまま）。DD単位の揃え（起案③）は未着工＝別GO。**★残るOPEN＝明朝 2026-09-17 07:00 の実循環で同じ値が出るのを実見してクローズ。**
