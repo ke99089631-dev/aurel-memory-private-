@@ -1620,3 +1620,15 @@ Tier0本命=逆ボラ(Sensor #10)を機関の恒久の血として組込。純�
 **完了の定義（段1）**: 明朝から **5営業日** 実循環で `executor_shadow stepped` が rc=0 で通り、紙の目標と紙の口座の乖離（rejected=0・below_min 以外の skip なし）・chain_verified=True・LIVE locked を実見。並行して予算門/KILL は selftest 済（紙口座での「閉じるのを見た」は selftest (3)(4) が該当）。
 **次の段（別GO）**: 段2＝機関用口座（会長が用意）の読取接続（E2 を実口座に）／段3＝極小実弾（会長二重ロック・bracket発注＋SL照合＝mt5_live.py 既存機構）。
 **境界**: 金ゼロ・紙の口座・単一書き手・本番/凍結/プロップ/裁量口座/.env 非接触・LLM非介在・鍵は会長のみ。
+
+## 2026-09-16 第5手 — 練習血液の2兵（tail_hedge・event_driven）を「見習い(apprentice)」へ降格（会長「やって」）
+**変更（backup: `frontier.pre-apprentice.20260916.bak.py` / `s2_floor_monitor.pre-apprentice.20260916.bak.py`）**
+- `frontier.py`: `EXCLUDED_FROM_WALL = {tail_hedge, event_driven (見習い), macro_causal (目)}` を新設し、**紙帳簿モードと実市場バスケットモードの両方**で壁の計算から外す（発注器の影帳簿 `executor_*` も除外）。★9/16午前の macro 降格時「frontier は空 trades を読まないので自然に外れる」は**紙モードだけの話**で、実市場モードでは basket が残っていた＝この手で正しく除外。
+- `source_family.py`: status="apprentice" 新設（verdict APPRENTICE・配分対象外・`apprentices` 集計）。tail_hedge/event_driven を apprentice に。→ **sources_breathing 5 → 4**（event 源泉は現役ゼロ＝正直）。
+- `proposals.py`: SOLDIER_REGIMES から tail_hedge/event_driven を除去。**trend_follow v2 に high_vol を追加**（教科書TSMOMの危機アルファ＝2008年 +22% 実測が根拠）→ 相場カバーの穴なし（gaps=[]）。apprentice だけの源泉は「空」と叫ばない例外。
+- `s2_floor_monitor.py`: SOLDIERS を real/partial の5兵（mean_reversion/stat_arb/trend_follow/carry/vol_sell）に。`apprentices`/`sensors` を盤面に別掲。`s1_forward.json` から tail_hedge(24)/event_driven(36) を削除（`_resets` 記録）。
+- 兵のコード（tail_hedge.py / event_driven.py）と auto_writeback の step 配線は**無改変**＝紙の練習は毎朝続く（見習いのまま成績を積む）。
+**検証（全緑）**: frontier/source_family/proposals selftest PASS。gaps=[]。s2: 5源泉 0/5。dashboard 再生成。
+**実測（正直な壁）**: 壁 **13.68 → 12.28%/yr**、効率帯 12.26、edges 16→13、Sharpe 1.82→1.64（実市場バスケット基準・律速=DD）。＝練習血液と「目」が実力を約1.4ポイント押し上げていた。
+**現在の機関の稼ぎ手（正直な数え方）**: 現役5兵（戻り取り・裁定(0組休止)・トレンドv2・金利差v2・保険売りv2）／見習い2／目1。
+**完了の定義**: 明朝 07:00 実循環で frontier が `EXCLUDED_FROM_WALL` 適用で測り直され（壁≈12.3%）、digest/dashboard が rc=0 で通ること（本日の他6件と一括実見）。
