@@ -3,7 +3,7 @@ doc_id: AURELIAN-REVIEW-2026-09
 tags: [institution, review, proposal, pinned]
 type: review-proposal
 created: 2026-09-16
-status: 方針は会長確認済（2026-09-16「既存の精度アップに使う」）・着工Aは会長GO待ち
+status: 方針確認済（09-16）・第2段C=carry/trend/vol_sell 教科書化＋macro降格 着工済（実循環実見待ち）・A発注器=起案 EXECUTOR-PROPOSAL.md 執筆済（着工GO待ち）
 owner: AUREL
 approver: 会長（KEIKI MAEDA）
 source: 会長 2026-09-16（携帯）「独自より現に存在している方法を使う／既存エッジを循環に乗せれば精度が上がるのでは／この機会にaurelianを見直そう」

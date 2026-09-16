@@ -1592,3 +1592,15 @@ Tier0本命=逆ボラ(Sensor #10)を機関の恒久の血として組込。純�
 **現在の持ち高（紙）**: 9月分コンドル1枚（建て 09-01・IV 14.9 vs RV 10.3・受取 0.65%・翼幅 4.0%・満期 9月末＝未到来）。
 **完了の定義**: 明朝 2026-09-17 07:00 実循環で `vol_sell ... vrp_condor_v2` と面 v2 を実見。
 **境界（不変）**: paper・金ゼロ・単一書き手・本番/凍結/プロップ(g4_)/.env 非接触・発注器なし・鍵は会長。
+
+## 2026-09-16 載せ替え第2段・第4手 — 世界読み（macro_causal）を「稼ぎ手」から「天候を読む目」へ降格（会長「君の推しで行こうか」）
+**理由**: 7源泉で最も自己流（因果の鎖＝AURELの決め打ち・教科書の型が無い）。9月に紙で床(-15%)を割った。世界読み（macro_read/causal_map）は①情報循環の背骨として価値があるので、そこだけ残す。
+**変更（backup: `macro_causal.py.bak_20260916_sensor_only` / `proposals.py.bak_20260916_macro_sensor`）**
+- `macro_causal.py`: `ROLE="sensor_only"`。帳簿の trades=空（紙損益なし）・positions は held=False/read=True。assess は role/read_chains を出し、held=[]・total_pnl=0・state="SENSOR"。macro_read/causal_map は従来どおり公開（digest の①情報 signal `macro-read=3chains causal_map=5` を実見）。evidence.py が読取専用で使う `_real_trades()` は残置（因果の証拠づくり用の測定器）。selftest を sensor_only 検査へ更新→PASS。
+- `s2_floor_monitor.py`: SOLDIERS から macro_causal を除外（S2候補ではない）。`s1_forward.json` の macro_causal 項を削除（`_resets` 記録・旧 count=24）。
+- `source_family.py`: status="sensor" を新設（verdict SENSOR・配分対象外・active/slot と別集計 `sensors`）。macro 源泉の兵を sensor に。＝**sources_breathing 6/6 → 5/6**（正直: 世界読みは稼がない）。selftest PASS。
+- `proposals.py`: SOLDIER_REGIMES から macro_causal を除去。sensor を持つ源泉は「空」と叫ばない例外を追加（設計どおり稼がない源泉）。selftest PASS・gaps=[]・open=0。
+- frontier は空 trades の帳簿を読まない設計＝明朝の再測定で macro_causal は壁から自然に外れる（数字が動く＝正直）。
+**検証（全緑）**: macro_causal/source_family/proposals selftest PASS。run_digest: closed_loops=9/9・chain_verified=True・macro-read=3chains・sources_breathing=5/6。s2 monitor は7兵表示。dashboard 再生成。
+**残る7つの稼ぎ手の現況**: carry v2 / trend_follow v2 / vol_sell v2（本日教科書化）／mean_reversion（教科書に近い・コスト実測済・据置）／stat_arb（実測で0組・休止中）／tail_hedge（partial・見習い）／event_driven（dormant）。
+**完了の定義**: 明朝 2026-09-17 07:00 実循環で `macro_causal` の step が sensor_only で通り、digest の macro-read が残り、frontier が macro_causal 抜きで再測定されるのを実見。

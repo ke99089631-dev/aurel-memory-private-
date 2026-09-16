@@ -34,6 +34,8 @@ updated: 2026-06-03
 ## 📌 PINNED — 投資機関 Aurelian（AUREL推進・育成フェーズ）
 - **推進マンデート（会長 2026-08-09「君に推進でいこう」）**: 機関の育成はAUREL主導。境界=①測定/観測/循環運転/報告/記憶/**建設案の起案**は自律 ②**建設の着工**は起案→会長GO ③**実弾ゲート（二重ロック `enable_live`＋`arm_code`）・出金・レバ・プロップ(g4_)は永久に会長のみ**。「考える・測る・提案するはAUREL、鍵を回すは会長」。
 - **[projects/institution/LIVE-GATE-CRITERIA.md](projects/institution/LIVE-GATE-CRITERIA.md)** — 実弾を“検討してよい土俵”に上がる7条件（草案v1・会長ratify待ち）。現在地=土俵の外（実績短・実データ通過0・adoption0）。今の議題は「待つ・貯める・触りすぎない」。
+- **[projects/institution/AURELIAN-REVIEW-2026-09.md](projects/institution/AURELIAN-REVIEW-2026-09.md)** — **2026-09-16 見直し（会長確認済）**: 機関＝「資金が来た日のための畑」。独自エッジ発見→**既存の稼ぎ方を教科書どおりに回す**へ転換。carry/trend/vol_sell を教科書v2化・macro_causal は「天候を読む目」に降格（同日着工・実循環実見待ち）。
+- **[projects/institution/EXECUTOR-PROPOSAL.md](projects/institution/EXECUTOR-PROPOSAL.md)** — **発注器（畑の鍬）起案 v1（2026-09-16・着工GO待ち）**。段1=紙口座に影の発注（金ゼロ）→段2読取接続→段3極小実弾（会長二重ロック）。鍵 `LIVE_ARM.json` は会長のみが置く＝**AURELは書かない**。裁量口座27972608・プロップ・$53は拒否リスト。
 - **[projects/institution/CIRCULATION-ARCHITECTURE.md](projects/institution/CIRCULATION-ARCHITECTURE.md)** — 9循環＋8兵士＋発見器ガントレットの設計・建設ログ。機関は毎朝07:00自律で1拍（`AUREL_Circulation_WriteBack`）。金ゼロ・adoption0・紙のみ。
 
 ---

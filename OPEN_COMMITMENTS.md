@@ -273,3 +273,7 @@ updated: 2026-07-28
 - 実装・selftest PASS・盤面実見済（詳細 CIRCULATION-ARCHITECTURE 2026-09-16 第3手）。**完了の定義＝明朝 09-17 07:00 の autowrite.log で vol_sell v2 step（`vrp_condor_v2`）を実見**、rc=0。
 - **本日の載せ替え3本（carry/trend_follow/vol_sell）は全て明朝の同じ実循環で一括実見してクローズ**。frontier の壁は3帳簿が変わったので数字が動く＝正直な変化として記録する。
 - 留保（実弾前の必須ゲート・別GO）: オプションの板コストと IV スキューの実測差替。
+
+### 🔴 OPEN（実循環での実見待ち・2026-09-16 12:30）: 世界読み（macro_causal）を sensor_only へ降格
+- 実装・selftest PASS・digest 手動再構築で実見済（詳細 CIRCULATION-ARCHITECTURE 第4手）。**完了の定義＝明朝 09-17 07:00 の実循環で macro_causal step（role=sensor_only）・digest macro-read 残存・frontier の壁が macro 抜きで再測定されるのを実見**。
+- ★本日の4件（vol_sell監視修理／carry v2／trend v2／vol_sell v2／macro降格）は**全部 明朝の同じ実循環で一括実見**してクローズする。
