@@ -3,7 +3,7 @@ doc_id: AURELIAN-REVIEW-2026-09
 tags: [institution, review, proposal, pinned]
 type: review-proposal
 created: 2026-09-16
-status: draft（会長の「見直そう」を受けた起案・着工は会長GO）
+status: 方針は会長確認済（2026-09-16「既存の精度アップに使う」）・着工Aは会長GO待ち
 owner: AUREL
 approver: 会長（KEIKI MAEDA）
 source: 会長 2026-09-16（携帯）「独自より現に存在している方法を使う／既存エッジを循環に乗せれば精度が上がるのでは／この機会にaurelianを見直そう」
