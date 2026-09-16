@@ -292,3 +292,14 @@ updated: 2026-07-28
 
 ### 🔴 OPEN（実循環での実見待ち・2026-09-16 16:10）: 見習い降格（tail_hedge/event_driven）＋壁の除外
 - 実装・selftest PASS・手動再測定 壁 13.68→12.28%/yr（詳細 CIRCULATION-ARCHITECTURE 第5手）。**完了の定義＝明朝 09-17 07:00 の実循環で壁≈12.3% と sources_breathing=4/6 を実見**。本日分7件を一括実見してクローズ。
+
+### ✅ CLOSED 2026-09-17 07:00（本日分7件 一括実見・完了の定義を全て満たした）
+明朝の実循環（generated 2026-09-17 07:00〜07:01）で本日分を実見しクローズ:
+1. **vol_sell 監視修理** — schema `aurelian.vol_sell/v2`、floor breach 無し（s1_dd 一点ノイズ除外が効いて clear）。
+2. **carry v2** — `aurelian.carry/v2`（textbook g10）、held=3（AUD/CHF/JPY）、valve open、rc正常。
+3. **trend v2** — `aurelian.trend_follow/v2`（tsmom）、53銘柄・selection=none、rc正常。
+4. **vol_sell v2** — `aurelian.vol_sell/v2`（VRPコンドル）、rc正常。
+5. **macro sensor降格** — role=sensor_only、trades=0、digest/frontier 生存。
+6. **発注器 段1** — executor_shadow stepped: rejected=0、ledger_chain_verified=True、money_moved=0、orders=1（残52はbelow_min＝正常）。※5営業日観察は継続（09-17が1日目）。
+7. **見習い降格＋壁除外** — frontier wall=**12.27%/yr**、n_edges=13（apprentice/sensor/executor除外）、sources_breathing=**4/6**。
+残る継続監視: 段1の5営業日観察（09-17=1日目）／段2は会長「入れた」待ち／vol_sell実弾前の板コスト・IVスキュー実測。
