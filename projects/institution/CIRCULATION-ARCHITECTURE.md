@@ -1566,3 +1566,16 @@ Tier0本命=逆ボラ(Sensor #10)を機関の恒久の血として組込。純�
 **正直な留保**: (1) gross=1 の無レバ数字。ボラ目標(例10%)へ拡大すれば年率・DDとも約2倍。床-15%はレバ1で2008に割れる＝弁25は2008型の緩慢な崩れには遅い（VIX百分位やキャリー自身のモメンタム弁は次の検討・今回は教科書1点に絞った）。(2) EUR/GBP が入っていない＝G10のうち6通貨。**次の血＝ECB/BoE 政策金利を FRED から取る（blood_fetch 拡張・無料）→ 8通貨化**（起案）。(3) 政策金利は月次で 2025-07 まで＝それ以降は最終既知を据置（既存の正直ラベルと同じ）。
 **完了の定義**: 明朝 2026-09-17 07:00 の実循環（auto_writeback 4c）で `carry stepped ... textbook g10_carry_v2` の記録と carry.json v2 を実見。
 **境界（不変）**: paper・金ゼロ・単一書き手・本番/凍結/プロップ(g4_)/.env 非接触・発注器なし・鍵は会長。
+
+## 2026-09-16 載せ替え第2段・第2手 — トレンド兵を「教科書・時系列モメンタム v2」へ書き換え（会長GO「君に任せる。進めてくれ」）
+**変更（backup: `trend_follow.py.bak_20260916_pre_textbook` / s1_forward は carry 時のバックアップに同梱）**
+- `circulation/trend_follow.py` 全面書換（v2）。教科書の5点: ①対象＝取引できる銘柄**全部**（bars×cost_table 交差=53本。VIX/DXY=non_tradable と BTCUSDT/ETHUSDT/SOLUSDT=現物と重複 を除外。cost_table 欠損は fail-closed） ②向き＝前日までの 20/60/250 営業日リターンの符号の平均（3物差しの多数決） ③大きさ＝直近63日の荒さの逆数・gross=1 ④月初1回入替・入替量×実測片道コスト ⑤弁なし（トレンドは危機で稼ぐ型＝教科書に弁は無い）。免疫は v1 と同じ recent_sum。**v1 の「soldier_screen が過去成績で選んだ銘柄だけに乗る」は廃止**（9/3 の教訓＝過去成績での選別は標本外で剥がれる。教科書は選ばず薄く広く）。soldier_screen は mean_reversion 用として存続。
+- 帳簿は53脚（和集合カレンダー・休場日は0）3.9MB（compact JSON）。面 trend_follow.json の契約不変（knob 表示は LOOKBACKS）。`source_family.py` の trend_follow ラベル/knob を v2 へ（1行）。
+- **carry の副修正**: `_cost_bps` が cost_table の `rows` を見ておらず既定1bpsを使っていた→ rows を読む正修正。carry 再構築: cost_paid 0.0229→0.0062、total_pnl 0.466→0.483。selftest PASS。
+- **S1 時計リセット**: trend_follow 26/30 → **0/30**（新兵）。`_resets` に記録。
+**検証（全緑）**: trend_follow --selftest PASS（上げ系列=+1/下げ=−1／末尾削っても過去不変／held≥8・gross=1・非取引/重複ゼロ／手書き・成績選別ゼロ／千の傷免疫／real=True）。carry selftest PASS。source_family selftest PASS。s2_floor_monitor: trend_follow 0/30 clear・carry 0/30 clear・vol_sell clear。dashboard 再生成（トレンドの専用カードは元から無し＝正常）。
+**実測（紙・29年 1997-04〜2026-09・gross=1・レバ無し・コスト込み）**: 年率 **+3.59%**／年率ボラ 10.35%／シャープ **0.35**／最大DD **−22.0%**／入替354回。**2008: +22.0%（危機アルファ＝教科書どおり）**、悪い年は 2000 −10.4%・2023 −9.3%。＝文献のTSMOM（先物58本でシャープ0.4〜0.6）より少し低い＝ETF中心でセクター/国別ETFが互いに似ている（実質の分散が少ない）ため。正直な数字。
+**現在の持ち高（紙）**: 買い46本／売り7本。最大は HYG 13.7%（荒さが小さいので逆ボラで太る＝教科書の副作用。上限キャップは次の検討）。
+**正直な留保**: (1) gross=1 の無レバ数字。(2) 逆ボラ重みは低ボラ債券系(HYG/IEF/TLT)に寄る＝銘柄別上限（例10%）を足すかは次の判断（教科書1点に絞ったため未実装）。(3) セクターETF 11本＋国別ETF 12本は相関が高く「53本」ほどの分散は無い。
+**完了の定義**: 明朝 2026-09-17 07:00 実循環で `trend_follow ... textbook tsmom_v2` の記録と面 v2 を実見、digest/dashboard/frontier が壊れていないこと（frontier は書き換わった2帳簿を読む＝壁の数字が変わる見込み・正直な数字）。
+**境界（不変）**: paper・金ゼロ・単一書き手・本番/凍結/プロップ(g4_)/.env 非接触・発注器なし・鍵は会長。

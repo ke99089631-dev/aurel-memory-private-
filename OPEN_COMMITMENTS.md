@@ -264,3 +264,7 @@ updated: 2026-07-28
 - 実装・selftest 3本PASS・盤面/ダッシュ実見済（詳細 CIRCULATION-ARCHITECTURE 2026-09-16）。**完了の定義＝明朝 09-17 07:00 の autowrite.log で carry の v2 step（`textbook g10_carry_v2`）を実見**し、digest/dashboard が壊れていないこと。
 - 副起案（着工=会長GO）: ECB/BoE 政策金利を FRED から取り EUR/GBP を並べる（8通貨化）。
 - 副起案（検討）: 弁の第2段（VIX百分位 or キャリー自身の直近モメンタム）＝2008型の緩慢な崩れ対策。今回は教科書1点に絞った。
+
+### 🔴 OPEN（実循環での実見待ち・2026-09-16 11:30）: トレンド兵 v2（教科書TSMOM）の載せ替え＋carry コスト読取の正修正
+- 実装・selftest PASS・盤面実見済（詳細 CIRCULATION-ARCHITECTURE 2026-09-16）。**完了の定義＝明朝 09-17 07:00 の autowrite.log で trend_follow v2 step（`tsmom_v2`）と carry v2 step を実見**、frontier/digest/dashboard が rc=0 で通ること。壁の数字が変わるのは正直な変化（記録する）。
+- 副起案（検討・別GO）: 逆ボラ重みの銘柄別上限（例10%）／ETFの重複（セクター/国別）の扱い。
