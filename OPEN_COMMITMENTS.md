@@ -282,3 +282,10 @@ updated: 2026-07-28
 - 実装・selftest 9項目PASS・実走1回OK（詳細 CIRCULATION-ARCHITECTURE 2026-09-16 段1）。配線＝auto_writeback 5m（非致命）。
 - **完了の定義＝09-17〜 5営業日、autowrite.log に `executor_shadow stepped ... rejected=0 chain_verified=True` を実見し、executor_divergence.jsonl に below_min 以外の skip/reject が無いこと**。異常が出たら段を戻す（G0思想）。
 - 段2/段3 は別GO（会長: 機関用口座の準備が段2の前提）。
+
+### 🔴 OPEN（会長判断待ち・2026-09-16 15:30）: 発注器 段2『口座の鏡（読むだけ）』＝端末との通信が通らず保留
+- **できたこと**: 会長提供の機関専用口座（login 26608494 / VantageTradingLtd-Live）の資格情報を `empire/config/secrets/aurelian_executor.env` に保管（パスワードは記憶・会話に書かない）。機関専用の端末を `C:\Users\user\AurelianMT5`（Program Files の MT5 を複製・portable）に用意。**端末単体はこの口座に正常ログインできた**（ウィンドウ題名で実見＝資格情報は正しい）。読取専用モジュール `circulation/executor_mirror.py`（発注APIの呼び出しゼロ・期待口座ガード・拒否リスト＝selftest PASS）。
+- **できていないこと**: Python(MetaTrader5 5.0.5735) ↔ 端末の IPC が `-10005 IPC timeout` で一度も通らない。ログイン無しの素の attach でも同じ。サンドボックス外・スケジュールタスク（対話ユーザーセッション）からでも同じ。
+- **原因の見立て**: 複製端末が **自動更新（build 6090→6182）の失敗ループ**に入っている（約8分ごとに「自分の複製を liveupdate へ作れず失敗→再起動」）。更新保留状態の端末は IPC を受け付けない疑い。会長の Program Files 端末には保留更新なし。
+- **選択肢（会長）**: (a) **Vantage 公式の MT5 インストーラで機関専用端末を別フォルダに正規インストール**（UAC の「はい」が要る＝会長の手。以後は自動更新も正常）→ AURELが接続を再試行 (b) 複製端末の更新を手で当てる（不確実） (c) 段2を保留し段1（影の発注5日）を先に完了。**AUREL推奨=(a)**。
+- 後片付け済: 端末プロセス停止・臨時のプローブタスク削除。段1（影の発注）は影響なし。
