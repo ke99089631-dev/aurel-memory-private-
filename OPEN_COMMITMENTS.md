@@ -259,3 +259,8 @@ updated: 2026-07-28
 - **起案（小・可逆）**: ①一点ノイズ除外＝スナップの落ちが「帳簿の1日最大損失×器数×安全係数」を超え、かつ翌点で全戻りなら異常として記録しDDから除外（隠さず `anomalies` に残す） ②vol_sell の 9/10 点を異常マーク ③DD単位を「点火時の累積を1.0とした比率」に揃える。
 - **完了の定義**: 翌朝の実循環で vol_sell の `floor_status` が正しい値（clear 見込み）で出て、`anomalies` に 9/10 が残っているのを実見。
 - **[2026-09-16 10:50 会長「OK」＝GO受領 → 実装＋selftest PASS＋盤面で実見]** `s2_floor_monitor.py` に一点ノイズ門を追加（定数 ANOMALY_MIN_DROP=0.10 / ANOMALY_RECOVER_FRAC=0.90・`_split_anomalies`・除外点は `s1_anomalies` として盤面に残す・台帳 s1_forward.json の生データは無改変）。バックアップ `s2_floor_monitor.py.bak_20260916_anomaly_guard`。selftest 新4項目（一点ノイズ除外／本物の暴落は残す／部分回復は残す／末尾点は残す）全PASS。`--peek` 実見: **vol_sell s1_dd -73.54% → -0.10% clear**、他7源泉の値は不変（carry -16.08% / macro_causal -15.96% は本物の落ちなので BREACH のまま）。DD単位の揃え（起案③）は未着工＝別GO。**★残るOPEN＝明朝 2026-09-17 07:00 の実循環で同じ値が出るのを実見してクローズ。**
+
+### 🔴 OPEN（実循環での実見待ち・2026-09-16 11:20）: キャリー兵 v2（教科書G10）の載せ替え
+- 実装・selftest 3本PASS・盤面/ダッシュ実見済（詳細 CIRCULATION-ARCHITECTURE 2026-09-16）。**完了の定義＝明朝 09-17 07:00 の autowrite.log で carry の v2 step（`textbook g10_carry_v2`）を実見**し、digest/dashboard が壊れていないこと。
+- 副起案（着工=会長GO）: ECB/BoE 政策金利を FRED から取り EUR/GBP を並べる（8通貨化）。
+- 副起案（検討）: 弁の第2段（VIX百分位 or キャリー自身の直近モメンタム）＝2008型の緩慢な崩れ対策。今回は教科書1点に絞った。
