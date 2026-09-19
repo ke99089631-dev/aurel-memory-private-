@@ -28,6 +28,9 @@ updated: 2026-06-03
 - **[projects/LIFE-GOAL-DAILY-100M.md](projects/LIFE-GOAL-DAILY-100M.md)** — 会長宣言「まずは日給1億」。**期限なし・事業固定なし**のシンプルな北極星。提案の評価軸として使う。急かさない。
 - **[projects/AUREL-PRODUCT.md](projects/AUREL-PRODUCT.md)** — AUREL製品化の起案（A: AUREL OS月額 / B: Aurelian測定機関 / C: 導入代行）。登り順C→A→B。金商法の壁あり。**凍結保存（検証段階が終わるまで催促しない）**。
 
+## 📌 PINNED — 裁量トレード × AUREL 副操縦士（2026-09-19 起案・着工GO待ち）
+- **[projects/DISCRETIONARY-COPILOT.md](projects/DISCRETIONARY-COPILOT.md)** — 会長の裁量「形」を読取のみで台帳化→機械定義→期待値測定→MQL5インジケータ。口座27972608は**読むだけ・発注なし**（9/16「接続はしない」と両立）。
+
 ## 📌 PINNED — プロップ戦略ロードマップ（司令室・常設パネル）
 - **[projects/PROP-ROADMAP.md](projects/PROP-ROADMAP.md)** — 会長がいつでも開く「全体像＋決定事項＋ロードマップ」1枚。現在地=Phase 7（$25k×1本の実弾GO待ち）。大きな決定・GO・数値が変わるたびにここを更新すること。
 
