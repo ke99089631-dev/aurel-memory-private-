@@ -303,3 +303,8 @@ updated: 2026-07-28
 6. **発注器 段1** — executor_shadow stepped: rejected=0、ledger_chain_verified=True、money_moved=0、orders=1（残52はbelow_min＝正常）。※5営業日観察は継続（09-17が1日目）。
 7. **見習い降格＋壁除外** — frontier wall=**12.27%/yr**、n_edges=13（apprentice/sensor/executor除外）、sources_breathing=**4/6**。
 残る継続監視: 段1の5営業日観察（09-17=1日目）／段2は会長「入れた」待ち／vol_sell実弾前の板コスト・IVスキュー実測。
+
+### 🔴 OPEN（2026-09-21 会長決定「毎日ボックス検証の報告を君にする」）: 裁量「壁→壁」台帳の毎日転記
+- AUREL宣言: 会長の日次報告を `projects/discretionary/LEDGER.md` に追記のみで転記し、朝の報告に裁量成績表（本数・勝率・平均R・DD・事前登録あり/なし別）を載せる。サンプル不足は必ず明記。
+- **完了の定義**: 30本到達時に「手順とSL定義の固定レポート」を出す（優位性判定ではない）。それまで毎日転記が途切れたら欠測として記録。
+- 段A（MT5読取収集器）・車線2（Dukascopy 機械壁検証）は別GO。金ゼロ・発注なし・口座27972608は読取のみ。
