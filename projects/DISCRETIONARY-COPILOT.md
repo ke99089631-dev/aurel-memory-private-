@@ -99,3 +99,10 @@ updated: 2026-09-19
 
 ## 状態（続き）
 - **2026-09-22 会長の携帯から初回記録＝実見完了**（複数画像3枚が正しく届き、約定履歴と申告値が全項目一致）。中間壁ブレイクの下抜けSELL、−1.00R。壁定義は上記に明文化。事前登録でなく事後記録（pre=False）＝主観予測力⑩は次回から事前投下で測る。
+- **2026-09-22 会長GO → 車線2プロトタイプ着手・稼働**（`C:\Users\user\AssetEmpire\empire\research\wall_to_wall\`・機関コードに干渉しない独立系統／venv=ImperialFlow）。
+  - 発見: 金の分足は取得済み＝ `empire/research/dukas/chunks/xauusd-m1-bid-*.csv`（**2010–2026・201チャンク**・形式 `timestamp(ms,UTC),O,H,L,C`・bidのみ）。取得器 `dukas/fetch_chunks.sh`（Node+dukascopy-node、XAUUSD=track A main）も実証済。検証機 `circulation/edge_screen`+`soldier_screen`（関門は import 流用：MIN_BARS1000=日足約4年・IS_FRAC0.70・FDR_Q0.10・COST_BASE typical160pt）。
+  - `m5_loader.py`: chunks→M5集約（pandas resample・週末空バー除外）。2026Q2で26,208本を確認。
+  - `backtest.py`: 機械定義Ver.1（**事前固定**）＝ボックス(黄)=過去288本の高安／中間壁(青)=中央±30%帯の直近スイング／M5終値の実体ブレイク→**次バー始値で成行**（先読み無し）／TP=次壁までの90%（手前10%）／SL=ブレイク足高安の外側+0.20／建玉中不介入・SL/TP到達で決済・MAX_HOLD288本。
+  - **初走行 2026Q2**: 本数199／勝率15.6%／平均R−0.05／合計R−9.9／TP22・**SL168**・時間切れ9／BUY107・SELL92。SLが8割＝**ブレイク→戻し（ダマシ）即撤退が多発**（会長 T-0001 と同型・仮説③ダマシ率と符合）。
+  - ★限界（正直に）: これは**機械の壁≠会長の壁**／1四半期のみ／**コスト未差引**（bidのみ）／OOS・FDR・時代持続は**未接続**。→ **まだ優位性は言えない**。
+  - 次段: ①全16年で通す（時代持続）②コスト差引（typical160pt＋悪化×3/×5併記）③soldier_screen 関門に日次集約層で載せる（前70/後30 OOS・FDR）④車線1（会長の実壁・事前登録）との一致率で中間壁の機械定義を校正。
