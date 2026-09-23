@@ -39,6 +39,20 @@ def latest_m5(n_bars=240, symbol="xauusd"):
     return m5.tail(n_bars)
 
 
+def live_m5_and_tick(n_bars=240):
+    """MT5 読取橋から今の M5(UTC index) と現在ティックを取る。橋が使えなければ例外。"""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import mt5_bridge
+    mt5 = mt5_bridge.connect()          # 口座27972608限定・発注なし・安全弁つき
+    try:
+        df = mt5_bridge.m5_bars(mt5, n_bars)
+        tick = mt5_bridge.live_tick(mt5)
+    finally:
+        mt5.shutdown()                  # 接続は掴みっぱなしにしない（読んだら離す）
+    df = df.set_index("dt")
+    return df[["open", "high", "low", "close"]], tick
+
+
 def current_box(m5):
     """末尾時点の箱(直近 RANGE_W 本)= 上壁/下壁/中間壁/幅。"""
     w = m5.tail(RANGE_W)
@@ -71,7 +85,17 @@ def detect_last_break(m5):
 
 
 def build_payload(n_bars=240):
-    m5 = latest_m5(n_bars)
+    # まず MT5 橋から今の値。取れなければ履歴にフォールバック（承認前/PC不在でも地図は出る）。
+    tick = None
+    source = "live"
+    try:
+        m5, tick = live_m5_and_tick(n_bars)
+        if len(m5) == 0:
+            raise RuntimeError("live 0本")
+    except Exception as e:
+        source = "hist"
+        sys.stderr.write("[live不可→履歴] %s\n" % (e,))
+        m5 = latest_m5(n_bars)
     idx = m5.index
     bars = [{
         "t": int(pd.Timestamp(idx[k]).timestamp()),
@@ -86,7 +110,10 @@ def build_payload(n_bars=240):
         "symbol": "XAUUSD (金) M5",
         "generated": dt.datetime.now().strftime("%Y-%m-%d %H:%M JST"),
         "data_end": pd.Timestamp(idx[-1]).tz_convert("Asia/Tokyo").strftime("%Y-%m-%d %H:%M JST"),
-        "note": "ヒストリカル（データ末端まで）。ライブ価格はMT5橋接続後に反映。",
+        "note": ("LIVE（MT5橋・読取専用）" if source == "live"
+                 else "ヒストリカル（データ末端まで）。MT5橋が繋がればライブに切替。"),
+        "source": source,
+        "tick": tick,
         "bars": bars,
         "box": {k: round(v, 3) for k, v in box.items()},
         "break": ({k: (round(v, 3) if isinstance(v, float) else v)
@@ -134,7 +161,8 @@ cv.width=W*DPR; cv.height=H*DPR; ctx.scale(DPR,DPR);
 // 価格レンジ（壁・TPも収める）
 let lo=Infinity, hi=-Infinity;
 for(const b of bars){ lo=Math.min(lo,b.l); hi=Math.max(hi,b.h); }
-const extra=[box.up,box.dn,box.mid]; if(brk){extra.push(brk.tp,brk.sl,brk.wall);}
+const tick=P.tick; const nowPx = tick ? (tick.bid+tick.ask)/2 : null;
+const extra=[box.up,box.dn,box.mid]; if(brk){extra.push(brk.tp,brk.sl,brk.wall);} if(nowPx!=null){extra.push(nowPx);}
 for(const v of extra){ if(v!=null){lo=Math.min(lo,v); hi=Math.max(hi,v);} }
 const pad=(hi-lo)*0.06||1; lo-=pad; hi+=pad;
 const gy=p=>PADT+(hi-p)/(hi-lo)*(H-PADT-PADB);
@@ -165,6 +193,8 @@ if(brk){
   hline(brk.tp,'#56d364',[6,4],'TP');
   hline(brk.sl,'#f85149',[2,3],'SL');
 }
+// 現在価格（ライブ時のみ・白実線）
+if(nowPx!=null){ hline(nowPx,'#ffffff',[],'現在'); }
 
 // ローソク
 for(let i=0;i<bars.length;i++){
@@ -187,7 +217,16 @@ let txt='箱幅 '+box.width.toFixed(2)+' (上'+box.up.toFixed(1)+'/下'+box.dn.t
 if(brk){ txt+=' ｜ 直近ブレイク='+(brk.dir==='UP'?'上':'下')+' 壁'+brk.wall.toFixed(1)
         +' → TP'+brk.tp.toFixed(1)+' / SL'+brk.sl.toFixed(1); }
 else { txt+=' ｜ 直近ブレイクなし（レンジ内）'; }
+if(tick){ txt+=' ｜ 現在 bid'+tick.bid.toFixed(2)+'/ask'+tick.ask.toFixed(2)
+        +' spread'+tick.spread_bps.toFixed(2)+'bps'; }
 lg.textContent=txt+' ｜ '+P.note;
+// LIVEバッジをヘッダ先頭に
+const hd=document.getElementById('hd');
+if(hd){ const b=document.createElement('span');
+  b.textContent = (P.source==='live'?'● LIVE':'○ 履歴');
+  b.style.cssText='float:right;font-size:11px;padding:1px 8px;border-radius:10px;'
+    +(P.source==='live'?'background:#0f2b17;color:#56d364':'background:#2a2a2a;color:#999');
+  hd.insertBefore(b, hd.firstChild); }
 // 右端(最新)にスクロール
 document.getElementById('wrap').scrollLeft=plotW;
 </script></body></html>"""
