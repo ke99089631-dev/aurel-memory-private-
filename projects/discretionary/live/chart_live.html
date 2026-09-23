@@ -10,11 +10,20 @@
   #hd b{color:#e6edf3}
   #badge{float:right;font-size:11px;padding:1px 8px;border-radius:10px}
   #sub{color:#8b949e;font-size:11px}
-  #chart{position:fixed;top:44px;left:0;right:0;bottom:0}
+  #chart{position:fixed;top:44px;left:0;right:0;bottom:38px}
+  #grid{position:fixed;top:44px;left:0;right:0;bottom:38px;pointer-events:none;z-index:2}
+  #ctrl{position:fixed;left:0;right:0;bottom:0;height:38px;z-index:6;display:flex;
+    align-items:center;gap:4px;padding:0 8px;background:rgba(13,17,23,.92);
+    border-top:1px solid #21262d;font-size:12px;overflow-x:auto;white-space:nowrap}
+  .cbtn{background:#1b2230;color:#c9d1d9;border:1px solid #30363d;border-radius:6px;
+    padding:4px 9px;font-size:13px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .cbtn:active{background:#2a3446}
+  .cbtn.on{background:#0f2b17;color:#56d364;border-color:#238636}
+  #ctrl .lab{color:#8b949e;font-size:11px}
   .tag{display:inline-block;padding:0 6px;border-radius:8px;font-size:10px;margin-right:3px}
   .yel{background:#3a3410;color:#e3c94a}.blu{background:#0e2740;color:#58a6ff}
   .grn{background:#0f2b17;color:#56d364}.red{background:#3a1113;color:#f85149}
-  #err{position:fixed;bottom:6px;left:10px;font-size:11px;color:#f85149;z-index:6}
+  #err{position:fixed;bottom:44px;left:10px;font-size:11px;color:#f85149;z-index:6}
 </style></head><body>
 <div id="hd">
   <span id="badge"></span>
@@ -26,6 +35,18 @@
   </span>
 </div>
 <div id="chart"></div>
+<canvas id="grid"></canvas>
+<div id="ctrl">
+  <span class="lab">マス幅</span>
+  <button class="cbtn" id="cellDn">−</button>
+  <span id="cellVal" style="min-width:44px;text-align:center">$5</span>
+  <button class="cbtn" id="cellUp">＋</button>
+  <span class="lab" style="margin-left:6px">位置</span>
+  <button class="cbtn" id="origUp">▲</button>
+  <button class="cbtn" id="origDn">▼</button>
+  <button class="cbtn" id="snap" title="タップで線合わせ">◎合わせ</button>
+  <button class="cbtn" id="fit" title="自動フィットに戻す">⤢</button>
+</div>
 <div id="err"></div>
 <script src="/lightweight-charts.js"></script>
 <script>
@@ -42,7 +63,7 @@ const chart = LWC.createChart(document.getElementById('chart'), {
   autoSize:true,
   layout:{ background:{color:'#0d1117'}, textColor:'#c9d1d9' },
   grid:{ vertLines:{color:'#2b3440', style:LWC.LineStyle.Solid},
-         horzLines:{color:'#2b3440', style:LWC.LineStyle.Solid} },
+         horzLines:{visible:false} },   // 横線は自前の可変マスグリッドで描く
   crosshair:{ mode: LWC.CrosshairMode.Normal },
   rightPriceScale:{ borderColor:'#30363d' },
   timeScale:{ borderColor:'#30363d', timeVisible:true, secondsVisible:false,
@@ -131,4 +152,56 @@ async function pollTick(){
 pollData();
 setInterval(pollData, 10000);     // フルは10秒ごと（壁の再計算・取りこぼし補正）
 setInterval(pollTick, 1000);      // 現在値は毎秒＝常に追ってる状態
+
+// ── 可変マス・グリッド（MT5風: 1マス=価格固定、原点を動かして先端合わせ）──
+const gridCanvas = document.getElementById('grid');
+const gctx = gridCanvas.getContext('2d');
+const DPR = Math.max(1, window.devicePixelRatio||1);
+const CELL_STEPS = [0.5,1,2,2.5,5,10,20,25,50];
+let cellIdx = CELL_STEPS.indexOf(5);
+let gridStep = CELL_STEPS[cellIdx];
+let gridOrigin = null;            // この価格を通る線を引き、±マス幅で格子（null=自動で下端の丸め）
+let snapMode = false;
+const chartEl = document.getElementById('chart');
+
+function drawGrid(){
+  const w = chartEl.clientWidth, h = chartEl.clientHeight;
+  if(gridCanvas.width!==Math.round(w*DPR)||gridCanvas.height!==Math.round(h*DPR)){
+    gridCanvas.width=Math.round(w*DPR); gridCanvas.height=Math.round(h*DPR);
+  }
+  gctx.setTransform(DPR,0,0,DPR,0,0);
+  gctx.clearRect(0,0,w,h);
+  const pa = series.coordinateToPrice(0), pb = series.coordinateToPrice(h);
+  if(pa==null||pb==null) return;
+  const hi=Math.max(pa,pb), lo=Math.min(pa,pb);
+  if(gridOrigin==null) gridOrigin = Math.round(lo/gridStep)*gridStep;
+  let start = gridOrigin + Math.floor((lo-gridOrigin)/gridStep)*gridStep;
+  gctx.font='10px monospace'; gctx.textBaseline='bottom';
+  for(let price=start; price<=hi+1e-9; price+=gridStep){
+    const y = series.priceToCoordinate(price);
+    if(y==null) continue;
+    gctx.strokeStyle='rgba(120,150,190,0.20)'; gctx.lineWidth=1;
+    gctx.beginPath(); gctx.moveTo(0,Math.round(y)+0.5); gctx.lineTo(w,Math.round(y)+0.5); gctx.stroke();
+    gctx.fillStyle='rgba(150,180,210,0.55)'; gctx.fillText(price.toFixed(2), 2, y-1);
+  }
+}
+(function loop(){ try{ drawGrid(); }catch(e){} requestAnimationFrame(loop); })();
+
+function setCell(){ document.getElementById('cellVal').textContent =
+  '$'+(gridStep<1 ? gridStep : gridStep.toString()); }
+document.getElementById('cellUp').onclick=()=>{ cellIdx=Math.min(CELL_STEPS.length-1,cellIdx+1);
+  gridStep=CELL_STEPS[cellIdx]; setCell(); };
+document.getElementById('cellDn').onclick=()=>{ cellIdx=Math.max(0,cellIdx-1);
+  gridStep=CELL_STEPS[cellIdx]; setCell(); };
+document.getElementById('origUp').onclick=()=>{ if(gridOrigin!=null) gridOrigin+=gridStep/10; };
+document.getElementById('origDn').onclick=()=>{ if(gridOrigin!=null) gridOrigin-=gridStep/10; };
+document.getElementById('fit').onclick=()=>{ gridOrigin=null;
+  chart.priceScale('right').applyOptions({autoScale:true}); chart.timeScale().fitContent(); };
+const snapBtn=document.getElementById('snap');
+snapBtn.onclick=()=>{ snapMode=!snapMode; snapBtn.classList.toggle('on',snapMode); };
+chart.subscribeClick((param)=>{
+  if(!snapMode||!param.point) return;
+  const p = series.coordinateToPrice(param.point.y);
+  if(p!=null){ gridOrigin = p; snapMode=false; snapBtn.classList.remove('on'); }
+});
 </script></body></html>
