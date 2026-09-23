@@ -331,6 +331,34 @@ def build_paper_v3():
             "trades": rows[-300:]}
 
 
+# ── 会長が引いた水平線（AURELが読める共有ファイル。チャットで「白線見て」に応えるための正本）──
+USER_LINES = os.path.join(HERE, "user_lines.json")
+
+
+def load_lines():
+    try:
+        with open(USER_LINES, encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return {"lines": []}
+
+
+def save_lines(lines):
+    clean = []
+    for L in (lines or []):
+        try:
+            clean.append({"id": str(L.get("id")),
+                          "price": round(float(L["price"]), 3),
+                          "color": str(L.get("color", "#ffffff"))[:16],
+                          "width": int(L.get("width", 2)),
+                          "label": str(L.get("label", ""))[:40]})
+        except Exception:
+            continue
+    with open(USER_LINES, "w", encoding="utf-8") as f:
+        json.dump({"lines": clean, "updated": time.strftime("%Y-%m-%d %H:%M:%S")},
+                  f, ensure_ascii=False, indent=1)
+
+
 class H(http.server.BaseHTTPRequestHandler):
     def _send(self, code, body, ctype):
         if isinstance(body, str):
@@ -366,6 +394,22 @@ class H(http.server.BaseHTTPRequestHandler):
                 self._send(200, json.dumps(build_paper(), ensure_ascii=False), "application/json; charset=utf-8")
             elif p == "/api/paperv3":
                 self._send(200, json.dumps(build_paper_v3(), ensure_ascii=False), "application/json; charset=utf-8")
+            elif p == "/api/lines":
+                self._send(200, json.dumps(load_lines(), ensure_ascii=False), "application/json; charset=utf-8")
+            else:
+                self._send(404, "not found", "text/plain; charset=utf-8")
+        except Exception as e:
+            self._send(500, "err: %s" % e, "text/plain; charset=utf-8")
+
+    def do_POST(self):
+        try:
+            p = self.path.split("?")[0]
+            if p == "/api/lines":
+                n = int(self.headers.get("Content-Length") or 0)
+                body = self.rfile.read(n).decode("utf-8") if n else "{}"
+                data = json.loads(body)
+                save_lines(data.get("lines", []))
+                self._send(200, json.dumps({"ok": True}), "application/json; charset=utf-8")
             else:
                 self._send(404, "not found", "text/plain; charset=utf-8")
         except Exception as e:

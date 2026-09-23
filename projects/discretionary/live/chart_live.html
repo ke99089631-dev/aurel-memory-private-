@@ -23,6 +23,14 @@
   .cbtn:active{background:#2a3446}
   .cbtn.on{background:#0f2b17;color:#56d364;border-color:#238636}
   #ctrl .lab{color:#8b949e;font-size:11px}
+  #linebar{position:fixed;left:0;right:0;bottom:38px;height:36px;z-index:8;display:none;
+    align-items:center;gap:5px;padding:0 8px;background:rgba(13,17,23,.96);
+    border-top:1px solid #30363d;overflow-x:auto;white-space:nowrap;font-size:12px}
+  #linebar.on{display:flex}
+  #lbInfo{color:#c9d1d9;font-size:11px;min-width:64px}
+  .sw{display:inline-block;width:20px;height:20px;border-radius:4px;margin:0 1px;cursor:pointer;
+    border:2px solid transparent;vertical-align:middle}
+  .sw.sel{border-color:#fff}
   #aipnl{position:fixed;top:47px;left:6px;right:6px;z-index:5;display:none;
     background:rgba(13,17,23,.9);border:1px solid #30363d;border-radius:8px;
     padding:5px 9px;font-size:12px;color:#e6edf3;line-height:1.45}
@@ -55,6 +63,7 @@
 <canvas id="trades"></canvas>
 <canvas id="ai"></canvas>
 <div id="ctrl">
+  <button class="cbtn" id="addLine" title="水平線を追加">＋線</button>
   <span class="lab">マス</span>
   <button class="cbtn" id="cellDn">−</button>
   <button class="cbtn" id="cellUp">＋</button>
@@ -62,6 +71,14 @@
   <button class="cbtn on" id="zonesBtn" title="時間帯シェード(本物帯/ダマシ巣)">時間帯</button>
   <button class="cbtn" id="statsBtn" title="溜まり幅・壁までの余地">📊 情報</button>
   <button class="cbtn" id="paperBtn" title="車線3 AURELの紙トレード集計(材料)">🤖 車線3</button>
+</div>
+<div id="linebar">
+  <span id="lbInfo">線</span>
+  <span id="swatches"></span>
+  <span class="lab" style="margin-left:4px">太</span>
+  <button class="cbtn" id="wDn">−</button><button class="cbtn" id="wUp">＋</button>
+  <button class="cbtn" id="delLine" style="color:#f85149">削除</button>
+  <button class="cbtn on" id="doneLine">確定</button>
 </div>
 <div id="aipnl"></div>
 <div id="stats"></div>
@@ -94,8 +111,8 @@ const chart = LWC.createChart(document.getElementById('chart'), {
   localization:{ timeFormatter:(t)=>jstLabel(t,true), priceFormatter:(p)=>p.toFixed(2) },
 });
 const series = chart.addCandlestickSeries({
-  upColor:'#26a641', downColor:'#f85149', borderUpColor:'#26a641',
-  borderDownColor:'#f85149', wickUpColor:'#26a641', wickDownColor:'#f85149',
+  upColor:'#2f81f7', downColor:'#e6edf3', borderUpColor:'#2f81f7',    // 上昇=青 / 下降=白（会長のMT5に合わせる）
+  borderDownColor:'#c9d1d9', wickUpColor:'#2f81f7', wickDownColor:'#c9d1d9',
   priceFormat:{ type:'price', precision:2, minMove:0.01 },
 });
 
@@ -120,9 +137,9 @@ function setWallLines(box, brk){
     wallLines.push(series.createPriceLine({ price, color, lineWidth:1,
       lineStyle:style, axisLabelVisible:true, title })); };
   if (box){
-    add(box.up,'#e3c94a',LWC.LineStyle.Dashed,'上壁');
-    add(box.dn,'#e3c94a',LWC.LineStyle.Dashed,'下壁');
-    add(box.mid,'#58a6ff',LWC.LineStyle.Dotted,'中間');
+    add(box.up,'#e3c94a',LWC.LineStyle.Solid,'上壁');    // 壁は実線
+    add(box.dn,'#e3c94a',LWC.LineStyle.Solid,'下壁');
+    add(box.mid,'#58a6ff',LWC.LineStyle.Solid,'中間');
   }
   if (brk){
     add(brk.tp,'#56d364',LWC.LineStyle.Dashed,'TP');
@@ -132,8 +149,8 @@ function setWallLines(box, brk){
 function setCurrent(nowPx){
   if (nowPx==null) return;
   if (curLine==null){
-    curLine = series.createPriceLine({ price:nowPx, color:'#ffffff',
-      lineWidth:1, lineStyle:LWC.LineStyle.Solid, axisLabelVisible:true, title:'現在' });
+    curLine = series.createPriceLine({ price:nowPx, color:'#c9d1d9',
+      lineWidth:1, lineStyle:LWC.LineStyle.Dotted, axisLabelVisible:true, title:'現在' });   // 現在価格=点線
   } else {
     curLine.applyOptions({ price:nowPx });
   }
@@ -398,6 +415,60 @@ redrawOverlays();
 // 「全体」ボタン: 自動スケール＋全体表示に戻す
 document.getElementById('fit').onclick=()=>{
   chart.priceScale('right').applyOptions({autoScale:true}); chart.timeScale().fitContent(); };
+
+// ── 水平線ツール（多色・太さ・複数・追加/削除・タップで選択→ドラッグ移動。保存でAURELも読める）──
+let userLines=[], uLineObjs={}, selLine=null, lineEdit=false;
+const COLORS=['#ffffff','#2f81f7','#e3c94a','#f85149','#56d364','#22d3ee','#c084fc','#f0a35e'];
+const _sScroll={ mouseWheel:true, pressedMouseMove:true, horzTouchDrag:true, vertTouchDrag:true };
+const _sScale={ mouseWheel:true, pinch:true, axisPressedMouseMove:{time:true, price:true} };
+function renderUserLines(){
+  for(const id in uLineObjs){ series.removePriceLine(uLineObjs[id]); } uLineObjs={};
+  for(const L of userLines){ uLineObjs[L.id]=series.createPriceLine({ price:L.price, color:L.color,
+    lineWidth:L.width, lineStyle:LWC.LineStyle.Solid, axisLabelVisible:true,
+    title:(L.id===selLine?'◆':'') }); }
+}
+async function loadLines(){ try{ const r=await fetch('/api/lines'); const d=await r.json();
+  userLines=(d.lines||[]).map(L=>({id:L.id,price:L.price,color:L.color,width:L.width||2})); renderUserLines(); }catch(e){} }
+async function saveLines(){ try{ await fetch('/api/lines',{method:'POST',
+  headers:{'Content-Type':'application/json'}, body:JSON.stringify({lines:userLines})}); }catch(e){} }
+function curL(){ return userLines.find(L=>L.id===selLine); }
+function lbInfo(){ const L=curL(); if(L) document.getElementById('lbInfo').textContent='線 '+L.price.toFixed(2)+' / 太'+L.width; }
+function markSwatch(c){ document.querySelectorAll('.sw').forEach(s=>s.classList.toggle('sel',s.dataset.c===c)); }
+function buildSwatches(){ const box=document.getElementById('swatches'); box.innerHTML='';
+  for(const c of COLORS){ const s=document.createElement('span'); s.className='sw'; s.style.background=c;
+    s.dataset.c=c; s.onclick=()=>{ const L=curL(); if(!L)return; L.color=c; renderUserLines(); markSwatch(c); saveLines(); };
+    box.appendChild(s); } }
+function enterEdit(){ lineEdit=true; chart.applyOptions({handleScroll:false,handleScale:false});
+  document.getElementById('linebar').classList.add('on'); const L=curL(); if(L) markSwatch(L.color); lbInfo(); }
+function exitEdit(){ lineEdit=false; chart.applyOptions({handleScroll:_sScroll,handleScale:_sScale});
+  document.getElementById('linebar').classList.remove('on'); selLine=null; renderUserLines(); }
+document.getElementById('addLine').onclick=()=>{
+  const price=(curPx!=null)?curPx:(lastBox?lastBox.mid:(series.coordinateToPrice(chartEl.clientHeight/2)||4330));
+  const id='L'+Date.now(); userLines.push({id, price:Math.round(price*100)/100, color:'#ffffff', width:2});
+  selLine=id; renderUserLines(); saveLines(); enterEdit(); };
+document.getElementById('delLine').onclick=()=>{ if(!selLine)return;
+  userLines=userLines.filter(L=>L.id!==selLine); saveLines(); exitEdit(); };
+document.getElementById('doneLine').onclick=()=>{ saveLines(); exitEdit(); };
+document.getElementById('wUp').onclick=()=>{ const L=curL(); if(!L)return; L.width=Math.min(6,L.width+1); renderUserLines(); lbInfo(); saveLines(); };
+document.getElementById('wDn').onclick=()=>{ const L=curL(); if(!L)return; L.width=Math.max(1,L.width-1); renderUserLines(); lbInfo(); saveLines(); };
+// タップで線を選択→編集（近い線だけ掴む＝勝手に動かない）
+chart.subscribeClick((param)=>{ if(lineEdit||!param.point) return;
+  let best=null,bd=1e9; for(const L of userLines){ const yb=series.priceToCoordinate(L.price);
+    if(yb==null) continue; const d=Math.abs(yb-param.point.y); if(d<bd){bd=d;best=L;} }
+  if(best && bd<=12){ selLine=best.id; renderUserLines(); enterEdit(); } });
+// 編集中のみ縦ドラッグで移動
+(function(){ let drag=false;
+  const yToP=(cy)=>{ const r=chartEl.getBoundingClientRect(); return series.coordinateToPrice(cy-r.top); };
+  const down=(e)=>{ if(!lineEdit||!selLine) return; drag=true; mv(e); };
+  const mv=(e)=>{ if(!drag) return; const y=(e.touches?e.touches[0].clientY:e.clientY);
+    const p=yToP(y); const L=curL(); if(p!=null&&L){ L.price=Math.round(p*100)/100; renderUserLines(); lbInfo(); } if(e.cancelable) e.preventDefault(); };
+  const up=()=>{ if(drag){ drag=false; saveLines(); } };
+  chartEl.addEventListener('touchstart',down,{passive:false});
+  chartEl.addEventListener('touchmove',mv,{passive:false});
+  chartEl.addEventListener('touchend',up);
+  chartEl.addEventListener('mousedown',down); chartEl.addEventListener('mousemove',mv); chartEl.addEventListener('mouseup',up);
+})();
+buildSwatches(); loadLines();
 
 // ── A3: 自分の過去トレード重ね描き（台帳ledger→E/SL/TP/決済を地図に）──
 const tradesCanvas = document.getElementById('trades');
