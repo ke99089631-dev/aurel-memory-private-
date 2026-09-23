@@ -16,6 +16,7 @@ import sys
 ALLOWED_LOGIN = 27972608          # 裁量口座のみ。これ以外に繋がったら中断。
 TERMINAL_PATH = r"C:\Program Files\MetaTrader 5\terminal64.exe"
 SYMBOL = "XAUUSD+"                 # Vantage 金（会長の実トレード銘柄）
+SERVER_UTC_OFFSET_H = 3            # MT5サーバ時刻はGMT+3。rates.time はサーバ時刻を刻むので真UTCへ-3h補正
 
 # 発注系を「呼べない」ように、使ってよい読取関数だけを明示（自己文書化）。
 _READ_ONLY_FUNCS = ("initialize", "shutdown", "account_info", "symbol_info",
@@ -61,7 +62,8 @@ def m5_bars(mt5, count=300):
     if rates is None or len(rates) == 0:
         raise RuntimeError("M5 rates 取得不可: %s" % SYMBOL)
     df = pd.DataFrame(rates)
-    df["dt"] = pd.to_datetime(df["time"], unit="s", utc=True)   # MT5=GMT+3だが epoch は UTC
+    # rates.time はサーバ(GMT+3)の壁時計を刻む → 真UTCへ -3h。以降 +9h で正しいJST表示になる。
+    df["dt"] = pd.to_datetime(df["time"], unit="s", utc=True) - pd.Timedelta(hours=SERVER_UTC_OFFSET_H)
     return df[["dt", "open", "high", "low", "close", "tick_volume"]]
 
 
