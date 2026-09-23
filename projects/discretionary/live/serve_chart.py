@@ -202,6 +202,43 @@ def build_trades():
     return {"trades": [trades[t] for t in order]}
 
 
+PAPER_LEDGER = os.path.join(HERE, "paper_ledger.jsonl")
+
+
+def build_paper():
+    """車線3(AUREL紙トレード)の一覧＋集計。会長の実(車線1)とは別物・発注なし。"""
+    rows = []
+    try:
+        for line in open(PAPER_LEDGER, encoding="utf-8"):
+            line = line.strip()
+            if line:
+                rows.append(json.loads(line))
+    except Exception:
+        rows = []
+    n = len(rows)
+    if not n:
+        return {"trades": [], "summary": {"n": 0}}
+    tp = sum(1 for r in rows if r.get("exit_reason") == "TP")
+    sl = sum(1 for r in rows if r.get("exit_reason") == "SL")
+    tm = sum(1 for r in rows if r.get("exit_reason") == "TIME")
+    avg_r = sum(r.get("R", 0) for r in rows) / n
+    # 時間帯(zone)別
+    zones = {}
+    for r in rows:
+        z = r.get("zone", "中立")
+        zones.setdefault(z, {"n": 0, "tp": 0, "sumR": 0.0})
+        zones[z]["n"] += 1
+        zones[z]["tp"] += 1 if r.get("exit_reason") == "TP" else 0
+        zones[z]["sumR"] += r.get("R", 0)
+    by_zone = {z: {"n": v["n"], "tp_rate": round(100.0 * v["tp"] / v["n"], 1),
+                   "avg_r": round(v["sumR"] / v["n"], 3)}
+               for z, v in zones.items() if v["n"] > 0}
+    summary = {"n": n, "tp": tp, "sl": sl, "time": tm,
+               "tp_rate": round(100.0 * tp / n, 1), "avg_r": round(avg_r, 3),
+               "by_zone": by_zone}
+    return {"trades": rows[-40:], "summary": summary}
+
+
 class H(http.server.BaseHTTPRequestHandler):
     def _send(self, code, body, ctype):
         if isinstance(body, str):
@@ -233,6 +270,8 @@ class H(http.server.BaseHTTPRequestHandler):
                 self._send(200, json.dumps(build_tick(), ensure_ascii=False), "application/json; charset=utf-8")
             elif p == "/api/trades":
                 self._send(200, json.dumps(build_trades(), ensure_ascii=False), "application/json; charset=utf-8")
+            elif p == "/api/paper":
+                self._send(200, json.dumps(build_paper(), ensure_ascii=False), "application/json; charset=utf-8")
             else:
                 self._send(404, "not found", "text/plain; charset=utf-8")
         except Exception as e:

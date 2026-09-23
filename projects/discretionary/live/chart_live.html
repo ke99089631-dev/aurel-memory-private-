@@ -22,11 +22,11 @@
   .cbtn:active{background:#2a3446}
   .cbtn.on{background:#0f2b17;color:#56d364;border-color:#238636}
   #ctrl .lab{color:#8b949e;font-size:11px}
-  #tradeInfo,#stats{position:fixed;top:48px;left:8px;right:8px;z-index:7;display:none;
+  #tradeInfo,#stats,#paper{position:fixed;top:48px;left:8px;right:8px;z-index:7;display:none;
     background:rgba(20,26,36,.96);border:1px solid #30363d;border-radius:8px;
-    padding:7px 10px;font-size:12px;line-height:1.6;color:#e6edf3}
-  #tradeInfo b,#stats b{color:#fff}
-  #tradeInfo .x,#stats .x{float:right;color:#8b949e;cursor:pointer;padding:0 4px}
+    padding:7px 10px;font-size:12px;line-height:1.6;color:#e6edf3;max-height:70vh;overflow-y:auto}
+  #tradeInfo b,#stats b,#paper b{color:#fff}
+  #tradeInfo .x,#stats .x,#paper .x{float:right;color:#8b949e;cursor:pointer;padding:0 4px}
   .chip{background:#1b2230;border:1px solid #30363d;border-radius:12px;padding:3px 9px;
     font-size:12px;cursor:pointer;margin-left:4px;white-space:nowrap;color:#c9d1d9}
   .chip .d{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle}
@@ -61,9 +61,11 @@
   <button class="cbtn on" id="tradesBtn" title="自分の過去トレードを重ねる">自分</button>
   <button class="cbtn on" id="zonesBtn" title="時間帯シェード(本物帯/ダマシ巣)">時間帯</button>
   <button class="cbtn" id="statsBtn" title="溜まり幅・壁までの余地">📊 情報</button>
+  <button class="cbtn" id="paperBtn" title="車線3 AURELの紙トレード集計">🤖 車線3</button>
   <span class="lab" style="margin-left:6px">復習</span><span id="tradeChips"></span>
 </div>
 <div id="stats"></div>
+<div id="paper"></div>
 <div id="tradeInfo"></div>
 <div id="err"></div>
 <script src="/lightweight-charts.js"></script>
@@ -214,6 +216,43 @@ function updateStats(){
 }
 document.getElementById('statsBtn').onclick=(e)=>{ statsOn=!statsOn;
   e.currentTarget.classList.toggle('on',statsOn); updateStats(); };
+
+// ── D1 車線3: AUREL紙トレードの集計パネル（会長の実=車線1とは別物・発注なし）──
+let paperOn=false;
+async function updatePaper(){
+  const el=document.getElementById('paper'); if(!el) return;
+  if(!paperOn){ el.style.display='none'; return; }
+  el.style.display='block';
+  try{
+    const r=await fetch('/api/paper',{cache:'no-store'}); const d=await r.json();
+    const s=d.summary||{n:0};
+    if(!s.n){ el.innerHTML='<span class="x" id="pX">✕</span>車線3: まだ標本なし（5分ごとに貯まる）'; }
+    else{
+      const rc = s.avg_r>=0?'#56d364':'#f85149';
+      let h='<span class="x" id="pX">✕</span>';
+      h+='<b>🤖 車線3（AUREL紙トレード・発注なし）</b><br>';
+      h+='標本 <b>'+s.n+'</b> ／ 本物率 <b>'+s.tp_rate+'%</b>（TP'+s.tp+'/SL'+s.sl+'/時間切れ'+s.time+'）'
+       +' ／ 平均R <b style="color:'+rc+'">'+(s.avg_r>=0?'+':'')+s.avg_r+'</b><br>';
+      h+='<span style="color:#8b949e">時間帯別:</span><br>';
+      const zc={'本物帯':'#56d364','ダマシ巣':'#f85149','中立':'#e3c94a'};
+      for(const z of ['本物帯','中立','ダマシ巣']){ const v=s.by_zone&&s.by_zone[z]; if(!v) continue;
+        h+='　<span style="color:'+(zc[z]||'#c9d1d9')+'">'+z+'</span> n'+v.n
+         +' 本物率'+v.tp_rate+'% 平均R'+(v.avg_r>=0?'+':'')+v.avg_r+'<br>'; }
+      const last=(d.trades||[]).slice(-5).reverse();
+      if(last.length){ h+='<span style="color:#8b949e">直近:</span><br>';
+        for(const t of last){ const c=t.exit_reason==='TP'?'#56d364':(t.exit_reason==='SL'?'#f85149':'#8b949e');
+          h+='　'+t.id+' '+(t.side==='BUY'?'買':'売')+' <span style="color:'+c+'">'+t.exit_reason
+           +' '+(t.R>=0?'+':'')+t.R.toFixed(2)+'R</span> <span style="color:#8b949e">'+(t.entry_jst||'')+'</span><br>'; } }
+      h+='<span style="color:#8b949e;font-size:11px">※純ルールの連続適用＝backtestの続き。規律ある標本を24/5で蓄積中。会長の実トレードとは別。</span>';
+      el.innerHTML=h;
+    }
+    const x=document.getElementById('pX'); if(x) x.onclick=()=>{ paperOn=false; el.style.display='none';
+      document.getElementById('paperBtn').classList.remove('on'); };
+  }catch(e){ el.innerHTML='<span class="x" id="pX">✕</span>取得失敗: '+(e&&e.message?e.message:e);
+    const x=document.getElementById('pX'); if(x) x.onclick=()=>{ paperOn=false; el.style.display='none'; }; }
+}
+document.getElementById('paperBtn').onclick=(e)=>{ paperOn=!paperOn;
+  e.currentTarget.classList.toggle('on',paperOn); updatePaper(); };
 
 pollData();
 setInterval(pollData, 10000);     // フルは10秒ごと（壁の再計算・取りこぼし補正）
