@@ -266,12 +266,16 @@ function drawZones(){
   zctx.setTransform(DPR,0,0,DPR,0,0); zctx.clearRect(0,0,w,h);
   if(!showZones||!allBars.length) return;
   const tsc=chart.timeScale(); const sp=(tsc.options().barSpacing||8);
+  // 表示中のバーだけを見る（全1500本を毎回計算しない＝パンを重くしない）
+  const lr=tsc.getVisibleLogicalRange();
+  let i0=0, i1=allBars.length-1;
+  if(lr){ i0=Math.max(0,Math.floor(lr.from)-1); i1=Math.min(allBars.length-1,Math.ceil(lr.to)+1); }
   let runZone=null, runStartX=null, prevX=null;
   const flush=(endX)=>{ if(runZone&&runStartX!=null&&endX!=null){
     zctx.fillStyle = runZone==='real'?'rgba(38,166,65,0.09)':'rgba(248,81,73,0.09)';
     zctx.fillRect(runStartX,0,Math.max(1,endX-runStartX),h); } };
-  for(const b of allBars){
-    const x=tsc.timeToCoordinate(b.time);
+  for(let i=i0;i<=i1;i++){
+    const b=allBars[i]; const x=tsc.timeToCoordinate(b.time);
     if(x==null){ if(runZone){ flush(prevX!=null?prevX+sp/2:null); runZone=null; } continue; }
     const z=zoneOf(b.time);
     if(z!==runZone){ flush(prevX!=null?prevX+sp/2:null); runZone=z; runStartX=x-sp/2; }
@@ -280,9 +284,14 @@ function drawZones(){
   flush(prevX!=null?prevX+sp/2:null);
 }
 document.getElementById('zonesBtn').onclick=(e)=>{ showZones=!showZones;
-  e.currentTarget.classList.toggle('on',showZones); };
+  e.currentTarget.classList.toggle('on',showZones); redrawOverlays(); };
 
-(function loop(){ try{ drawZones(); drawGrid(); drawTrades(); }catch(e){} requestAnimationFrame(loop); })();
+// オーバーレイ(時間帯/グリッド/トレード)は「表示範囲が変わった時」だけ再描画＝パンを重くしない
+function redrawOverlays(){ try{ drawZones(); drawGrid(); drawTrades(); }catch(e){} }
+chart.timeScale().subscribeVisibleLogicalRangeChange(redrawOverlays);   // パン/ズームに追従
+window.addEventListener('resize', ()=>setTimeout(redrawOverlays,60));
+setInterval(redrawOverlays, 300);   // 保険(ライブ更新・トグル反映)。5fps未満＝軽い
+redrawOverlays();
 
 function setCell(){ document.getElementById('cellVal').textContent =
   '$'+(gridStep<1 ? gridStep : gridStep.toString()); }
