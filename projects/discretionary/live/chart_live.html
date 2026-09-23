@@ -238,6 +238,20 @@ async function updatePaper(){
       for(const z of ['本物帯','中立','ダマシ巣']){ const v=s.by_zone&&s.by_zone[z]; if(!v) continue;
         h+='　<span style="color:'+(zc[z]||'#c9d1d9')+'">'+z+'</span> n'+v.n
          +' 本物率'+v.tp_rate+'% 平均R'+(v.avg_r>=0?'+':'')+v.avg_r+'<br>'; }
+      // ★本物 vs ダマシ の特徴比較（どの特徴が分けるか＝ダマシ見抜きの材料）
+      const fs=s.feature_split;
+      if(fs){
+        const lbl={break_str_atr:'ブレイク強度',entry_body_ratio:'実体比率',
+          reject_wick_ratio:'反発ヒゲ',momentum20_pct:'勢い20本%',range_pos:'レンジ位置',
+          wall_touches:'壁タッチ数',tightness_pct:'締まり%'};
+        h+='<span style="color:#8b949e">本物(n'+s.tp_n+') vs ダマシ(n'+s.sl_n+') 特徴平均:</span><br>';
+        for(const k in lbl){ const v=fs[k]; if(!v) continue;
+          const a=v['本物'], b=v['ダマシ'];
+          const av=a==null?'-':a, bv=b==null?'-':b;
+          const diff=(a!=null&&b!=null)?(Math.abs(a-b)>Math.abs(b)*0.2+0.01):false;
+          h+='　'+lbl[k]+' <span style="color:#56d364">'+av+'</span> / <span style="color:#f85149">'+bv+'</span>'
+            +(diff?' <span style="color:#f0a35e">◀差</span>':'')+'<br>'; }
+      }
       const last=(d.trades||[]).slice(-5).reverse();
       if(last.length){ h+='<span style="color:#8b949e">直近:</span><br>';
         for(const t of last){ const c=t.exit_reason==='TP'?'#56d364':(t.exit_reason==='SL'?'#f85149':'#8b949e');

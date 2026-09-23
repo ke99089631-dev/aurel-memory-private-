@@ -233,9 +233,26 @@ def build_paper():
     by_zone = {z: {"n": v["n"], "tp_rate": round(100.0 * v["tp"] / v["n"], 1),
                    "avg_r": round(v["sumR"] / v["n"], 3)}
                for z, v in zones.items() if v["n"] > 0}
+    # ★本物(TP) vs ダマシ(SL) で「質・文脈の特徴」の平均を比較＝どの特徴が分けるか
+    FEATS = ["break_str_atr", "entry_body_ratio", "reject_wick_ratio",
+             "momentum20_pct", "range_pos", "wall_touches", "tightness_pct"]
+    tp_rows = [r for r in rows if r.get("exit_reason") == "TP"]
+    sl_rows = [r for r in rows if r.get("exit_reason") == "SL"]
+
+    def _mean(rs, key):
+        vals = [r.get("features", {}).get(key) for r in rs]
+        vals = [v for v in vals if isinstance(v, (int, float))]
+        return round(sum(vals) / len(vals), 3) if vals else None
+
+    feature_split = {}
+    for k in FEATS:
+        feature_split[k] = {"本物": _mean(tp_rows, k), "ダマシ": _mean(sl_rows, k)}
+
     summary = {"n": n, "tp": tp, "sl": sl, "time": tm,
                "tp_rate": round(100.0 * tp / n, 1), "avg_r": round(avg_r, 3),
-               "by_zone": by_zone}
+               "by_zone": by_zone,
+               "feature_split": feature_split,
+               "tp_n": len(tp_rows), "sl_n": len(sl_rows)}
     return {"trades": rows[-40:], "summary": summary}
 
 

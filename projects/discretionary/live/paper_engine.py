@@ -17,6 +17,7 @@ import datetime as dt
 import urllib.request
 
 sys.path.insert(0, r"C:\Users\user\AssetEmpire\empire\research\wall_to_wall")
+import numpy as np
 import pandas as pd
 from backtest_mm import backtest_mm
 
@@ -86,6 +87,49 @@ def _reason(row, dm):
             "width_pct": width_pct, "confidence": conf, "reason": reason}
 
 
+def compute_features(m5, row):
+    """★backtestが記録しない「質・文脈」の特徴を計測（車線3の本来の材料）。
+       全て客観・数値。後で本物(TP)/ダマシ(SL)を分ける軸を探すための入力。"""
+    idx = m5.index
+    try:
+        ie = idx.get_loc(pd.Timestamp(row["entry_time"]))
+    except Exception:
+        return {}
+    if isinstance(ie, slice):
+        ie = ie.start
+    o = m5["open"].to_numpy(); h = m5["high"].to_numpy()
+    l = m5["low"].to_numpy();  c = m5["close"].to_numpy()
+    wall = row["wall"]; width = row["width"]; side = row["side"]
+    n0 = max(0, ie - 100)
+    trs = [h[k] - l[k] for k in range(max(1, ie - 14), ie)]
+    atr = float(np.mean(trs)) if trs else 0.0
+    rng = h[ie] - l[ie]; body = abs(c[ie] - o[ie])
+    body_ratio = round(body / rng, 3) if rng > 0 else 0.0
+    wick = (h[ie] - max(o[ie], c[ie])) if side == "SELL" else (min(o[ie], c[ie]) - l[ie])
+    wick_ratio = round(wick / rng, 3) if rng > 0 else 0.0
+    mom = round((c[ie] - c[max(0, ie - 20)]) / c[ie] * 100, 3) if ie >= 20 else 0.0
+    win_h = float(max(h[n0:ie + 1])); win_l = float(min(l[n0:ie + 1]))
+    rpos = round((c[ie] - win_l) / (win_h - win_l), 3) if win_h > win_l else 0.5
+    tol = 0.1 * width
+    if side == "SELL":
+        touches = int(sum(1 for k in range(n0, ie) if abs(l[k] - wall) <= tol))
+    else:
+        touches = int(sum(1 for k in range(n0, ie) if abs(h[k] - wall) <= tol))
+    s0 = max(0, ie - 30)
+    tight = round(float(np.std(c[s0:ie])) / row["entry"] * 100, 3) if ie > s0 else 0.0
+    brk_str = round(rng / atr, 2) if atr > 0 else 0.0
+    return {
+        "break_str_atr": brk_str,        # ブレイク/エントリー足の値幅 ÷ ATR（勢い）
+        "entry_body_ratio": body_ratio,  # 実体比率（強い足=1に近い）
+        "reject_wick_ratio": wick_ratio, # 壁での反発ヒゲ比率（拒否の強さ）
+        "momentum20_pct": mom,           # 直近20本の勢い(%)
+        "range_pos": rpos,               # レンジ内の位置(0=安値圏/1=高値圏)
+        "wall_touches": touches,         # 壁が試された回数(壁の強さ)
+        "tightness_pct": tight,          # 溜まりの締まり(小さいほど tight)
+        "atr14": round(atr, 3),
+    }
+
+
 def sync_once():
     dm = _load_damashi()
     m5 = _fetch_bars()
@@ -122,6 +166,7 @@ def sync_once():
             "logged_at": dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         }
         rec.update(info)
+        rec["features"] = compute_features(m5, row)   # ★検証機が見ない質・文脈
         with open(PAPER, "a", encoding="utf-8") as f:
             f.write(json.dumps(rec, ensure_ascii=False) + "\n")
         seen.add(et)
