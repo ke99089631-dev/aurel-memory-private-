@@ -449,7 +449,7 @@ const tctx = tradesCanvas.getContext('2d');
 let tradesData = [];
 let showTrades = false;      // 会長の過去トレード(B)は既定オフ。今回の主役はAのAI建玉
 let paperTrades = [];        // AURELの紙エントリー(車線3 v3a)
-let showPaper = true;
+let showPaper = false;       // ノイズだったので既定オフ
 function nearestBarTime(t){
   const n=allBars.length; if(!n) return null;
   if(t<=allBars[0].time) return allBars[0].time;
