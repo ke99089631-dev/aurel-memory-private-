@@ -121,6 +121,63 @@ def build_data(n=1500):
     }
 
 
+LEDGER = r"C:\Users\user\.aurel\memory\projects\discretionary\ledger.jsonl"
+
+
+def _jst_epoch(ts):
+    """台帳の ts (JST naive '2026-09-22T21:44:00') → epoch秒(UTC)。"""
+    import datetime as dt
+    try:
+        d = dt.datetime.fromisoformat(ts)
+        return int(d.replace(tzinfo=dt.timezone(dt.timedelta(hours=9))).timestamp())
+    except Exception:
+        return None
+
+
+def build_trades():
+    """台帳(ledger.jsonl)を統合して会長の実トレード一覧を返す。
+       kind=trade を基本に、kind=update(target一致)で exit/sl/tp/post を上書き。"""
+    trades = {}
+    order = []
+    try:
+        f = open(LEDGER, encoding="utf-8")
+    except Exception:
+        return {"trades": []}
+    with f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                r = json.loads(line)
+            except Exception:
+                continue
+            k = r.get("kind")
+            if k == "trade":
+                tid = r.get("id")
+                trades[tid] = {
+                    "id": tid, "side": r.get("side"),
+                    "entry": r.get("entry"), "sl": r.get("sl"), "tp": r.get("tp"),
+                    "exit": r.get("exit"), "entry_time": _jst_epoch(r.get("ts")),
+                    "exit_time": None, "post": r.get("post") or "",
+                    "wall": r.get("wall") or "",
+                }
+                order.append(tid)
+            elif k == "update":
+                t = trades.get(r.get("target"))
+                if not t:
+                    continue
+                if r.get("exit") is not None:
+                    t["exit"] = r.get("exit"); t["exit_time"] = _jst_epoch(r.get("ts"))
+                if r.get("sl") is not None:
+                    t["sl"] = r.get("sl")
+                if r.get("tp") is not None:
+                    t["tp"] = r.get("tp")
+                if r.get("post"):
+                    t["post"] = r.get("post")
+    return {"trades": [trades[t] for t in order]}
+
+
 class H(http.server.BaseHTTPRequestHandler):
     def _send(self, code, body, ctype):
         if isinstance(body, str):
@@ -150,6 +207,8 @@ class H(http.server.BaseHTTPRequestHandler):
                 self._send(200, json.dumps(data, ensure_ascii=False), "application/json; charset=utf-8")
             elif p == "/api/tick":
                 self._send(200, json.dumps(build_tick(), ensure_ascii=False), "application/json; charset=utf-8")
+            elif p == "/api/trades":
+                self._send(200, json.dumps(build_trades(), ensure_ascii=False), "application/json; charset=utf-8")
             else:
                 self._send(404, "not found", "text/plain; charset=utf-8")
         except Exception as e:

@@ -12,6 +12,7 @@
   #sub{color:#8b949e;font-size:11px}
   #chart{position:fixed;top:44px;left:0;right:0;bottom:38px}
   #grid{position:fixed;top:44px;left:0;right:0;bottom:38px;pointer-events:none;z-index:2}
+  #trades{position:fixed;top:44px;left:0;right:0;bottom:38px;pointer-events:none;z-index:3}
   #ctrl{position:fixed;left:0;right:0;bottom:0;height:38px;z-index:6;display:flex;
     align-items:center;gap:4px;padding:0 8px;background:rgba(13,17,23,.92);
     border-top:1px solid #21262d;font-size:12px;overflow-x:auto;white-space:nowrap}
@@ -36,6 +37,7 @@
 </div>
 <div id="chart"></div>
 <canvas id="grid"></canvas>
+<canvas id="trades"></canvas>
 <div id="ctrl">
   <span class="lab">マス幅</span>
   <button class="cbtn" id="cellDn">−</button>
@@ -46,6 +48,7 @@
   <button class="cbtn" id="origDn">▼</button>
   <button class="cbtn" id="snap" title="タップで線合わせ">◎合わせ</button>
   <button class="cbtn" id="fit" title="自動フィットに戻す">⤢</button>
+  <button class="cbtn on" id="tradesBtn" title="自分の過去トレードを重ねる">自分</button>
 </div>
 <div id="err"></div>
 <script src="/lightweight-charts.js"></script>
@@ -131,6 +134,7 @@ async function pollData(){
     if (d.break) wi += ' ｜ 直近ブレイク'+(d.break.dir==='UP'?'上':'下')+' 壁'+d.break.wall.toFixed(1)
       +'→TP'+d.break.tp.toFixed(1)+'/SL'+d.break.sl.toFixed(1);
     document.getElementById('wallinfo').textContent = wi;
+    fetchTrades();   // 過去トレードも定期更新（新規記録が入れば反映）
   }catch(e){ document.getElementById('err').textContent = '接続待ち… '+(e&&e.message?e.message:e); }
 }
 
@@ -185,7 +189,7 @@ function drawGrid(){
     gctx.fillStyle='rgba(150,180,210,0.55)'; gctx.fillText(price.toFixed(2), 2, y-1);
   }
 }
-(function loop(){ try{ drawGrid(); }catch(e){} requestAnimationFrame(loop); })();
+(function loop(){ try{ drawGrid(); drawTrades(); }catch(e){} requestAnimationFrame(loop); })();
 
 function setCell(){ document.getElementById('cellVal').textContent =
   '$'+(gridStep<1 ? gridStep : gridStep.toString()); }
@@ -204,4 +208,60 @@ chart.subscribeClick((param)=>{
   const p = series.coordinateToPrice(param.point.y);
   if(p!=null){ gridOrigin = p; snapMode=false; snapBtn.classList.remove('on'); }
 });
+
+// ── A3: 自分の過去トレード重ね描き（台帳ledger→E/SL/TP/決済を地図に）──
+const tradesCanvas = document.getElementById('trades');
+const tctx = tradesCanvas.getContext('2d');
+let tradesData = [];
+let showTrades = true;
+async function fetchTrades(){
+  try{ const r=await fetch('/api/trades',{cache:'no-store'}); const d=await r.json();
+       tradesData=d.trades||[]; }catch(e){}
+}
+function drawTrades(){
+  const w=chartEl.clientWidth, h=chartEl.clientHeight;
+  if(tradesCanvas.width!==Math.round(w*DPR)||tradesCanvas.height!==Math.round(h*DPR)){
+    tradesCanvas.width=Math.round(w*DPR); tradesCanvas.height=Math.round(h*DPR);
+  }
+  tctx.setTransform(DPR,0,0,DPR,0,0);
+  tctx.clearRect(0,0,w,h);
+  if(!showTrades) return;
+  const tsc=chart.timeScale();
+  for(const t of tradesData){
+    if(t.entry_time==null || t.entry==null) continue;
+    const x1=tsc.timeToCoordinate(t.entry_time);
+    if(x1==null) continue;                                   // 画面外(時間)ならスキップ
+    let x2 = t.exit_time!=null ? tsc.timeToCoordinate(t.exit_time) : w;
+    if(x2==null) x2=w;                                       // 建玉中/画面右外は右端まで
+    const yE=series.priceToCoordinate(t.entry);
+    const ySL=t.sl!=null?series.priceToCoordinate(t.sl):null;
+    const yTP=t.tp!=null?series.priceToCoordinate(t.tp):null;
+    const yX=t.exit!=null?series.priceToCoordinate(t.exit):null;
+    const seg=(y,color,dash)=>{ if(y==null)return; tctx.strokeStyle=color; tctx.lineWidth=1.4;
+      tctx.setLineDash(dash||[]); tctx.beginPath();
+      tctx.moveTo(x1,y); tctx.lineTo(Math.max(x1+2,x2),y); tctx.stroke(); tctx.setLineDash([]); };
+    seg(ySL,'rgba(248,81,73,0.85)',[3,3]);                   // SL 赤破線
+    seg(yTP,'rgba(86,211,100,0.85)',[6,4]);                  // TP 緑破線
+    seg(yE,'rgba(235,235,235,0.9)',[]);                      // 建値 白実線
+    if(yE!=null){                                            // entryマーカー
+      const buy=t.side==='BUY'; tctx.fillStyle=buy?'#26a641':'#f85149';
+      tctx.beginPath();
+      if(buy){ tctx.moveTo(x1,yE+9); tctx.lineTo(x1-5,yE+18); tctx.lineTo(x1+5,yE+18); }
+      else   { tctx.moveTo(x1,yE-9); tctx.lineTo(x1-5,yE-18); tctx.lineTo(x1+5,yE-18); }
+      tctx.closePath(); tctx.fill();
+      tctx.fillStyle='#c9d1d9'; tctx.font='10px monospace'; tctx.textBaseline='middle';
+      tctx.fillText(t.id+' '+(buy?'買':'売'), x1+7, buy?yE+14:yE-14);
+    }
+    if(yX!=null && t.exit_time!=null){                       // exitマーカー
+      const win = t.side==='BUY' ? (t.exit>t.entry) : (t.exit<t.entry);
+      tctx.fillStyle = win?'#56d364':'#f85149';
+      tctx.beginPath(); tctx.arc(x2,yX,4,0,7); tctx.fill();
+      if(t.post){ tctx.fillStyle='#f0a35e'; tctx.font='10px monospace';
+        tctx.textBaseline='middle'; tctx.fillText(t.post, x2+6, yX); }
+    }
+  }
+}
+fetchTrades();
+document.getElementById('tradesBtn').onclick=(e)=>{ showTrades=!showTrades;
+  e.currentTarget.classList.toggle('on',showTrades); };
 </script></body></html>
