@@ -94,6 +94,49 @@ def build_tick():
     return {"source": "live", "ts": int(time.time()), "tick": tick, "lastbars": lastbars}
 
 
+_PAPER_V3_FILE = os.path.join(HERE, "paper_ledger_v3.jsonl")
+_AI_MAX_HOLD_S = 288 * 300   # backtest_v3 の MAX_HOLD(288本) 秒換算
+
+
+def latest_ai_position(tick):
+    """AURELの直近の建玉(車線3 v3a の最新TAKE)を、今の価格で追跡して返す。
+       現在値がSL/TP未達かつ保有時間内なら open(=ライブ追跡), それ以外は closed。"""
+    last = None
+    try:
+        for line in open(_PAPER_V3_FILE, encoding="utf-8"):
+            line = line.strip()
+            if not line:
+                continue
+            r = json.loads(line)
+            if r.get("decision") == "TAKE":
+                last = r
+    except Exception:
+        return None
+    if not last:
+        return None
+    entry = last["entry"]; sl = last["sl"]; tp = last["tp"]; side = last["side"]
+    risk = abs(entry - sl) or 1e-9
+    price = ((tick["bid"] + tick["ask"]) / 2.0) if tick else entry
+    if side == "SELL":
+        live_r = (entry - price) / risk
+        hit_sl = price >= sl; hit_tp = price <= tp
+    else:
+        live_r = (price - entry) / risk
+        hit_sl = price <= sl; hit_tp = price >= tp
+    now = int(time.time())
+    within = (now - int(last["entry_time"])) < _AI_MAX_HOLD_S
+    is_open = (not hit_sl) and (not hit_tp) and within
+    return {
+        "id": last.get("id"), "side": side, "entry": entry, "sl": sl, "tp": tp,
+        "entry_time": int(last["entry_time"]), "entry_jst": last.get("entry_jst"),
+        "wall": last.get("wall"), "width": last.get("width"),
+        "score": last.get("score"), "real_rate": last.get("real_rate"),
+        "reason": last.get("skip_reason") or "",
+        "open": bool(is_open), "live_r": round(live_r, 2),
+        "recorded_exit": last.get("exit"), "recorded_reason": last.get("exit_reason"),
+    }
+
+
 def build_data(n=1500):
     """チャート用データ一式（bars/tick/walls/source）。live優先→hist フォールバック。"""
     tick = None
@@ -116,6 +159,7 @@ def build_data(n=1500):
             for k in range(len(m5))]
     box = chart_gen.current_box(m5)
     brk = chart_gen.detect_last_break(m5)
+    ai_pos = latest_ai_position(tick)
 
     # C1: 直近ブレイクの発生時刻(JST)から本物率(機械統計)を引く
     damashi = None
@@ -141,6 +185,7 @@ def build_data(n=1500):
         "break": ({k: (round(v, 3) if isinstance(v, float) else v)
                    for k, v in brk.items()} if brk else None),
         "damashi": damashi,
+        "ai_pos": ai_pos,
         "range_w": chart_gen.RANGE_W,
     }
 
