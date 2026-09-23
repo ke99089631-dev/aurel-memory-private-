@@ -137,6 +137,44 @@ def latest_ai_position(tick):
     }
 
 
+def fixed_box_and_break(m5):
+    """効いてる固定の壁(スイング＋タッチ)で箱を決める。ローリング最安値のように価格を追わない。
+       価格が壁の外に出ていれば break(メジャードムーブ目標つき)を返す。"""
+    import numpy as np
+    import walls
+    h = m5["high"].to_numpy(); l = m5["low"].to_numpy(); c = m5["close"].to_numpy()
+    n = len(c)
+    if n < 40:
+        return None, None
+    win = 200                      # 直近~15hの構造から壁を採る
+    lo0 = max(0, n - win)
+    atr = float(np.mean(h[max(1, n - 14):n] - l[max(1, n - 14):n])) if n > 15 else 0.0
+    ws = walls.find_walls(h[lo0:n], l[lo0:n], c[lo0:n], atr)
+    res = [w for w in ws if w["kind"] == "res"]
+    sup = [w for w in ws if w["kind"] == "sup"]
+    if not res or not sup:
+        return None, None
+    R = max(res, key=lambda w: (w["touches"], w["price"]))    # 強い抵抗(タッチ優先,高い方)
+    S = max(sup, key=lambda w: (w["touches"], -w["price"]))   # 強い支持(タッチ優先,低い方)
+    up, dn = R["price"], S["price"]
+    if up <= dn:
+        return None, None
+    width = up - dn
+    mids = [w for w in ws if dn < w["price"] < up]
+    mid = max(mids, key=lambda w: w["touches"])["price"] if mids else (up + dn) / 2.0
+    box = {"up": round(up, 3), "dn": round(dn, 3), "mid": round(mid, 3),
+           "width": round(width, 3), "up_touches": R["touches"], "dn_touches": S["touches"]}
+    price = float(c[-1])
+    brk = None
+    if price < dn:
+        brk = {"dir": "DOWN", "wall": round(dn, 3), "width": round(width, 3),
+               "tp": round(dn - width, 3), "sl": round(dn + width * 0.33, 3)}
+    elif price > up:
+        brk = {"dir": "UP", "wall": round(up, 3), "width": round(width, 3),
+               "tp": round(up + width, 3), "sl": round(up - width * 0.33, 3)}
+    return box, brk
+
+
 def build_data(n=1500):
     """チャート用データ一式（bars/tick/walls/source）。live優先→hist フォールバック。"""
     tick = None
@@ -157,16 +195,18 @@ def build_data(n=1500):
              "open": round(float(o[k]), 3), "high": round(float(h[k]), 3),
              "low": round(float(l[k]), 3), "close": round(float(c[k]), 3)}
             for k in range(len(m5))]
-    box = chart_gen.current_box(m5)
-    brk = chart_gen.detect_last_break(m5)
+    # 効いてる固定の壁に差し替え（ローリング最安値=価格追従の弱点を解消）。失敗時のみ旧方式。
+    box, brk = fixed_box_and_break(m5)
+    if box is None:
+        box = chart_gen.current_box(m5)
+        brk = None
     ai_pos = latest_ai_position(tick)
 
-    # C1: 直近ブレイクの発生時刻(JST)から本物率(機械統計)を引く
+    # C1: いまの時間帯(JST)の本物率(機械統計)
     damashi = None
-    if brk is not None and _DAMASHI:
+    if _DAMASHI:
         try:
-            bt = pd.Timestamp(m5.index[brk["idx"]])
-            jh = int(bt.tz_convert("Asia/Tokyo").hour)
+            jh = int(pd.Timestamp(m5.index[-1]).tz_convert("Asia/Tokyo").hour)
             hrec = _DAMASHI.get("hours", {}).get(str(jh))
             base = _DAMASHI.get("base_tp_rate")
             if hrec:
