@@ -21,11 +21,11 @@
   .cbtn:active{background:#2a3446}
   .cbtn.on{background:#0f2b17;color:#56d364;border-color:#238636}
   #ctrl .lab{color:#8b949e;font-size:11px}
-  #tradeInfo{position:fixed;top:48px;left:8px;right:8px;z-index:7;display:none;
+  #tradeInfo,#stats{position:fixed;top:48px;left:8px;right:8px;z-index:7;display:none;
     background:rgba(20,26,36,.96);border:1px solid #30363d;border-radius:8px;
-    padding:7px 10px;font-size:12px;line-height:1.5;color:#e6edf3}
-  #tradeInfo b{color:#fff}
-  #tradeInfo .x{float:right;color:#8b949e;cursor:pointer;padding:0 4px}
+    padding:7px 10px;font-size:12px;line-height:1.6;color:#e6edf3}
+  #tradeInfo b,#stats b{color:#fff}
+  #tradeInfo .x,#stats .x{float:right;color:#8b949e;cursor:pointer;padding:0 4px}
   .chip{background:#1b2230;border:1px solid #30363d;border-radius:12px;padding:3px 9px;
     font-size:12px;cursor:pointer;margin-left:4px;white-space:nowrap;color:#c9d1d9}
   .chip .d{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle}
@@ -57,8 +57,10 @@
   <button class="cbtn" id="snap" title="タップで線合わせ">◎合わせ</button>
   <button class="cbtn" id="fit" title="自動フィットに戻す">⤢</button>
   <button class="cbtn on" id="tradesBtn" title="自分の過去トレードを重ねる">自分</button>
+  <button class="cbtn" id="statsBtn" title="溜まり幅・壁までの余地">📊 情報</button>
   <span class="lab" style="margin-left:6px">復習</span><span id="tradeChips"></span>
 </div>
+<div id="stats"></div>
 <div id="tradeInfo"></div>
 <div id="err"></div>
 <script src="/lightweight-charts.js"></script>
@@ -93,6 +95,7 @@ const series = chart.addCandlestickSeries({
 let lastTime = 0;         // 既知の最終バー時刻
 let allBars = [];         // 直近バー配列（トレード時刻のバー吸着・先端合わせ用）
 let wallLines = [];       // 壁/TP/SL（10秒ごと更新）
+let statsOn = false, lastBox = null, lastBreak = null, curPx = null;  // B2/B3 情報パネル用
 let curLine = null;       // 現在価格ライン（毎秒 applyOptions で追従）
 let firstLoad = true;
 
@@ -139,6 +142,7 @@ async function pollData(){
     else { for (const b of bars){ if (b.time >= lastTime) series.update(b); } }
     if (bars.length){ lastTime = bars[bars.length-1].time; allBars = bars; }
     setWallLines(d.box, d.break);
+    lastBox = d.box; lastBreak = d.break;   // B2/B3 情報パネル用に保持
     setBadge(d.source==='live');
     let wi = '';
     if (d.box) wi += ' ｜ 箱幅'+d.box.width.toFixed(1);
@@ -158,11 +162,42 @@ async function pollTick(){
     if (d.lastbars && d.lastbars.length) lastTime = Math.max(lastTime, d.lastbars[d.lastbars.length-1].time);
     const tick = d.tick, nowPx = tick ? (tick.bid+tick.ask)/2 : null;
     setCurrent(nowPx);
+    curPx = nowPx; updateStats();
     setBadge(d.source==='live');
     document.getElementById('px').textContent = tick
       ? ('  '+nowPx.toFixed(2)+'  (spread '+tick.spread_bps.toFixed(2)+'bps)') : '';
   }catch(e){ /* 毎秒なので一時失敗は無視（次の tick で復帰） */ }
 }
+
+// ── B2 溜まり幅メーター ＋ B3 次壁までの余地ゲージ（常時読める情報パネル）──
+function fmtSigned(v){ return (v>=0?'+':'')+v.toFixed(1); }
+function updateStats(){
+  const el=document.getElementById('stats'); if(!el) return;
+  if(!statsOn){ el.style.display='none'; return; }
+  if(curPx==null||!lastBox){ el.innerHTML='データ待ち…'; el.style.display='block'; return; }
+  const b=lastBox, up=b.up-curPx, dn=curPx-b.dn;
+  const near=Math.min(Math.abs(up),Math.abs(dn)), warn = near<=b.width*0.10;
+  let h='<span class="x" id="stX">✕</span>';
+  h+='<b>現在 '+curPx.toFixed(2)+'</b><br>';
+  h+='箱: 上'+b.up.toFixed(1)+' / 中'+b.mid.toFixed(1)+' / 下'+b.dn.toFixed(1)
+     +' ・ 溜まり幅 <b>'+b.width.toFixed(1)+'</b><br>';
+  h+='余地: 上壁まで <b>'+fmtSigned(up)+'</b> ／ 下壁まで <b>'+fmtSigned(-dn)+'</b>'
+     +(warn?' <span style="color:#f0a35e">← 壁に接近</span>':'')+'<br>';
+  const k=lastBreak;
+  if(k){
+    const tpRem=Math.abs(k.tp-curPx), rr=Math.abs(k.tp-k.wall)/Math.max(1e-9,Math.abs(k.wall-k.sl));
+    const prog=(curPx-k.wall)/((k.tp-k.wall)||1)*100;
+    h+='直近ブレイク: '+(k.dir==='UP'?'上▲':'下▼')+' 壁'+k.wall.toFixed(1)+' 幅'+k.width.toFixed(1)
+      +' → TP'+k.tp.toFixed(1)+'（残り<b>'+tpRem.toFixed(1)+'</b>）／ SL'+k.sl.toFixed(1)
+      +' ・ RR≈'+rr.toFixed(1)
+      +'<br>メジャードムーブ達成 <b>'+Math.max(0,Math.min(100,prog)).toFixed(0)+'%</b>';
+  } else { h+='直近ブレイク: なし（レンジ内）'; }
+  el.innerHTML=h; el.style.display='block';
+  const x=document.getElementById('stX'); if(x) x.onclick=()=>{ statsOn=false;
+    el.style.display='none'; document.getElementById('statsBtn').classList.remove('on'); };
+}
+document.getElementById('statsBtn').onclick=(e)=>{ statsOn=!statsOn;
+  e.currentTarget.classList.toggle('on',statsOn); updateStats(); };
 
 pollData();
 setInterval(pollData, 10000);     // フルは10秒ごと（壁の再計算・取りこぼし補正）
