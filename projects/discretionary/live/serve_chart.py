@@ -27,6 +27,14 @@ PORT = 8793
 PAGE = os.path.join(HERE, "chart_live.html")
 LIB = os.path.join(HERE, "lightweight-charts.js")
 
+# C1 ダマシ確率メーター用: JST時間帯別 本物率(TP率) テーブル（compute_damashi_jst.py が生成）
+_DAMASHI = None
+try:
+    with open(os.path.join(HERE, "damashi_hour_jst.json"), encoding="utf-8") as _f:
+        _DAMASHI = json.load(_f)
+except Exception:
+    _DAMASHI = None
+
 # ── MT5接続をプロセス内で保持（都度 initialize/shutdown しない）──────────
 # MetaTrader5 API はスレッド安全でないため、全読取を1本のロックで直列化する。
 _MT5 = None
@@ -108,6 +116,21 @@ def build_data(n=1500):
             for k in range(len(m5))]
     box = chart_gen.current_box(m5)
     brk = chart_gen.detect_last_break(m5)
+
+    # C1: 直近ブレイクの発生時刻(JST)から本物率(機械統計)を引く
+    damashi = None
+    if brk is not None and _DAMASHI:
+        try:
+            bt = pd.Timestamp(m5.index[brk["idx"]])
+            jh = int(bt.tz_convert("Asia/Tokyo").hour)
+            hrec = _DAMASHI.get("hours", {}).get(str(jh))
+            base = _DAMASHI.get("base_tp_rate")
+            if hrec:
+                damashi = {"jst_hour": jh, "real_rate": hrec["tp_rate"],
+                           "n": hrec["n"], "base": base}
+        except Exception:
+            damashi = None
+
     return {
         "symbol": "XAUUSD (金) M5",
         "source": source,
@@ -117,6 +140,7 @@ def build_data(n=1500):
         "box": {k: round(v, 3) for k, v in box.items()},
         "break": ({k: (round(v, 3) if isinstance(v, float) else v)
                    for k, v in brk.items()} if brk else None),
+        "damashi": damashi,
         "range_w": chart_gen.RANGE_W,
     }
 

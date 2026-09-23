@@ -11,6 +11,7 @@
   #badge{float:right;font-size:11px;padding:1px 8px;border-radius:10px}
   #sub{color:#8b949e;font-size:11px}
   #chart{position:fixed;top:44px;left:0;right:0;bottom:38px}
+  #zones{position:fixed;top:44px;left:0;right:0;bottom:38px;pointer-events:none;z-index:1}
   #grid{position:fixed;top:44px;left:0;right:0;bottom:38px;pointer-events:none;z-index:2}
   #trades{position:fixed;top:44px;left:0;right:0;bottom:38px;pointer-events:none;z-index:3}
   #ctrl{position:fixed;left:0;right:0;bottom:0;height:38px;z-index:6;display:flex;
@@ -44,6 +45,7 @@
   </span>
 </div>
 <div id="chart"></div>
+<canvas id="zones"></canvas>
 <canvas id="grid"></canvas>
 <canvas id="trades"></canvas>
 <div id="ctrl">
@@ -57,6 +59,7 @@
   <button class="cbtn" id="snap" title="タップで線合わせ">◎合わせ</button>
   <button class="cbtn" id="fit" title="自動フィットに戻す">⤢</button>
   <button class="cbtn on" id="tradesBtn" title="自分の過去トレードを重ねる">自分</button>
+  <button class="cbtn on" id="zonesBtn" title="時間帯シェード(本物帯/ダマシ巣)">時間帯</button>
   <button class="cbtn" id="statsBtn" title="溜まり幅・壁までの余地">📊 情報</button>
   <span class="lab" style="margin-left:6px">復習</span><span id="tradeChips"></span>
 </div>
@@ -96,6 +99,7 @@ let lastTime = 0;         // 既知の最終バー時刻
 let allBars = [];         // 直近バー配列（トレード時刻のバー吸着・先端合わせ用）
 let wallLines = [];       // 壁/TP/SL（10秒ごと更新）
 let statsOn = false, lastBox = null, lastBreak = null, curPx = null;  // B2/B3 情報パネル用
+let lastDamashi = null;   // C1 ダマシ確率メーター（時間帯本物率）
 let curLine = null;       // 現在価格ライン（毎秒 applyOptions で追従）
 let firstLoad = true;
 
@@ -142,7 +146,7 @@ async function pollData(){
     else { for (const b of bars){ if (b.time >= lastTime) series.update(b); } }
     if (bars.length){ lastTime = bars[bars.length-1].time; allBars = bars; }
     setWallLines(d.box, d.break);
-    lastBox = d.box; lastBreak = d.break;   // B2/B3 情報パネル用に保持
+    lastBox = d.box; lastBreak = d.break; lastDamashi = d.damashi;   // B2/B3/C1 用に保持
     setBadge(d.source==='live');
     let wi = '';
     if (d.box) wi += ' ｜ 箱幅'+d.box.width.toFixed(1);
@@ -192,6 +196,18 @@ function updateStats(){
       +' ・ RR≈'+rr.toFixed(1)
       +'<br>メジャードムーブ達成 <b>'+Math.max(0,Math.min(100,prog)).toFixed(0)+'%</b>';
   } else { h+='直近ブレイク: なし（レンジ内）'; }
+  // C1 ダマシ確率メーター（時間帯本物率）
+  const dm=lastDamashi;
+  if(dm){
+    const rr=dm.real_rate, base=dm.base;
+    const col = rr>=base+3?'#56d364' : (rr<=base-3?'#f85149':'#e3c94a');
+    const bar = '█'.repeat(Math.round(rr/5)) ;
+    h+='<br><span style="color:'+col+'">本物率(JST'+dm.jst_hour+'時) <b>'+rr.toFixed(0)+'%</b></span>'
+      +' <span style="color:#8b949e">(平均'+base.toFixed(0)+'% / 機械n='+dm.n+')</span>'
+      +'<br><span style="color:'+col+';letter-spacing:-1px">'+bar+'</span>'
+      +(rr<=base-3?' <span style="color:#f85149">ダマシ多め</span>':'')
+      +(rr>=base+3?' <span style="color:#56d364">本物寄り</span>':'');
+  }
   el.innerHTML=h; el.style.display='block';
   const x=document.getElementById('stX'); if(x) x.onclick=()=>{ statsOn=false;
     el.style.display='none'; document.getElementById('statsBtn').classList.remove('on'); };
@@ -236,7 +252,37 @@ function drawGrid(){
     gctx.fillStyle='rgba(150,180,210,0.35)'; gctx.fillText(price.toFixed(dec), 2, y-1);
   }
 }
-(function loop(){ try{ drawGrid(); drawTrades(); }catch(e){} requestAnimationFrame(loop); })();
+// ── A2: JST時間帯シェード（本物帯07-12=緑 / ダマシ巣00-05=赤）──
+const zonesCanvas = document.getElementById('zones');
+const zctx = zonesCanvas.getContext('2d');
+let showZones = true;
+function zoneOf(t){ const jh=Math.floor(((t+JST)%86400)/3600);
+  if(jh>=7&&jh<12) return 'real'; if(jh>=0&&jh<5) return 'trap'; return null; }
+function drawZones(){
+  const w=chartEl.clientWidth, h=chartEl.clientHeight;
+  if(zonesCanvas.width!==Math.round(w*DPR)||zonesCanvas.height!==Math.round(h*DPR)){
+    zonesCanvas.width=Math.round(w*DPR); zonesCanvas.height=Math.round(h*DPR);
+  }
+  zctx.setTransform(DPR,0,0,DPR,0,0); zctx.clearRect(0,0,w,h);
+  if(!showZones||!allBars.length) return;
+  const tsc=chart.timeScale(); const sp=(tsc.options().barSpacing||8);
+  let runZone=null, runStartX=null, prevX=null;
+  const flush=(endX)=>{ if(runZone&&runStartX!=null&&endX!=null){
+    zctx.fillStyle = runZone==='real'?'rgba(38,166,65,0.09)':'rgba(248,81,73,0.09)';
+    zctx.fillRect(runStartX,0,Math.max(1,endX-runStartX),h); } };
+  for(const b of allBars){
+    const x=tsc.timeToCoordinate(b.time);
+    if(x==null){ if(runZone){ flush(prevX!=null?prevX+sp/2:null); runZone=null; } continue; }
+    const z=zoneOf(b.time);
+    if(z!==runZone){ flush(prevX!=null?prevX+sp/2:null); runZone=z; runStartX=x-sp/2; }
+    prevX=x;
+  }
+  flush(prevX!=null?prevX+sp/2:null);
+}
+document.getElementById('zonesBtn').onclick=(e)=>{ showZones=!showZones;
+  e.currentTarget.classList.toggle('on',showZones); };
+
+(function loop(){ try{ drawZones(); drawGrid(); drawTrades(); }catch(e){} requestAnimationFrame(loop); })();
 
 function setCell(){ document.getElementById('cellVal').textContent =
   '$'+(gridStep<1 ? gridStep : gridStep.toString()); }
