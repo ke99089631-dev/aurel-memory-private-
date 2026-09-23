@@ -21,6 +21,14 @@
   .cbtn:active{background:#2a3446}
   .cbtn.on{background:#0f2b17;color:#56d364;border-color:#238636}
   #ctrl .lab{color:#8b949e;font-size:11px}
+  #tradeInfo{position:fixed;top:48px;left:8px;right:8px;z-index:7;display:none;
+    background:rgba(20,26,36,.96);border:1px solid #30363d;border-radius:8px;
+    padding:7px 10px;font-size:12px;line-height:1.5;color:#e6edf3}
+  #tradeInfo b{color:#fff}
+  #tradeInfo .x{float:right;color:#8b949e;cursor:pointer;padding:0 4px}
+  .chip{background:#1b2230;border:1px solid #30363d;border-radius:12px;padding:3px 9px;
+    font-size:12px;cursor:pointer;margin-left:4px;white-space:nowrap;color:#c9d1d9}
+  .chip .d{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle}
   .tag{display:inline-block;padding:0 6px;border-radius:8px;font-size:10px;margin-right:3px}
   .yel{background:#3a3410;color:#e3c94a}.blu{background:#0e2740;color:#58a6ff}
   .grn{background:#0f2b17;color:#56d364}.red{background:#3a1113;color:#f85149}
@@ -49,7 +57,9 @@
   <button class="cbtn" id="snap" title="タップで線合わせ">◎合わせ</button>
   <button class="cbtn" id="fit" title="自動フィットに戻す">⤢</button>
   <button class="cbtn on" id="tradesBtn" title="自分の過去トレードを重ねる">自分</button>
+  <span class="lab" style="margin-left:6px">復習</span><span id="tradeChips"></span>
 </div>
+<div id="tradeInfo"></div>
 <div id="err"></div>
 <script src="/lightweight-charts.js"></script>
 <script>
@@ -81,6 +91,7 @@ const series = chart.addCandlestickSeries({
 });
 
 let lastTime = 0;         // 既知の最終バー時刻
+let allBars = [];         // 直近バー配列（トレード時刻のバー吸着・先端合わせ用）
 let wallLines = [];       // 壁/TP/SL（10秒ごと更新）
 let curLine = null;       // 現在価格ライン（毎秒 applyOptions で追従）
 let firstLoad = true;
@@ -126,7 +137,7 @@ async function pollData(){
     const bars = d.bars || [];
     if (firstLoad){ series.setData(bars); chart.timeScale().fitContent(); firstLoad=false; }
     else { for (const b of bars){ if (b.time >= lastTime) series.update(b); } }
-    if (bars.length) lastTime = bars[bars.length-1].time;
+    if (bars.length){ lastTime = bars[bars.length-1].time; allBars = bars; }
     setWallLines(d.box, d.break);
     setBadge(d.source==='live');
     let wi = '';
@@ -180,13 +191,14 @@ function drawGrid(){
   const hi=Math.max(pa,pb), lo=Math.min(pa,pb);
   if(gridOrigin==null) gridOrigin = Math.round(lo/gridStep)*gridStep;
   let start = gridOrigin + Math.floor((lo-gridOrigin)/gridStep)*gridStep;
-  gctx.font='10px monospace'; gctx.textBaseline='bottom';
+  gctx.font='8px monospace'; gctx.textBaseline='bottom';
+  const dec = gridStep<1 ? 2 : 1;
   for(let price=start; price<=hi+1e-9; price+=gridStep){
     const y = series.priceToCoordinate(price);
     if(y==null) continue;
-    gctx.strokeStyle='rgba(120,150,190,0.20)'; gctx.lineWidth=1;
+    gctx.strokeStyle='rgba(120,150,190,0.10)'; gctx.lineWidth=1;
     gctx.beginPath(); gctx.moveTo(0,Math.round(y)+0.5); gctx.lineTo(w,Math.round(y)+0.5); gctx.stroke();
-    gctx.fillStyle='rgba(150,180,210,0.55)'; gctx.fillText(price.toFixed(2), 2, y-1);
+    gctx.fillStyle='rgba(150,180,210,0.35)'; gctx.fillText(price.toFixed(dec), 2, y-1);
   }
 }
 (function loop(){ try{ drawGrid(); drawTrades(); }catch(e){} requestAnimationFrame(loop); })();
@@ -197,16 +209,25 @@ document.getElementById('cellUp').onclick=()=>{ cellIdx=Math.min(CELL_STEPS.leng
   gridStep=CELL_STEPS[cellIdx]; setCell(); };
 document.getElementById('cellDn').onclick=()=>{ cellIdx=Math.max(0,cellIdx-1);
   gridStep=CELL_STEPS[cellIdx]; setCell(); };
-document.getElementById('origUp').onclick=()=>{ if(gridOrigin!=null) gridOrigin+=gridStep/10; };
-document.getElementById('origDn').onclick=()=>{ if(gridOrigin!=null) gridOrigin-=gridStep/10; };
+document.getElementById('origUp').onclick=()=>{ if(gridOrigin!=null) gridOrigin+=gridStep/20; };
+document.getElementById('origDn').onclick=()=>{ if(gridOrigin!=null) gridOrigin-=gridStep/20; };
 document.getElementById('fit').onclick=()=>{ gridOrigin=null;
   chart.priceScale('right').applyOptions({autoScale:true}); chart.timeScale().fitContent(); };
 const snapBtn=document.getElementById('snap');
 snapBtn.onclick=()=>{ snapMode=!snapMode; snapBtn.classList.toggle('on',snapMode); };
 chart.subscribeClick((param)=>{
-  if(!snapMode||!param.point) return;
-  const p = series.coordinateToPrice(param.point.y);
-  if(p!=null){ gridOrigin = p; snapMode=false; snapBtn.classList.remove('on'); }
+  if(!snapMode) return;
+  let price=null;
+  // タップした位置のローソクの高値/安値のうち近い方に吸着＝先端にピタッと合う
+  if(param.time!=null && param.point){
+    const bar=nearestBar(param.time);
+    const clickP=series.coordinateToPrice(param.point.y);
+    if(bar && clickP!=null){
+      price = Math.abs(clickP-bar.high)<=Math.abs(clickP-bar.low) ? bar.high : bar.low;
+    }
+  }
+  if(price==null && param.point) price=series.coordinateToPrice(param.point.y);
+  if(price!=null){ gridOrigin=price; snapMode=false; snapBtn.classList.remove('on'); }
 });
 
 // ── A3: 自分の過去トレード重ね描き（台帳ledger→E/SL/TP/決済を地図に）──
@@ -214,9 +235,64 @@ const tradesCanvas = document.getElementById('trades');
 const tctx = tradesCanvas.getContext('2d');
 let tradesData = [];
 let showTrades = true;
+function nearestBarTime(t){
+  const n=allBars.length; if(!n) return null;
+  if(t<=allBars[0].time) return allBars[0].time;
+  if(t>=allBars[n-1].time) return allBars[n-1].time;
+  let lo=0,hi=n-1;
+  while(lo<=hi){ const m=(lo+hi)>>1; const bt=allBars[m].time;
+    if(bt===t) return bt; if(bt<t) lo=m+1; else hi=m-1; }
+  const a=allBars[Math.max(0,hi)].time, b=allBars[Math.min(n-1,lo)].time;
+  return (t-a)<=(b-t)?a:b;
+}
+function nearestBar(time){
+  const bt=nearestBarTime(time); if(bt==null) return null;
+  for(const b of allBars){ if(b.time===bt) return b; } return null;
+}
+function tradeR(t){
+  if(t.exit==null||t.sl==null||t.entry==null) return null;
+  const risk=Math.abs(t.entry-t.sl); if(!risk) return null;
+  const pnl = t.side==='BUY' ? (t.exit-t.entry) : (t.entry-t.exit);
+  return pnl/risk;
+}
+function tradeWin(t){ if(t.exit==null) return null;
+  return t.side==='BUY' ? (t.exit>t.entry) : (t.exit<t.entry); }
+function focusTrade(t){
+  const et=nearestBarTime(t.entry_time);
+  let xt = t.exit_time!=null ? nearestBarTime(t.exit_time)
+         : (allBars.length?allBars[allBars.length-1].time:et);
+  if(et==null) return;
+  const pad=25*300;                       // 前後25本(=125分)の余白
+  try{ chart.priceScale('right').applyOptions({autoScale:true});
+       chart.timeScale().setVisibleRange({from:et-pad, to:(xt||et)+pad}); }catch(e){}
+  const R=tradeR(t), win=tradeWin(t);
+  const info=document.getElementById('tradeInfo');
+  const col = win===null?'#8b949e':(win?'#56d364':'#f85149');
+  info.innerHTML='<span class="x" id="tiX">✕</span>'
+    +'<b>'+t.id+' '+(t.side==='BUY'?'買い▲':'売り▼')+'</b>'
+    +' 建値'+t.entry+' ／ SL'+(t.sl??'-')+' ／ TP'+(t.tp??'-')+'<br>'
+    +'決済'+(t.exit!=null?t.exit:'（建玉中）')
+    +(t.post?' ・<span style="color:'+col+'">'+t.post+'</span>':'')
+    +(R!=null?' <b style="color:'+col+'">'+(R>=0?'+':'')+R.toFixed(2)+'R</b>':'')
+    +(t.wall?'<br><span style="color:#8b949e">壁: '+t.wall+'</span>':'');
+  info.style.display='block';
+  document.getElementById('tiX').onclick=()=>{ info.style.display='none'; };
+}
+function renderChips(){
+  const box=document.getElementById('tradeChips'); if(!box) return;
+  box.innerHTML='';
+  for(const t of tradesData){
+    const win=tradeWin(t);
+    const c=document.createElement('span'); c.className='chip';
+    const col=win===null?'#8b949e':(win?'#56d364':'#f85149');
+    c.innerHTML='<span class="d" style="background:'+col+'"></span>'+t.id+(t.side==='BUY'?' 買':' 売');
+    c.onclick=()=>focusTrade(t);
+    box.appendChild(c);
+  }
+}
 async function fetchTrades(){
   try{ const r=await fetch('/api/trades',{cache:'no-store'}); const d=await r.json();
-       tradesData=d.trades||[]; }catch(e){}
+       tradesData=d.trades||[]; renderChips(); }catch(e){}
 }
 function drawTrades(){
   const w=chartEl.clientWidth, h=chartEl.clientHeight;
@@ -229,10 +305,12 @@ function drawTrades(){
   const tsc=chart.timeScale();
   for(const t of tradesData){
     if(t.entry_time==null || t.entry==null) continue;
-    const x1=tsc.timeToCoordinate(t.entry_time);
+    const et=nearestBarTime(t.entry_time); if(et==null) continue;   // トレード時刻→最寄りバーに吸着
+    const x1=tsc.timeToCoordinate(et);
     if(x1==null) continue;                                   // 画面外(時間)ならスキップ
-    let x2 = t.exit_time!=null ? tsc.timeToCoordinate(t.exit_time) : w;
-    if(x2==null) x2=w;                                       // 建玉中/画面右外は右端まで
+    let x2 = w;
+    if(t.exit_time!=null){ const xt=nearestBarTime(t.exit_time);
+      const cx = xt!=null ? tsc.timeToCoordinate(xt) : null; x2 = cx==null ? w : cx; }
     const yE=series.priceToCoordinate(t.entry);
     const ySL=t.sl!=null?series.priceToCoordinate(t.sl):null;
     const yTP=t.tp!=null?series.priceToCoordinate(t.tp):null;
