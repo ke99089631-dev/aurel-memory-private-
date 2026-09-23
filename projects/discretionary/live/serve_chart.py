@@ -256,6 +256,36 @@ def build_paper():
     return {"trades": rows[-40:], "summary": summary}
 
 
+PAPER_V3 = os.path.join(HERE, "paper_ledger_v3.jsonl")
+
+
+def build_paper_v3():
+    """車線3 v3a(品質壁＋採点)の集計。全候補 / TAKE / SKIP を比較（採点が効くか）。"""
+    rows = []
+    try:
+        for line in open(PAPER_V3, encoding="utf-8"):
+            line = line.strip()
+            if line:
+                rows.append(json.loads(line))
+    except Exception:
+        rows = []
+    if not rows:
+        return {"summary": {"n": 0}, "trades": []}
+
+    def grp(rs):
+        if not rs:
+            return {"n": 0}
+        tp = sum(1 for r in rs if r.get("exit_reason") == "TP")
+        return {"n": len(rs), "tp_rate": round(100.0 * tp / len(rs), 1),
+                "avg_r": round(sum(r.get("R", 0) for r in rs) / len(rs), 3)}
+
+    take = [r for r in rows if r.get("decision") == "TAKE"]
+    skip = [r for r in rows if r.get("decision") == "SKIP"]
+    return {"summary": {"n": len(rows), "all": grp(rows),
+                        "take": grp(take), "skip": grp(skip)},
+            "trades": rows[-30:]}
+
+
 class H(http.server.BaseHTTPRequestHandler):
     def _send(self, code, body, ctype):
         if isinstance(body, str):
@@ -289,6 +319,8 @@ class H(http.server.BaseHTTPRequestHandler):
                 self._send(200, json.dumps(build_trades(), ensure_ascii=False), "application/json; charset=utf-8")
             elif p == "/api/paper":
                 self._send(200, json.dumps(build_paper(), ensure_ascii=False), "application/json; charset=utf-8")
+            elif p == "/api/paperv3":
+                self._send(200, json.dumps(build_paper_v3(), ensure_ascii=False), "application/json; charset=utf-8")
             else:
                 self._send(404, "not found", "text/plain; charset=utf-8")
         except Exception as e:

@@ -257,7 +257,18 @@ async function updatePaper(){
         for(const t of last){ const c=t.exit_reason==='TP'?'#56d364':(t.exit_reason==='SL'?'#f85149':'#8b949e');
           h+='　'+t.id+' '+(t.side==='BUY'?'買':'売')+' <span style="color:'+c+'">'+t.exit_reason
            +' '+(t.R>=0?'+':'')+t.R.toFixed(2)+'R</span> <span style="color:#8b949e">'+(t.entry_jst||'')+'</span><br>'; } }
-      h+='<span style="color:#8b949e;font-size:11px">※純ルールの連続適用＝backtestの続き。規律ある標本を24/5で蓄積中。会長の実トレードとは別。</span>';
+      h+='<span style="color:#8b949e;font-size:11px">※上=純ルール(全ブレイク)＝backtestの続き。</span>';
+      // v3a: 品質壁＋採点レーン（壁の引き方を効いてる壁に）
+      try{
+        const r2=await fetch('/api/paperv3',{cache:'no-store'}); const d2=await r2.json();
+        const s2=d2.summary||{n:0};
+        if(s2.n){
+          const g=(x,lab,col)=>x&&x.n?('　'+lab+' n'+x.n+' 本物率'+x.tp_rate+'% 平均R<b style="color:'+((x.avg_r>=0)?'#56d364':'#f85149')+'">'+(x.avg_r>=0?'+':'')+x.avg_r+'</b><br>'):'';
+          h+='<hr style="border-color:#30363d"><b>🧱 v3a 品質壁レーン（壁の引き方を「効いてる壁」に）</b><br>';
+          h+=g(s2.all,'全候補','')+g(s2.take,'TAKE(採点採用)','')+g(s2.skip,'SKIP(見送り)','');
+          h+='<span style="color:#8b949e;font-size:11px">壁選定を精緻化した実験レーン。TAKEとSKIPの差＝採点が勝ちを分けるか(まだ標本不足で結論不可)。</span>';
+        }
+      }catch(e){}
       el.innerHTML=h;
     }
     const x=document.getElementById('pX'); if(x) x.onclick=()=>{ paperOn=false; el.style.display='none';
