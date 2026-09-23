@@ -60,10 +60,22 @@ def dynamic_box(m5):
 
     price = float(c[-1])
     brk = None
+    # ★TPは会長ルール「溜まり幅＝壁と中間線の間」（箱全幅ではない）。SLは壁の内側(ブレイク失敗の位置)。
     if price < dn_p:
-        brk = {"dir": "DOWN", "wall": round(dn_p, 3), "width": round(width, 3),
-               "tp": round(dn_p - width, 3), "sl": round(dn_p + width * SL_PAD_FR, 3)}
+        pool = pool_width(dn_p, mid_p, up_p, "DOWN")
+        brk = {"dir": "DOWN", "wall": round(dn_p, 3), "width": round(pool, 3),
+               "tp": round(dn_p - pool, 3), "sl": round(dn_p + pool * SL_PAD_FR, 3)}
     elif price > up_p:
-        brk = {"dir": "UP", "wall": round(up_p, 3), "width": round(width, 3),
-               "tp": round(up_p + width, 3), "sl": round(up_p - width * SL_PAD_FR, 3)}
+        pool = pool_width(dn_p, mid_p, up_p, "UP")
+        brk = {"dir": "UP", "wall": round(up_p, 3), "width": round(pool, 3),
+               "tp": round(up_p + pool, 3), "sl": round(up_p - pool * SL_PAD_FR, 3)}
     return box, brk
+
+
+def pool_width(dn_p, mid_p, up_p, direction):
+    """溜まり幅: 下抜けなら (中間−下壁)、上抜けなら (上壁−中間)。中間が壁に貼り付いて極端に細い時は半幅で代用。"""
+    full = up_p - dn_p
+    pool = (mid_p - dn_p) if direction == "DOWN" else (up_p - mid_p)
+    if pool < full * 0.2:
+        pool = full / 2.0
+    return pool
