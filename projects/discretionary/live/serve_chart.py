@@ -195,11 +195,13 @@ def build_data(n=1500):
              "open": round(float(o[k]), 3), "high": round(float(h[k]), 3),
              "low": round(float(l[k]), 3), "close": round(float(c[k]), 3)}
             for k in range(len(m5))]
-    # 効いてる固定の壁に差し替え（ローリング最安値=価格追従の弱点を解消）。失敗時のみ旧方式。
-    box, brk = fixed_box_and_break(m5)
+    # ① 壁の動的組み直し（トレンドでも箱が置いてけぼりにならず段階的に乗り換わる）。
+    import wallbox
+    box, brk = wallbox.dynamic_box(m5)
     if box is None:
-        box = chart_gen.current_box(m5)
-        brk = None
+        box, brk = fixed_box_and_break(m5)     # 予備1: 帯無しなら強壁固定
+    if box is None:
+        box = chart_gen.current_box(m5); brk = None  # 予備2: 旧ローリング
     ai_pos = latest_ai_position(tick)
 
     # C1: いまの時間帯(JST)の本物率(機械統計)
