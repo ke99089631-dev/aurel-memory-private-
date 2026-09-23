@@ -283,7 +283,7 @@ def build_paper_v3():
     skip = [r for r in rows if r.get("decision") == "SKIP"]
     return {"summary": {"n": len(rows), "all": grp(rows),
                         "take": grp(take), "skip": grp(skip)},
-            "trades": rows[-30:]}
+            "trades": rows[-300:]}
 
 
 class H(http.server.BaseHTTPRequestHandler):

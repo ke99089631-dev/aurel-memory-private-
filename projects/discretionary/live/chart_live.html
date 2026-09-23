@@ -14,6 +14,7 @@
   #zones{position:fixed;top:44px;left:0;right:0;bottom:38px;pointer-events:none;z-index:1}
   #grid{position:fixed;top:44px;left:0;right:0;bottom:38px;pointer-events:none;z-index:2}
   #trades{position:fixed;top:44px;left:0;right:0;bottom:38px;pointer-events:none;z-index:3}
+  #ai{position:fixed;top:44px;left:0;right:0;bottom:38px;pointer-events:none;z-index:4}
   #ctrl{position:fixed;left:0;right:0;bottom:0;height:38px;z-index:6;display:flex;
     align-items:center;gap:4px;padding:0 8px;background:rgba(13,17,23,.92);
     border-top:1px solid #21262d;font-size:12px;overflow-x:auto;white-space:nowrap}
@@ -48,6 +49,7 @@
 <canvas id="zones"></canvas>
 <canvas id="grid"></canvas>
 <canvas id="trades"></canvas>
+<canvas id="ai"></canvas>
 <div id="ctrl">
   <span class="lab">マス幅</span>
   <button class="cbtn" id="cellDn">−</button>
@@ -58,7 +60,8 @@
   <button class="cbtn" id="origDn">▼</button>
   <button class="cbtn" id="snap" title="タップで線合わせ">◎合わせ</button>
   <button class="cbtn" id="fit" title="自動フィットに戻す">⤢</button>
-  <button class="cbtn on" id="tradesBtn" title="自分の過去トレードを重ねる">自分</button>
+  <button class="cbtn on" id="aiBtn" title="AURELのエントリーをうっすら建玉表示">🤖AI建玉</button>
+  <button class="cbtn" id="tradesBtn" title="自分の過去トレードを重ねる">自分</button>
   <button class="cbtn on" id="zonesBtn" title="時間帯シェード(本物帯/ダマシ巣)">時間帯</button>
   <button class="cbtn" id="statsBtn" title="溜まり幅・壁までの余地">📊 情報</button>
   <button class="cbtn" id="paperBtn" title="車線3 AURELの紙トレード集計">🤖 車線3</button>
@@ -155,7 +158,8 @@ async function pollData(){
     if (d.break) wi += ' ｜ 直近ブレイク'+(d.break.dir==='UP'?'上':'下')+' 壁'+d.break.wall.toFixed(1)
       +'→TP'+d.break.tp.toFixed(1)+'/SL'+d.break.sl.toFixed(1);
     document.getElementById('wallinfo').textContent = wi;
-    fetchTrades();   // 過去トレードも定期更新（新規記録が入れば反映）
+    fetchTrades();   // 会長の過去トレード（B・既定オフ）
+    fetchPaper();    // AURELのエントリー（A・うっすら建玉）
   }catch(e){ document.getElementById('err').textContent = '接続待ち… '+(e&&e.message?e.message:e); }
 }
 
@@ -350,8 +354,54 @@ function drawZones(){
 document.getElementById('zonesBtn').onclick=(e)=>{ showZones=!showZones;
   e.currentTarget.classList.toggle('on',showZones); redrawOverlays(); };
 
-// オーバーレイ(時間帯/グリッド/トレード)は「表示範囲が変わった時」だけ再描画＝パンを重くしない
-function redrawOverlays(){ try{ drawZones(); drawGrid(); drawTrades(); }catch(e){} }
+// ── A: AURELのエントリーを MT5式「うっすら建玉」で乗せる（エントリー線＋SL赤帯/TP緑帯）──
+const aiCanvas=document.getElementById('ai'), aictx=aiCanvas.getContext('2d');
+async function fetchPaper(){
+  try{ const r=await fetch('/api/paperv3',{cache:'no-store'}); const d=await r.json();
+       paperTrades=(d.trades||[]).filter(t=>t.decision==='TAKE'); }catch(e){}
+}
+function drawPaperEntries(){
+  const w=chartEl.clientWidth, h=chartEl.clientHeight;
+  if(aiCanvas.width!==Math.round(w*DPR)||aiCanvas.height!==Math.round(h*DPR)){
+    aiCanvas.width=Math.round(w*DPR); aiCanvas.height=Math.round(h*DPR);
+  }
+  aictx.setTransform(DPR,0,0,DPR,0,0); aictx.clearRect(0,0,w,h);
+  if(!showPaper||!paperTrades.length) return;
+  const tsc=chart.timeScale(); const sp=(tsc.options().barSpacing||8);
+  for(const t of paperTrades){
+    if(t.entry_time==null||t.entry==null) continue;
+    const et=nearestBarTime(t.entry_time); if(et==null) continue;
+    const x1=tsc.timeToCoordinate(et); if(x1==null) continue;
+    const exT=t.entry_time+(t.hold_bars||3)*300;
+    const xt=nearestBarTime(exT); let x2=xt!=null?tsc.timeToCoordinate(xt):null;
+    if(x2==null) x2=x1+sp*(t.hold_bars||3);
+    x2=Math.max(x1+3,x2);
+    const yE=series.priceToCoordinate(t.entry);
+    const ySL=t.sl!=null?series.priceToCoordinate(t.sl):null;
+    const yTP=t.tp!=null?series.priceToCoordinate(t.tp):null;
+    if(yE==null) continue;
+    if(ySL!=null){ aictx.fillStyle='rgba(248,81,73,0.10)';
+      aictx.fillRect(x1,Math.min(yE,ySL),x2-x1,Math.abs(ySL-yE)); }   // SL帯(赤)
+    if(yTP!=null){ aictx.fillStyle='rgba(38,166,65,0.10)';
+      aictx.fillRect(x1,Math.min(yE,yTP),x2-x1,Math.abs(yTP-yE)); }   // TP帯(緑)
+    aictx.strokeStyle='rgba(88,166,255,0.85)'; aictx.lineWidth=1; aictx.setLineDash([4,3]);
+    aictx.beginPath(); aictx.moveTo(x1,yE); aictx.lineTo(x2,yE); aictx.stroke(); aictx.setLineDash([]);
+    // エントリー矢印(青)
+    const buy=t.side==='BUY'; aictx.fillStyle='#58a6ff'; aictx.beginPath();
+    if(buy){ aictx.moveTo(x1,yE+2); aictx.lineTo(x1-5,yE+10); aictx.lineTo(x1+5,yE+10); }
+    else   { aictx.moveTo(x1,yE-2); aictx.lineTo(x1-5,yE-10); aictx.lineTo(x1+5,yE-10); }
+    aictx.closePath(); aictx.fill();
+    // 決済マーカー(TP緑/SL赤/時間切れ灰)
+    const yX=t.exit!=null?series.priceToCoordinate(t.exit):null;
+    if(yX!=null){ aictx.fillStyle=t.exit_reason==='TP'?'#56d364':(t.exit_reason==='SL'?'#f85149':'#8b949e');
+      aictx.beginPath(); aictx.arc(x2,yX,3,0,7); aictx.fill(); }
+  }
+}
+document.getElementById('aiBtn').onclick=(e)=>{ showPaper=!showPaper;
+  e.currentTarget.classList.toggle('on',showPaper); drawPaperEntries(); };
+
+// オーバーレイ(時間帯/グリッド/トレード/AI建玉)は「表示範囲が変わった時」だけ再描画＝パンを重くしない
+function redrawOverlays(){ try{ drawZones(); drawGrid(); drawTrades(); drawPaperEntries(); }catch(e){} }
 chart.timeScale().subscribeVisibleLogicalRangeChange(redrawOverlays);   // パン/ズームに追従
 window.addEventListener('resize', ()=>setTimeout(redrawOverlays,60));
 setInterval(redrawOverlays, 300);   // 保険(ライブ更新・トグル反映)。5fps未満＝軽い
@@ -388,7 +438,9 @@ chart.subscribeClick((param)=>{
 const tradesCanvas = document.getElementById('trades');
 const tctx = tradesCanvas.getContext('2d');
 let tradesData = [];
-let showTrades = true;
+let showTrades = false;      // 会長の過去トレード(B)は既定オフ。今回の主役はAのAI建玉
+let paperTrades = [];        // AURELの紙エントリー(車線3 v3a)
+let showPaper = true;
 function nearestBarTime(t){
   const n=allBars.length; if(!n) return null;
   if(t<=allBars[0].time) return allBars[0].time;
