@@ -12,7 +12,7 @@
   #sub{color:#8b949e;font-size:11px}
   #chart{position:fixed;top:44px;left:0;right:0;bottom:38px}
   #zones{position:fixed;top:44px;left:0;right:0;bottom:38px;pointer-events:none;z-index:1}
-  #grid{position:fixed;top:44px;left:0;right:0;bottom:38px;pointer-events:none;z-index:2}
+  #fixgrid{position:fixed;top:44px;left:0;right:0;bottom:38px;pointer-events:none;z-index:2}
   #trades{position:fixed;top:44px;left:0;right:0;bottom:38px;pointer-events:none;z-index:3}
   #ai{position:fixed;top:44px;left:0;right:0;bottom:38px;pointer-events:none;z-index:4}
   #ctrl{position:fixed;left:0;right:0;bottom:0;height:38px;z-index:6;display:flex;
@@ -51,25 +51,17 @@
 </div>
 <div id="chart"></div>
 <canvas id="zones"></canvas>
-<canvas id="grid"></canvas>
+<canvas id="fixgrid"></canvas>
 <canvas id="trades"></canvas>
 <canvas id="ai"></canvas>
 <div id="ctrl">
-  <span class="lab">マス幅</span>
+  <span class="lab">マス</span>
   <button class="cbtn" id="cellDn">−</button>
-  <span id="cellVal" style="min-width:44px;text-align:center">$5</span>
   <button class="cbtn" id="cellUp">＋</button>
-  <span class="lab" style="margin-left:6px">位置</span>
-  <button class="cbtn" id="origUp">▲</button>
-  <button class="cbtn" id="origDn">▼</button>
-  <button class="cbtn" id="snap" title="タップで線合わせ">◎合わせ</button>
-  <button class="cbtn" id="fit" title="自動フィットに戻す">⤢</button>
-  <button class="cbtn on" id="aiBtn" title="AURELのエントリーをうっすら建玉表示">🤖AI建玉</button>
-  <button class="cbtn" id="tradesBtn" title="自分の過去トレードを重ねる">自分</button>
+  <button class="cbtn" id="fit" title="全体表示に戻す">⤢ 全体</button>
   <button class="cbtn on" id="zonesBtn" title="時間帯シェード(本物帯/ダマシ巣)">時間帯</button>
   <button class="cbtn" id="statsBtn" title="溜まり幅・壁までの余地">📊 情報</button>
-  <button class="cbtn" id="paperBtn" title="車線3 AURELの紙トレード集計">🤖 車線3</button>
-  <span class="lab" style="margin-left:6px">復習</span><span id="tradeChips"></span>
+  <button class="cbtn" id="paperBtn" title="車線3 AURELの紙トレード集計(材料)">🤖 車線3</button>
 </div>
 <div id="aipnl"></div>
 <div id="stats"></div>
@@ -90,10 +82,12 @@ function jstLabel(t, withDate){
 const chart = LWC.createChart(document.getElementById('chart'), {
   autoSize:true,
   layout:{ background:{color:'#0d1117'}, textColor:'#c9d1d9' },
-  grid:{ vertLines:{color:'#2b3440', style:LWC.LineStyle.Solid},
-         horzLines:{visible:false} },   // 横線は自前の可変マスグリッドで描く
+  grid:{ vertLines:{visible:false}, horzLines:{visible:false} },   // 標準格子はオフ→固定ピクセルのマスを別途描く
   crosshair:{ mode: LWC.CrosshairMode.Normal },
   rightPriceScale:{ borderColor:'#30363d' },
+  // MT5同様: 指ドラッグで縦横に動かす・ピンチ/ホイールでズーム・軸ドラッグでスケール
+  handleScroll:{ mouseWheel:true, pressedMouseMove:true, horzTouchDrag:true, vertTouchDrag:true },
+  handleScale:{ mouseWheel:true, pinch:true, axisPressedMouseMove:{time:true, price:true} },
   timeScale:{ borderColor:'#30363d', timeVisible:true, secondsVisible:false,
     rightOffset:6, barSpacing:9, minBarSpacing:2,
     tickMarkFormatter:(t)=>jstLabel(t,false) },
@@ -292,39 +286,27 @@ pollData();
 setInterval(pollData, 10000);     // フルは10秒ごと（壁の再計算・取りこぼし補正）
 setInterval(pollTick, 1000);      // 現在値は毎秒＝常に追ってる状態
 
-// ── 可変マス・グリッド（MT5風: 1マス=価格固定、原点を動かして先端合わせ）──
-const gridCanvas = document.getElementById('grid');
-const gctx = gridCanvas.getContext('2d');
 const DPR = Math.max(1, window.devicePixelRatio||1);
-const CELL_STEPS = [0.5,1,2,2.5,5,10,20,25,50];
-let cellIdx = CELL_STEPS.indexOf(5);
-let gridStep = CELL_STEPS[cellIdx];
-let gridOrigin = null;            // この価格を通る線を引き、±マス幅で格子（null=自動で下端の丸め）
-let snapMode = false;
 const chartEl = document.getElementById('chart');
 
-function drawGrid(){
-  const w = chartEl.clientWidth, h = chartEl.clientHeight;
-  if(gridCanvas.width!==Math.round(w*DPR)||gridCanvas.height!==Math.round(h*DPR)){
-    gridCanvas.width=Math.round(w*DPR); gridCanvas.height=Math.round(h*DPR);
+// ── 固定ピクセルのマス（MT5式）: マスは画面に固定＝何を動かしても動かない/大きさ不変。
+//    チャートを縦(価格軸ドラッグ)・横に伸縮させ、壁線をこの固定マスに合わせてマス数を数える。──
+const fixCanvas=document.getElementById('fixgrid'), fgctx=fixCanvas.getContext('2d');
+let cellPx=42;                       // マスの1辺(画面px・固定)。「マス −/＋」でだけ変わる
+function drawFixedGrid(){
+  const w=chartEl.clientWidth, h=chartEl.clientHeight;
+  if(fixCanvas.width!==Math.round(w*DPR)||fixCanvas.height!==Math.round(h*DPR)){
+    fixCanvas.width=Math.round(w*DPR); fixCanvas.height=Math.round(h*DPR);
   }
-  gctx.setTransform(DPR,0,0,DPR,0,0);
-  gctx.clearRect(0,0,w,h);
-  const pa = series.coordinateToPrice(0), pb = series.coordinateToPrice(h);
-  if(pa==null||pb==null) return;
-  const hi=Math.max(pa,pb), lo=Math.min(pa,pb);
-  if(gridOrigin==null) gridOrigin = Math.round(lo/gridStep)*gridStep;
-  let start = gridOrigin + Math.floor((lo-gridOrigin)/gridStep)*gridStep;
-  gctx.font='8px monospace'; gctx.textBaseline='bottom';
-  const dec = gridStep<1 ? 2 : 1;
-  for(let price=start; price<=hi+1e-9; price+=gridStep){
-    const y = series.priceToCoordinate(price);
-    if(y==null) continue;
-    gctx.strokeStyle='rgba(120,150,190,0.10)'; gctx.lineWidth=1;
-    gctx.beginPath(); gctx.moveTo(0,Math.round(y)+0.5); gctx.lineTo(w,Math.round(y)+0.5); gctx.stroke();
-    gctx.fillStyle='rgba(150,180,210,0.35)'; gctx.fillText(price.toFixed(dec), 2, y-1);
-  }
+  fgctx.setTransform(DPR,0,0,DPR,0,0); fgctx.clearRect(0,0,w,h);
+  fgctx.strokeStyle='rgba(140,160,190,0.15)'; fgctx.lineWidth=1;
+  for(let y=0;y<=h;y+=cellPx){ fgctx.beginPath(); fgctx.moveTo(0,Math.round(y)+0.5); fgctx.lineTo(w,Math.round(y)+0.5); fgctx.stroke(); }
+  for(let x=0;x<=w;x+=cellPx){ fgctx.beginPath(); fgctx.moveTo(Math.round(x)+0.5,0); fgctx.lineTo(Math.round(x)+0.5,h); fgctx.stroke(); }
 }
+document.getElementById('cellUp').onclick=()=>{ cellPx=Math.min(120,cellPx+6); drawFixedGrid(); };
+document.getElementById('cellDn').onclick=()=>{ cellPx=Math.max(16,cellPx-6); drawFixedGrid(); };
+drawFixedGrid();
+
 // ── A2: JST時間帯シェード（本物帯07-12=緑 / ダマシ巣00-05=赤）──
 const zonesCanvas = document.getElementById('zones');
 const zctx = zonesCanvas.getContext('2d');
@@ -390,9 +372,6 @@ function drawAiPosition(){
   tag(ySL,'SL '+p.sl.toFixed(2),'rgba(90,25,25,0.95)');
   tag(yE, (p.side==='BUY'?'買 ':'売 ')+p.entry.toFixed(2),'rgba(30,60,110,0.95)');
 }
-document.getElementById('aiBtn').onclick=(e)=>{ showPaper=!showPaper;
-  e.currentTarget.classList.toggle('on',showPaper); drawAiPosition(); updateAiPnl(); };
-
 // 建玉の見出し＋現在値での損益（毎秒更新）
 function updateAiPnl(){
   const el=document.getElementById('aipnl'); if(!el) return;
@@ -409,39 +388,16 @@ function updateAiPnl(){
     +' <span style="color:#8b949e;font-size:11px">'+(p.entry_jst||'')+' 壁'+(p.wall!=null?p.wall.toFixed(1):'-')+'</span>';
 }
 
-// オーバーレイは「表示範囲が変わった時」だけ再描画＝パンを重くしない
-function redrawOverlays(){ try{ drawZones(); drawGrid(); drawTrades(); drawAiPosition(); }catch(e){} }
+// オーバーレイ(時間帯/トレード/AI建玉)は「表示範囲が変わった時」だけ再描画＝パンを重くしない
+function redrawOverlays(){ try{ drawZones(); drawTrades(); drawAiPosition(); }catch(e){} }
 chart.timeScale().subscribeVisibleLogicalRangeChange(redrawOverlays);   // パン/ズームに追従
-window.addEventListener('resize', ()=>setTimeout(redrawOverlays,60));
+window.addEventListener('resize', ()=>setTimeout(()=>{ drawFixedGrid(); redrawOverlays(); },60));
 setInterval(redrawOverlays, 300);   // 保険(ライブ更新・トグル反映)。5fps未満＝軽い
 redrawOverlays();
 
-function setCell(){ document.getElementById('cellVal').textContent =
-  '$'+(gridStep<1 ? gridStep : gridStep.toString()); }
-document.getElementById('cellUp').onclick=()=>{ cellIdx=Math.min(CELL_STEPS.length-1,cellIdx+1);
-  gridStep=CELL_STEPS[cellIdx]; setCell(); };
-document.getElementById('cellDn').onclick=()=>{ cellIdx=Math.max(0,cellIdx-1);
-  gridStep=CELL_STEPS[cellIdx]; setCell(); };
-document.getElementById('origUp').onclick=()=>{ if(gridOrigin!=null) gridOrigin+=gridStep/20; };
-document.getElementById('origDn').onclick=()=>{ if(gridOrigin!=null) gridOrigin-=gridStep/20; };
-document.getElementById('fit').onclick=()=>{ gridOrigin=null;
+// 「全体」ボタン: 自動スケール＋全体表示に戻す
+document.getElementById('fit').onclick=()=>{
   chart.priceScale('right').applyOptions({autoScale:true}); chart.timeScale().fitContent(); };
-const snapBtn=document.getElementById('snap');
-snapBtn.onclick=()=>{ snapMode=!snapMode; snapBtn.classList.toggle('on',snapMode); };
-chart.subscribeClick((param)=>{
-  if(!snapMode) return;
-  let price=null;
-  // タップした位置のローソクの高値/安値のうち近い方に吸着＝先端にピタッと合う
-  if(param.time!=null && param.point){
-    const bar=nearestBar(param.time);
-    const clickP=series.coordinateToPrice(param.point.y);
-    if(bar && clickP!=null){
-      price = Math.abs(clickP-bar.high)<=Math.abs(clickP-bar.low) ? bar.high : bar.low;
-    }
-  }
-  if(price==null && param.point) price=series.coordinateToPrice(param.point.y);
-  if(price!=null){ gridOrigin=price; snapMode=false; snapBtn.classList.remove('on'); }
-});
 
 // ── A3: 自分の過去トレード重ね描き（台帳ledger→E/SL/TP/決済を地図に）──
 const tradesCanvas = document.getElementById('trades');
@@ -555,6 +511,4 @@ function drawTrades(){
   }
 }
 fetchTrades();
-document.getElementById('tradesBtn').onclick=(e)=>{ showTrades=!showTrades;
-  e.currentTarget.classList.toggle('on',showTrades); };
 </script></body></html>
