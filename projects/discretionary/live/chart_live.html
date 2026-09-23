@@ -41,11 +41,13 @@ function jstLabel(t, withDate){
 const chart = LWC.createChart(document.getElementById('chart'), {
   autoSize:true,
   layout:{ background:{color:'#0d1117'}, textColor:'#c9d1d9' },
-  grid:{ vertLines:{color:'#161b22'}, horzLines:{color:'#161b22'} },
+  grid:{ vertLines:{color:'#2b3440', style:LWC.LineStyle.Solid},
+         horzLines:{color:'#2b3440', style:LWC.LineStyle.Solid} },
   crosshair:{ mode: LWC.CrosshairMode.Normal },
   rightPriceScale:{ borderColor:'#30363d' },
   timeScale:{ borderColor:'#30363d', timeVisible:true, secondsVisible:false,
-    rightOffset:6, tickMarkFormatter:(t)=>jstLabel(t,false) },
+    rightOffset:6, barSpacing:9, minBarSpacing:2,
+    tickMarkFormatter:(t)=>jstLabel(t,false) },
   localization:{ timeFormatter:(t)=>jstLabel(t,true), priceFormatter:(p)=>p.toFixed(2) },
 });
 const series = chart.addCandlestickSeries({
@@ -55,14 +57,21 @@ const series = chart.addCandlestickSeries({
 });
 
 let lastTime = 0;         // 既知の最終バー時刻
-let priceLines = [];      // 壁/TP/SL/現在値の価格ライン
+let wallLines = [];       // 壁/TP/SL（10秒ごと更新）
+let curLine = null;       // 現在価格ライン（毎秒 applyOptions で追従）
 let firstLoad = true;
 
-function setLines(box, brk, nowPx){
-  for (const pl of priceLines) series.removePriceLine(pl);
-  priceLines = [];
+function setBadge(live){
+  const badge = document.getElementById('badge');
+  badge.textContent = live ? '● LIVE' : '○ 履歴';
+  badge.style.cssText = 'float:right;font-size:11px;padding:1px 8px;border-radius:10px;'+
+    (live?'background:#0f2b17;color:#56d364':'background:#2a2a2a;color:#999');
+}
+function setWallLines(box, brk){
+  for (const pl of wallLines) series.removePriceLine(pl);
+  wallLines = [];
   const add = (price,color,style,title)=>{ if(price==null) return;
-    priceLines.push(series.createPriceLine({ price, color, lineWidth:1,
+    wallLines.push(series.createPriceLine({ price, color, lineWidth:1,
       lineStyle:style, axisLabelVisible:true, title })); };
   if (box){
     add(box.up,'#e3c94a',LWC.LineStyle.Dashed,'上壁');
@@ -73,48 +82,53 @@ function setLines(box, brk, nowPx){
     add(brk.tp,'#56d364',LWC.LineStyle.Dashed,'TP');
     add(brk.sl,'#f85149',LWC.LineStyle.Dotted,'SL');
   }
-  if (nowPx!=null) add(nowPx,'#ffffff',LWC.LineStyle.Solid,'現在');
+}
+function setCurrent(nowPx){
+  if (nowPx==null) return;
+  if (curLine==null){
+    curLine = series.createPriceLine({ price:nowPx, color:'#ffffff',
+      lineWidth:1, lineStyle:LWC.LineStyle.Solid, axisLabelVisible:true, title:'現在' });
+  } else {
+    curLine.applyOptions({ price:nowPx });
+  }
 }
 
-async function poll(){
+// フル更新（バー全体＋壁）: 初回とその後10秒ごと
+async function pollData(){
   try{
     const r = await fetch('/api/data?n=1500', {cache:'no-store'});
     const d = await r.json();
     document.getElementById('err').textContent = '';
-    // バー反映（初回は全部、以降は最終バー以降だけ update＝パン/ズームを壊さない）
     const bars = d.bars || [];
-    if (firstLoad){
-      series.setData(bars);
-      chart.timeScale().fitContent();
-      firstLoad = false;
-    } else {
-      for (const b of bars){ if (b.time >= lastTime) series.update(b); }
-    }
+    if (firstLoad){ series.setData(bars); chart.timeScale().fitContent(); firstLoad=false; }
+    else { for (const b of bars){ if (b.time >= lastTime) series.update(b); } }
     if (bars.length) lastTime = bars[bars.length-1].time;
-
-    const tick = d.tick;
-    const nowPx = tick ? (tick.bid+tick.ask)/2 : null;
-    setLines(d.box, d.break, nowPx);
-
-    // ヘッダ
-    const badge = document.getElementById('badge');
-    const live = d.source==='live';
-    badge.textContent = live ? '● LIVE' : '○ 履歴';
-    badge.style.cssText = 'float:right;font-size:11px;padding:1px 8px;border-radius:10px;'+
-      (live?'background:#0f2b17;color:#56d364':'background:#2a2a2a;color:#999');
-    document.getElementById('px').textContent = tick
-      ? ('  '+((tick.bid+tick.ask)/2).toFixed(2)+'  (spread '+tick.spread_bps.toFixed(2)+'bps)')
-      : '';
+    setWallLines(d.box, d.break);
+    setBadge(d.source==='live');
     let wi = '';
     if (d.box) wi += ' ｜ 箱幅'+d.box.width.toFixed(1);
     if (d.break) wi += ' ｜ 直近ブレイク'+(d.break.dir==='UP'?'上':'下')+' 壁'+d.break.wall.toFixed(1)
       +'→TP'+d.break.tp.toFixed(1)+'/SL'+d.break.sl.toFixed(1);
     document.getElementById('wallinfo').textContent = wi;
-  }catch(e){
-    document.getElementById('err').textContent = '接続待ち… '+(e&&e.message?e.message:e);
-  }
+  }catch(e){ document.getElementById('err').textContent = '接続待ち… '+(e&&e.message?e.message:e); }
 }
-poll();
-setInterval(poll, 3000);          // 3秒ごとにライブ更新
-window.addEventListener('resize', ()=>{ /* チャートは自動リサイズ(fixed) */ });
+
+// 常時追従（軽量）: 毎秒 現在値＋形成中ローソクだけ更新（パン/ズームは壊さない）
+async function pollTick(){
+  try{
+    const r = await fetch('/api/tick', {cache:'no-store'});
+    const d = await r.json();
+    for (const b of (d.lastbars||[])){ if (b.time >= lastTime) series.update(b); }
+    if (d.lastbars && d.lastbars.length) lastTime = Math.max(lastTime, d.lastbars[d.lastbars.length-1].time);
+    const tick = d.tick, nowPx = tick ? (tick.bid+tick.ask)/2 : null;
+    setCurrent(nowPx);
+    setBadge(d.source==='live');
+    document.getElementById('px').textContent = tick
+      ? ('  '+nowPx.toFixed(2)+'  (spread '+tick.spread_bps.toFixed(2)+'bps)') : '';
+  }catch(e){ /* 毎秒なので一時失敗は無視（次の tick で復帰） */ }
+}
+
+pollData();
+setInterval(pollData, 10000);     // フルは10秒ごと（壁の再計算・取りこぼし補正）
+setInterval(pollTick, 1000);      // 現在値は毎秒＝常に追ってる状態
 </script></body></html>

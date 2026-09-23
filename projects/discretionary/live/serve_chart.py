@@ -14,6 +14,7 @@ import os
 import sys
 import json
 import time
+import threading
 import http.server
 import socketserver
 
@@ -27,7 +28,9 @@ PAGE = os.path.join(HERE, "chart_live.html")
 LIB = os.path.join(HERE, "lightweight-charts.js")
 
 # ── MT5接続をプロセス内で保持（都度 initialize/shutdown しない）──────────
+# MetaTrader5 API はスレッド安全でないため、全読取を1本のロックで直列化する。
 _MT5 = None
+_LOCK = threading.Lock()
 
 
 def _get_mt5():
@@ -45,24 +48,42 @@ def _get_mt5():
 
 
 def _live_df_tick(n):
-    """保持接続から M5(UTC index) と tick。失敗したら接続を破棄して例外。"""
+    """保持接続から M5(UTC index) と tick。失敗したら接続を破棄して例外。ロックで直列化。"""
     global _MT5
     import mt5_bridge
-    mt5 = _get_mt5()
-    if mt5 is None:
-        raise RuntimeError("no MT5")
-    try:
-        df = mt5_bridge.m5_bars(mt5, n)
-        tick = mt5_bridge.live_tick(mt5)
-    except Exception:
+    with _LOCK:
+        mt5 = _get_mt5()
+        if mt5 is None:
+            raise RuntimeError("no MT5")
         try:
-            mt5.shutdown()
+            df = mt5_bridge.m5_bars(mt5, n)
+            tick = mt5_bridge.live_tick(mt5)
         except Exception:
-            pass
-        _MT5 = None
-        raise
+            try:
+                mt5.shutdown()
+            except Exception:
+                pass
+            _MT5 = None
+            raise
     df = df.set_index("dt")
     return df[["open", "high", "low", "close"]], tick
+
+
+def build_tick():
+    """毎秒ポーリング用の軽量データ: 現在tick + 直近数本(形成中ローソクの成長を反映)。壁計算はしない。"""
+    import pandas as pd
+    try:
+        m5, tick = _live_df_tick(3)
+    except Exception:
+        return {"source": "hist", "ts": int(time.time()), "tick": None, "lastbars": []}
+    idx = m5.index
+    lastbars = [{"time": int(pd.Timestamp(idx[k]).timestamp()),
+                 "open": round(float(m5["open"].iloc[k]), 3),
+                 "high": round(float(m5["high"].iloc[k]), 3),
+                 "low": round(float(m5["low"].iloc[k]), 3),
+                 "close": round(float(m5["close"].iloc[k]), 3)}
+                for k in range(len(m5))]
+    return {"source": "live", "ts": int(time.time()), "tick": tick, "lastbars": lastbars}
 
 
 def build_data(n=1500):
@@ -127,6 +148,8 @@ class H(http.server.BaseHTTPRequestHandler):
                 n = max(50, min(5000, n))
                 data = build_data(n)
                 self._send(200, json.dumps(data, ensure_ascii=False), "application/json; charset=utf-8")
+            elif p == "/api/tick":
+                self._send(200, json.dumps(build_tick(), ensure_ascii=False), "application/json; charset=utf-8")
             else:
                 self._send(404, "not found", "text/plain; charset=utf-8")
         except Exception as e:
@@ -136,9 +159,14 @@ class H(http.server.BaseHTTPRequestHandler):
         pass
 
 
+class Threaded(socketserver.ThreadingMixIn, http.server.HTTPServer):
+    daemon_threads = True
+    allow_reuse_address = False   # Windowsの二重バインド回避（2つ目は明確に失敗させる）
+
+
 if __name__ == "__main__":
-    # allow_reuse_address は Windows では同一ポート二重バインドを許してしまい配信が不安定に
-    # なるため使わない（二重起動時は2つ目が明確に失敗して気づける）。
-    with socketserver.TCPServer((HOST, PORT), H) as srv:
-        print("壁→壁 ライブチャート on http://%s:%d/ (API: /api/data?n=1500)" % (HOST, PORT))
-        srv.serve_forever()
+    # 毎秒ティックと重いフル取得(1500本)が並行して来ても詰まらないようスレッド化。
+    # MT5読取は _LOCK で直列化しているのでAPI非スレッド安全でも安全。
+    srv = Threaded((HOST, PORT), H)
+    print("壁→壁 ライブチャート on http://%s:%d/ (/api/data?n=1500, /api/tick)" % (HOST, PORT))
+    srv.serve_forever()
