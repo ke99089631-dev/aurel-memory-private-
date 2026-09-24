@@ -94,46 +94,27 @@ def build_tick():
     return {"source": "live", "ts": int(time.time()), "tick": tick, "lastbars": lastbars}
 
 
-_PAPER_V3_FILE = os.path.join(HERE, "paper_ledger_v3.jsonl")
-_AI_MAX_HOLD_S = 288 * 300   # backtest_v3 の MAX_HOLD(288本) 秒換算
-
-
 def latest_ai_position(tick):
-    """AURELの直近の建玉(車線3 v3a の最新TAKE)を、今の価格で追跡して返す。
-       現在値がSL/TP未達かつ保有時間内なら open(=ライブ追跡), それ以外は closed。"""
-    last = None
+    """AURELの現在の建玉（setup_ledger の status=open）を今の価格で追跡して返す。無ければ None。"""
     try:
-        for line in open(_PAPER_V3_FILE, encoding="utf-8"):
-            line = line.strip()
-            if not line:
-                continue
-            r = json.loads(line)
-            if r.get("decision") == "TAKE":
-                last = r
+        recs = _load_setups()
     except Exception:
         return None
-    if not last:
+    opens = [r for r in recs if r.get("status") == "open" and r.get("entry") is not None]
+    if not opens:
         return None
+    last = opens[-1]
     entry = last["entry"]; sl = last["sl"]; tp = last["tp"]; side = last["side"]
     risk = abs(entry - sl) or 1e-9
     price = ((tick["bid"] + tick["ask"]) / 2.0) if tick else entry
-    if side == "SELL":
-        live_r = (entry - price) / risk
-        hit_sl = price >= sl; hit_tp = price <= tp
-    else:
-        live_r = (price - entry) / risk
-        hit_sl = price <= sl; hit_tp = price >= tp
-    now = int(time.time())
-    within = (now - int(last["entry_time"])) < _AI_MAX_HOLD_S
-    is_open = (not hit_sl) and (not hit_tp) and within
+    live_r = ((entry - price) if side == "SELL" else (price - entry)) / risk
     return {
         "id": last.get("id"), "side": side, "entry": entry, "sl": sl, "tp": tp,
         "entry_time": int(last["entry_time"]), "entry_jst": last.get("entry_jst"),
-        "wall": last.get("wall"), "width": last.get("width"),
-        "score": last.get("score"), "real_rate": last.get("real_rate"),
-        "reason": last.get("skip_reason") or "",
-        "open": bool(is_open), "live_r": round(live_r, 2),
-        "recorded_exit": last.get("exit"), "recorded_reason": last.get("exit_reason"),
+        "wall": last.get("wall"), "width": last.get("pool"),
+        "real_rate": (last.get("pred") or {}).get("p_real"),
+        "reason": (last.get("pred") or {}).get("reason", ""),
+        "open": True, "live_r": round(live_r, 2),
     }
 
 
@@ -272,6 +253,9 @@ def build_trades():
                     "exit": r.get("exit"), "entry_time": _jst_epoch(r.get("ts")),
                     "exit_time": None, "post": r.get("post") or "",
                     "wall": r.get("wall") or "",
+                    # 会長の眼（カード v1 の主観タグ）＝収束ループの入力
+                    "feel": r.get("feel") or "", "env": r.get("env") or "",
+                    "pre": bool(r.get("pre")), "tags": _card_tags(r.get("note") or ""),
                 }
                 order.append(tid)
             elif k == "update":
@@ -286,7 +270,124 @@ def build_trades():
                     t["tp"] = r.get("tp")
                 if r.get("post"):
                     t["post"] = r.get("post")
+                more = _card_tags(r.get("note") or "")
+                if more:
+                    t["tags"].update(more)
     return {"trades": [trades[t] for t in order]}
+
+
+def _card_tags(note):
+    """note 内の固定フォーマット「質=… / 種別=… / 余地=…」を拾う（無ければ空）。"""
+    import re
+    tags = {}
+    for key in ("質", "種別", "余地", "感触", "環境"):
+        m = re.search(key + r"\s*[=＝]\s*([^/／\n]+)", note)
+        if m:
+            tags[key] = m.group(1).strip()
+    return tags
+
+
+# ── 収束ループ: AURELのセットアップ記録（setup_engine.py が書く台帳）──
+SETUP_LEDGER = os.path.join(HERE, "setup_ledger.jsonl")
+
+
+def _load_setups():
+    """setup_ledger.jsonl を統合（setup + update）して時系列で返す。"""
+    recs, order = {}, []
+    if not os.path.exists(SETUP_LEDGER):
+        return []
+    for line in open(SETUP_LEDGER, encoding="utf-8"):
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            r = json.loads(line)
+        except Exception:
+            continue
+        if r.get("kind") == "setup":
+            recs[r["id"]] = r; order.append(r["id"])
+        elif r.get("kind") == "update":
+            t = recs.get(r.get("target"))
+            if t:
+                for k, v in r.items():
+                    if k not in ("kind", "target", "logged_at"):
+                        t[k] = v
+    return [recs[i] for i in order]
+
+
+def _confidence(n):
+    if n < 30:
+        return "低（サンプル不足・手順固定は30本）"
+    if n < 100:
+        return "中（優位性判定は+0.2Rなら約100本）"
+    return "高"
+
+
+def build_setups(tick=None):
+    """AIのセットアップ一覧＋会長トレードの自動紐付け＋予測vs実測の較正。"""
+    recs = _load_setups()
+    trades = build_trades()["trades"]
+    price = ((tick["bid"] + tick["ask"]) / 2.0) if tick else None
+    # 会長の実トレードを近いセットアップに紐付け（同方向・時間差≤4h・壁の近く）
+    for t in trades:
+        if t.get("entry_time") is None or t.get("entry") is None:
+            continue
+        best, bd = None, 1e18
+        for s in recs:
+            if s.get("side") != t.get("side"):
+                continue
+            dtm = t["entry_time"] - s["break_time"]
+            if dtm < -3600 or dtm > 4 * 3600:
+                continue
+            if abs(t["entry"] - s["wall"]) > max(1.5 * s.get("pool", 0), 10.0):
+                continue
+            if abs(dtm) < bd:
+                best, bd = s, abs(dtm)
+        if best is not None:
+            best["chairman"] = {"id": t["id"], "feel": t.get("feel"), "env": t.get("env"),
+                                "post": t.get("post"), "pre": t.get("pre"), "tags": t.get("tags", {}),
+                                "entry": t.get("entry"), "sl": t.get("sl"), "tp": t.get("tp"),
+                                "exit": t.get("exit")}
+    # ライブR（建玉中）
+    for s in recs:
+        if s.get("status") == "open" and price is not None and s.get("entry") is not None:
+            risk = abs(s["entry"] - s["sl"]) or 1e-9
+            s["live_r"] = round(((s["entry"] - price) if s["side"] == "SELL" else (price - s["entry"])) / risk, 2)
+
+    closed = [s for s in recs if s.get("status") == "closed"]
+    n = len(closed)
+
+    def grp(rs):
+        if not rs:
+            return {"n": 0}
+        tp = sum(1 for r in rs if r.get("exit_reason") == "TP")
+        preds = [r["pred"]["p_real"] for r in rs if (r.get("pred") or {}).get("p_real") is not None]
+        return {"n": len(rs), "tp_rate": round(100.0 * tp / len(rs), 1),
+                "avg_r": round(sum(r.get("R", 0) for r in rs) / len(rs), 3),
+                "pred_rate": round(sum(preds) / len(preds), 1) if preds else None,
+                "avg_mfe": round(sum(r.get("mfe_R", 0) for r in rs) / len(rs), 2)}
+
+    chase = [r["chase"] for r in recs if (r.get("chase") or {}).get("status") == "closed"]
+    linked = [s for s in recs if s.get("chairman")]
+    agree = 0
+    for s in linked:
+        post = (s["chairman"].get("post") or "")
+        if s.get("outcome") and post:
+            if (post == "ダマシ" and s["outcome"] == "ダマシ") or (post != "ダマシ" and s["outcome"] != "ダマシ"):
+                agree += 1
+    summary = {
+        "n_setups": len(recs), "n_closed": n,
+        "status": {k: sum(1 for r in recs if r.get("status") == k)
+                   for k in ("open", "closed", "waiting", "no_retest", "invalid")},
+        "all": grp(closed),
+        "outer": grp([r for r in closed if r.get("wall_kind") == "outer"]),
+        "mid": grp([r for r in closed if r.get("wall_kind") == "mid"]),
+        "by_zone": {z: grp([r for r in closed if r.get("zone") == z]) for z in ("本物帯", "中立", "ダマシ巣")},
+        "chase": grp(chase),
+        "linked": len(linked), "agree": agree,
+        "confidence": _confidence(n),
+    }
+    return {"setups": recs[-120:], "summary": summary}
 
 
 PAPER_LEDGER = os.path.join(HERE, "paper_ledger.jsonl")
@@ -436,6 +537,13 @@ class H(http.server.BaseHTTPRequestHandler):
                 self._send(200, json.dumps(build_paper(), ensure_ascii=False), "application/json; charset=utf-8")
             elif p == "/api/paperv3":
                 self._send(200, json.dumps(build_paper_v3(), ensure_ascii=False), "application/json; charset=utf-8")
+            elif p == "/api/setups":
+                tick = None
+                try:
+                    tick = build_tick().get("tick")
+                except Exception:
+                    tick = None
+                self._send(200, json.dumps(build_setups(tick), ensure_ascii=False), "application/json; charset=utf-8")
             elif p == "/api/lines":
                 self._send(200, json.dumps(load_lines(), ensure_ascii=False), "application/json; charset=utf-8")
             else:
