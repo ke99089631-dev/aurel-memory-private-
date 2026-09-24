@@ -121,6 +121,7 @@ let allBars = [];         // 直近バー配列（トレード時刻のバー吸
 let wallLines = [];       // 壁/TP/SL（10秒ごと更新）
 let statsOn = false, lastBox = null, lastBreak = null, curPx = null;  // B2/B3 情報パネル用
 let lastDamashi = null;   // C1 ダマシ確率メーター（時間帯本物率）
+let tradeStats = null;    // D1 会長の現状成績（/api/stats・台帳の集計）
 let curLine = null;       // 現在価格ライン（毎秒 applyOptions で追従）
 let firstLoad = true;
 
@@ -230,6 +231,28 @@ function updateStats(){
       +'<br><span style="color:'+col+';letter-spacing:-1px">'+bar+'</span>'
       +(rr<=base-3?' <span style="color:#f85149">ダマシ多め</span>':'')
       +(rr>=base+3?' <span style="color:#56d364">本物寄り</span>':'');
+  }
+  // D1 会長の現状成績（台帳・実弾のみ。数字は検証室 aurel_trade_room.stats と同一＝チャットの『成績:』行と揃う）
+  const ts=tradeStats;
+  if(ts){
+    const fR=v=>v==null?'-':(v>=0?'+':'')+Number(v).toFixed(2)+'R';
+    const n=ts.trades, c=ts.closed, o=ts.open;
+    h+='<hr style="border:0;border-top:1px solid #30363d;margin:5px 0">';
+    h+='<b>📒 会長の成績</b> <span style="color:#8b949e">実弾・台帳 n'+n+'（確定'+c+(o?'／建玉中'+o:'')+'）</span><br>';
+    if(c){
+      const sumCol=ts.sumR>=0?'#56d364':'#f85149';
+      h+=ts.wins+'勝'+ts.losses+'敗 勝率<b>'+Number(ts.winrate).toFixed(0)+'%</b> ・ 合計<b style="color:'+sumCol+'">'+fR(ts.sumR)+'</b>'
+        +' ・ 平均'+fR(ts.avgR)+' ・ 最大DD'+Number(ts.maxDD_R).toFixed(1)+'R<br>';
+      h+='<span style="color:#8b949e">直近:</span> '+(ts.recent||[]).map(t=>{
+          const col=t.R==null?'#8b949e':(t.R>0?'#56d364':'#f85149');
+          return '<span style="color:'+col+'">●</span>'+t.id.replace(/^T-0+/,'T')+(t.R==null?'(建玉中)':'('+fR(t.R)+')'); }).join(' ')+'<br>';
+    } else { h+='確定トレードなし<br>'; }
+    const fixN=30, seg=Math.round(Math.min(fixN,c)/fixN*10);
+    h+='<span style="color:#8b949e">手順固定まで '+c+'/'+fixN+' </span>'
+      +'<span style="color:#e3c94a;letter-spacing:-1px">'+'█'.repeat(seg)+'</span>'
+      +'<span style="color:#30363d;letter-spacing:-1px">'+'█'.repeat(10-seg)+'</span>'
+      +' <span style="color:#8b949e">事前'+ts.pre+'/事後'+ts.post_only+'</span>'
+      +(c<fixN?' <span style="color:#f0a35e">サンプル不足</span>':' <span style="color:#56d364">30本到達</span>');
   }
   el.innerHTML=h; el.style.display='block';
   const x=document.getElementById('stX'); if(x) x.onclick=()=>{ statsOn=false;
@@ -579,6 +602,13 @@ async function fetchTrades(){
   try{ const r=await fetch('/api/trades',{cache:'no-store'}); const d=await r.json();
        tradesData=d.trades||[]; renderChips(); }catch(e){}
 }
+// D1 会長の現状成績: 台帳が携帯フォームから追記されるので 60秒ごとに取り直す（情報パネルに表示）
+async function fetchStats(){
+  try{ const r=await fetch('/api/stats',{cache:'no-store'}); const d=await r.json();
+       if(d.ok){ tradeStats=d.stats; if(statsOn) updateStats(); } }catch(e){}
+}
+setInterval(()=>{ fetchStats(); fetchTrades(); }, 60000);
+fetchStats();
 function drawTrades(){
   const w=chartEl.clientWidth, h=chartEl.clientHeight;
   fitCanvas(tradesCanvas,w,h);

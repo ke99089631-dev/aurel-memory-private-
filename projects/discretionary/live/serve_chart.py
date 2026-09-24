@@ -276,6 +276,36 @@ def build_trades():
     return {"trades": [trades[t] for t in order]}
 
 
+PHONE_DIR = r"C:\Users\user\.aurel\phone"
+
+
+def build_stats():
+    """会長の現状成績（台帳の集計）。計算は検証室(aurel_trade_room.stats)をそのまま使う＝チャットの『成績:』行と同じ数字。
+       閾値(30本/100本)や除外規則(未執行)を二重に持たない。"""
+    try:
+        if PHONE_DIR not in sys.path:
+            sys.path.insert(0, PHONE_DIR)
+        import importlib
+        import aurel_trade_room as tr
+        importlib.reload(tr)                       # 検証室側の修正を再起動なしで拾う
+        recs = tr.load_records()
+        trades = tr.effective(recs)
+        st = tr.stats(trades)
+        # 成績に数えるカード＝stats と同じ除外（未執行は落とす）
+        counted = [t for t in trades if not str(t.get("post") or "").startswith("未執行")]
+        recent = []
+        for t in counted:
+            recent.append({"id": t["id"], "side": t.get("side"), "R": t.get("R"),
+                           "post": t.get("post") or "", "pre": bool(t.get("pre")),
+                           "ts": (t.get("ts") or "")[5:16].replace("T", " ")})
+        st["recent"] = recent[-8:]
+        st["open_ids"] = [t["id"] for t in counted if t.get("R") is None]
+        st["losses"] = st["closed"] - st["wins"]
+        return {"ok": True, "stats": st, "ledger_mtime": os.path.getmtime(LEDGER) if os.path.exists(LEDGER) else None}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+
 def _card_tags(note):
     """note 内の固定フォーマット「質=… / 種別=… / 余地=…」を拾う（無ければ空）。"""
     import re
@@ -534,6 +564,8 @@ class H(http.server.BaseHTTPRequestHandler):
                 self._send(200, json.dumps(build_tick(), ensure_ascii=False), "application/json; charset=utf-8")
             elif p == "/api/trades":
                 self._send(200, json.dumps(build_trades(), ensure_ascii=False), "application/json; charset=utf-8")
+            elif p == "/api/stats":
+                self._send(200, json.dumps(build_stats(), ensure_ascii=False), "application/json; charset=utf-8")
             elif p == "/api/paper":
                 self._send(200, json.dumps(build_paper(), ensure_ascii=False), "application/json; charset=utf-8")
             elif p == "/api/paperv3":
