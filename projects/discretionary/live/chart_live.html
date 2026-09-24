@@ -275,9 +275,11 @@ function updatePaper(){
         h+='　'+t.id+' '+(t.side==='BUY'?'買':'売')+(t.wall_kind==='mid'?'(青)':'(黄)')
           +' <span style="color:'+c+'">'+res+'</span> <span style="color:#8b949e">'+(t.entry_jst||t.break_jst||'')
           +(t.chairman?' ⇔ '+t.chairman.id:'')+'</span><br>'; } }
-    h+='<span style="color:#8b949e;font-size:11px">※gross・スプレッド未控除。TP=溜まり幅1個(壁↔中間)、SL=壁の内側。</span>';
+    h+='<span style="color:#8b949e;font-size:11px">※gross・スプレッド未控除。TP=溜まり幅1個(壁↔中間)、SL=壁の内側。</span><br>';
+    h+='<button class="cbtn'+(showAiHistory?' on':'')+'" id="aiHistBtn" style="margin-top:4px">過去のAI建玉もチャートに描く</button>';
   }
   el.innerHTML=h;
+  const hb=document.getElementById('aiHistBtn'); if(hb) hb.onclick=()=>{ showAiHistory=!showAiHistory; drawSetups(); updatePaper(); };
   const x=document.getElementById('pX'); if(x) x.onclick=()=>{ paperOn=false; el.style.display='none';
     document.getElementById('paperBtn').classList.remove('on'); };
 }
@@ -297,9 +299,7 @@ const fixCanvas=document.getElementById('fixgrid'), fgctx=fixCanvas.getContext('
 let cellPx=42;                       // マスの1辺(画面px・固定)。「マス −/＋」でだけ変わる
 function drawFixedGrid(){
   const w=chartEl.clientWidth, h=chartEl.clientHeight;
-  if(fixCanvas.width!==Math.round(w*DPR)||fixCanvas.height!==Math.round(h*DPR)){
-    fixCanvas.width=Math.round(w*DPR); fixCanvas.height=Math.round(h*DPR);
-  }
+  fitCanvas(fixCanvas,w,h);
   fgctx.setTransform(DPR,0,0,DPR,0,0); fgctx.clearRect(0,0,w,h);
   fgctx.strokeStyle='rgba(140,160,190,0.15)'; fgctx.lineWidth=1;
   for(let y=0;y<=h;y+=cellPx){ fgctx.beginPath(); fgctx.moveTo(0,Math.round(y)+0.5); fgctx.lineTo(w,Math.round(y)+0.5); fgctx.stroke(); }
@@ -317,9 +317,7 @@ function zoneOf(t){ const jh=Math.floor(((t+JST)%86400)/3600);
   if(jh>=7&&jh<12) return 'real'; if(jh>=0&&jh<5) return 'trap'; return null; }
 function drawZones(){
   const w=chartEl.clientWidth, h=chartEl.clientHeight;
-  if(zonesCanvas.width!==Math.round(w*DPR)||zonesCanvas.height!==Math.round(h*DPR)){
-    zonesCanvas.width=Math.round(w*DPR); zonesCanvas.height=Math.round(h*DPR);
-  }
+  fitCanvas(zonesCanvas,w,h);
   zctx.setTransform(DPR,0,0,DPR,0,0); zctx.clearRect(0,0,w,h);
   if(!showZones||!allBars.length) return;
   const tsc=chart.timeScale(); const sp=(tsc.options().barSpacing||8);
@@ -346,11 +344,18 @@ document.getElementById('zonesBtn').onclick=(e)=>{ showZones=!showZones;
 // ── AURELの建玉を MT5式に重ねる: 建値線＋SL赤帯＋TP緑帯を「入った所から出た所まで」だけ、薄く。建玉中は濃く。──
 const aiCanvas=document.getElementById('ai'), aictx=aiCanvas.getContext('2d');
 let aiPos=null;              // /api/data の ai_pos（建玉中の見出し用）
+// ★キャンバスの実サイズ(=DPR倍)とCSS表示サイズを必ず一致させる。
+//   これが無いとスマホ(DPR=3)で描画が3倍に引き伸ばされ「文字が巨大・位置がズレて自由に動く」ように見える。
+function fitCanvas(cv,w,h){
+  const W=Math.round(w*DPR), H=Math.round(h*DPR);
+  if(cv.width!==W||cv.height!==H){ cv.width=W; cv.height=H; }
+  if(cv.style.width!==w+'px'){ cv.style.width=w+'px'; }
+  if(cv.style.height!==h+'px'){ cv.style.height=h+'px'; }
+}
+let showAiHistory=false;     // 既定: チャートには「今のAI建玉」だけ。過去は🤖AIパネルの一覧で見る
 function drawSetups(){
   const w=chartEl.clientWidth, h=chartEl.clientHeight;
-  if(aiCanvas.width!==Math.round(w*DPR)||aiCanvas.height!==Math.round(h*DPR)){
-    aiCanvas.width=Math.round(w*DPR); aiCanvas.height=Math.round(h*DPR);
-  }
+  fitCanvas(aiCanvas,w,h);
   aictx.setTransform(DPR,0,0,DPR,0,0); aictx.clearRect(0,0,w,h);
   if(!showPaper||!setups.length||!allBars.length) return;
   const tsc=chart.timeScale();
@@ -359,6 +364,7 @@ function drawSetups(){
   const tTo   = lr ? (allBars[Math.min(allBars.length-1,Math.ceil(lr.to))]||allBars[allBars.length-1]).time + 300 : 1e12;
   for(const s of setups){
     if(!(s.status==='open'||s.status==='closed') || s.entry==null || s.entry_time==null) continue;
+    if(!showAiHistory && s.status!=='open') continue;              // 過去の建玉は既定で描かない（引き算）
     const et=nearestBarTime(s.entry_time); if(et==null) continue;
     const xt = s.exit_time!=null ? nearestBarTime(s.exit_time) : null;
     const endT = xt!=null ? xt : allBars[allBars.length-1].time;
@@ -575,9 +581,7 @@ async function fetchTrades(){
 }
 function drawTrades(){
   const w=chartEl.clientWidth, h=chartEl.clientHeight;
-  if(tradesCanvas.width!==Math.round(w*DPR)||tradesCanvas.height!==Math.round(h*DPR)){
-    tradesCanvas.width=Math.round(w*DPR); tradesCanvas.height=Math.round(h*DPR);
-  }
+  fitCanvas(tradesCanvas,w,h);
   tctx.setTransform(DPR,0,0,DPR,0,0);
   tctx.clearRect(0,0,w,h);
   if(!showTrades) return;
