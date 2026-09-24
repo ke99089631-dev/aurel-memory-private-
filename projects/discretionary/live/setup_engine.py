@@ -26,7 +26,9 @@ import wallbox
 from wallbox import pool_width, SL_PAD_FR
 
 API = "http://100.73.107.61:8793/api/data?n=2000"   # サーバは Tailscale IP のみ bind
+TICK_API = "http://100.73.107.61:8793/api/tick"
 LEDGER = os.path.join(HERE, "setup_ledger.jsonl")
+SPREAD_LOG = os.path.join(HERE, "spread_log.jsonl")   # 2分ごとの実測スプレッド(JST時間帯別の中央値→AI成績のコスト控除に使う)
 DAMASHI_FILE = os.path.join(HERE, "damashi_hour_jst.json")
 INTERVAL = 120          # 2分ごと（M5の確定足を拾う）
 RETRACE_BARS = 12       # 戻り目を待つ本数（1時間）
@@ -42,6 +44,33 @@ def _load_damashi():
             return json.load(f)
     except Exception:
         return {}
+
+
+def _fetch_tick():
+    """現在ティック(bid/ask/spread_pt)。取れなければ None（成績のコスト控除は仮値にフォールバック）。"""
+    try:
+        with urllib.request.urlopen(TICK_API, timeout=10) as r:
+            d = json.loads(r.read().decode("utf-8"))
+        t = d.get("tick") or {}
+        if t.get("spread_pt") is None:
+            return None
+        return t
+    except Exception:
+        return None
+
+
+def _log_spread(tick):
+    """実測スプレッドを1行追記（ts, JST時, spread_pt）。会長の『スプレッドも合わせる』(2026-09-25)のための素材。"""
+    if not tick:
+        return
+    try:
+        now = dt.datetime.now(dt.timezone.utc)
+        jh = (now.hour + 9) % 24
+        with open(SPREAD_LOG, "a", encoding="utf-8") as f:
+            f.write(json.dumps({"ts": int(now.timestamp()), "jst_hour": jh,
+                                "spread_pt": float(tick["spread_pt"]), "bid": tick.get("bid")}) + "\n")
+    except Exception:
+        pass
 
 
 def _fetch_bars():
@@ -298,7 +327,7 @@ def load_state():
 
 
 UPDATE_FIELDS = ("status", "entry", "entry_time", "entry_jst", "exit", "exit_time", "exit_reason",
-                 "R", "mfe_R", "mae_R", "hold_bars", "outcome", "chase", "features")
+                 "R", "mfe_R", "mae_R", "hold_bars", "outcome", "chase", "features", "spread_pt")
 
 
 def sync_once():
@@ -323,11 +352,16 @@ def sync_once():
         start_t = max(ends)
     max_bt = max((int(r["break_time"]) for r in recs.values()), default=-1)
     setups = scan(m5, dm, start_t)
+    tick = _fetch_tick()
+    _log_spread(tick)
     added = updated = 0
     now = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open(LEDGER, "a", encoding="utf-8") as f:
         for s in setups:
             k = _key(s)
+            # 建玉を持った瞬間の実測スプレッドを記録に残す（成績のコスト控除＝実測優先・無ければ時間帯中央値/仮値）
+            if s.get("status") == "open" and tick and "spread_pt" not in s:
+                s["spread_pt"] = float(tick["spread_pt"])
             if k not in by_key:
                 if int(s["break_time"]) <= max_bt:
                     continue                       # 既存より古い「新規」は窓ズレの産物＝採らない

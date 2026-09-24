@@ -1,0 +1,9 @@
+{
+  "_doc": "AI(紙)の成績を会長の実弾と同じ土俵にするためのコスト。AIの建値/決済はbid足のmid想定なので、往復で spread 1回分 + 手数料 を引く。単位=価格pt(0.01lot なら 1pt=1USD)。",
+  "commission_pt": 0.06,
+  "commission_note": "会長の実約定 0.01lot 往復手数料 0.06USD (T-0004/T-0005 の MT5 明細より)",
+  "spread_pt_default": 0.25,
+  "spread_note": "実測が無い時間帯の仮値。2026-09-25 08:30 JST 実測 0.15-0.16pt。spread_log.jsonl が貯まれば JST 時間帯ごとの中央値(n>=20)に自動で置き換わる。",
+  "slippage_pt": 0.0,
+  "slippage_note": "未モデル。会長の Sell Stop は T-0002 で 5.85pt 滑った実績あり。AIは戻り目の次足始値で入る想定なので今は 0。"
+}

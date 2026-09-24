@@ -327,20 +327,84 @@ def _r_stats(rs):
             "recent": [{"id": r["id"], "R": r["R"]} for r in rs[-8:]]}
 
 
+COST_FILE = os.path.join(HERE, "cost_model.json")
+SPREAD_LOG = os.path.join(HERE, "spread_log.jsonl")
+
+
+def _cost_model():
+    """コスト前提(cost_model.json) ＋ 実測スプレッドのJST時間帯別中央値(spread_log.jsonl・n>=20の時間帯だけ)。"""
+    cm = {"commission_pt": 0.06, "spread_pt_default": 0.25, "slippage_pt": 0.0}
+    try:
+        with open(COST_FILE, encoding="utf-8") as f:
+            cm.update({k: v for k, v in json.load(f).items() if not k.startswith("_") and not k.endswith("_note")})
+    except Exception:
+        pass
+    by_hour = {}
+    try:
+        for line in open(SPREAD_LOG, encoding="utf-8"):
+            try:
+                r = json.loads(line)
+                by_hour.setdefault(int(r["jst_hour"]), []).append(float(r["spread_pt"]))
+            except Exception:
+                continue
+    except Exception:
+        pass
+    med = {}
+    for h, xs in by_hour.items():
+        if len(xs) >= 20:
+            xs = sorted(xs)
+            med[h] = round(xs[len(xs) // 2], 3)
+    cm["spread_by_hour"] = med
+    cm["spread_samples"] = sum(len(v) for v in by_hour.values())
+    return cm
+
+
+def _net_R(r, cm):
+    """AI記録1本の正味R。コスト(pt)=実測spread(建玉時) or 時間帯中央値 or 仮値 ＋ 手数料 ＋ 滑り。R換算=コスト/リスク幅。"""
+    risk = abs(float(r["entry"]) - float(r["sl"])) if r.get("entry") is not None and r.get("sl") is not None else None
+    if not risk:
+        return float(r["R"]), None, "n/a"
+    if r.get("spread_pt") is not None:
+        sp, src = float(r["spread_pt"]), "実測"
+    else:
+        jh = r.get("jst_hour")
+        try:
+            jh = int(((int(r["entry_time"]) // 3600) + 9) % 24) if r.get("entry_time") else int(jh)
+        except Exception:
+            jh = None
+        if jh is not None and jh in cm["spread_by_hour"]:
+            sp, src = cm["spread_by_hour"][jh], "時間帯中央値"
+        else:
+            sp, src = float(cm["spread_pt_default"]), "仮値"
+    cost = sp + float(cm["commission_pt"]) + float(cm.get("slippage_pt") or 0.0)
+    return round(float(r["R"]) - cost / risk, 3), round(cost, 3), src
+
+
 def build_ai_stats(since_epoch=None):
-    """AI(setup_engine・戻り目エントリー)の成績を会長と同じ物差しで。gross=スプレッド未控除。
+    """AI(setup_engine・戻り目エントリー)の成績を会長と同じ物差しで。
+       net=スプレッド＋手数料を控除（会長『スプレッドも合わせる』2026-09-25）／gross=控除前も併記。
        all=全期間 / same=会長の最初の実弾以降（同期間比較用）。open=建玉中の件数。"""
     recs = _load_setups()
+    cm = _cost_model()
     closed = sorted([r for r in recs if r.get("status") == "closed" and r.get("R") is not None],
                     key=lambda r: int(r.get("exit_time") or r.get("break_time") or 0))
-    rows = [{"id": r["id"], "R": float(r["R"])} for r in closed]
-    out = {"all": _r_stats(rows), "gross": True,
-           "open": sum(1 for r in recs if r.get("status") == "open"),
-           "n_setups": len(recs)}
+    rows_net, rows_gross, src_count, costs = [], [], {}, []
+    for r in closed:
+        rn, cost, src = _net_R(r, cm)
+        rows_net.append({"id": r["id"], "R": rn, "bt": int(r.get("break_time") or 0)})
+        rows_gross.append({"id": r["id"], "R": float(r["R"]), "bt": int(r.get("break_time") or 0)})
+        src_count[src] = src_count.get(src, 0) + 1
+        if cost is not None:
+            costs.append(cost)
+    out = {"all": _r_stats(rows_net), "all_gross": _r_stats(rows_gross),
+           "open": sum(1 for r in recs if r.get("status") == "open"), "n_setups": len(recs),
+           "cost": {"commission_pt": cm["commission_pt"], "spread_default_pt": cm["spread_pt_default"],
+                    "spread_by_hour": cm["spread_by_hour"], "spread_samples": cm["spread_samples"],
+                    "avg_cost_pt": round(sum(costs) / len(costs), 3) if costs else None,
+                    "sources": src_count}}
     if since_epoch:
-        same = [{"id": r["id"], "R": float(r["R"])} for r in closed
-                if int(r.get("break_time") or 0) >= since_epoch]
-        out["same"] = _r_stats(same)
+        out["same"] = _r_stats([x for x in rows_net if x["bt"] >= since_epoch])
+        out["same_gross"] = _r_stats([x for x in rows_gross if x["bt"] >= since_epoch])
     return out
 
 

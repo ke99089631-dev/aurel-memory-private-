@@ -247,7 +247,7 @@ function updateStats(){
     const dots=(rs,pre)=>(rs||[]).map(t=>'<span style="color:'+cR(t.R)+'">●</span>').join('');
     const n=ts.trades, c=ts.closed, o=ts.open;
     h+='<hr style="border:0;border-top:1px solid #30363d;margin:5px 0">';
-    h+='<b>📒 成績くらべ</b> <span style="color:#8b949e">会長=実弾(台帳) ／ AI=戻り目エントリーの紙(gross・スプレッド未控除)</span><br>';
+    h+='<b>📒 成績くらべ</b> <span style="color:#8b949e">会長=実弾(台帳) ／ AI=戻り目エントリーの紙・スプレッド＋手数料を控除済み(net)</span><br>';
     // 3列: 会長 / AI(会長の初弾以降＝同期間) / AI(全期間)
     const ai=aiStats||{}, same=ai.same||{n:0}, all=ai.all||{n:0};
     const cols=[{k:'会長',s:{n:c,wins:ts.wins,losses:ts.losses,winrate:ts.winrate,sumR:ts.sumR,avgR:ts.avgR,maxDD_R:ts.maxDD_R,recent:ts.recent}},
@@ -272,7 +272,14 @@ function updateStats(){
       +'<span style="color:#30363d;letter-spacing:-1px">'+'█'.repeat(10-seg)+'</span>'
       +' <span style="color:#8b949e">事前'+ts.pre+'/事後'+ts.post_only+'</span>'
       +(c<fixN?' <span style="color:#f0a35e">サンプル不足</span>':' <span style="color:#56d364">30本到達</span>');
-    if(all.n){ h+='<br><span style="color:#8b949e">AI 決着'+all.n+'本'+(ai.open?'・建玉中'+ai.open:'')+' ／ 差の判定は両者とも約100本から。AIは同じ壁でも戻り目で入る＝会長(即追い)と建値が違う点に注意。</span>'; }
+    if(all.n){
+      const cst=ai.cost||{}, g=ai.all_gross||{}, sg=ai.same_gross||{};
+      const srcs=Object.entries(cst.sources||{}).map(([k,v])=>k+v).join('/');
+      h+='<br><span style="color:#8b949e">AI 決着'+all.n+'本'+(ai.open?'・建玉中'+ai.open:'')
+        +' ／ コスト平均'+(cst.avg_cost_pt!=null?cst.avg_cost_pt.toFixed(2):'-')+'pt(スプレッド'+(srcs||'-')+'＋手数料'+cst.commission_pt+')'
+        +' ／ 控除前: 同期間'+(sg.n?fR(sg.sumR):'-')+'・全体'+(g.n?fR(g.sumR):'-')
+        +'<br>差の判定は両者とも約100本から。AIは戻り目で入る＝会長(即追い)と建値が違う。滑りは未控除。</span>';
+    }
   }
   el.innerHTML=h; el.style.display='block';
   const x=document.getElementById('stX'); if(x) x.onclick=()=>{ statsOn=false;
