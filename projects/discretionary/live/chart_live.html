@@ -370,25 +370,32 @@ function drawSetups(){
     const yE=series.priceToCoordinate(s.entry), ySL=series.priceToCoordinate(s.sl), yTP=series.priceToCoordinate(s.tp);
     if(yE==null||ySL==null||yTP==null) continue;
     const live = s.status==='open';
-    const a = live?0.20:0.10;
+    // MT5式: 線が主役。帯はごく薄く（建玉中だけ少し濃く）
+    const a = live?0.12:0.05;
     aictx.fillStyle='rgba(248,81,73,'+a+')'; aictx.fillRect(x1,Math.min(yE,ySL),x2-x1,Math.abs(ySL-yE));
     aictx.fillStyle='rgba(38,166,65,'+a+')'; aictx.fillRect(x1,Math.min(yE,yTP),x2-x1,Math.abs(yTP-yE));
     const seg=(y,col,dash,lw)=>{ aictx.strokeStyle=col; aictx.lineWidth=lw||1; aictx.setLineDash(dash||[]);
       aictx.beginPath(); aictx.moveTo(x1,y); aictx.lineTo(x2,y); aictx.stroke(); aictx.setLineDash([]); };
-    seg(yE,'rgba(88,166,255,'+(live?1:0.7)+')',[],live?2:1.2);
-    if(live){ seg(ySL,'rgba(248,81,73,0.9)',[4,3]); seg(yTP,'rgba(86,211,100,0.9)',[4,3]); }
-    // 入口マーカー＋ラベル
-    aictx.fillStyle = s.side==='BUY' ? '#58a6ff' : '#58a6ff';
-    aictx.font=(live?'bold ':'')+'10px monospace'; aictx.textBaseline='middle'; aictx.textAlign='left';
-    aictx.fillStyle='rgba(200,220,255,'+(live?1:0.8)+')';
-    aictx.fillText('AI'+(s.side==='BUY'?'買':'売')+(live?' '+s.id:''), x1+3, s.side==='BUY'?yE+9:yE-9);
-    // 出口: 結果を色の点＋R
+    seg(yE,'rgba(88,166,255,'+(live?1:0.75)+')',[],live?2:1.2);                 // 建値＝青実線
+    seg(ySL,'rgba(248,81,73,'+(live?0.9:0.45)+')',[3,3]);                         // SL＝赤点線
+    seg(yTP,'rgba(86,211,100,'+(live?0.9:0.45)+')',[3,3]);                        // TP＝緑点線
+    // 入口: 建値線の左端に小さな▲▼と短いラベル（線に貼り付く）
+    const buy = s.side==='BUY';
+    aictx.fillStyle = buy?'#58a6ff':'#f0a35e';
+    aictx.beginPath();
+    if(buy){ aictx.moveTo(x1,yE-1); aictx.lineTo(x1-4,yE+6); aictx.lineTo(x1+4,yE+6); }
+    else   { aictx.moveTo(x1,yE+1); aictx.lineTo(x1-4,yE-6); aictx.lineTo(x1+4,yE-6); }
+    aictx.closePath(); aictx.fill();
+    aictx.font=(live?'bold ':'')+'9px monospace'; aictx.textBaseline='middle'; aictx.textAlign='left';
+    aictx.fillStyle='rgba(200,220,255,'+(live?1:0.75)+')';
+    aictx.fillText('AI'+(buy?'買':'売')+' '+s.entry.toFixed(1)+(live?' '+s.id:''), x1+6, buy?yE+7:yE-7);
+    // 出口: 結果の点＋R（決済価格の位置＝SLかTPの線の上に乗る）
     if(!live && s.exit!=null){
       const yX=series.priceToCoordinate(s.exit); if(yX==null) continue;
       const win = s.exit_reason==='TP';
       aictx.fillStyle = win?'#56d364':(s.exit_reason==='SL'?'#f85149':'#8b949e');
-      aictx.beginPath(); aictx.arc(x2,yX,3.5,0,7); aictx.fill();
-      aictx.font='10px monospace'; aictx.fillText(fmtR(s.R||0)+(s.chairman?' ⇔'+s.chairman.id:''), x2+5, yX);
+      aictx.beginPath(); aictx.arc(x2,yX,3,0,7); aictx.fill();
+      aictx.font='9px monospace'; aictx.fillText(fmtR(s.R||0)+(s.chairman?' ⇔'+s.chairman.id:''), x2+4, yX);
     }
   }
 }
@@ -424,7 +431,23 @@ function updateAiPnl(){
 function redrawOverlays(){ try{ drawZones(); drawTrades(); drawSetups(); }catch(e){} }
 chart.timeScale().subscribeVisibleLogicalRangeChange(redrawOverlays);   // パン/ズームに追従
 window.addEventListener('resize', ()=>setTimeout(()=>{ drawFixedGrid(); redrawOverlays(); },60));
-setInterval(redrawOverlays, 300);   // 保険(ライブ更新・トグル反映)。5fps未満＝軽い
+setInterval(redrawOverlays, 300);   // 保険(ライブ更新・トグル反映)
+// 縦の伸縮（価格軸ドラッグ）にはイベントが無いので、毎フレーム「座標が変わったか」だけ見て変わった時だけ描き直す
+// ＝オーバーレイがローソクから遅れて浮いて見えない。判定は座標2点の比較だけなので軽い。
+(function(){ let sig='';
+  function tick(){
+    try{
+      const tsc=chart.timeScale(); const lr=tsc.getVisibleLogicalRange();
+      const p=(curPx!=null)?curPx:(lastBox?lastBox.mid:null);
+      const y=(p!=null)?series.priceToCoordinate(p):null;
+      const y2=(lastBox)?series.priceToCoordinate(lastBox.up):null;
+      const s=(lr?lr.from.toFixed(2)+'/'+lr.to.toFixed(2):'')+'|'+y+'|'+y2+'|'+chartEl.clientWidth+'x'+chartEl.clientHeight;
+      if(s!==sig){ sig=s; redrawOverlays(); }
+    }catch(e){}
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
 redrawOverlays();
 
 // 「全体」ボタン: 自動スケール＋全体表示に戻す

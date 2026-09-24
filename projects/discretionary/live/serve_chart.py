@@ -387,6 +387,7 @@ def build_setups(tick=None):
         "linked": len(linked), "agree": agree,
         "confidence": _confidence(n),
     }
+    recs.sort(key=lambda r: int(r.get("break_time") or 0))     # 表示は時系列（IDの順ではなく）
     return {"setups": recs[-120:], "summary": summary}
 
 

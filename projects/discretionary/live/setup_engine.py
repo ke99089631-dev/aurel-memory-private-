@@ -33,6 +33,7 @@ RETRACE_BARS = 12       # 戻り目を待つ本数（1時間）
 MAX_HOLD = 288          # 最長保有（24h）
 MID_POOL_BARS = 6       # 中間ブレイク認定: 直前この本数の終値が全て反対側（溜まりがあった）
 COOLDOWN = 3
+LATE_LOOKBACK = 24      # 壁の乗り換え後に価格が既に外だった時、何本前までブレイク足を遡って探すか
 
 
 def _load_damashi():
@@ -117,14 +118,19 @@ def _simulate(o, h, l, c, ie, side, entry, sl, tp, n):
             "mfe_R": round(mfe, 2), "mae_R": round(mae, 2), "hold_bars": exit_k - ie}
 
 
-def scan(m5, dm):
-    """過去→現在へ一方向に走査し、セットアップ記録の列を返す（先読みなし・確定的）。"""
+def scan(m5, dm, start_t=None):
+    """過去→現在へ一方向に走査し、セットアップ記録の列を返す（先読みなし・確定的）。
+       start_t: この epoch 以降のバーから走査を始める（台帳の続きから＝窓のズレで過去が湧かない）。"""
     o = m5["open"].to_numpy(); h = m5["high"].to_numpy()
     l = m5["low"].to_numpy();  c = m5["close"].to_numpy()
     idx = m5.index; n = len(c)
     out = []
     i = wallbox.WALL_WIN
+    if start_t is not None:
+        i0 = int(idx.searchsorted(pd.Timestamp(start_t, unit="s", tz="UTC")))
+        i = max(i, i0)
     cooldown_until = -1
+    emitted = []             # (壁価格, 方向, ブレイク足) 同じ壁・同じ足を二度登録しない
     while i < n:
         if i <= cooldown_until:
             i += 1; continue
@@ -144,9 +150,26 @@ def scan(m5, dm):
                 ev = ("UP", "mid", mid)
             elif c[i] < mid and np.all(prev >= mid):
                 ev = ("DOWN", "mid", mid)
+        i_break = i
+        if ev is None and (c[i] < dn or c[i] > up):
+            # 壁が段階的に乗り換わった直後（箱の再アンカー時点で価格が既に外）は、通常の交差判定に掛からない。
+            # 直近RETRACE_BARS本内にその壁の交差があれば、その足をブレイク足として後追い登録する（会長の見え方に合わせる）。
+            d2 = "DOWN" if c[i] < dn else "UP"; w2 = dn if d2 == "DOWN" else up
+            tol = max(1.0, 0.25 * (up - dn))
+            dup = any(e[1] == d2 and abs(e[0] - w2) <= tol for e in emitted)
+            if not dup:
+                for jj in range(i, max(i - LATE_LOOKBACK, 1) - 1, -1):
+                    if d2 == "DOWN" and c[jj] < w2 and c[jj - 1] >= w2:
+                        ev = (d2, "outer", w2); i_break = jj; break
+                    if d2 == "UP" and c[jj] > w2 and c[jj - 1] <= w2:
+                        ev = (d2, "outer", w2); i_break = jj; break
+                if ev is not None and any(e[2] == i_break for e in emitted):
+                    ev = None                          # 同じブレイク足からの二重登録は避ける
         if ev is None:
             i += 1; continue
         direction, kind, wall = ev
+        emitted.append((float(wall), direction, i_break))
+        i = i_break                                   # 以降の特徴・戻り目探索はブレイク足基準
         if kind == "outer":
             pool = pool_width(dn, mid, up, direction)
         else:
@@ -283,14 +306,31 @@ def sync_once():
     m5 = _fetch_bars()
     if m5 is None or len(m5) < wallbox.WALL_WIN + 20:
         return 0, 0
-    setups = scan(m5, dm)
     recs, by_key, maxn = load_state()
+    # ★台帳の続きから走査する。取得窓(2000本)が時間とともにずれても、過去に「新規」が湧かないように。
+    #   未決着(open/waiting)があればその最初のブレイクから再評価。無ければ最後の記録の直後から。
+    start_t = None
+    pending = [r for r in recs.values() if r.get("status") in ("open", "waiting")]
+    if pending:
+        start_t = min(int(r["break_time"]) for r in pending)
+    elif recs:
+        ends = []
+        for r in recs.values():
+            if r.get("status") == "closed" and r.get("exit_time"):
+                ends.append(int(r["exit_time"]) + 1)
+            else:
+                ends.append(int(r["break_time"]) + COOLDOWN * 300 + 1)
+        start_t = max(ends)
+    max_bt = max((int(r["break_time"]) for r in recs.values()), default=-1)
+    setups = scan(m5, dm, start_t)
     added = updated = 0
     now = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open(LEDGER, "a", encoding="utf-8") as f:
         for s in setups:
             k = _key(s)
             if k not in by_key:
+                if int(s["break_time"]) <= max_bt:
+                    continue                       # 既存より古い「新規」は窓ズレの産物＝採らない
                 maxn += 1
                 rec = {"id": "S-%04d" % maxn, "kind": "setup", "lane": "3", "logged_at": now}
                 rec.update(s)

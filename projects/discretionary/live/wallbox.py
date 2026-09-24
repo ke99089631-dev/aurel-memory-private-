@@ -41,6 +41,12 @@ def dynamic_box(m5):
     cand = [x for x in strong if lo_b <= x["price"] <= hi_b]
     if len(cand) < 2:
         cand = strong
+    # ★急なトレンドで価格が「効いてる壁」の外に出たまま（新安値/新高値を更新中）の時は、
+    #   直近のスイング（タッチ1回）も候補に入れて箱を価格側へ乗り換えさせる＝置いてけぼり防止。
+    price0 = float(c[-1])
+    if cand and (price0 < min(x["price"] for x in cand) or price0 > max(x["price"] for x in cand)):
+        weak = [x for x in ws if x["touches"] < 2 and lo_b <= x["price"] <= hi_b]
+        cand = cand + weak
 
     res = [x for x in cand if x["kind"] == "res"]
     sup = [x for x in cand if x["kind"] == "sup"]
