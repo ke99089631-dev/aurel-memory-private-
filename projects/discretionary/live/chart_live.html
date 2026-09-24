@@ -10,32 +10,34 @@
   #hd b{color:#e6edf3}
   #badge{float:right;font-size:11px;padding:1px 8px;border-radius:10px}
   #sub{color:#8b949e;font-size:11px}
-  #chart{position:fixed;top:44px;left:0;right:0;bottom:38px}
-  #zones{position:fixed;top:44px;left:0;right:0;bottom:38px;pointer-events:none;z-index:1}
-  #fixgrid{position:fixed;top:44px;left:0;right:0;bottom:38px;pointer-events:none;z-index:2}
-  #trades{position:fixed;top:44px;left:0;right:0;bottom:38px;pointer-events:none;z-index:3}
-  #ai{position:fixed;top:44px;left:0;right:0;bottom:38px;pointer-events:none;z-index:4}
-  #ctrl{position:fixed;left:0;right:0;bottom:0;height:38px;z-index:6;display:flex;
+  /* 2026-09-25 会長: ボタン列を画面下→ヘッダー直下へ（iPhoneの下端はホームバーが反応するため）。
+     ヘッダー44px ＋ ボタン列38px ＝ 82px から下がチャート。下端は余白ゼロで安全域だけ空ける。 */
+  #chart{position:fixed;top:82px;left:0;right:0;bottom:env(safe-area-inset-bottom,0px)}
+  #zones{position:fixed;top:82px;left:0;right:0;bottom:env(safe-area-inset-bottom,0px);pointer-events:none;z-index:1}
+  #fixgrid{position:fixed;top:82px;left:0;right:0;bottom:env(safe-area-inset-bottom,0px);pointer-events:none;z-index:2}
+  #trades{position:fixed;top:82px;left:0;right:0;bottom:env(safe-area-inset-bottom,0px);pointer-events:none;z-index:3}
+  #ai{position:fixed;top:82px;left:0;right:0;bottom:env(safe-area-inset-bottom,0px);pointer-events:none;z-index:4}
+  #ctrl{position:fixed;left:0;right:0;top:44px;height:38px;z-index:6;display:flex;
     align-items:center;gap:4px;padding:0 8px;background:rgba(13,17,23,.92);
-    border-top:1px solid #21262d;font-size:12px;overflow-x:auto;white-space:nowrap}
+    border-bottom:1px solid #21262d;font-size:12px;overflow-x:auto;white-space:nowrap}
   .cbtn{background:#1b2230;color:#c9d1d9;border:1px solid #30363d;border-radius:6px;
     padding:4px 9px;font-size:13px;cursor:pointer;-webkit-tap-highlight-color:transparent}
   .cbtn:active{background:#2a3446}
   .cbtn.on{background:#0f2b17;color:#56d364;border-color:#238636}
   #ctrl .lab{color:#8b949e;font-size:11px}
-  #linebar{position:fixed;left:0;right:0;bottom:38px;height:36px;z-index:8;display:none;
+  #linebar{position:fixed;left:0;right:0;top:82px;height:36px;z-index:8;display:none;
     align-items:center;gap:5px;padding:0 8px;background:rgba(13,17,23,.96);
-    border-top:1px solid #30363d;overflow-x:auto;white-space:nowrap;font-size:12px}
+    border-bottom:1px solid #30363d;overflow-x:auto;white-space:nowrap;font-size:12px}
   #linebar.on{display:flex}
   #lbInfo{color:#c9d1d9;font-size:11px;min-width:64px}
   .sw{display:inline-block;width:20px;height:20px;border-radius:4px;margin:0 1px;cursor:pointer;
     border:2px solid transparent;vertical-align:middle}
   .sw.sel{border-color:#fff}
-  #aipnl{position:fixed;top:47px;left:6px;right:6px;z-index:5;display:none;
+  #aipnl{position:fixed;top:85px;left:6px;right:6px;z-index:5;display:none;
     background:rgba(13,17,23,.9);border:1px solid #30363d;border-radius:8px;
     padding:5px 9px;font-size:12px;color:#e6edf3;line-height:1.45}
   #aipnl b{color:#fff}
-  #tradeInfo,#stats,#paper{position:fixed;top:48px;left:8px;right:8px;z-index:7;display:none;
+  #tradeInfo,#stats,#paper{position:fixed;top:86px;left:8px;right:8px;z-index:7;display:none;
     background:rgba(20,26,36,.96);border:1px solid #30363d;border-radius:8px;
     padding:7px 10px;font-size:12px;line-height:1.6;color:#e6edf3;max-height:70vh;overflow-y:auto}
   #tradeInfo b,#stats b,#paper b{color:#fff}
@@ -46,7 +48,11 @@
   .tag{display:inline-block;padding:0 6px;border-radius:8px;font-size:10px;margin-right:3px}
   .yel{background:#3a3410;color:#e3c94a}.blu{background:#0e2740;color:#58a6ff}
   .grn{background:#0f2b17;color:#56d364}.red{background:#3a1113;color:#f85149}
-  #err{position:fixed;bottom:44px;left:10px;font-size:11px;color:#f85149;z-index:6}
+  #err{position:fixed;bottom:8px;left:10px;font-size:11px;color:#f85149;z-index:6}
+  .cmp{border-collapse:collapse;margin:2px 0;font-size:12px}
+  .cmp th,.cmp td{padding:1px 6px;text-align:right;border-bottom:1px solid #21262d;white-space:nowrap}
+  .cmp th{color:#8b949e;font-weight:normal}
+  .cmp td:first-child,.cmp th:first-child{text-align:left;color:#8b949e}
 </style></head><body>
 <div id="hd">
   <span id="badge"></span>
@@ -122,6 +128,7 @@ let wallLines = [];       // 壁/TP/SL（10秒ごと更新）
 let statsOn = false, lastBox = null, lastBreak = null, curPx = null;  // B2/B3 情報パネル用
 let lastDamashi = null;   // C1 ダマシ確率メーター（時間帯本物率）
 let tradeStats = null;    // D1 会長の現状成績（/api/stats・台帳の集計）
+let aiStats = null;       // D1 AI側の成績（同じ /api/stats の ai: all=全期間 / same=会長の初弾以降）
 let curLine = null;       // 現在価格ライン（毎秒 applyOptions で追従）
 let firstLoad = true;
 
@@ -236,23 +243,36 @@ function updateStats(){
   const ts=tradeStats;
   if(ts){
     const fR=v=>v==null?'-':(v>=0?'+':'')+Number(v).toFixed(2)+'R';
+    const cR=v=>v==null?'#8b949e':(v>=0?'#56d364':'#f85149');
+    const dots=(rs,pre)=>(rs||[]).map(t=>'<span style="color:'+cR(t.R)+'">●</span>').join('');
     const n=ts.trades, c=ts.closed, o=ts.open;
     h+='<hr style="border:0;border-top:1px solid #30363d;margin:5px 0">';
-    h+='<b>📒 会長の成績</b> <span style="color:#8b949e">実弾・台帳 n'+n+'（確定'+c+(o?'／建玉中'+o:'')+'）</span><br>';
+    h+='<b>📒 成績くらべ</b> <span style="color:#8b949e">会長=実弾(台帳) ／ AI=戻り目エントリーの紙(gross・スプレッド未控除)</span><br>';
+    // 3列: 会長 / AI(会長の初弾以降＝同期間) / AI(全期間)
+    const ai=aiStats||{}, same=ai.same||{n:0}, all=ai.all||{n:0};
+    const cols=[{k:'会長',s:{n:c,wins:ts.wins,losses:ts.losses,winrate:ts.winrate,sumR:ts.sumR,avgR:ts.avgR,maxDD_R:ts.maxDD_R,recent:ts.recent}},
+                {k:'AI同期間',s:same},{k:'AI全体',s:all}];
+    const cell=(f)=>cols.map(cl=>'<td>'+(cl.s.n?f(cl.s):'-')+'</td>').join('');
+    h+='<table class="cmp"><tr><th></th>'+cols.map(cl=>'<th>'+cl.k+'</th>').join('')+'</tr>';
+    h+='<tr><td>本数</td>'+cols.map(cl=>'<td>'+(cl.s.n||0)+(cl.k==='会長'&&o?'<span style="color:#8b949e">+'+o+'</span>':'')+'</td>').join('')+'</tr>';
+    h+='<tr><td>勝敗</td>'+cell(s=>s.wins+'勝'+s.losses+'敗')+'</tr>';
+    h+='<tr><td>勝率</td>'+cell(s=>Number(s.winrate).toFixed(0)+'%')+'</tr>';
+    h+='<tr><td>合計R</td>'+cell(s=>'<b style="color:'+cR(s.sumR)+'">'+fR(s.sumR)+'</b>')+'</tr>';
+    h+='<tr><td>平均R</td>'+cell(s=>'<span style="color:'+cR(s.avgR)+'">'+fR(s.avgR)+'</span>')+'</tr>';
+    h+='<tr><td>最大DD</td>'+cell(s=>Number(s.maxDD_R).toFixed(1)+'R')+'</tr>';
+    h+='<tr><td>直近</td>'+cell(s=>'<span style="letter-spacing:-1px">'+dots(s.recent)+'</span>')+'</tr>';
+    h+='</table>';
     if(c){
-      const sumCol=ts.sumR>=0?'#56d364':'#f85149';
-      h+=ts.wins+'勝'+ts.losses+'敗 勝率<b>'+Number(ts.winrate).toFixed(0)+'%</b> ・ 合計<b style="color:'+sumCol+'">'+fR(ts.sumR)+'</b>'
-        +' ・ 平均'+fR(ts.avgR)+' ・ 最大DD'+Number(ts.maxDD_R).toFixed(1)+'R<br>';
-      h+='<span style="color:#8b949e">直近:</span> '+(ts.recent||[]).map(t=>{
-          const col=t.R==null?'#8b949e':(t.R>0?'#56d364':'#f85149');
-          return '<span style="color:'+col+'">●</span>'+t.id.replace(/^T-0+/,'T')+(t.R==null?'(建玉中)':'('+fR(t.R)+')'); }).join(' ')+'<br>';
-    } else { h+='確定トレードなし<br>'; }
+      h+='<span style="color:#8b949e">会長の直近:</span> '+(ts.recent||[]).map(t=>
+          '<span style="color:'+cR(t.R)+'">●</span>'+t.id.replace(/^T-0+/,'T')+(t.R==null?'(建玉中)':'('+fR(t.R)+')')).join(' ')+'<br>';
+    } else { h+='会長の確定トレードなし<br>'; }
     const fixN=30, seg=Math.round(Math.min(fixN,c)/fixN*10);
-    h+='<span style="color:#8b949e">手順固定まで '+c+'/'+fixN+' </span>'
+    h+='<span style="color:#8b949e">会長 手順固定まで '+c+'/'+fixN+' </span>'
       +'<span style="color:#e3c94a;letter-spacing:-1px">'+'█'.repeat(seg)+'</span>'
       +'<span style="color:#30363d;letter-spacing:-1px">'+'█'.repeat(10-seg)+'</span>'
       +' <span style="color:#8b949e">事前'+ts.pre+'/事後'+ts.post_only+'</span>'
       +(c<fixN?' <span style="color:#f0a35e">サンプル不足</span>':' <span style="color:#56d364">30本到達</span>');
+    if(all.n){ h+='<br><span style="color:#8b949e">AI 決着'+all.n+'本'+(ai.open?'・建玉中'+ai.open:'')+' ／ 差の判定は両者とも約100本から。AIは同じ壁でも戻り目で入る＝会長(即追い)と建値が違う点に注意。</span>'; }
   }
   el.innerHTML=h; el.style.display='block';
   const x=document.getElementById('stX'); if(x) x.onclick=()=>{ statsOn=false;
@@ -605,7 +625,7 @@ async function fetchTrades(){
 // D1 会長の現状成績: 台帳が携帯フォームから追記されるので 60秒ごとに取り直す（情報パネルに表示）
 async function fetchStats(){
   try{ const r=await fetch('/api/stats',{cache:'no-store'}); const d=await r.json();
-       if(d.ok){ tradeStats=d.stats; if(statsOn) updateStats(); } }catch(e){}
+       if(d.ok){ tradeStats=d.stats; aiStats=d.ai||null; if(statsOn) updateStats(); } }catch(e){}
 }
 setInterval(()=>{ fetchStats(); fetchTrades(); }, 60000);
 fetchStats();

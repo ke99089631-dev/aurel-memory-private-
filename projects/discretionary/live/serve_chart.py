@@ -301,9 +301,47 @@ def build_stats():
         st["recent"] = recent[-8:]
         st["open_ids"] = [t["id"] for t in counted if t.get("R") is None]
         st["losses"] = st["closed"] - st["wins"]
-        return {"ok": True, "stats": st, "ledger_mtime": os.path.getmtime(LEDGER) if os.path.exists(LEDGER) else None}
+        # 会長の最初の実弾以降＝「同期間」の境目（AI側を同じ期間で切って並べる）
+        first_ts = min((_jst_epoch(t.get("ts")) or 1e18) for t in counted) if counted else None
+        ai = build_ai_stats(first_ts)
+        return {"ok": True, "stats": st, "ai": ai, "since": first_ts,
+                "ledger_mtime": os.path.getmtime(LEDGER) if os.path.exists(LEDGER) else None}
     except Exception as e:
         return {"ok": False, "error": str(e)}
+
+
+def _r_stats(rs):
+    """R列の集計（会長側 aurel_trade_room.stats と同じ定義: 勝ち=R>0・最大DDは累積Rの山からの落ち幅）。"""
+    n = len(rs)
+    if not n:
+        return {"n": 0}
+    wins = sum(1 for r in rs if r["R"] > 0)
+    sumR = round(sum(r["R"] for r in rs), 2)
+    peak = cum = dd = 0.0
+    for r in rs:
+        cum += r["R"]
+        peak = max(peak, cum)
+        dd = min(dd, cum - peak)
+    return {"n": n, "wins": wins, "losses": n - wins, "winrate": round(100.0 * wins / n, 1),
+            "sumR": sumR, "avgR": round(sumR / n, 2), "maxDD_R": round(dd, 2),
+            "recent": [{"id": r["id"], "R": r["R"]} for r in rs[-8:]]}
+
+
+def build_ai_stats(since_epoch=None):
+    """AI(setup_engine・戻り目エントリー)の成績を会長と同じ物差しで。gross=スプレッド未控除。
+       all=全期間 / same=会長の最初の実弾以降（同期間比較用）。open=建玉中の件数。"""
+    recs = _load_setups()
+    closed = sorted([r for r in recs if r.get("status") == "closed" and r.get("R") is not None],
+                    key=lambda r: int(r.get("exit_time") or r.get("break_time") or 0))
+    rows = [{"id": r["id"], "R": float(r["R"])} for r in closed]
+    out = {"all": _r_stats(rows), "gross": True,
+           "open": sum(1 for r in recs if r.get("status") == "open"),
+           "n_setups": len(recs)}
+    if since_epoch:
+        same = [{"id": r["id"], "R": float(r["R"])} for r in closed
+                if int(r.get("break_time") or 0) >= since_epoch]
+        out["same"] = _r_stats(same)
+    return out
 
 
 def _card_tags(note):
