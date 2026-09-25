@@ -221,3 +221,4 @@
 {"kind": "update", "target": "S-0090", "logged_at": "2026-09-25 23:41:33", "frozen": true, "mfe_R": 0.72, "mae_R": 0.51, "hold_bars": 2}
 {"kind": "update", "target": "S-0090", "logged_at": "2026-09-25 23:45:34", "frozen": true, "mfe_R": 0.72, "mae_R": 0.6, "hold_bars": 3}
 {"kind": "update", "target": "S-0090", "logged_at": "2026-09-25 23:51:34", "frozen": true, "status": "closed", "exit": 4276.538, "exit_reason": "SL", "R": -1.0, "mfe_R": 0.72, "mae_R": 1.36, "hold_bars": 4, "exit_time": 1790347500, "outcome": "ダマシ"}
+{"kind": "update", "target": "S-0090", "logged_at": "2026-09-26 00:11:36", "slip_src": "tick-sim L=1s", "spread_pt": 0.16, "slip_pt": -0.18, "sl_slip_pt": 0.032}
