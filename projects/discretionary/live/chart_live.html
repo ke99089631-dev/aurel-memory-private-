@@ -277,8 +277,15 @@ function updateStats(){
       const srcs=Object.entries(cst.sources||{}).map(([k,v])=>k+v).join('/');
       h+='<br><span style="color:#8b949e">AI 決着'+all.n+'本'+(ai.open?'・建玉中'+ai.open:'')
         +' ／ コスト平均'+(cst.avg_cost_pt!=null?cst.avg_cost_pt.toFixed(2):'-')+'pt(スプレッド'+(srcs||'-')+'＋手数料'+cst.commission_pt+')'
-        +' ／ 控除前: 同期間'+(sg.n?fR(sg.sumR):'-')+'・全体'+(g.n?fR(g.sumR):'-')
-        +'<br>差の判定は両者とも約100本から。AIは戻り目で入る＝会長(即追い)と建値が違う。滑りは未控除。</span>';
+        +' ／ 控除前: 同期間'+(sg.n?fR(sg.sumR):'-')+'・全体'+(g.n?fR(g.sumR):'-');
+      const ss=cst.slip_summary;
+      if(ss && ss.entry_slip_1){
+        h+='<br>滑り(ティック再現・1秒後約定): 入口 中央値'+ss.entry_slip_1.median+'pt/上位10%'+ss.entry_slip_1.p90+'pt'
+          +' ／ SL発動 中央値'+(ss.sl.median!=null?ss.sl.median:'-')+'pt/最大'+(ss.sl.max!=null?ss.sl.max:'-')+'pt'
+          +' ／ 実測'+(cst.slip_measured||0)+'本';
+      }
+      if((ai.tp_miss||[]).length){ h+='<br><span style="color:#f0a35e">TP不成立 '+ai.tp_miss.length+'本('+ai.tp_miss.join(',')+')＝紙はTP到達だが実際の指値は届かず→netから除外</span>'; }
+      h+='<br>差の判定は両者とも約100本から。AIは戻り目で入る＝会長(即追い)と建値が違う。</span>';
     }
   }
   el.innerHTML=h; el.style.display='block';

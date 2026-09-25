@@ -376,7 +376,11 @@ def _net_R(r, cm):
             sp, src = cm["spread_by_hour"][jh], "時間帯中央値"
         else:
             sp, src = float(cm["spread_pt_default"]), "仮値"
-    cost = sp + float(cm["commission_pt"]) + float(cm.get("slippage_pt") or 0.0)
+    # 滑り: 実測(slippage_sim・ティック再現・符号付き)があればそれ、無ければ cost_model の既定値
+    slip = float(r["slip_pt"]) if r.get("slip_pt") is not None else float(cm.get("slippage_pt") or 0.0)
+    if r.get("exit_reason") == "SL" and r.get("sl_slip_pt") is not None:
+        slip += float(r["sl_slip_pt"])          # 逆指値の実発動レートとSL価格の差（不利側のみ）
+    cost = sp + float(cm["commission_pt"]) + slip
     return round(float(r["R"]) - cost / risk, 3), round(cost, 3), src
 
 
@@ -389,19 +393,33 @@ def build_ai_stats(since_epoch=None):
     closed = sorted([r for r in recs if r.get("status") == "closed" and r.get("R") is not None],
                     key=lambda r: int(r.get("exit_time") or r.get("break_time") or 0))
     rows_net, rows_gross, src_count, costs = [], [], {}, []
+    tp_miss, slip_n = [], 0
     for r in closed:
+        rows_gross.append({"id": r["id"], "R": float(r["R"]), "bt": int(r.get("break_time") or 0)})
+        if r.get("tp_fill_ok") is False:
+            tp_miss.append(r["id"])            # 紙はTP到達だが実際の指値(ask/bid)は届かず＝結果不明 → net からは除外して本数を示す
+            continue
         rn, cost, src = _net_R(r, cm)
         rows_net.append({"id": r["id"], "R": rn, "bt": int(r.get("break_time") or 0)})
-        rows_gross.append({"id": r["id"], "R": float(r["R"]), "bt": int(r.get("break_time") or 0)})
         src_count[src] = src_count.get(src, 0) + 1
+        if r.get("slip_pt") is not None:
+            slip_n += 1
         if cost is not None:
             costs.append(cost)
+    slip_sum = None
+    try:
+        with open(os.path.join(HERE, "slippage_report.json"), encoding="utf-8") as f:
+            slip_sum = json.load(f).get("summary")
+    except Exception:
+        pass
     out = {"all": _r_stats(rows_net), "all_gross": _r_stats(rows_gross),
            "open": sum(1 for r in recs if r.get("status") == "open"), "n_setups": len(recs),
+           "tp_miss": tp_miss,
            "cost": {"commission_pt": cm["commission_pt"], "spread_default_pt": cm["spread_pt_default"],
                     "spread_by_hour": cm["spread_by_hour"], "spread_samples": cm["spread_samples"],
                     "avg_cost_pt": round(sum(costs) / len(costs), 3) if costs else None,
-                    "sources": src_count}}
+                    "sources": src_count, "slip_measured": slip_n,
+                    "slip_default_pt": cm.get("slippage_pt"), "slip_summary": slip_sum}}
     if since_epoch:
         out["same"] = _r_stats([x for x in rows_net if x["bt"] >= since_epoch])
         out["same_gross"] = _r_stats([x for x in rows_gross if x["bt"] >= since_epoch])

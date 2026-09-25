@@ -21,6 +21,7 @@ SERVER_UTC_OFFSET_H = 3            # MT5サーバ時刻はGMT+3。rates.time は
 # 発注系を「呼べない」ように、使ってよい読取関数だけを明示（自己文書化）。
 _READ_ONLY_FUNCS = ("initialize", "shutdown", "account_info", "symbol_info",
                     "symbol_info_tick", "symbol_select", "copy_rates_from_pos",
+                    "copy_ticks_range",          # 2026-09-25 滑りのティック再現(slippage_sim)。履歴読取のみ
                     "last_error")
 
 

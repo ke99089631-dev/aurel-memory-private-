@@ -387,8 +387,12 @@ def sync_once():
     return added, updated
 
 
+SLIP_EVERY = 15          # 30分ごとに、決着済みで滑り未計測の記録をティック再現で埋める（読取のみ）
+
+
 def main():
     print("車線3 収束ループ・エンジン起動（2分ごと・発注なし・金ゼロ）", flush=True)
+    cycle = 0
     while True:
         try:
             a, u = sync_once()
@@ -396,6 +400,15 @@ def main():
                 print("%s +%d 新規 / %d 更新" % (dt.datetime.now().strftime("%H:%M:%S"), a, u), flush=True)
         except Exception as e:
             sys.stderr.write("sync err: %s\n" % e)
+        cycle += 1
+        if cycle % SLIP_EVERY == 0:
+            try:
+                import slippage_sim
+                s, n = slippage_sim.run(apply_updates=True, only_missing=True)
+                if n:
+                    print("%s 滑り実測 追記 %d 本" % (dt.datetime.now().strftime("%H:%M:%S"), n), flush=True)
+            except Exception as e:
+                sys.stderr.write("slip err: %s\n" % e)
         time.sleep(INTERVAL)
 
 
