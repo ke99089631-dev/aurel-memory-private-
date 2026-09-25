@@ -1,33 +1,53 @@
 {
  "summary": {
-  "n": 0,
+  "n": 1,
   "entry_slip_0.3": {
-   "n": 0,
-   "median": null,
-   "mean": 0.0,
-   "p90": null,
-   "adverse_share": 0.0
+   "n": 1,
+   "median": 0.03,
+   "mean": 0.03,
+   "p90": 0.03,
+   "adverse_share": 100.0
+  },
+  "chase_slip_0.3": {
+   "n": 1,
+   "median": -0.03,
+   "p90": -0.03
   },
   "entry_slip_1": {
-   "n": 0,
-   "median": null,
-   "mean": 0.0,
-   "p90": null,
-   "adverse_share": 0.0
+   "n": 1,
+   "median": 0.13,
+   "mean": 0.13,
+   "p90": 0.13,
+   "adverse_share": 100.0
+  },
+  "chase_slip_1": {
+   "n": 1,
+   "median": -0.07,
+   "p90": -0.07
   },
   "entry_slip_3": {
-   "n": 0,
-   "median": null,
-   "mean": 0.0,
-   "p90": null,
+   "n": 1,
+   "median": -0.05,
+   "mean": -0.05,
+   "p90": -0.05,
    "adverse_share": 0.0
   },
+  "chase_slip_3": {
+   "n": 1,
+   "median": 0.09,
+   "p90": 0.09
+  },
   "entry_slip_120": {
-   "n": 0,
-   "median": null,
-   "mean": 0.0,
-   "p90": null,
-   "adverse_share": 0.0
+   "n": 1,
+   "median": 0.14,
+   "mean": 0.14,
+   "p90": 0.14,
+   "adverse_share": 100.0
+  },
+  "chase_slip_120": {
+   "n": 1,
+   "median": 0.04,
+   "p90": 0.04
   },
   "sl": {
    "n": 0,
@@ -38,18 +58,38 @@
    "max": null
   },
   "tp": {
-   "n": 0,
-   "fill_ok": 0,
+   "n": 1,
+   "fill_ok": 1,
    "fill_miss": 0
   },
   "spread_at_entry": {
-   "median": null,
-   "p90": null,
-   "max": null
+   "median": 0.16,
+   "p90": 0.16,
+   "max": 0.16
   },
-  "open_vs_tick_abs_median": null,
+  "open_vs_tick_abs_median": 0.0,
   "adopt_latency_s": 1.0,
-  "generated": "2026-09-25 09:57:26"
+  "generated": "2026-09-25 10:27:27"
  },
- "rows": []
+ "rows": [
+  {
+   "id": "S-0085",
+   "side": "BUY",
+   "risk": 4.164999999999964,
+   "exit_reason": "TP",
+   "R": 0.424,
+   "bid0": 4273.33,
+   "spread_pt": 0.16,
+   "slip_0.3": 0.03,
+   "slip_1": 0.13,
+   "slip_3": -0.05,
+   "slip_120": 0.14,
+   "open_vs_tick": 0.0,
+   "chase_slip_0.3": -0.03,
+   "chase_slip_1": -0.07,
+   "chase_slip_3": 0.09,
+   "chase_slip_120": 0.04,
+   "tp_fill_ok": true
+  }
+ ]
 }
