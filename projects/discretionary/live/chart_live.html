@@ -127,6 +127,7 @@ let allBars = [];         // 直近バー配列（トレード時刻のバー吸
 let wallLines = [];       // 壁/TP/SL（10秒ごと更新）
 let statsOn = false, lastBox = null, lastBreak = null, curPx = null;  // B2/B3 情報パネル用
 let lastDamashi = null;   // C1 ダマシ確率メーター（時間帯本物率）
+let lastBig = null;       // 大箱(直近24hの高安)＝会長の黄壁の尺度
 let tradeStats = null;    // D1 会長の現状成績（/api/stats・台帳の集計）
 let aiStats = null;       // D1 AI側の成績（同じ /api/stats の ai: all=全期間 / same=会長の初弾以降）
 let curLine = null;       // 現在価格ライン（毎秒 applyOptions で追従）
@@ -138,12 +139,16 @@ function setBadge(live){
   badge.style.cssText = 'float:right;font-size:11px;padding:1px 8px;border-radius:10px;'+
     (live?'background:#0f2b17;color:#56d364':'background:#2a2a2a;color:#999');
 }
-function setWallLines(box, brk){
+function setWallLines(box, brk, big){
   for (const pl of wallLines) series.removePriceLine(pl);
   wallLines = [];
   const add = (price,color,style,title)=>{ if(price==null) return;
     wallLines.push(series.createPriceLine({ price, color, lineWidth:1,
       lineStyle:style, axisLabelVisible:true, title })); };
+  if (big){                                              // 大箱(24h高安)=会長の黄壁と同じ定義。細い黄破線
+    add(big.up,'rgba(227,201,74,0.55)',LWC.LineStyle.Dashed,'大箱上');
+    add(big.dn,'rgba(227,201,74,0.55)',LWC.LineStyle.Dashed,'大箱下');
+  }
   if (box){
     add(box.up,'#e3c94a',LWC.LineStyle.Solid,'上壁');    // 壁は実線
     add(box.dn,'#e3c94a',LWC.LineStyle.Solid,'下壁');
@@ -174,8 +179,8 @@ async function pollData(){
     if (firstLoad){ series.setData(bars); chart.timeScale().fitContent(); firstLoad=false; }
     else { for (const b of bars){ if (b.time >= lastTime) series.update(b); } }
     if (bars.length){ lastTime = bars[bars.length-1].time; allBars = bars; }
-    setWallLines(d.box, d.break);
-    lastBox = d.box; lastBreak = d.break; lastDamashi = d.damashi;   // B2/B3/C1 用に保持
+    setWallLines(d.box, d.break, d.bigbox);
+    lastBox = d.box; lastBreak = d.break; lastDamashi = d.damashi; lastBig = d.bigbox||null;   // B2/B3/C1 用に保持
     setBadge(d.source==='live');
     let wi = '';
     if (d.box) wi += ' ｜ 箱幅'+d.box.width.toFixed(1);
@@ -214,8 +219,12 @@ function updateStats(){
   const near=Math.min(Math.abs(up),Math.abs(dn)), warn = near<=b.width*0.10;
   let h='<span class="x" id="stX">✕</span>';
   h+='<b>現在 '+curPx.toFixed(2)+'</b><br>';
-  h+='箱: 上'+b.up.toFixed(1)+' / 中'+b.mid.toFixed(1)+' / 下'+b.dn.toFixed(1)
+  h+='小箱(今): 上'+b.up.toFixed(1)+' / 中'+b.mid.toFixed(1)+' / 下'+b.dn.toFixed(1)
      +' ・ 溜まり幅 <b>'+b.width.toFixed(1)+'</b><br>';
+  if(lastBig){                                          // 大箱＝24h高安。会長の黄壁の尺度。目安=小箱の溜まり分を壁から測った到達点
+    h+='<span style="color:#e3c94a">大箱(24h): 上'+lastBig.up.toFixed(1)+' / 下'+lastBig.dn.toFixed(1)+' ・ 幅 <b>'+lastBig.width.toFixed(1)+'</b></span>'
+      +' <span style="color:#8b949e">溜まり分の目安: 下抜けなら'+(b.dn-b.width).toFixed(1)+' / 上抜けなら'+(b.up+b.width).toFixed(1)+'</span><br>';
+  }
   h+='余地: 上壁まで <b>'+fmtSigned(up)+'</b> ／ 下壁まで <b>'+fmtSigned(-dn)+'</b>'
      +(warn?' <span style="color:#f0a35e">← 壁に接近</span>':'')+'<br>';
   const k=lastBreak;

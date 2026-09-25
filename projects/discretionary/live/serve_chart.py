@@ -184,6 +184,16 @@ def build_data(n=1500):
     if box is None:
         box = chart_gen.current_box(m5); brk = None  # 予備2: 旧ローリング
     ai_pos = latest_ai_position(tick)
+    # 大箱＝直近24h(288本・形成中は除く)の高安。会長が黄で引く「セッションの壁」と同じ定義(旧backtest Ver.1の箱)。
+    # 小箱(dynamic_box)＝今の締まった範囲＝ノイズを除いた溜まり。2層を同じ画面に置いて尺度のずれを防ぐ(2026-09-25 会長)。
+    bigbox = None
+    try:
+        hh = h[:-1][-288:]; ll = l[:-1][-288:]
+        if len(hh) >= 50:
+            bu, bd = float(hh.max()), float(ll.min())
+            bigbox = {"up": round(bu, 3), "dn": round(bd, 3), "width": round(bu - bd, 3), "bars": int(len(hh))}
+    except Exception:
+        bigbox = None
 
     # C1: いまの時間帯(JST)の本物率(機械統計)
     damashi = None
@@ -205,6 +215,7 @@ def build_data(n=1500):
         "tick": tick,
         "bars": bars,
         "box": {k: round(v, 3) for k, v in box.items()},
+        "bigbox": bigbox,
         "break": ({k: (round(v, 3) if isinstance(v, float) else v)
                    for k, v in brk.items()} if brk else None),
         "damashi": damashi,
