@@ -194,3 +194,5 @@
 {"kind": "update", "target": "S-0088", "logged_at": "2026-09-25 17:01:08", "frozen": true, "mfe_R": 0.54, "mae_R": 0.47, "hold_bars": 27}
 {"kind": "update", "target": "S-0088", "logged_at": "2026-09-25 17:15:09", "frozen": true, "mfe_R": 0.57, "mae_R": 0.47, "hold_bars": 30}
 {"kind": "update", "target": "S-0088", "logged_at": "2026-09-25 17:21:09", "frozen": true, "mfe_R": 0.7, "mae_R": 0.47, "hold_bars": 31}
+{"kind": "update", "target": "S-0088", "logged_at": "2026-09-25 17:31:10", "frozen": true, "mfe_R": 0.72, "mae_R": 0.47, "hold_bars": 33}
+{"kind": "update", "target": "S-0088", "logged_at": "2026-09-25 17:35:10", "frozen": true, "mfe_R": 1.01, "mae_R": 0.47, "hold_bars": 34}
