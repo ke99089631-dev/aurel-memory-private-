@@ -330,12 +330,47 @@ UPDATE_FIELDS = ("status", "entry", "entry_time", "entry_jst", "exit", "exit_tim
                  "R", "mfe_R", "mae_R", "hold_bars", "outcome", "chase", "features", "spread_pt")
 
 
+def _advance_open(recs, m5, f, now):
+    """建玉中(open)の記録は「記録済みの建値/SL/TP」だけで前進させる（壁の再計算に左右されない）。
+       2026-09-25 S-0086 が2分ごとに open↔no_retest を往復した対策: dynamic_box は走査開始位置で壁が変わる(経路依存)ため、
+       再走査で同じブレイクの壁がずれ、既に持っている紙建玉が消えたり戻ったりしていた。建玉は一度持ったら凍結。"""
+    o = m5["open"].to_numpy(); h = m5["high"].to_numpy()
+    l = m5["low"].to_numpy();  c = m5["close"].to_numpy()
+    idx = m5.index; n = len(m5)
+    t_of = {int(pd.Timestamp(idx[k]).timestamp()): k for k in range(n)}
+    updated = 0
+    for r in recs.values():
+        if r.get("status") != "open" or not r.get("entry_time") or r.get("entry") is None:
+            continue
+        ie = t_of.get(int(r["entry_time"]))
+        if ie is None:
+            continue
+        res = _simulate(o, h, l, c, ie, r["side"], float(r["entry"]), float(r["sl"]), float(r["tp"]), n)
+        upd = {"kind": "update", "target": r["id"], "logged_at": now, "frozen": True}
+        if res["status"] == "closed":
+            exit_k = res["exit_k"]
+            upd.update({"status": "closed", "exit": res["exit"], "exit_reason": res["exit_reason"], "R": res["R"],
+                        "mfe_R": res["mfe_R"], "mae_R": res["mae_R"], "hold_bars": res["hold_bars"],
+                        "exit_time": int(pd.Timestamp(idx[exit_k]).timestamp()),
+                        "outcome": "本物" if res["exit_reason"] == "TP" else ("ダマシ" if res["exit_reason"] == "SL" else "時間切れ")})
+        elif (res["mfe_R"], res["mae_R"]) != (r.get("mfe_R"), r.get("mae_R")):
+            upd.update({"mfe_R": res["mfe_R"], "mae_R": res["mae_R"], "hold_bars": res["hold_bars"]})
+        else:
+            continue
+        f.write(json.dumps(upd, ensure_ascii=False) + "\n")
+        r.update(upd); updated += 1
+    return updated
+
+
 def sync_once():
     dm = _load_damashi()
     m5 = _fetch_bars()
     if m5 is None or len(m5) < wallbox.WALL_WIN + 20:
         return 0, 0
     recs, by_key, maxn = load_state()
+    now0 = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open(LEDGER, "a", encoding="utf-8") as f:
+        frozen_upd = _advance_open(recs, m5, f, now0)
     # ★台帳の続きから走査する。取得窓(2000本)が時間とともにずれても、過去に「新規」が湧かないように。
     #   未決着(open/waiting)があればその最初のブレイクから再評価。無ければ最後の記録の直後から。
     start_t = None
@@ -375,6 +410,8 @@ def sync_once():
                 old = recs[by_key[k]]
                 if old.get("status") == "closed":
                     continue                       # 決着済みは触らない
+                if old.get("status") == "open":
+                    continue                       # 建玉中は凍結（_advance_open が前進させる）。再走査で壁がずれても消さない
                 if old.get("status") != s["status"] or (
                         s["status"] == "open" and old.get("entry") != s.get("entry")):
                     upd = {"kind": "update", "target": old["id"], "logged_at": now}
@@ -384,7 +421,7 @@ def sync_once():
                     f.write(json.dumps(upd, ensure_ascii=False) + "\n")
                     old.update(upd)
                     updated += 1
-    return added, updated
+    return added, updated + frozen_upd
 
 
 SLIP_EVERY = 15          # 30分ごとに、決着済みで滑り未計測の記録をティック再現で埋める（読取のみ）
