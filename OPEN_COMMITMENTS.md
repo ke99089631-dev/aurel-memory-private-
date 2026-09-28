@@ -201,6 +201,7 @@ updated: 2026-07-28
 
 ### 🔴 OPEN（会長判断待ち・2026-09-07）: 裁定の柱をどうするか
 0組のまま置く（推奨・嘘をつかない状態の維持）／関門を緩める（**AUREL推奨せず**＝結果を見て基準を動かす行為）／**共和分以外の柱を立てる**（研究予算を別の稼ぎ方へ）。AUREL推奨＝**「0組で休止」＋「次の柱の起案作成」の併走**。
+- **[2026-09-28 追記・観測]** 実測選別（arb_screen 09-07・n_survivors=0）以降、stat_arb は毎朝 `held=0 total_pnl=0.0` で step するが帳簿の `last_step_date` が null のまま＝**S2前進日数が 09-04 の 19/30 で凍結（24日間）**。朝ブリーフには「実(real) 19/30」と出続けるが実態は休止。判断待ちは変わらず（0組休止のまま／次の柱起案）。表示を「休止」と正直に出す小修正は起案可能（着工は会長GO）。
 
 ### ✅ 副産物（器の改良・2026-09-07）: 長い測定が窓の開閉で全滅する問題を解消
 1万組の総当たりは十数分かかるが、対話の窓が閉じると計算プロセスが道連れで落ち、**同じ全滅を3回**起こした。→ `arb_screen.py` に**再開可能な途中経過**を実装（`data/circulation/arb_screen_cache.json`・単一書き手）。各組に「両脚のバー本数＋最終日」の指紋を付け、**バーが増えたらその組だけ自動で測り直す**。つまみ署名が変われば全部破棄。書込みは tmp→`os.replace` で不完全な途中経過を残さない。実見＝再開時に `11026/11026 組は前回の結果を再利用（残り0組だけ測った）`。**測定結果は不変**（selftest PASS）。
@@ -278,10 +279,11 @@ updated: 2026-07-28
 - 実装・selftest PASS・digest 手動再構築で実見済（詳細 CIRCULATION-ARCHITECTURE 第4手）。**完了の定義＝明朝 09-17 07:00 の実循環で macro_causal step（role=sensor_only）・digest macro-read 残存・frontier の壁が macro 抜きで再測定されるのを実見**。
 - ★本日の4件（vol_sell監視修理／carry v2／trend v2／vol_sell v2／macro降格）は**全部 明朝の同じ実循環で一括実見**してクローズする。
 
-### 🔴 OPEN（実循環5営業日の実見待ち・2026-09-16 13:00）: 発注器 段1『影の発注』
+### ✅ CLOSED 2026-09-28（実循環8営業日を実見・完了の定義を満たした）: 発注器 段1『影の発注』
 - 実装・selftest 9項目PASS・実走1回OK（詳細 CIRCULATION-ARCHITECTURE 2026-09-16 段1）。配線＝auto_writeback 5m（非致命）。
 - **完了の定義＝09-17〜 5営業日、autowrite.log に `executor_shadow stepped ... rejected=0 chain_verified=True` を実見し、executor_divergence.jsonl に below_min 以外の skip/reject が無いこと**。異常が出たら段を戻す（G0思想）。
-- 段2/段3 は別GO（会長: 機関用口座の準備が段2の前提）。
+- **実見（2026-09-28 AUREL点検）**: `executor_shadow.json`（generated 09-28 07:02）= rejected=0 / ledger_chain_verified=true / money_moved=0 / skipped=53（全て below_min）。`executor_divergence.jsonl` 09-19〜09-26 の全56件が status=FILLED（影の約定のみ・skip/reject ゼロ）。autowrite.log は毎朝 `executor_shadow: SKIP nn` のみ（例外なし・09-17〜09-28 連続）。09-17〜09-26 で営業日8日＝5営業日を超過。
+- 段2/段3 は別GO（会長: 機関用口座の準備が段2の前提）。段2は下の 15:30 項（会長の公式MT5インストール待ち）。
 
 ### 🔴 OPEN（会長判断待ち・2026-09-16 15:30）: 発注器 段2『口座の鏡（読むだけ）』＝端末との通信が通らず保留
 - **できたこと**: 会長提供の機関専用口座（login 26608494 / VantageTradingLtd-Live）の資格情報を `empire/config/secrets/aurelian_executor.env` に保管（パスワードは記憶・会話に書かない）。機関専用の端末を `C:\Users\user\AurelianMT5`（Program Files の MT5 を複製・portable）に用意。**端末単体はこの口座に正常ログインできた**（ウィンドウ題名で実見＝資格情報は正しい）。読取専用モジュール `circulation/executor_mirror.py`（発注APIの呼び出しゼロ・期待口座ガード・拒否リスト＝selftest PASS）。
