@@ -242,3 +242,5 @@
 {"kind": "update", "target": "S-0095", "logged_at": "2026-09-28 10:55:36", "frozen": true, "mfe_R": 0.12, "mae_R": 0.16, "hold_bars": 1}
 {"kind": "update", "target": "S-0095", "logged_at": "2026-09-28 11:01:36", "frozen": true, "mfe_R": 0.12, "mae_R": 0.25, "hold_bars": 2}
 {"kind": "update", "target": "S-0094", "logged_at": "2026-09-28 11:05:36", "status": "no_retest", "chase": {"entry": 4227.13, "status": "open", "exit_reason": null, "R": null, "mfe_R": 0.88, "mae_R": 0.04}, "features": {"break_str_atr": 1.95, "break_body_ratio": 0.302, "break_depth_pool": 0.03, "momentum20_pct": -0.903, "wall_touches": 6, "tightness_pct": 0.262, "atr14": 6.377}}
+{"kind": "update", "target": "S-0095", "logged_at": "2026-09-28 11:41:39", "frozen": true, "mfe_R": 0.14, "mae_R": 0.25, "hold_bars": 10}
+{"kind": "update", "target": "S-0095", "logged_at": "2026-09-28 11:51:39", "frozen": true, "mfe_R": 0.2, "mae_R": 0.25, "hold_bars": 12}
