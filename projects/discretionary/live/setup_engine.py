@@ -362,6 +362,36 @@ def _advance_open(recs, m5, f, now):
     return updated
 
 
+def _advance_chase(recs, m5, f, now):
+    """chase変種(抜けで即追う)が open のまま凍結された記録を、記録済みの建値/SL/TP だけで前進させる。
+       戻り目待ちが no_retest / invalid で終わっても、chase は独立に自分の TP/SL/TIME まで走る。
+       2026-09-28 S-0093/S-0094 が no_retest 確定後に chase を部分値(open)で凍結していた対策。"""
+    o = m5["open"].to_numpy(); h = m5["high"].to_numpy()
+    l = m5["low"].to_numpy();  c = m5["close"].to_numpy()
+    idx = m5.index; n = len(m5)
+    t_of = {int(pd.Timestamp(idx[k]).timestamp()): k for k in range(n)}
+    updated = 0
+    for r in recs.values():
+        ch = r.get("chase")
+        if not isinstance(ch, dict) or ch.get("status") != "open":
+            continue
+        ib = t_of.get(int(r["break_time"]))
+        if ib is None or ib + 1 > n - 1:
+            continue                          # 窓外/直近すぎ＝次サイクルで前進
+        res = _simulate(o, h, l, c, ib + 1, r["side"], float(ch["entry"]),
+                        float(r["sl"]), float(r["tp"]), n)
+        new_ch = {"entry": ch["entry"], "status": res["status"],
+                  "exit_reason": res.get("exit_reason"), "R": res.get("R"),
+                  "mfe_R": res["mfe_R"], "mae_R": res["mae_R"]}
+        if new_ch == ch:
+            continue
+        upd = {"kind": "update", "target": r["id"], "logged_at": now,
+               "chase": new_ch, "chase_frozen": True}
+        f.write(json.dumps(upd, ensure_ascii=False) + "\n")
+        r.update(upd); updated += 1
+    return updated
+
+
 def sync_once():
     dm = _load_damashi()
     m5 = _fetch_bars()
@@ -371,6 +401,7 @@ def sync_once():
     now0 = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open(LEDGER, "a", encoding="utf-8") as f:
         frozen_upd = _advance_open(recs, m5, f, now0)
+        frozen_upd += _advance_chase(recs, m5, f, now0)
     # ★台帳の続きから走査する。取得窓(2000本)が時間とともにずれても、過去に「新規」が湧かないように。
     #   未決着(open/waiting)があればその最初のブレイクから再評価。無ければ最後の記録の直後から。
     start_t = None
