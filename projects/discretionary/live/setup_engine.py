@@ -166,14 +166,17 @@ def _reaccel_from(o, h, l, c, idx, ib, side, wall, sl_base, tp, n):
        TP ＝ 既存レーンと同じ（溜まり幅1個）。→ 入り方だけを変えて比較する。
        崩壊: リテスト中に終値が既存SLの外側＝ブレイク失敗(invalid)。トリガー不発＝no_trigger。"""
     sell = (side == "SELL")
+    # リテスト＝壁「付近」まで戻る（会長の眼: T-0008 は機械壁の2.8下で折り返し）。許容＝_features の壁タッチと同じ max(0.1*溜まり, 0.3)
+    pool = abs(float(tp) - float(wall))
+    tol = max(0.1 * pool, 0.3)
     j = None
     j_last = min(ib + RETRACE_BARS, n - 1)
     for k in range(ib + 1, j_last + 1):
-        if (sell and h[k] >= wall) or ((not sell) and l[k] <= wall):
+        if (sell and h[k] >= wall - tol) or ((not sell) and l[k] <= wall + tol):
             j = k; break
     if j is None:
         return {"status": "waiting" if ib + RETRACE_BARS > n - 1 else "no_retest"}
-    out = {"retest_time": _ts(idx, j), "retest_jst": _jst(idx, j)}
+    out = {"retest_time": _ts(idx, j), "retest_jst": _jst(idx, j), "retest_tol": round(tol, 2)}
     ext = h[j] if sell else l[j]
     k_last = min(j + REACCEL_BARS, n - 1)
     for k in range(j + 1, k_last + 1):

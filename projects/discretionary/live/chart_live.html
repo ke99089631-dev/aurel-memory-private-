@@ -258,9 +258,9 @@ function updateStats(){
     h+='<hr style="border:0;border-top:1px solid #30363d;margin:5px 0">';
     h+='<b>📒 成績くらべ</b> <span style="color:#8b949e">会長=実弾(台帳) ／ AI=戻り目エントリーの紙・スプレッド＋手数料を控除済み(net)</span><br>';
     // 3列: 会長 / AI(会長の初弾以降＝同期間) / AI(全期間)
-    const ai=aiStats||{}, same=ai.same||{n:0}, all=ai.all||{n:0};
+    const ai=aiStats||{}, same=ai.same||{n:0}, all=ai.all||{n:0}, re=ai.reaccel_same||{n:0}, reAll=ai.reaccel||{n:0};
     const cols=[{k:'会長',s:{n:c,wins:ts.wins,losses:ts.losses,winrate:ts.winrate,sumR:ts.sumR,avgR:ts.avgR,maxDD_R:ts.maxDD_R,recent:ts.recent}},
-                {k:'AI同期間',s:same},{k:'AI全体',s:all}];
+                {k:'AI同期間',s:same},{k:'AI全体',s:all},{k:'<span style="color:#f0a35e">AI再加速</span>',s:re}];
     const cell=(f)=>cols.map(cl=>'<td>'+(cl.s.n?f(cl.s):'-')+'</td>').join('');
     h+='<table class="cmp"><tr><th></th>'+cols.map(cl=>'<th>'+cl.k+'</th>').join('')+'</tr>';
     h+='<tr><td>本数</td>'+cols.map(cl=>'<td>'+(cl.s.n||0)+(cl.k==='会長'&&o?'<span style="color:#8b949e">+'+o+'</span>':'')+'</td>').join('')+'</tr>';
@@ -294,7 +294,11 @@ function updateStats(){
           +' ／ 実測'+(cst.slip_measured||0)+'本';
       }
       if((ai.tp_miss||[]).length){ h+='<br><span style="color:#f0a35e">TP不成立 '+ai.tp_miss.length+'本('+ai.tp_miss.join(',')+')＝紙はTP到達だが実際の指値は届かず→netから除外</span>'; }
-      h+='<br>差の判定は両者とも約100本から。AIは戻り目で入る＝会長(即追い)と建値が違う。</span>';
+      if(reAll.n){ const rg=ai.reaccel_gross||{}, rsg=ai.reaccel_same_gross||{}, rst=ai.reaccel_status||{};
+        h+='<br><span style="color:#f0a35e">AI再加速</span>(会長型: リテスト後の直前足安値割れで入る・壁/TPは同じ・SLは構造の外) 決着'+reAll.n+'本 全体'+fR(reAll.sumR)+'(平均'+fR(reAll.avgR)+')'
+          +' ／ 控除前: 同期間'+(rsg.n?fR(rsg.sumR):'-')+'・全体'+(rg.n?fR(rg.sumR):'-')
+          +' ／ 不発'+(rst.no_trigger||0)+'・崩壊'+(rst.invalid||0)+'・戻りなし'+(rst.no_retest||0); }
+      h+='<br>差の判定は両者とも約100本から。AI同期間/全体は戻り目で入る＝会長と建値が違う。AI再加速は会長の入り方の写し(2026-09-29 GO)。</span>';
     }
   }
   el.innerHTML=h; el.style.display='block';
@@ -328,6 +332,8 @@ function updatePaper(){
       const g=(x,lab)=>x&&x.n?('　'+lab+' n'+x.n+' 本物率'+x.tp_rate+'% '+fmtR(x.avg_r)+'<br>'):'';
       h+=g(s.outer,'外壁(黄)')+g(s.mid,'中間(青)');
       h+=g(s.chase,'即追い変種');
+      h+=g(s.reaccel,'<span style="color:#f0a35e">再加速変種(会長型)</span>');
+      if(s.reaccel_status){ const q=s.reaccel_status; h+='　<span style="color:#8b949e">再加速: 建玉中'+(q.open||0)+'・待ち'+(q.waiting||0)+'・不発'+(q.no_trigger||0)+'・崩壊'+(q.invalid||0)+'・戻りなし'+(q.no_retest||0)+'</span><br>'; }
       const zc={'本物帯':'#56d364','ダマシ巣':'#f85149','中立':'#e3c94a'};
       for(const z of ['本物帯','中立','ダマシ巣']){ const v=s.by_zone&&s.by_zone[z]; if(!v||!v.n) continue;
         h+='　<span style="color:'+zc[z]+'">'+z+'</span> n'+v.n+' 本物率'+v.tp_rate+'% '+fmtR(v.avg_r)+'<br>'; }
@@ -469,6 +475,28 @@ function drawSetups(){
       aictx.beginPath(); aictx.arc(x2,yX,3,0,7); aictx.fill();
       aictx.font='9px monospace'; aictx.fillText(fmtR(s.R||0)+(s.chairman?' ⇔'+s.chairman.id:''), x2+4, yX);
     }
+  }
+  // 第3印: 再加速変種（会長型）＝橙の点線（建値→決済）と小さな◆。主レーンと独立に描く（no_retest でも再加速だけ入ることがある）
+  for(const s of setups){
+    const ra=s.reaccel; if(!ra||!(ra.status==='open'||ra.status==='closed')||ra.entry==null||ra.entry_time==null) continue;
+    if(!showAiHistory && ra.status!=='open') continue;
+    const et=nearestBarTime(ra.entry_time); if(et==null) continue;
+    const xt = ra.exit_time!=null ? nearestBarTime(ra.exit_time) : null;
+    const endT = xt!=null ? xt : allBars[allBars.length-1].time;
+    if(endT < tFrom || et > tTo) continue;
+    const x1=tsc.timeToCoordinate(et); if(x1==null) continue;
+    let x2 = xt!=null ? tsc.timeToCoordinate(xt) : w; if(x2==null) x2=w; if(x2-x1<3) x2=x1+3;
+    const yE=series.priceToCoordinate(ra.entry); if(yE==null) continue;
+    const live = ra.status==='open';
+    aictx.strokeStyle='rgba(240,163,94,'+(live?1:0.7)+')'; aictx.lineWidth=live?2:1; aictx.setLineDash([2,3]);
+    aictx.beginPath(); aictx.moveTo(x1,yE); aictx.lineTo(x2,yE); aictx.stroke(); aictx.setLineDash([]);
+    aictx.fillStyle='#f0a35e'; aictx.beginPath();
+    aictx.moveTo(x1,yE-5); aictx.lineTo(x1+4,yE); aictx.lineTo(x1,yE+5); aictx.lineTo(x1-4,yE); aictx.closePath(); aictx.fill();
+    if(live){ const ySL=series.priceToCoordinate(ra.sl); if(ySL!=null){ aictx.strokeStyle='rgba(240,163,94,0.6)'; aictx.setLineDash([3,3]);
+      aictx.beginPath(); aictx.moveTo(x1,ySL); aictx.lineTo(x2,ySL); aictx.stroke(); aictx.setLineDash([]); } }
+    aictx.font=(live?'bold ':'')+'9px monospace'; aictx.textBaseline='middle'; aictx.textAlign='left';
+    aictx.fillStyle='rgba(240,163,94,'+(live?1:0.8)+')';
+    aictx.fillText('再'+(s.side==='BUY'?'買':'売')+' '+ra.entry.toFixed(1)+(!live&&ra.R!=null?' '+fmtR(ra.R):''), x1+6, yE+(s.side==='BUY'?9:-9));
   }
 }
 // 見出し1行（常時）: 建玉中なら損益、無ければスコープ（本物率・AI実測・信頼度）

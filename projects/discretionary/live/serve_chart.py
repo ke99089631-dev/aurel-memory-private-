@@ -431,9 +431,28 @@ def build_ai_stats(since_epoch=None):
                     "avg_cost_pt": round(sum(costs) / len(costs), 3) if costs else None,
                     "sources": src_count, "slip_measured": slip_n,
                     "slip_default_pt": cm.get("slippage_pt"), "slip_summary": slip_sum}}
+    # 再加速変種（会長型・第3レーン・会長GO 2026-09-29）: 同じ壁/TP・入り方だけ違う。コストは建玉時刻の時間帯中央値(or仮値)＋手数料。
+    re_net, re_gross, re_status = [], [], {}
+    for r in sorted(recs, key=lambda r: int(r.get("break_time") or 0)):
+        ra = r.get("reaccel") if isinstance(r.get("reaccel"), dict) else None
+        if not ra:
+            continue
+        re_status[ra.get("status")] = re_status.get(ra.get("status"), 0) + 1
+        if ra.get("status") != "closed" or ra.get("R") is None:
+            continue
+        bt = int(r.get("break_time") or 0)
+        re_gross.append({"id": r["id"], "R": float(ra["R"]), "bt": bt})
+        fake = {"R": ra["R"], "entry": ra.get("entry"), "sl": ra.get("sl"), "entry_time": ra.get("entry_time"),
+                "jst_hour": r.get("jst_hour"), "exit_reason": ra.get("exit_reason")}
+        rn, _, _ = _net_R(fake, cm)
+        re_net.append({"id": r["id"], "R": rn, "bt": bt})
+    out["reaccel"] = _r_stats(re_net); out["reaccel_gross"] = _r_stats(re_gross)
+    out["reaccel_status"] = re_status
     if since_epoch:
         out["same"] = _r_stats([x for x in rows_net if x["bt"] >= since_epoch])
         out["same_gross"] = _r_stats([x for x in rows_gross if x["bt"] >= since_epoch])
+        out["reaccel_same"] = _r_stats([x for x in re_net if x["bt"] >= since_epoch])
+        out["reaccel_same_gross"] = _r_stats([x for x in re_gross if x["bt"] >= since_epoch])
     return out
 
 
@@ -529,6 +548,7 @@ def build_setups(tick=None):
                 "avg_mfe": round(sum(r.get("mfe_R", 0) for r in rs) / len(rs), 2)}
 
     chase = [r["chase"] for r in recs if (r.get("chase") or {}).get("status") == "closed"]
+    reaccel = [r["reaccel"] for r in recs if (r.get("reaccel") or {}).get("status") == "closed"]
     linked = [s for s in recs if s.get("chairman")]
     agree = 0
     for s in linked:
@@ -545,6 +565,9 @@ def build_setups(tick=None):
         "mid": grp([r for r in closed if r.get("wall_kind") == "mid"]),
         "by_zone": {z: grp([r for r in closed if r.get("zone") == z]) for z in ("本物帯", "中立", "ダマシ巣")},
         "chase": grp(chase),
+        "reaccel": grp(reaccel),
+        "reaccel_status": {k: sum(1 for r in recs if (r.get("reaccel") or {}).get("status") == k)
+                           for k in ("open", "closed", "waiting", "no_retest", "no_trigger", "invalid")},
         "linked": len(linked), "agree": agree,
         "confidence": _confidence(n),
     }
