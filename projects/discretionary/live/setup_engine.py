@@ -36,6 +36,8 @@ MAX_HOLD = 288          # 最長保有（24h）
 MID_POOL_BARS = 6       # 中間ブレイク認定: 直前この本数の終値が全て反対側（溜まりがあった）
 COOLDOWN = 3
 LATE_LOOKBACK = 24      # 壁の乗り換え後に価格が既に外だった時、何本前までブレイク足を遡って探すか
+REACCEL_BARS = 12       # 再加速変種: 壁リテスト後、直前足の安値割れ(買いは高値超え)を待つ最大本数（1時間）
+REACCEL_PAD = 0.2       # 再加速変種: SL＝リテスト区間の極値の外側にこのpt
 
 
 def _load_damashi():
@@ -73,8 +75,9 @@ def _log_spread(tick):
         pass
 
 
-def _fetch_bars():
-    with urllib.request.urlopen(API, timeout=25) as r:
+def _fetch_bars(n_bars=None):
+    url = API if not n_bars else API.split("?")[0] + "?n=%d" % int(n_bars)
+    with urllib.request.urlopen(url, timeout=25) as r:
         d = json.loads(r.read().decode("utf-8"))
     bars = d.get("bars", [])
     if len(bars) < 2:
@@ -145,6 +148,58 @@ def _simulate(o, h, l, c, ie, side, entry, sl, tp, n):
     return {"status": "closed", "exit": round(float(exit_px), 3), "exit_reason": reason,
             "exit_k": exit_k, "R": round(pnl / risk, 3),
             "mfe_R": round(mfe, 2), "mae_R": round(mae, 2), "hold_bars": exit_k - ie}
+
+
+def _ts(idx, k):
+    return int(pd.Timestamp(idx[k]).timestamp())
+
+
+def _jst(idx, k):
+    return pd.Timestamp(idx[k]).tz_convert("Asia/Tokyo").strftime("%Y-%m-%d %H:%M")
+
+
+def _reaccel_from(o, h, l, c, idx, ib, side, wall, sl_base, tp, n):
+    """再加速変種（会長の入り方・2026-09-28 T-0008/0009/0010 の3本同型・会長GO 2026-09-29）。
+       ブレイク足 ib → 壁リテスト(RETRACE_BARS内・戻り目と同じ検知) → その後 REACCEL_BARS 内で
+       「直前足の安値割れ(買いは高値超え)」＝逆指値約定。建値＝直前足の安値(高値)。
+       SL ＝ max(既存レーンのSL, リテスト区間の極値＋REACCEL_PAD)（構造の外・既存より内側には置かない）
+       TP ＝ 既存レーンと同じ（溜まり幅1個）。→ 入り方だけを変えて比較する。
+       崩壊: リテスト中に終値が既存SLの外側＝ブレイク失敗(invalid)。トリガー不発＝no_trigger。"""
+    sell = (side == "SELL")
+    j = None
+    j_last = min(ib + RETRACE_BARS, n - 1)
+    for k in range(ib + 1, j_last + 1):
+        if (sell and h[k] >= wall) or ((not sell) and l[k] <= wall):
+            j = k; break
+    if j is None:
+        return {"status": "waiting" if ib + RETRACE_BARS > n - 1 else "no_retest"}
+    out = {"retest_time": _ts(idx, j), "retest_jst": _jst(idx, j)}
+    ext = h[j] if sell else l[j]
+    k_last = min(j + REACCEL_BARS, n - 1)
+    for k in range(j + 1, k_last + 1):
+        if (sell and c[k] >= sl_base) or ((not sell) and c[k] <= sl_base):
+            out["status"] = "invalid"; out["why"] = "リテスト中に終値が構造の外"
+            return out
+        trig = l[k - 1] if sell else h[k - 1]
+        if (sell and l[k] < trig) or ((not sell) and h[k] > trig):
+            entry = float(trig)
+            sl = max(sl_base, ext + REACCEL_PAD) if sell else min(sl_base, ext - REACCEL_PAD)
+            out.update({"entry": round(entry, 3), "entry_time": _ts(idx, k), "entry_jst": _jst(idx, k),
+                        "sl": round(float(sl), 3), "tp": round(float(tp), 3), "swing": round(float(ext), 3),
+                        "wait_bars": k - j})
+            ok = (sl > entry > tp) if sell else (tp > entry > sl)
+            if not ok:
+                out["status"] = "invalid"; out["why"] = "建値がSL/TPの外"
+                return out
+            r = _simulate(o, h, l, c, k, side, entry, sl, tp, n)
+            out.update({"status": r["status"], "mfe_R": r["mfe_R"], "mae_R": r["mae_R"], "hold_bars": r["hold_bars"]})
+            if r["status"] == "closed":
+                out.update({"exit": r["exit"], "exit_reason": r["exit_reason"], "R": r["R"],
+                            "exit_time": _ts(idx, r["exit_k"])})
+            return out
+        ext = max(ext, h[k]) if sell else min(ext, l[k])
+    out["status"] = "waiting" if j + REACCEL_BARS > n - 1 else "no_trigger"
+    return out
 
 
 def scan(m5, dm, start_t=None):
@@ -244,6 +299,8 @@ def scan(m5, dm, start_t=None):
                           "mfe_R": r["mfe_R"], "mae_R": r["mae_R"]}
         else:
             s["chase"] = {"entry": round(ch_entry, 3), "status": "invalid"}
+        # 再加速変種（会長型・第3レーン）。以後の前進は _advance_reaccel が記録済みの壁/SL/TPだけで行う（凍結）
+        s["reaccel"] = _reaccel_from(o, h, l, c, idx, i, side, wall, sl, tp, n)
 
         # 戻り目（壁リテスト）待ち
         j_enter = None
@@ -392,9 +449,49 @@ def _advance_chase(recs, m5, f, now):
     return updated
 
 
-def sync_once():
+REACCEL_DONE = ("closed", "invalid", "no_retest", "no_trigger")
+
+
+def _advance_reaccel(recs, m5, f, now):
+    """再加速変種を、記録済みの壁/SL/TP だけで前進させる（凍結・壁の再計算に左右されない）。
+       reaccel が無い記録（2026-09-29 以前の分）はここで初めて計算＝バックフィル。
+       open は記録済みの建値/SLで前進、waiting/未計算はブレイク足から再評価。"""
+    o = m5["open"].to_numpy(); h = m5["high"].to_numpy()
+    l = m5["low"].to_numpy();  c = m5["close"].to_numpy()
+    idx = m5.index; n = len(m5)
+    t_of = {_ts(idx, k): k for k in range(n)}
+    updated = 0
+    for r in recs.values():
+        ra = r.get("reaccel") if isinstance(r.get("reaccel"), dict) else None
+        st = ra.get("status") if ra else None
+        if st in REACCEL_DONE:
+            continue
+        ib = t_of.get(int(r["break_time"]))
+        if ib is None or ib + 1 > n - 1:
+            continue
+        if st == "open" and ra.get("entry_time") is not None:
+            ie = t_of.get(int(ra["entry_time"]))
+            if ie is None:
+                continue
+            res = _simulate(o, h, l, c, ie, r["side"], float(ra["entry"]), float(ra["sl"]), float(ra["tp"]), n)
+            new = dict(ra)
+            new.update({"status": res["status"], "mfe_R": res["mfe_R"], "mae_R": res["mae_R"], "hold_bars": res["hold_bars"]})
+            if res["status"] == "closed":
+                new.update({"exit": res["exit"], "exit_reason": res["exit_reason"], "R": res["R"],
+                            "exit_time": _ts(idx, res["exit_k"])})
+        else:
+            new = _reaccel_from(o, h, l, c, idx, ib, r["side"], float(r["wall"]), float(r["sl"]), float(r["tp"]), n)
+        if new == ra:
+            continue
+        upd = {"kind": "update", "target": r["id"], "logged_at": now, "reaccel": new, "reaccel_frozen": True}
+        f.write(json.dumps(upd, ensure_ascii=False) + "\n")
+        r.update(upd); updated += 1
+    return updated
+
+
+def sync_once(n_bars=None):
     dm = _load_damashi()
-    m5 = _fetch_bars()
+    m5 = _fetch_bars(n_bars)
     if m5 is None or len(m5) < wallbox.WALL_WIN + 20:
         return 0, 0
     recs, by_key, maxn = load_state()
@@ -402,6 +499,7 @@ def sync_once():
     with open(LEDGER, "a", encoding="utf-8") as f:
         frozen_upd = _advance_open(recs, m5, f, now0)
         frozen_upd += _advance_chase(recs, m5, f, now0)
+        frozen_upd += _advance_reaccel(recs, m5, f, now0)
     # ★台帳の続きから走査する。取得窓(2000本)が時間とともにずれても、過去に「新規」が湧かないように。
     #   未決着(open/waiting)があればその最初のブレイクから再評価。無ければ最後の記録の直後から。
     start_t = None
@@ -480,8 +578,22 @@ def main():
         time.sleep(INTERVAL)
 
 
+def backfill_reaccel(n_bars=5000):
+    """再加速変種を過去記録に一度だけ計算（走査はしない・advance のみ）。窓=最大5000本(約17営業日)。"""
+    m5 = _fetch_bars(n_bars)
+    recs, _, _ = load_state()
+    now = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open(LEDGER, "a", encoding="utf-8") as f:
+        u = _advance_reaccel(recs, m5, f, now)
+    from collections import Counter
+    cnt = Counter((r.get("reaccel") or {}).get("status", "none") for r in recs.values())
+    return u, dict(cnt), (m5.index[0].tz_convert("Asia/Tokyo").strftime("%m-%d %H:%M"), len(m5))
+
+
 if __name__ == "__main__":
     if "--once" in sys.argv:
         print("新規/更新:", sync_once())
+    elif "--backfill-reaccel" in sys.argv:
+        print("再加速バックフィル 更新/状態/窓:", backfill_reaccel())
     else:
         main()
