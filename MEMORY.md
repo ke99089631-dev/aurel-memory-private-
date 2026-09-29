@@ -41,6 +41,10 @@ updated: 2026-06-03
 - **[projects/institution/EXECUTOR-PROPOSAL.md](projects/institution/EXECUTOR-PROPOSAL.md)** — **発注器（畑の鍬）起案 v1（2026-09-16・着工GO待ち）**。段1=紙口座に影の発注（金ゼロ）→段2読取接続→段3極小実弾（会長二重ロック）。鍵 `LIVE_ARM.json` は会長のみが置く＝**AURELは書かない**。裁量口座27972608・プロップ・$53は拒否リスト。
 - **[projects/institution/CIRCULATION-ARCHITECTURE.md](projects/institution/CIRCULATION-ARCHITECTURE.md)** — 9循環＋8兵士＋発見器ガントレットの設計・建設ログ。機関は毎朝07:00自律で1拍（`AUREL_Circulation_WriteBack`）。金ゼロ・adoption0・紙のみ。
 
+## ⚠️ 部屋の分離ルール（会長訂正 2026-09-29）
+- 携帯チャットは**部屋ごとに話題が分かれている**。自分の部屋は `~/.aurel/projects/<id>/meta.json` の name で確認（home=AUREL本部屋 / p_4f6c30e5=壁→壁 検証室 / 他は各事業部）。
+- 記憶は全部屋共有だが、**話題は部屋に従う**。本部屋(home)で壁→壁の話題を自分から出さない。短い問いを「最新のepisodic」で補完しない＝部屋の文脈で解釈する。跨ぐ時は「それは検証室の話」と一言で誘導する。
+
 ---
 
 ## 0. Identity
