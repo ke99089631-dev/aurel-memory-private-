@@ -452,6 +452,53 @@ def _advance_chase(recs, m5, f, now):
     return updated
 
 
+def _advance_waiting(recs, m5, f, now):
+    """戻り目待ち(waiting)の記録を、記録済みの壁/SL/TP だけで決着させる（scan の戻り目ロジックと同一・凍結）。
+       2026-09-29 S-0104 対策: dynamic_box は走査開始位置で壁が変わる(経路依存)ため、再走査で同じブレイクが別キーになり、
+       waiting の記録が永久に更新されなかった。open になれば以後は _advance_open が前進させる。"""
+    o = m5["open"].to_numpy(); h = m5["high"].to_numpy()
+    l = m5["low"].to_numpy();  c = m5["close"].to_numpy()
+    idx = m5.index; n = len(m5)
+    t_of = {_ts(idx, k): k for k in range(n)}
+    updated = 0
+    for r in recs.values():
+        if r.get("status") != "waiting":
+            continue
+        ib = t_of.get(int(r["break_time"]))
+        if ib is None:
+            continue
+        side = r["side"]; wall = float(r["wall"]); sl = float(r["sl"]); tp = float(r["tp"])
+        j_enter = None
+        j_last = min(ib + RETRACE_BARS, n - 1)
+        for j in range(ib + 1, j_last + 1):
+            if (side == "SELL" and h[j] >= wall) or (side == "BUY" and l[j] <= wall):
+                j_enter = j; break
+        upd = {"kind": "update", "target": r["id"], "logged_at": now, "waiting_resolved": True}
+        if j_enter is None:
+            if ib + RETRACE_BARS > n - 1:
+                continue                                  # まだ窓の中
+            upd["status"] = "no_retest"
+        else:
+            ie = j_enter + 1
+            if ie > n - 1:
+                continue
+            entry = float(o[ie])
+            ok = (sl > entry > tp) if side == "SELL" else (tp > entry > sl)
+            upd.update({"entry": round(entry, 3), "entry_time": _ts(idx, ie), "entry_jst": _jst(idx, ie)})
+            if not ok:
+                upd["status"] = "invalid"
+            else:
+                res = _simulate(o, h, l, c, ie, side, entry, sl, tp, n)
+                upd.update({"status": res["status"], "mfe_R": res["mfe_R"], "mae_R": res["mae_R"], "hold_bars": res["hold_bars"]})
+                if res["status"] == "closed":
+                    upd.update({"exit": res["exit"], "exit_reason": res["exit_reason"], "R": res["R"],
+                                "exit_time": _ts(idx, res["exit_k"]),
+                                "outcome": "本物" if res["exit_reason"] == "TP" else ("ダマシ" if res["exit_reason"] == "SL" else "時間切れ")})
+        f.write(json.dumps(upd, ensure_ascii=False) + "\n")
+        r.update(upd); updated += 1
+    return updated
+
+
 REACCEL_DONE = ("closed", "invalid", "no_retest", "no_trigger")
 
 
@@ -500,7 +547,8 @@ def sync_once(n_bars=None):
     recs, by_key, maxn = load_state()
     now0 = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open(LEDGER, "a", encoding="utf-8") as f:
-        frozen_upd = _advance_open(recs, m5, f, now0)
+        frozen_upd = _advance_waiting(recs, m5, f, now0)
+        frozen_upd += _advance_open(recs, m5, f, now0)
         frozen_upd += _advance_chase(recs, m5, f, now0)
         frozen_upd += _advance_reaccel(recs, m5, f, now0)
     # ★台帳の続きから走査する。取得窓(2000本)が時間とともにずれても、過去に「新規」が湧かないように。
