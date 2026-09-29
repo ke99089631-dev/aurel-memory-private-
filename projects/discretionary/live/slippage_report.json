@@ -1,41 +1,41 @@
 {
  "summary": {
-  "n": 1,
+  "n": 0,
   "entry_slip_0.3": {
-   "n": 1,
-   "median": -0.05,
-   "mean": -0.05,
-   "p90": -0.05,
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
    "adverse_share": 0.0
   },
   "entry_slip_1": {
-   "n": 1,
-   "median": -0.16,
-   "mean": -0.16,
-   "p90": -0.16,
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
    "adverse_share": 0.0
   },
   "entry_slip_3": {
-   "n": 1,
-   "median": -0.2,
-   "mean": -0.2,
-   "p90": -0.2,
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
    "adverse_share": 0.0
   },
   "entry_slip_120": {
-   "n": 1,
-   "median": -1.14,
-   "mean": -1.14,
-   "p90": -1.14,
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
    "adverse_share": 0.0
   },
   "sl": {
-   "n": 1,
-   "measured": 1,
+   "n": 0,
+   "measured": 0,
    "not_triggered_on_tick": 0,
-   "median": 0.223,
-   "p90": 0.223,
-   "max": 0.223
+   "median": null,
+   "p90": null,
+   "max": null
   },
   "tp": {
    "n": 0,
@@ -43,29 +43,13 @@
    "fill_miss": 0
   },
   "spread_at_entry": {
-   "median": 0.16,
-   "p90": 0.16,
-   "max": 0.16
+   "median": null,
+   "p90": null,
+   "max": null
   },
-  "open_vs_tick_abs_median": 0.0,
+  "open_vs_tick_abs_median": null,
   "adopt_latency_s": 1.0,
-  "generated": "2026-09-30 03:05:11"
+  "generated": "2026-09-30 03:35:14"
  },
- "rows": [
-  {
-   "id": "S-0107",
-   "side": "SELL",
-   "risk": 2.9370000000008076,
-   "exit_reason": "SL",
-   "R": -1.0,
-   "bid0": 4148.44,
-   "spread_pt": 0.16,
-   "slip_0.3": -0.05,
-   "slip_1": -0.16,
-   "slip_3": -0.2,
-   "slip_120": -1.14,
-   "open_vs_tick": 0.0,
-   "sl_slip": 0.223
-  }
- ]
+ "rows": []
 }
