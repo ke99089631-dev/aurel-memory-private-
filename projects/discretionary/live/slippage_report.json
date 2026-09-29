@@ -1,114 +1,55 @@
 {
  "summary": {
-  "n": 2,
+  "n": 0,
   "entry_slip_0.3": {
-   "n": 2,
-   "median": 0.0,
-   "mean": -0.065,
-   "p90": 0.0,
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
    "adverse_share": 0.0
-  },
-  "chase_slip_0.3": {
-   "n": 2,
-   "median": -0.13,
-   "p90": -0.13
   },
   "entry_slip_1": {
-   "n": 2,
-   "median": -0.06,
-   "mean": -0.1,
-   "p90": -0.06,
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
    "adverse_share": 0.0
   },
-  "chase_slip_1": {
-   "n": 2,
-   "median": -0.33,
-   "p90": -0.33
-  },
   "entry_slip_3": {
-   "n": 2,
-   "median": 0.67,
-   "mean": 0.02,
-   "p90": 0.67,
-   "adverse_share": 50.0
-  },
-  "chase_slip_3": {
-   "n": 2,
-   "median": -0.1,
-   "p90": -0.1
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
+   "adverse_share": 0.0
   },
   "entry_slip_120": {
-   "n": 2,
-   "median": 5.03,
-   "mean": 1.7,
-   "p90": 5.03,
-   "adverse_share": 50.0
-  },
-  "chase_slip_120": {
-   "n": 2,
-   "median": -0.34,
-   "p90": -0.34
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
+   "adverse_share": 0.0
   },
   "sl": {
-   "n": 1,
-   "measured": 1,
+   "n": 0,
+   "measured": 0,
    "not_triggered_on_tick": 0,
-   "median": 0.023,
-   "p90": 0.023,
-   "max": 0.023
+   "median": null,
+   "p90": null,
+   "max": null
   },
   "tp": {
-   "n": 1,
-   "fill_ok": 1,
+   "n": 0,
+   "fill_ok": 0,
    "fill_miss": 0
   },
   "spread_at_entry": {
-   "median": 0.16,
-   "p90": 0.16,
-   "max": 0.16
+   "median": null,
+   "p90": null,
+   "max": null
   },
-  "open_vs_tick_abs_median": 0.0,
+  "open_vs_tick_abs_median": null,
   "adopt_latency_s": 1.0,
-  "generated": "2026-09-29 10:40:48"
+  "generated": "2026-09-29 11:10:51"
  },
- "rows": [
-  {
-   "id": "S-0098",
-   "side": "BUY",
-   "risk": 4.028999999999542,
-   "exit_reason": "TP",
-   "R": 0.745,
-   "bid0": 4124.2,
-   "spread_pt": 0.15,
-   "slip_0.3": -0.13,
-   "slip_1": -0.06,
-   "slip_3": 0.67,
-   "slip_120": 5.03,
-   "open_vs_tick": 0.0,
-   "chase_slip_0.3": -0.27,
-   "chase_slip_1": -0.54,
-   "chase_slip_3": -1.09,
-   "chase_slip_120": -0.34,
-   "tp_fill_ok": true
-  },
-  {
-   "id": "S-0099",
-   "side": "BUY",
-   "risk": 4.317000000000007,
-   "exit_reason": "SL",
-   "R": -1.0,
-   "bid0": 4129.87,
-   "spread_pt": 0.16,
-   "slip_0.3": 0.0,
-   "slip_1": -0.14,
-   "slip_3": -0.63,
-   "slip_120": -1.63,
-   "open_vs_tick": 0.0,
-   "chase_slip_0.3": -0.13,
-   "chase_slip_1": -0.33,
-   "chase_slip_3": -0.1,
-   "chase_slip_120": -2.62,
-   "sl_slip": 0.023
-  }
- ]
+ "rows": []
 }
