@@ -38,6 +38,7 @@ COOLDOWN = 3
 LATE_LOOKBACK = 24      # 壁の乗り換え後に価格が既に外だった時、何本前までブレイク足を遡って探すか
 REACCEL_BARS = 12       # 再加速変種: 壁リテスト後、直前足の安値割れ(買いは高値超え)を待つ最大本数（1時間）
 REACCEL_PAD = 0.2       # 再加速変種: SL＝リテスト区間の極値の外側にこのpt
+MIN_SL_W = 3.0          # AI最小SL幅(建値↔SL・ドル)。極小SLがR分散の主因(S-0051 SL0.09→net-5.76 / S-0105 SL1.34→+11R)＝当たりくじ化。会長委任で3.0固定(2026-09-30・会長の型の最小実SL2.72に整合)。同期間再シミュ: sd2.58→1.88・標準誤差0.39→0.29・DD-11.6→-6.9、平均Rは+0.36→+0.30でほぼ不変。TPは据え置き、SLだけ外側へ広げる。
 
 
 def _load_damashi():
@@ -187,6 +188,7 @@ def _reaccel_from(o, h, l, c, idx, ib, side, wall, sl_base, tp, n):
         if (sell and l[k] < trig) or ((not sell) and h[k] > trig):
             entry = float(trig)
             sl = max(sl_base, ext + REACCEL_PAD) if sell else min(sl_base, ext - REACCEL_PAD)
+            sl = max(sl, entry + MIN_SL_W) if sell else min(sl, entry - MIN_SL_W)   # 最小SL幅フロア(会長委任 2026-09-30・建値基準)
             out.update({"entry": round(entry, 3), "entry_time": _ts(idx, k), "entry_jst": _jst(idx, k),
                         "sl": round(float(sl), 3), "tp": round(float(tp), 3), "swing": round(float(ext), 3),
                         "wait_bars": k - j})
@@ -266,8 +268,10 @@ def scan(m5, dm, start_t=None):
         side = "SELL" if direction == "DOWN" else "BUY"
         if direction == "DOWN":
             sl = wall + pool * SL_PAD_FR; tp = wall - pool
+            sl = max(sl, wall + MIN_SL_W)          # 最小SL幅フロア(会長委任 2026-09-30): 極小SLの分散源を断つ・TPは据え置き
         else:
             sl = wall - pool * SL_PAD_FR; tp = wall + pool
+            sl = min(sl, wall - MIN_SL_W)          # 同上（買いはSLを下へ広げる）
         bt = int(pd.Timestamp(idx[i]).timestamp())
         jst = pd.Timestamp(idx[i]).tz_convert("Asia/Tokyo")
         jh = int(jst.hour)
