@@ -913,3 +913,4 @@
 {"kind": "update", "target": "S-0126", "logged_at": "2026-10-01 19:10:48", "reaccel": {"retest_time": 1790849100, "retest_jst": "2026-10-01 19:05", "retest_tol": 0.48, "status": "waiting"}, "reaccel_frozen": true}
 {"kind": "update", "target": "S-0126", "logged_at": "2026-10-01 19:20:50", "waiting_resolved": true, "entry": 4159.19, "entry_time": 1790849700, "entry_jst": "2026-10-01 19:15", "status": "closed", "mfe_R": 10.78, "mae_R": 53.44, "hold_bars": 0, "exit": 4159.28, "exit_reason": "SL", "R": -1.0, "exit_time": 1790849700, "outcome": "ダマシ"}
 {"kind": "update", "target": "S-0126", "logged_at": "2026-10-01 19:20:50", "reaccel": {"retest_time": 1790849100, "retest_jst": "2026-10-01 19:05", "retest_tol": 0.48, "status": "invalid", "why": "リテスト中に終値が構造の外"}, "reaccel_frozen": true}
+{"kind": "update", "target": "S-0126", "logged_at": "2026-10-01 19:26:51", "slip_src": "tick-sim L=1s", "spread_pt": 0.15, "slip_pt": 0.15, "sl_slip_pt": 0.06}
