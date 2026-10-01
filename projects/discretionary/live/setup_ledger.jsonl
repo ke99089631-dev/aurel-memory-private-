@@ -961,3 +961,7 @@
 {"kind": "update", "target": "S-0130", "logged_at": "2026-10-01 23:41:28", "reaccel": {"retest_time": 1790865300, "retest_jst": "2026-10-01 23:35", "retest_tol": 2.68, "status": "waiting"}, "reaccel_frozen": true}
 {"kind": "update", "target": "S-0130", "logged_at": "2026-10-01 23:45:29", "waiting_resolved": true, "entry": 4173.68, "entry_time": 1790865600, "entry_jst": "2026-10-01 23:40", "status": "open", "mfe_R": 0.05, "mae_R": 0.48, "hold_bars": 0}
 {"kind": "update", "target": "S-0130", "logged_at": "2026-10-01 23:51:30", "frozen": true, "mfe_R": 0.05, "mae_R": 0.59, "hold_bars": 1}
+{"kind": "update", "target": "S-0130", "logged_at": "2026-10-01 23:55:30", "frozen": true, "mfe_R": 0.05, "mae_R": 0.7, "hold_bars": 2}
+{"kind": "update", "target": "S-0130", "logged_at": "2026-10-02 00:01:31", "frozen": true, "mfe_R": 0.05, "mae_R": 0.83, "hold_bars": 3}
+{"kind": "update", "target": "S-0130", "logged_at": "2026-10-02 00:05:32", "frozen": true, "status": "closed", "exit": 4156.944, "exit_reason": "SL", "R": -1.0, "mfe_R": 0.05, "mae_R": 1.2, "hold_bars": 4, "exit_time": 1790866800, "outcome": "ダマシ"}
+{"kind": "update", "target": "S-0130", "logged_at": "2026-10-02 00:05:32", "reaccel": {"retest_time": 1790865300, "retest_jst": "2026-10-01 23:35", "retest_tol": 2.68, "status": "invalid", "why": "リテスト中に終値が構造の外"}, "reaccel_frozen": true}
