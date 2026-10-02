@@ -1,41 +1,41 @@
 {
  "summary": {
-  "n": 2,
+  "n": 0,
   "entry_slip_0.3": {
-   "n": 2,
-   "median": -0.01,
-   "mean": -0.05,
-   "p90": -0.01,
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
    "adverse_share": 0.0
   },
   "entry_slip_1": {
-   "n": 2,
-   "median": 0.3,
-   "mean": 0.125,
-   "p90": 0.3,
-   "adverse_share": 50.0
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
+   "adverse_share": 0.0
   },
   "entry_slip_3": {
-   "n": 2,
-   "median": 0.2,
-   "mean": 0.1,
-   "p90": 0.2,
-   "adverse_share": 50.0
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
+   "adverse_share": 0.0
   },
   "entry_slip_120": {
-   "n": 2,
-   "median": 0.78,
-   "mean": -0.115,
-   "p90": 0.78,
-   "adverse_share": 50.0
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
+   "adverse_share": 0.0
   },
   "sl": {
-   "n": 2,
-   "measured": 2,
+   "n": 0,
+   "measured": 0,
    "not_triggered_on_tick": 0,
-   "median": 0.005,
-   "p90": 0.005,
-   "max": 0.005
+   "median": null,
+   "p90": null,
+   "max": null
   },
   "tp": {
    "n": 0,
@@ -43,44 +43,13 @@
    "fill_miss": 0
   },
   "spread_at_entry": {
-   "median": 0.16,
-   "p90": 0.16,
-   "max": 0.16
+   "median": null,
+   "p90": null,
+   "max": null
   },
-  "open_vs_tick_abs_median": 0.0,
+  "open_vs_tick_abs_median": null,
   "adopt_latency_s": 1.0,
-  "generated": "2026-10-03 05:01:56"
+  "generated": "2026-10-03 05:32:00"
  },
- "rows": [
-  {
-   "id": "S-0148",
-   "side": "BUY",
-   "risk": 3.9600000000000364,
-   "exit_reason": "SL",
-   "R": -1.0,
-   "bid0": 4148.44,
-   "spread_pt": 0.16,
-   "slip_0.3": -0.09,
-   "slip_1": 0.3,
-   "slip_3": 0.2,
-   "slip_120": 0.78,
-   "open_vs_tick": 0.0,
-   "sl_slip": 0.0
-  },
-  {
-   "id": "S-0149",
-   "side": "SELL",
-   "risk": 1.675000000000182,
-   "exit_reason": "SL",
-   "R": -1.0,
-   "bid0": 4142.67,
-   "spread_pt": 0.15,
-   "slip_0.3": -0.01,
-   "slip_1": -0.05,
-   "slip_3": 0.0,
-   "slip_120": -1.01,
-   "open_vs_tick": 0.0,
-   "sl_slip": 0.005
-  }
- ]
+ "rows": []
 }
