@@ -1,41 +1,41 @@
 {
  "summary": {
-  "n": 0,
+  "n": 2,
   "entry_slip_0.3": {
-   "n": 0,
-   "median": null,
-   "mean": 0.0,
-   "p90": null,
+   "n": 2,
+   "median": -0.05,
+   "mean": -0.315,
+   "p90": -0.05,
    "adverse_share": 0.0
   },
   "entry_slip_1": {
-   "n": 0,
-   "median": null,
-   "mean": 0.0,
-   "p90": null,
-   "adverse_share": 0.0
+   "n": 2,
+   "median": 0.02,
+   "mean": -0.29,
+   "p90": 0.02,
+   "adverse_share": 50.0
   },
   "entry_slip_3": {
-   "n": 0,
-   "median": null,
-   "mean": 0.0,
-   "p90": null,
-   "adverse_share": 0.0
+   "n": 2,
+   "median": 0.37,
+   "mean": -0.265,
+   "p90": 0.37,
+   "adverse_share": 50.0
   },
   "entry_slip_120": {
-   "n": 0,
-   "median": null,
-   "mean": 0.0,
-   "p90": null,
-   "adverse_share": 0.0
+   "n": 2,
+   "median": 0.5,
+   "mean": 0.025,
+   "p90": 0.5,
+   "adverse_share": 50.0
   },
   "sl": {
-   "n": 0,
-   "measured": 0,
+   "n": 2,
+   "measured": 2,
    "not_triggered_on_tick": 0,
-   "median": null,
-   "p90": null,
-   "max": null
+   "median": 0.162,
+   "p90": 0.162,
+   "max": 0.162
   },
   "tp": {
    "n": 0,
@@ -43,13 +43,44 @@
    "fill_miss": 0
   },
   "spread_at_entry": {
-   "median": null,
-   "p90": null,
-   "max": null
+   "median": 0.23,
+   "p90": 0.23,
+   "max": 0.23
   },
-  "open_vs_tick_abs_median": null,
+  "open_vs_tick_abs_median": 0.0,
   "adopt_latency_s": 1.0,
-  "generated": "2026-10-05 07:08:01"
+  "generated": "2026-10-05 07:38:07"
  },
- "rows": []
+ "rows": [
+  {
+   "id": "S-0150",
+   "side": "SELL",
+   "risk": 2.324999999999818,
+   "exit_reason": "SL",
+   "R": -1.0,
+   "bid0": 4142.02,
+   "spread_pt": 0.22,
+   "slip_0.3": -0.58,
+   "slip_1": -0.6,
+   "slip_3": -0.9,
+   "slip_120": -0.45,
+   "open_vs_tick": 0.0,
+   "sl_slip": 0.035
+  },
+  {
+   "id": "S-0151",
+   "side": "BUY",
+   "risk": 3.9279999999998836,
+   "exit_reason": "SL",
+   "R": -1.0,
+   "bid0": 4142.91,
+   "spread_pt": 0.23,
+   "slip_0.3": -0.05,
+   "slip_1": 0.02,
+   "slip_3": 0.37,
+   "slip_120": 0.5,
+   "open_vs_tick": 0.0,
+   "sl_slip": 0.162
+  }
+ ]
 }
