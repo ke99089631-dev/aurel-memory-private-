@@ -453,6 +453,47 @@ def build_ai_stats(since_epoch=None):
         out["same_gross"] = _r_stats([x for x in rows_gross if x["bt"] >= since_epoch])
         out["reaccel_same"] = _r_stats([x for x in re_net if x["bt"] >= since_epoch])
         out["reaccel_same_gross"] = _r_stats([x for x in re_gross if x["bt"] >= since_epoch])
+    # ★ルールセットv1(会長GO 2026-10-06・雨の日ルール): 採用側/除外側を並走(shadow)で集計。
+    #   setup_engine が新規セットアップに v1 を付ける。それ以前の記録はここで同じ関数により後付け(読取時のみ・台帳は書き換えない)。
+    try:
+        import importlib
+        import rules_v1
+        importlib.reload(rules_v1)
+        closed_hist = [r for r in recs if r.get("status") == "closed"]
+        for r in recs:
+            if not isinstance(r.get("v1"), dict):
+                r["v1"] = rules_v1.evaluate(r, closed_hist)
+                r["v1"]["backfilled"] = True
+        keep_ids = {r["id"] for r in recs if r["v1"].get("keep")}
+        v1 = {"version": rules_v1.VERSION, "frozen_at": rules_v1.FROZEN_AT,
+              "thresholds": {"rain_n": rules_v1.RAIN_N, "rain_fake_rate": rules_v1.RAIN_FAKE_RATE,
+                             "p_real_min": rules_v1.P_REAL_MIN, "tight_max": rules_v1.TIGHT_MAX},
+              "n_keep": len(keep_ids), "n_drop": len(recs) - len(keep_ids),
+              "n_flagged_live": sum(1 for r in recs if not r["v1"].get("backfilled")),
+              "keep": _r_stats([x for x in rows_net if x["id"] in keep_ids]),
+              "keep_gross": _r_stats([x for x in rows_gross if x["id"] in keep_ids]),
+              "drop": _r_stats([x for x in rows_net if x["id"] not in keep_ids]),
+              "drop_gross": _r_stats([x for x in rows_gross if x["id"] not in keep_ids]),
+              "reaccel_keep": _r_stats([x for x in re_net if x["id"] in keep_ids]),
+              "reaccel_keep_gross": _r_stats([x for x in re_gross if x["id"] in keep_ids]),
+              "reaccel_drop": _r_stats([x for x in re_net if x["id"] not in keep_ids]),
+              "weather": rules_v1.current_weather(closed_hist, int(time.time())),
+              "drop_reason_counts": {}}
+        for r in recs:
+            for why in r["v1"].get("drop_reasons") or []:
+                key = why.split("(")[0]
+                v1["drop_reason_counts"][key] = v1["drop_reason_counts"].get(key, 0) + 1
+        if since_epoch:
+            v1["keep_same"] = _r_stats([x for x in rows_net if x["id"] in keep_ids and x["bt"] >= since_epoch])
+            v1["drop_same"] = _r_stats([x for x in rows_net if x["id"] not in keep_ids and x["bt"] >= since_epoch])
+        # 凍結日以降＝真の前向き検証(out-of-sample)。ここが本番の答え合わせ。
+        fz = _jst_epoch(rules_v1.FROZEN_AT + "T00:00:00") or 0
+        v1["forward"] = _r_stats([x for x in rows_net if x["id"] in keep_ids and x["bt"] >= fz])
+        v1["forward_drop"] = _r_stats([x for x in rows_net if x["id"] not in keep_ids and x["bt"] >= fz])
+        v1["forward_reaccel"] = _r_stats([x for x in re_net if x["id"] in keep_ids and x["bt"] >= fz])
+        out["v1"] = v1
+    except Exception as e:
+        out["v1"] = {"error": str(e)}
     return out
 
 

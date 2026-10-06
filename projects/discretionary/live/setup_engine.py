@@ -587,6 +587,12 @@ def sync_once(n_bars=None):
                 maxn += 1
                 rec = {"id": "S-%04d" % maxn, "kind": "setup", "lane": "3", "logged_at": now}
                 rec.update(s)
+                # ★ルールセットv1(会長GO 2026-10-06): 採用/除外フラグを建玉時点で固定。先読みなし(過去の決着と事前予測だけ)。
+                try:
+                    import rules_v1
+                    rec["v1"] = rules_v1.evaluate(rec, [r for r in recs.values() if r.get("status") == "closed"])
+                except Exception as e:
+                    sys.stderr.write("v1 err: %s\n" % e)
                 f.write(json.dumps(rec, ensure_ascii=False) + "\n")
                 by_key[k] = rec["id"]; recs[rec["id"]] = rec
                 added += 1

@@ -298,6 +298,14 @@ function updateStats(){
         h+='<br><span style="color:#f0a35e">AI再加速</span>(会長型: リテスト後の直前足安値割れで入る・壁/TPは同じ・SLは構造の外) 決着'+reAll.n+'本 全体'+fR(reAll.sumR)+'(平均'+fR(reAll.avgR)+')'
           +' ／ 控除前: 同期間'+(rsg.n?fR(rsg.sumR):'-')+'・全体'+(rg.n?fR(rg.sumR):'-')
           +' ／ 不発'+(rst.no_trigger||0)+'・崩壊'+(rst.invalid||0)+'・戻りなし'+(rst.no_retest||0); }
+      const v1=ai.v1||{};
+      if(v1.keep){ const w=v1.weather||{}, k=v1.keep, d=v1.drop||{n:0}, fw=v1.forward||{n:0}, rk=v1.reaccel_keep||{n:0};
+        const wx = w.rain_rate==null ? '判定保留' : ((w.rain?'<b style="color:#f85149">☔ 雨</b>':'<b style="color:#56d364">☀ 晴れ</b>')+'(直前'+w.rain_n+'本ダマシ'+Math.round(w.rain_rate*100)+'%)');
+        h+='<br><span style="color:#e3c94a">雨の日ルール v1</span>(会長GO '+v1.frozen_at+'・しきい値凍結) 今: '+wx
+          +' ／ 採用側 '+k.n+'本 '+fR(k.sumR)+'(勝率'+Number(k.winrate).toFixed(0)+'%・DD'+Number(k.maxDD_R).toFixed(1)+'R)'
+          +' ／ 除外側 '+d.n+'本 '+(d.n?fR(d.sumR):'-')
+          +' ／ 再加速×採用 '+rk.n+'本 '+(rk.n?fR(rk.sumR):'-')
+          +'<br><span style="color:#8b949e">凍結後(前向き・本番の答え合わせ): 採用 '+fw.n+'/30本 '+(fw.n?fR(fw.sumR):'-')+'・除外 '+((v1.forward_drop||{}).n||0)+'本 '+(((v1.forward_drop||{}).n)?fR(v1.forward_drop.sumR):'-')+'</span>'; }
       h+='<br>差の判定は両者とも約100本から。AI同期間/全体は戻り目で入る＝会長と建値が違う。AI再加速は会長の入り方の写し(2026-09-29 GO)。</span>';
     }
   }
