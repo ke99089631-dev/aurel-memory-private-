@@ -406,13 +406,12 @@ def build_ai_stats(since_epoch=None):
     rows_net, rows_gross, src_count, costs = [], [], {}, []
     tp_miss, slip_n = [], 0
     for r in closed:
-        rows_gross.append({"id": r["id"], "R": float(r["R"]), "bt": int(r.get("break_time") or 0),
-                           "kind": r.get("wall_kind")})
+        rows_gross.append({"id": r["id"], "R": float(r["R"]), "bt": int(r.get("break_time") or 0)})
         if r.get("tp_fill_ok") is False:
             tp_miss.append(r["id"])            # 紙はTP到達だが実際の指値(ask/bid)は届かず＝結果不明 → net からは除外して本数を示す
             continue
         rn, cost, src = _net_R(r, cm)
-        rows_net.append({"id": r["id"], "R": rn, "bt": int(r.get("break_time") or 0), "kind": r.get("wall_kind")})
+        rows_net.append({"id": r["id"], "R": rn, "bt": int(r.get("break_time") or 0)})
         src_count[src] = src_count.get(src, 0) + 1
         if r.get("slip_pt") is not None:
             slip_n += 1
@@ -442,11 +441,11 @@ def build_ai_stats(since_epoch=None):
         if ra.get("status") != "closed" or ra.get("R") is None:
             continue
         bt = int(r.get("break_time") or 0)
-        re_gross.append({"id": r["id"], "R": float(ra["R"]), "bt": bt, "kind": r.get("wall_kind")})
+        re_gross.append({"id": r["id"], "R": float(ra["R"]), "bt": bt})
         fake = {"R": ra["R"], "entry": ra.get("entry"), "sl": ra.get("sl"), "entry_time": ra.get("entry_time"),
                 "jst_hour": r.get("jst_hour"), "exit_reason": ra.get("exit_reason")}
         rn, _, _ = _net_R(fake, cm)
-        re_net.append({"id": r["id"], "R": rn, "bt": bt, "kind": r.get("wall_kind")})
+        re_net.append({"id": r["id"], "R": rn, "bt": bt})
     out["reaccel"] = _r_stats(re_net); out["reaccel_gross"] = _r_stats(re_gross)
     out["reaccel_status"] = re_status
     if since_epoch:
@@ -495,26 +494,6 @@ def build_ai_stats(since_epoch=None):
         out["v1"] = v1
     except Exception as e:
         out["v1"] = {"error": str(e)}
-        keep_ids, fz = set(), 0
-    # ★外壁のみ(会長GO 2026-10-08・影欄・表示のみ): 壁の種類で切る。エンジン側は外壁/中間の両方を記録したまま(台帳は変えない)。
-    #   外壁=箱の外壁(黄) / 中間=中間壁(青)。「外壁×v1採用」が本命の物差し・凍結後の前向きで30本を待つ。
-    def _k(rows, kind):
-        return [x for x in rows if x.get("kind") == kind]
-    o_net, o_gross, m_net = _k(rows_net, "outer"), _k(rows_gross, "outer"), _k(rows_net, "mid")
-    o_re, m_re = _k(re_net, "outer"), _k(re_net, "mid")
-    out["outer"] = {
-        "go": "2026-10-08",
-        "all": _r_stats(o_net), "all_gross": _r_stats(o_gross),
-        "mid": _r_stats(m_net),
-        "keep": _r_stats([x for x in o_net if x["id"] in keep_ids]),
-        "drop": _r_stats([x for x in o_net if x["id"] not in keep_ids]),
-        "mid_keep": _r_stats([x for x in m_net if x["id"] in keep_ids]),
-        "forward": _r_stats([x for x in o_net if x["bt"] >= fz]) if fz else {"n": 0},
-        "forward_keep": _r_stats([x for x in o_net if x["id"] in keep_ids and x["bt"] >= fz]) if fz else {"n": 0},
-        "reaccel": _r_stats(o_re), "reaccel_keep": _r_stats([x for x in o_re if x["id"] in keep_ids]),
-        "reaccel_mid": _r_stats(m_re),
-        "same": _r_stats([x for x in o_net if x["bt"] >= since_epoch]) if since_epoch else {"n": 0},
-    }
     return out
 
 

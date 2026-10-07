@@ -259,9 +259,8 @@ function updateStats(){
     h+='<b>📒 成績くらべ</b> <span style="color:#8b949e">会長=実弾(台帳) ／ AI=戻り目エントリーの紙・スプレッド＋手数料を控除済み(net)</span><br>';
     // 3列: 会長 / AI(会長の初弾以降＝同期間) / AI(全期間)
     const ai=aiStats||{}, same=ai.same||{n:0}, all=ai.all||{n:0}, re=ai.reaccel_same||{n:0}, reAll=ai.reaccel||{n:0};
-    const ow=ai.outer||{}, owAll=ow.all||{n:0};
     const cols=[{k:'会長',s:{n:c,wins:ts.wins,losses:ts.losses,winrate:ts.winrate,sumR:ts.sumR,avgR:ts.avgR,maxDD_R:ts.maxDD_R,recent:ts.recent}},
-                {k:'AI同期間',s:same},{k:'AI全体',s:all},{k:'<span style="color:#58a6ff">AI外壁</span>',s:owAll},{k:'<span style="color:#f0a35e">AI再加速</span>',s:re}];
+                {k:'AI同期間',s:same},{k:'AI全体',s:all},{k:'<span style="color:#f0a35e">AI再加速</span>',s:re}];
     const cell=(f)=>cols.map(cl=>'<td>'+(cl.s.n?f(cl.s):'-')+'</td>').join('');
     h+='<table class="cmp"><tr><th></th>'+cols.map(cl=>'<th>'+cl.k+'</th>').join('')+'</tr>';
     h+='<tr><td>本数</td>'+cols.map(cl=>'<td>'+(cl.s.n||0)+(cl.k==='会長'&&o?'<span style="color:#8b949e">+'+o+'</span>':'')+'</td>').join('')+'</tr>';
@@ -307,13 +306,6 @@ function updateStats(){
           +' ／ 除外側 '+d.n+'本 '+(d.n?fR(d.sumR):'-')
           +' ／ 再加速×採用 '+rk.n+'本 '+(rk.n?fR(rk.sumR):'-')
           +'<br><span style="color:#8b949e">凍結後(前向き・本番の答え合わせ): 採用 '+fw.n+'/30本 '+(fw.n?fR(fw.sumR):'-')+'・除外 '+((v1.forward_drop||{}).n||0)+'本 '+(((v1.forward_drop||{}).n)?fR(v1.forward_drop.sumR):'-')+'</span>'; }
-      if(owAll.n){ const ok=ow.keep||{n:0}, om=ow.mid||{n:0}, omk=ow.mid_keep||{n:0}, ofk=ow.forward_keep||{n:0}, of=ow.forward||{n:0}, ork=ow.reaccel_keep||{n:0}, or_=ow.reaccel||{n:0};
-        const w3=(s)=>s.n?(s.n+'本 '+fR(s.sumR)+'(勝率'+Number(s.winrate).toFixed(0)+'%・DD'+Number(s.maxDD_R).toFixed(1)+'R)'):'-';
-        h+='<br><span style="color:#58a6ff">外壁のみ</span>(会長GO '+(ow.go||'')+'・影欄: 箱の外壁(黄)ブレイクだけ・中間(青)を除く・表示のみ)'
-          +' 外壁 '+w3(owAll)+' ／ 中間 '+(om.n?om.n+'本 '+fR(om.sumR):'-')
-          +' ／ <b>外壁×採用</b> '+w3(ok)+' ／ 中間×採用 '+(omk.n?omk.n+'本 '+fR(omk.sumR):'-')
-          +' ／ 再加速×外壁 '+(or_.n?or_.n+'本 '+fR(or_.sumR):'-')+'・再加速×外壁×採用 '+w3(ork)
-          +'<br><span style="color:#8b949e">凍結後(前向き): <b>外壁×採用 '+ofk.n+'/30本 '+(ofk.n?fR(ofk.sumR):'-')+'</b>・外壁全部 '+of.n+'本 '+(of.n?fR(of.sumR):'-')+' ＝本命の物差し。30本まで判定しない。</span>'; }
       h+='<br>差の判定は両者とも約100本から。AI同期間/全体は戻り目で入る＝会長と建値が違う。AI再加速は会長の入り方の写し(2026-09-29 GO)。</span>';
     }
   }
