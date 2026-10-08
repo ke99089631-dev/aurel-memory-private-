@@ -2189,3 +2189,6 @@
 {"kind": "update", "target": "S-0195", "logged_at": "2026-10-09 02:40:43", "waiting_resolved": true, "entry": 4130.17, "entry_time": 1791480900, "entry_jst": "2026-10-09 02:35", "status": "open", "mfe_R": 0.71, "mae_R": 0.03, "hold_bars": 0}
 {"kind": "update", "target": "S-0195", "logged_at": "2026-10-09 02:46:44", "frozen": true, "mfe_R": 0.71, "mae_R": 0.2, "hold_bars": 1}
 {"kind": "update", "target": "S-0195", "logged_at": "2026-10-09 02:50:45", "frozen": true, "mfe_R": 0.9, "mae_R": 0.71, "hold_bars": 2}
+{"kind": "update", "target": "S-0195", "logged_at": "2026-10-09 02:56:46", "frozen": true, "mfe_R": 0.9, "mae_R": 0.91, "hold_bars": 3}
+{"kind": "update", "target": "S-0195", "logged_at": "2026-10-09 03:00:46", "frozen": true, "mfe_R": 1.08, "mae_R": 0.91, "hold_bars": 4}
+{"kind": "update", "target": "S-0195", "logged_at": "2026-10-09 03:06:47", "frozen": true, "mfe_R": 1.24, "mae_R": 0.91, "hold_bars": 5}
