@@ -2186,3 +2186,6 @@
 {"kind": "update", "target": "S-0196", "logged_at": "2026-10-09 02:26:41", "reaccel": {"retest_time": 1791480000, "retest_jst": "2026-10-09 02:20", "retest_tol": 1.1, "status": "waiting"}, "reaccel_frozen": true}
 {"kind": "update", "target": "S-0196", "logged_at": "2026-10-09 02:30:42", "waiting_resolved": true, "entry": 4136.53, "entry_time": 1791480300, "entry_jst": "2026-10-09 02:25", "status": "invalid"}
 {"kind": "update", "target": "S-0196", "logged_at": "2026-10-09 02:30:42", "reaccel": {"retest_time": 1791480000, "retest_jst": "2026-10-09 02:20", "retest_tol": 1.1, "status": "invalid", "why": "リテスト中に終値が構造の外"}, "reaccel_frozen": true}
+{"kind": "update", "target": "S-0195", "logged_at": "2026-10-09 02:40:43", "waiting_resolved": true, "entry": 4130.17, "entry_time": 1791480900, "entry_jst": "2026-10-09 02:35", "status": "open", "mfe_R": 0.71, "mae_R": 0.03, "hold_bars": 0}
+{"kind": "update", "target": "S-0195", "logged_at": "2026-10-09 02:46:44", "frozen": true, "mfe_R": 0.71, "mae_R": 0.2, "hold_bars": 1}
+{"kind": "update", "target": "S-0195", "logged_at": "2026-10-09 02:50:45", "frozen": true, "mfe_R": 0.9, "mae_R": 0.71, "hold_bars": 2}
