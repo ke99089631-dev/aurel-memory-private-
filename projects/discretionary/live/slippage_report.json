@@ -1,53 +1,33 @@
 {
  "summary": {
-  "n": 2,
+  "n": 0,
   "entry_slip_0.3": {
-   "n": 2,
-   "median": -0.01,
-   "mean": -0.015,
-   "p90": -0.01,
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
    "adverse_share": 0.0
   },
-  "chase_slip_0.3": {
-   "n": 1,
-   "median": 0.04,
-   "p90": 0.04
-  },
   "entry_slip_1": {
-   "n": 2,
-   "median": 0.45,
-   "mean": 0.245,
-   "p90": 0.45,
-   "adverse_share": 100.0
-  },
-  "chase_slip_1": {
-   "n": 1,
-   "median": -0.09,
-   "p90": -0.09
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
+   "adverse_share": 0.0
   },
   "entry_slip_3": {
-   "n": 2,
-   "median": 0.21,
-   "mean": 0.07,
-   "p90": 0.21,
-   "adverse_share": 50.0
-  },
-  "chase_slip_3": {
-   "n": 1,
-   "median": -0.12,
-   "p90": -0.12
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
+   "adverse_share": 0.0
   },
   "entry_slip_120": {
-   "n": 2,
-   "median": 1.83,
-   "mean": 0.87,
-   "p90": 1.83,
-   "adverse_share": 50.0
-  },
-  "chase_slip_120": {
-   "n": 1,
-   "median": 1.13,
-   "p90": 1.13
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
+   "adverse_share": 0.0
   },
   "sl": {
    "n": 0,
@@ -58,53 +38,18 @@
    "max": null
   },
   "tp": {
-   "n": 2,
-   "fill_ok": 2,
+   "n": 0,
+   "fill_ok": 0,
    "fill_miss": 0
   },
   "spread_at_entry": {
-   "median": 0.16,
-   "p90": 0.16,
-   "max": 0.16
+   "median": null,
+   "p90": null,
+   "max": null
   },
-  "open_vs_tick_abs_median": 0.0,
+  "open_vs_tick_abs_median": null,
   "adopt_latency_s": 1.0,
-  "generated": "2026-10-09 10:46:03"
+  "generated": "2026-10-09 11:16:10"
  },
- "rows": [
-  {
-   "id": "S-0199",
-   "side": "BUY",
-   "risk": 2.0230000000001382,
-   "exit_reason": "TP",
-   "R": 7.961,
-   "bid0": 4142.72,
-   "spread_pt": 0.16,
-   "slip_0.3": -0.01,
-   "slip_1": 0.04,
-   "slip_3": -0.07,
-   "slip_120": -0.09,
-   "open_vs_tick": 0.0,
-   "tp_fill_ok": true
-  },
-  {
-   "id": "S-0200",
-   "side": "BUY",
-   "risk": 11.09899999999925,
-   "exit_reason": "TP",
-   "R": 1.106,
-   "bid0": 4155.61,
-   "spread_pt": 0.16,
-   "slip_0.3": -0.02,
-   "slip_1": 0.45,
-   "slip_3": 0.21,
-   "slip_120": 1.83,
-   "open_vs_tick": 0.0,
-   "chase_slip_0.3": 0.04,
-   "chase_slip_1": -0.09,
-   "chase_slip_3": -0.12,
-   "chase_slip_120": 1.13,
-   "tp_fill_ok": true
-  }
- ]
+ "rows": []
 }
