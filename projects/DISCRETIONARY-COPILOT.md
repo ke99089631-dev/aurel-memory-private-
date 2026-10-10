@@ -334,3 +334,6 @@ MT5銘柄の答え: US100/NASDAQ100 = **NAS100.r（Cash）**。検証データ(u
 
 ## 2026-10-10 情報レイヤー候補一覧
 - ローソク外の「先に知る」候補20件と採用候補(★)・着手順: [[INFO-LAYER-CANDIDATES.md]] (同フォルダ discretionary/INFO-LAYER-CANDIDATES.md)
+
+## 2026-10-10 コックピットの読み方
+- 会長用の判断手順(朝ブリーフ3行・チャートの見方・3手の順番): discretionary/COCKPIT-GUIDE.md
