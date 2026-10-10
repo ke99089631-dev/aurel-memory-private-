@@ -773,8 +773,11 @@ def build_info():
         out = {"ok": True, "date": p.get("date"), "generated": p.get("generated"), "strikes": [], "events": [],
                "verdict": (p.get("correlation") or {}).get("verdict") or "", "opex": p.get("opex") or {},
                "gold": p.get("gold") or {}}
+        # 行使価格は GLD(ETF) のもの。先物基準の換算(xau_equiv)は CFD と20ドル前後ずれるので、
+        # クライアント側で「今の CFD 価格 ÷ GLD 価格」の比で描き直せるよう gld_strike / gld_price も渡す。
+        out["gld_price"] = (p.get("options") or {}).get("gld_price")
         for s in ((p.get("options") or {}).get("strikes") or [])[:6]:
-            out["strikes"].append({"xau": s["xau_equiv"], "oi": s["oi_total"]})
+            out["strikes"].append({"xau": s["xau_equiv"], "gld_strike": s.get("gld_strike"), "oi": s["oi_total"]})
         for e in (p.get("calendar") or {}).get("events") or []:
             try:
                 t = dt.datetime.strptime(e["date"] + " " + e["jst"][-5:], "%Y-%m-%d %H:%M").replace(tzinfo=jst)
