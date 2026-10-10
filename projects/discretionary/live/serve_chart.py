@@ -749,6 +749,70 @@ def save_lines(lines):
                   f, ensure_ascii=False, indent=1)
 
 
+# ── 情報レイヤー(goldinfo が毎朝06:50に書く latest.json / bias/<日付>.json)をチャート用に薄く整形 ──
+#    2026-10-10 会長『WEBチャートを見ればすぐ判断がつくようにしたい』。読取のみ・ネット取得はしない(ファイルを読むだけ)。
+GOLDINFO_DIR = r"C:\Users\user\.aurel\goldinfo"
+_INFO_CACHE = {"mtime": None, "data": None}
+
+
+def build_info():
+    import datetime as dt
+    path = os.path.join(GOLDINFO_DIR, "latest.json")
+    try:
+        mt = os.path.getmtime(path)
+    except Exception:
+        return {"ok": False, "note": "latest.json なし"}
+    jst = dt.timezone(dt.timedelta(hours=9))
+    now = dt.datetime.now(jst)
+    if _INFO_CACHE["mtime"] != mt or _INFO_CACHE["data"] is None:
+        try:
+            with open(path, encoding="utf-8") as f:
+                p = json.load(f)
+        except Exception as e:
+            return {"ok": False, "note": "読取失敗 %s" % e}
+        out = {"ok": True, "date": p.get("date"), "generated": p.get("generated"), "strikes": [], "events": [],
+               "verdict": (p.get("correlation") or {}).get("verdict") or "", "opex": p.get("opex") or {},
+               "gold": p.get("gold") or {}}
+        for s in ((p.get("options") or {}).get("strikes") or [])[:6]:
+            out["strikes"].append({"xau": s["xau_equiv"], "oi": s["oi_total"]})
+        for e in (p.get("calendar") or {}).get("events") or []:
+            try:
+                t = dt.datetime.strptime(e["date"] + " " + e["jst"][-5:], "%Y-%m-%d %H:%M").replace(tzinfo=jst)
+                out["events"].append({"t": int(t.timestamp()), "title": e["title"], "impact": e["impact"], "kind": "cal"})
+            except Exception:
+                continue
+        out["structural"] = [{"name": n, "hhmm": t} for n, t in ((p.get("structural") or {}).get("rows") or [])]
+        _INFO_CACHE["mtime"] = mt
+        _INFO_CACHE["data"] = out
+    out = dict(_INFO_CACHE["data"])
+    # 構造の時刻(毎日同じ)は「今日の未来」or「明日」の epoch に展開
+    ev = list(out["events"])
+    for s in out.get("structural") or []:
+        try:
+            hh, mm = int(s["hhmm"][:2]), int(s["hhmm"][3:5])
+            t = now.replace(hour=hh, minute=mm, second=0, microsecond=0)
+            if t < now:
+                t += dt.timedelta(days=1)
+            ev.append({"t": int(t.timestamp()), "title": s["name"], "impact": "Structural", "kind": "struct"})
+        except Exception:
+            continue
+    ev = [e for e in ev if e["t"] >= int(now.timestamp()) - 3600]
+    ev.sort(key=lambda e: e["t"])
+    out["events"] = ev[:12]
+    # 今この瞬間の帯
+    out["now"] = {"jst_hour": now.hour, "in_band": 7 <= now.hour < 12, "rollover": now.hour == 6,
+                  "weekday": now.weekday(), "triple_swap": now.weekday() == 2}
+    # 本日のバイアス宣言(あれば)
+    out["bias"] = None
+    try:
+        with open(os.path.join(GOLDINFO_DIR, "bias", now.strftime("%Y-%m-%d") + ".json"), encoding="utf-8") as f:
+            b = json.load(f)
+        out["bias"] = {"dir": b.get("dir"), "conf": b.get("conf"), "why": b.get("why"), "at": b.get("declared_at")}
+    except Exception:
+        pass
+    return out
+
+
 class H(http.server.BaseHTTPRequestHandler):
     def _send(self, code, body, ctype):
         if isinstance(body, str):
@@ -795,6 +859,8 @@ class H(http.server.BaseHTTPRequestHandler):
                 self._send(200, json.dumps(build_setups(tick), ensure_ascii=False), "application/json; charset=utf-8")
             elif p == "/api/lines":
                 self._send(200, json.dumps(load_lines(), ensure_ascii=False), "application/json; charset=utf-8")
+            elif p == "/api/info":
+                self._send(200, json.dumps(build_info(), ensure_ascii=False), "application/json; charset=utf-8")
             else:
                 self._send(404, "not found", "text/plain; charset=utf-8")
         except Exception as e:
