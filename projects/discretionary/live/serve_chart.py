@@ -785,6 +785,14 @@ def build_info():
             except Exception:
                 continue
         out["structural"] = [{"name": n, "hhmm": t} for n, t in ((p.get("structural") or {}).get("rows") or [])]
+        # 判断パネル用: 風向きの中身(ドル/金利/円/実質金利の5日変化)と FRB 予測市場の筆頭
+        out["corr"] = {}
+        for k, v in ((p.get("correlation") or {}).get("items") or {}).items():
+            if "last" in v:
+                out["corr"][k] = {"label": v.get("label"), "last": v.get("last"),
+                                  "chg5d": v.get("chg5d_pct", v.get("chg5d")), "chg1d": v.get("chg1d_pct", v.get("chg1d"))}
+        fed = ((p.get("prediction") or {}).get("fed") or [])
+        out["fed"] = fed[0] if fed else None
         _INFO_CACHE["mtime"] = mt
         _INFO_CACHE["data"] = out
     out = dict(_INFO_CACHE["data"])

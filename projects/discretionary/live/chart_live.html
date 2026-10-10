@@ -42,11 +42,21 @@
     background:rgba(13,17,23,.9);border:1px solid #30363d;border-radius:8px;
     padding:5px 9px;font-size:12px;color:#e6edf3;line-height:1.45}
   #aipnl b{color:#fff}
-  #tradeInfo,#stats,#paper{position:fixed;top:86px;left:8px;right:8px;z-index:7;display:none;
+  #tradeInfo,#stats,#paper,#decide{position:fixed;top:86px;left:8px;right:8px;z-index:7;display:none;
     background:rgba(20,26,36,.96);border:1px solid #30363d;border-radius:8px;
     padding:7px 10px;font-size:12px;line-height:1.6;color:#e6edf3;max-height:70vh;overflow-y:auto}
-  #tradeInfo b,#stats b,#paper b{color:#fff}
-  #tradeInfo .x,#stats .x,#paper .x{float:right;color:#8b949e;cursor:pointer;padding:0 4px}
+  #tradeInfo b,#stats b,#paper b,#decide b{color:#fff}
+  #tradeInfo .x,#stats .x,#paper .x,#decide .x{float:right;color:#8b949e;cursor:pointer;padding:0 4px}
+  /* 2026-10-10 判断パネル: 会長『あちこち見ずにチャートとこの1枚で分かるように』 */
+  #decide .sec{margin:5px 0 2px;color:#8b949e;font-size:11px;border-top:1px solid #21262d;padding-top:4px}
+  #decide .go{display:inline-block;padding:1px 8px;border-radius:8px;font-weight:bold}
+  #decide .ok{background:#0f2b17;color:#56d364}#decide .ng{background:#3a1113;color:#f85149}#decide .wa{background:#3a2a10;color:#f0a35e}
+  #decide table{border-collapse:collapse;width:100%}
+  #decide td{padding:0 4px;white-space:nowrap;border-bottom:1px solid #1b2230}
+  #decide td.r{text-align:right}
+  #decide tr.now td{color:#e6edf3;background:#1b2230}
+  #decide .ck{display:inline-block;margin:2px 6px 2px 0;padding:2px 8px;border:1px solid #30363d;border-radius:12px;cursor:pointer;color:#c9d1d9}
+  #decide .ck.on{background:#0f2b17;color:#56d364;border-color:#238636}
   .chip{background:#1b2230;border:1px solid #30363d;border-radius:12px;padding:3px 9px;
     font-size:12px;cursor:pointer;margin-left:4px;white-space:nowrap;color:#c9d1d9}
   .chip .d{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle}
@@ -84,6 +94,7 @@
   <button class="cbtn" id="statsBtn" title="溜まり幅・壁までの余地">📊 情報</button>
   <button class="cbtn" id="paperBtn" title="AIのセットアップ記録（集計・会長トレードとの紐付け）">🤖 AI</button>
   <button class="cbtn on" id="infoBtn" title="情報レイヤー: 厚い行使価格(紫)・指標時刻(縦線)・風向き/帯/バイアス(左下)">📡 材料</button>
+  <button class="cbtn" id="decideBtn" title="判断パネル: 時間・天気・地図(壁の一覧)・型チェック・成績を1枚に">🧭 判断</button>
 </div>
 <div id="linebar">
   <span id="lbInfo">線</span>
@@ -97,6 +108,7 @@
 <div id="stats"></div>
 <div id="paper"></div>
 <div id="tradeInfo"></div>
+<div id="decide"></div>
 <div id="err"></div>
 <div id="infohud"></div>
 <script src="/lightweight-charts.js"></script>
@@ -614,6 +626,88 @@ function updateInfoHud(){
 async function fetchInfo(){ try{ const r=await fetch('/api/info',{cache:'no-store'}); infoData=await r.json(); setInfoLines(); updateInfoHud(); drawInfo(); }catch(e){} }
 document.getElementById('infoBtn').onclick=(e)=>{ showInfo=!showInfo; e.currentTarget.classList.toggle('on',showInfo); setInfoLines(); updateInfoHud(); redrawOverlays(); };
 setInterval(fetchInfo, 60000);
+
+// ── 🧭 判断パネル(2026-10-10): 会長『あちこち見ずにチャートとこの1枚で分かるように』。
+//    時間(帯・次の予定) / 天気(風向き・バイアス) / 地図(壁の一覧=箱・紫線・会長の線を現在値からの距離順) / 型チェック / 成績。
+let decideOn=false; const ckState={brk:false,floor:false,sl:false,tp:false};
+function cellPrice(){   // 1マス(cellPx)が何ドルか
+  try{ if(curPx==null) return null; const y1=series.priceToCoordinate(curPx), y2=series.priceToCoordinate(curPx+10);
+    if(y1==null||y2==null||y1===y2) return null; return 10*cellPx/Math.abs(y1-y2); }catch(e){ return null; }
+}
+function levelRows(){
+  const rows=[]; const add=(p,name,cls)=>{ if(p!=null&&isFinite(p)) rows.push({p:+p,name,cls}); };
+  if(lastBig){ add(lastBig.up,'大箱 上','yel'); add(lastBig.dn,'大箱 下','yel'); }
+  if(lastBox){ add(lastBox.up,'小箱 上','yel'); add(lastBox.mid,'中間','blu'); add(lastBox.dn,'小箱 下','yel'); }
+  if(lastBreak){ add(lastBreak.tp,'機械TP','grn'); add(lastBreak.sl,'機械SL','red'); }
+  if(showInfo&&infoData&&infoData.ok){ for(const s of (infoData.strikes||[])) add(s.xau-(infoBasis||0),'紫 建玉'+(s.oi/10000).toFixed(1)+'万','pur'); }
+  for(const L of userLines) add(L.price,'会長の線','wht');
+  return rows;
+}
+function renderDecide(){
+  const el=document.getElementById('decide'); if(!el) return;
+  if(!decideOn){ el.style.display='none'; return; }
+  const nowS=Math.floor(Date.now()/1000); const d=(infoData&&infoData.ok)?infoData:null; const n=(d&&d.now)||{};
+  const jh=Math.floor(((nowS+JST)%86400)/3600), jm=Math.floor(((nowS+JST)%3600)/60);
+  const inBand=(jh>=7&&jh<12), roll=(jh===6);
+  const nxHi=d?(d.events||[]).find(e=>e.t>nowS&&e.impact==='High'):null;
+  const nxAny=d?(d.events||[]).find(e=>e.t>nowS):null;
+  const soon=!!(nxHi&&(nxHi.t-nowS)<=1800);
+  let timeV, timeC;
+  if(roll){ timeV='待て: ロールオーバー(06時台)'; timeC='ng'; }
+  else if(soon){ timeV='待て: 指標まで'+cdText(nxHi.t-nowS).replace('あと',''); timeC='ng'; }
+  else if(!inBand){ timeV='帯外: 新規は慎重(本物帯は07-12)'; timeC='wa'; }
+  else { timeV='入ってよい時間'; timeC='ok'; }
+  let h='<span class="x" id="dcX">✕</span><b>🧭 判断パネル</b> <span style="color:#8b949e">JST '+String(jh).padStart(2,'0')+':'+String(jm).padStart(2,'0')+(d?'・材料'+String(d.generated||'').slice(5):'・材料なし')+'</span>';
+  h+='<div class="sec">■ 時間</div>';
+  h+='<span class="go '+timeC+'">'+timeV+'</span>';
+  if(lastDamashi&&lastDamashi.real_rate!=null) h+=' <span style="color:#8b949e">この時間の本物率 '+Number(lastDamashi.real_rate).toFixed(0)+'%(平均'+Number(lastDamashi.base||0).toFixed(0)+'%)</span>';
+  h+='<br>';
+  if(nxAny) h+='次: '+jstLabel(nxAny.t,false)+' '+nxAny.title.slice(0,16)+' '+cdText(nxAny.t-nowS);
+  if(nxHi&&nxHi!==nxAny) h+=' ／ <span style="color:#f85149">指標 '+jstLabel(nxHi.t,false)+' '+nxHi.title.slice(0,14)+' '+cdText(nxHi.t-nowS)+'</span>';
+  if(n.triple_swap) h+=' ／ 水曜=3倍スワップ';
+  h+='<div class="sec">■ 天気（今日の追い風）</div>';
+  if(d){
+    h+='風向き <b>'+(d.verdict||'—')+'</b><br>';
+    const c=d.corr||{}; const parts=[];
+    for(const k of ['dxy','us10y','usdjpy','real10y']){ const x=c[k]; if(x&&x.last!=null){ const ch=x.chg5d;
+      parts.push(x.label+' '+x.last+(ch!=null?'('+(ch>=0?'+':'')+Number(ch).toFixed(2)+(k==='real10y'?'':'%')+'/5日)':'')); } }
+    if(parts.length) h+='<span style="color:#8b949e">'+parts.join(' ・ ')+'</span><br>';
+    if(d.fed&&d.fed.yes_pct!=null) h+='<span style="color:#8b949e">FRB予測市場: '+String(d.fed.q||'').replace('Will the Fed ','').replace('Will there be ','').slice(0,44)+' '+d.fed.yes_pct+'%</span><br>';
+    h+='AURELバイアス: '+(d.bias&&d.bias.dir?('<b>'+({up:'上',down:'下',flat:'横'}[d.bias.dir]||d.bias.dir)+' '+Math.round((d.bias.conf||0)*100)+'%</b> 「'+(d.bias.why||'')+'」 <span style="color:#8b949e">'+String(d.bias.at||'').slice(5)+'</span>'):'<span style="color:#8b949e">未宣言(平日07:06に宣言)</span>');
+    if(d.opex&&d.opex.days_left!=null) h+='<br><span style="color:#8b949e">COMEX金オプション満期 '+d.opex.date+'(あと'+d.opex.days_left+'日)</span>';
+  } else h+='<span style="color:#8b949e">材料なし(06:50に自動更新)</span>';
+  const cp=cellPrice();
+  h+='<div class="sec">■ 地図（現在 '+(curPx!=null?curPx.toFixed(2):'—')+(cp?' ・ 1マス≈'+cp.toFixed(1)+'ドル':'')+'）</div>';
+  if(curPx!=null){
+    const rows=levelRows().map(r=>Object.assign({},r,{dist:r.p-curPx})).sort((a,b)=>b.p-a.p);
+    const above=rows.filter(r=>r.dist>0).slice(-5), below=rows.filter(r=>r.dist<=0).slice(0,5);
+    const col={yel:'#e3c94a',blu:'#58a6ff',grn:'#56d364',red:'#f85149',pur:'#c084fc',wht:'#ffffff'};
+    const tr=(r)=>'<tr><td style="color:'+col[r.cls]+'">'+r.name+'</td><td class="r">'+r.p.toFixed(1)+'</td><td class="r">'+(r.dist>=0?'+':'')+r.dist.toFixed(1)+'</td><td class="r" style="color:#8b949e">'+(cp?((r.dist>=0?'+':'')+(r.dist/cp).toFixed(1)+'マス'):'')+'</td></tr>';
+    h+='<table>'+above.map(tr).join('')+'<tr class="now"><td>現在</td><td class="r">'+curPx.toFixed(2)+'</td><td></td><td></td></tr>'+below.map(tr).join('')+'</table>';
+    const nearUp=above.length?above[above.length-1]:null, nearDn=below.length?below[0]:null;
+    if(nearUp&&nearDn) h+='<span style="color:#8b949e">上の壁まで +'+nearUp.dist.toFixed(1)+'（'+nearUp.name+'） ／ 下の壁まで '+nearDn.dist.toFixed(1)+'（'+nearDn.name+'）</span>';
+  } else h+='<span style="color:#8b949e">価格待ち…</span>';
+  h+='<div class="sec">■ 型チェック（タップで✓・4つ揃ったら黒板へ）</div>';
+  const ck=[['brk','外壁を明確にブレイク'],['floor','床/天井化を確認(2タッチ)'],['sl','SLは壁の内側・狭め'],['tp','TP控えめ(紫線/次壁の手前)']];
+  h+=ck.map(([k,t])=>'<span class="ck'+(ckState[k]?' on':'')+'" data-k="'+k+'">'+(ckState[k]?'✓ ':'□ ')+t+'</span>').join('');
+  const nOk=ck.filter(([k])=>ckState[k]).length, all=(nOk===ck.length);
+  let verdict, vc;
+  if(!all){ verdict='型チェック '+nOk+'/4'; vc='wa'; }
+  else if(timeC==='ok'){ verdict='型OK・時間OK → 黒板にエントリー登録'; vc='ok'; }
+  else if(timeC==='ng'){ verdict='型OK・だが時間は待て'; vc='ng'; }
+  else { verdict='型OK・時間は帯外(慎重に)'; vc='wa'; }
+  h+='<br><span class="go '+vc+'">'+verdict+'</span> <span class="ck" id="ckReset">リセット</span>';
+  h+='<div class="sec">■ 成績（台帳）</div>';
+  if(tradeStats) h+=tradeStats.trades+'本(確定'+tradeStats.closed+') 勝率'+(tradeStats.winrate!=null?tradeStats.winrate+'%':'—')+' 合計'+(tradeStats.sumR>=0?'+':'')+tradeStats.sumR+'R 最大DD'+tradeStats.maxDD_R+'R <span style="color:#8b949e">'+(tradeStats.sample_note||'')+'</span>';
+  else h+='<span style="color:#8b949e">読込中…</span>';
+  el.innerHTML=h; el.style.display='block';
+  document.getElementById('dcX').onclick=()=>{ decideOn=false; renderDecide(); document.getElementById('decideBtn').classList.remove('on'); };
+  el.querySelectorAll('.ck[data-k]').forEach(s=>{ s.onclick=()=>{ ckState[s.dataset.k]=!ckState[s.dataset.k]; renderDecide(); }; });
+  const rs=document.getElementById('ckReset'); if(rs) rs.onclick=()=>{ for(const k in ckState) ckState[k]=false; renderDecide(); };
+}
+document.getElementById('decideBtn').onclick=(e)=>{ decideOn=!decideOn; e.currentTarget.classList.toggle('on',decideOn);
+  if(decideOn){ fetchInfo(); try{ fetchStats(); }catch(err){} } renderDecide(); };
+setInterval(()=>{ if(decideOn) renderDecide(); }, 5000);
 
 // オーバーレイ(時間帯/トレード/AI建玉/情報)は「表示範囲が変わった時」だけ再描画＝パンを重くしない
 function redrawOverlays(){ try{ drawZones(); drawTrades(); drawSetups(); drawInfo(); }catch(e){} }
