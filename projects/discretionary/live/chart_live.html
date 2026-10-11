@@ -42,6 +42,17 @@
     background:rgba(13,17,23,.9);border:1px solid #30363d;border-radius:8px;
     padding:5px 9px;font-size:12px;color:#e6edf3;line-height:1.45}
   #aipnl b{color:#fff}
+  /* 2026-10-12 会長『判断を全部そのくらい簡単にまとめて出すパネルを🤖AIの買いの下に』: 信号1個＋一言 */
+  #verdict{position:fixed;top:112px;left:6px;right:6px;z-index:6;display:none;
+    background:rgba(13,17,23,.94);border:1px solid #30363d;border-left:3px solid #58a6ff;border-radius:8px;
+    padding:6px 10px;font-size:12px;color:#e6edf3;line-height:1.5}
+  #verdict .vhead{font-size:14px;margin-bottom:2px}
+  #verdict .go{display:inline-block;padding:1px 9px;border-radius:9px;font-weight:bold}
+  #verdict .ok{background:#0f2b17;color:#56d364}#verdict .ng{background:#3a1113;color:#f85149}#verdict .wa{background:#3a2a10;color:#f0a35e}
+  #verdict .vsub{color:#8b949e;font-size:11px}
+  #verdict .vrow{margin-top:1px}
+  #verdict .vtip{color:#f0a35e}
+  #verdict b{color:#fff}
   #tradeInfo,#stats,#paper,#decide{position:fixed;top:86px;left:8px;right:8px;z-index:7;display:none;
     background:rgba(20,26,36,.96);border:1px solid #30363d;border-radius:8px;
     padding:7px 10px;font-size:12px;line-height:1.6;color:#e6edf3;max-height:70vh;overflow-y:auto}
@@ -105,6 +116,7 @@
   <button class="cbtn on" id="doneLine">確定</button>
 </div>
 <div id="aipnl"></div>
+<div id="verdict"></div>
 <div id="stats"></div>
 <div id="paper"></div>
 <div id="tradeInfo"></div>
@@ -564,6 +576,61 @@ function updateAiPnl(){
   if(s){ h+=' <span style="color:#f0a35e;font-size:11px">信頼度 '+s.confidence.split('（')[0]+'</span>'; }
   el.innerHTML=h;
 }
+
+// ── 🧭 結論パネル(2026-10-12): 会長『4つの判断を小学生でも分かるくらい簡単に1枚に』。
+//    判断パネルの時間/天気/地図/型チェックと同じ材料から、信号1個(✅/⏳/❌)＋一言(どこで買う・どこで撤退)を出す。🤖AI買い(#aipnl)の直下に常時。──
+function computeVerdict(){
+  const nowS=Math.floor(Date.now()/1000);
+  const d=(infoData&&infoData.ok)?infoData:null;
+  const jh=Math.floor(((nowS+JST)%86400)/3600);
+  const inBand=(jh>=7&&jh<12), roll=(jh===6);
+  const nxHi=d?(d.events||[]).find(e=>e.t>nowS&&e.impact==='High'):null;
+  const soon=!!(nxHi&&(nxHi.t-nowS)<=1800);
+  let timeTxt;
+  if(roll) timeTxt='ロールオーバー(危険)';
+  else if(soon) timeTxt='指標直前';
+  else if(!inBand) timeTxt='帯外(慎重)';
+  else timeTxt='本物帯(OK)';
+  const bias=d&&d.bias?d.bias:null;
+  const dirMap={up:'上',down:'下',flat:'横'};
+  const wxTxt = (bias&&bias.dir) ? (dirMap[bias.dir]+' '+Math.round((bias.conf||0)*100)+'%') : '未宣言';
+  let upWall=null, dnWall=null;
+  if(curPx!=null){
+    const rows=levelRows().map(r=>Object.assign({},r,{dist:r.p-curPx})).sort((a,b)=>b.p-a.p);
+    const above=rows.filter(r=>r.dist>0), below=rows.filter(r=>r.dist<=0);
+    upWall=above.length?above[above.length-1]:null;   // 現在値のすぐ上
+    dnWall=below.length?below[0]:null;                // 現在値のすぐ下
+  }
+  const nOk=['brk','floor','sl','tp'].filter(k=>ckState[k]).length;
+  let light, lightCls;
+  if(roll||soon){ light='やめとけ'; lightCls='ng'; }
+  else if(inBand&&nOk===4){ light='いけそう'; lightCls='ok'; }
+  else { light='待て・準備'; lightCls='wa'; }
+  return {timeTxt,wxTxt,bias,upWall,dnWall,nOk,light,lightCls};
+}
+function updateVerdict(){
+  const el=document.getElementById('verdict'); if(!el) return;
+  if(!showPaper){ el.style.display='none'; return; }
+  const v=computeVerdict();
+  const ap=document.getElementById('aipnl');   // 🤖AI買いの直下に置く(高さが変わっても追従)
+  let top=85;
+  if(ap && ap.style.display!=='none'){ const r=ap.getBoundingClientRect(); if(r.height) top=Math.round(r.bottom)+4; }
+  el.style.top=top+'px';
+  const icon = v.lightCls==='ok'?'✅':(v.lightCls==='ng'?'❌':'⏳');
+  const up=v.upWall, dn=v.dnWall, dir=v.bias&&v.bias.dir;
+  let advice;
+  if(v.lightCls==='ng'){ advice='今は手を出さない（'+v.timeTxt+'）。'; }
+  else if(dir==='up'&&up&&dn){ advice='床が固ければ '+up.p.toFixed(0)+' 手前まで小さく買い／'+dn.p.toFixed(0)+' 割れたら撤退'; }
+  else if(dir==='down'&&up&&dn){ advice='天井が固ければ '+dn.p.toFixed(0)+' 手前まで小さく売り／'+up.p.toFixed(0)+' 抜けたら撤退'; }
+  else if(up&&dn){ advice='横ばい。無理押しNG。壁で跳ねたら小さく（上'+up.p.toFixed(0)+' 下'+dn.p.toFixed(0)+'）'; }
+  else { advice='価格待ち…'; }
+  let h='<div class="vhead"><span class="go '+v.lightCls+'">'+icon+' '+v.light+'</span> <span class="vsub">AURELの結論</span></div>';
+  h+='<div class="vrow">⏰ '+v.timeTxt+' ｜ 🌤 '+v.wxTxt+' ｜ ✓型 '+v.nOk+'/4</div>';
+  if(up&&dn) h+='<div class="vrow">🎯 上の壁 <b>'+up.p.toFixed(0)+'</b>（'+up.name+'） ／ 🛡 下の壁 <b>'+dn.p.toFixed(0)+'</b>（'+dn.name+'）</div>';
+  h+='<div class="vrow vtip">→ '+advice+'</div>';
+  el.innerHTML=h; el.style.display='block';
+}
+setInterval(updateVerdict, 1000);   // 即実行しない: showPaper等は後方で宣言(let)=TDZ回避。タイマーは宣言後に発火するので安全
 
 // ── 情報レイヤー(/api/info・2026-10-10): 厚い行使価格=紫の横線 / 指標・構造の時刻=縦線+カウントダウン / 風向き・帯・バイアス=左下HUD。
 //    goldinfo が毎朝06:50に書いた材料を描くだけ。会長『WEBチャートを見ればすぐ判断がつくように』。──
