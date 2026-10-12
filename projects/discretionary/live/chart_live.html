@@ -579,6 +579,37 @@ function updateAiPnl(){
 
 // ── 🧭 結論パネル(2026-10-12): 会長『4つの判断を小学生でも分かるくらい簡単に1枚に』。
 //    判断パネルの時間/天気/地図/型チェックと同じ材料から、信号1個(✅/⏳/❌)＋一言(どこで買う・どこで撤退)を出す。🤖AI買い(#aipnl)の直下に常時。──
+function rsiSeries(bars, period){   // Wilder RSI。会長『RSIは残り体力メーター』=失速(70→49等)を赤で警告する用。
+  const n=bars.length; if(n<period+1) return null;
+  let gain=0, loss=0;
+  for(let i=1;i<=period;i++){ const ch=bars[i].close-bars[i-1].close; if(ch>=0) gain+=ch; else loss-=ch; }
+  gain/=period; loss/=period;
+  const out=new Array(n).fill(null);
+  out[period]= loss===0?100:100-100/(1+gain/loss);
+  for(let i=period+1;i<n;i++){
+    const ch=bars[i].close-bars[i-1].close, g=ch>0?ch:0, l=ch<0?-ch:0;
+    gain=(gain*(period-1)+g)/period; loss=(loss*(period-1)+l)/period;
+    out[i]= loss===0?100:100-100/(1+gain/loss);
+  }
+  return out;
+}
+// 型チェックのAI自動判定(2026-10-12 会長『形チェックは俺でなくAIが確認して表示・俺も指標として自分で確認』)。
+// ブレイク/床化は壁データから自動判定、SL/TPは機械目安を表示。会長はこれを見て最終は自分の目で確認。
+function computeKata(){
+  const k=lastBreak, box=lastBox;
+  let brk=false, dir=null, brkTxt='ブレイクなし（箱の中）';
+  if(k && k.wall!=null){ brk=true; dir=k.dir; brkTxt=(k.dir==='UP'?'上':'下')+'ブレイク 壁'+Number(k.wall).toFixed(1); }
+  let floor=false, floorTxt='（壁ブレイク後に判定）';
+  if(box){
+    const ut=box.up_touches||0, dt=box.dn_touches||0;
+    if(dir==='UP'){ floor=dt>=2; floorTxt='床タッチ '+dt+'回'+(floor?'＝床化OK':'＝あと'+Math.max(0,2-dt)+'回'); }
+    else if(dir==='DN'){ floor=ut>=2; floorTxt='天井タッチ '+ut+'回'+(floor?'＝天井化OK':'＝あと'+Math.max(0,2-ut)+'回'); }
+    else { floorTxt='床'+dt+'/天井'+ut+'タッチ（ブレイク待ち）'; }
+  }
+  const slRec=(k&&k.sl!=null)?k.sl:null, tpRec=(k&&k.tp!=null)?k.tp:null;
+  const nOk=(brk?1:0)+(floor?1:0);
+  return {brk,floor,dir,brkTxt,floorTxt,slRec,tpRec,nOk};
+}
 function computeVerdict(){
   const nowS=Math.floor(Date.now()/1000);
   const d=(infoData&&infoData.ok)?infoData:null;
@@ -601,12 +632,27 @@ function computeVerdict(){
     upWall=above.length?above[above.length-1]:null;   // 現在値のすぐ上
     dnWall=below.length?below[0]:null;                // 現在値のすぐ下
   }
-  const nOk=['brk','floor','sl','tp'].filter(k=>ckState[k]).length;
+  const kata=computeKata();
+  // RSI(14)=体力。失速(直近ピーク65+から8以上低下)=赤=新高値頼み注意(T-0022型)。過熱70+=飛び乗り注意。
+  let rsiNow=null, rsiState=null;
+  if(allBars&&allBars.length>20){
+    const s=rsiSeries(allBars,14);
+    if(s){ const vals=s.filter(x=>x!=null);
+      if(vals.length){ rsiNow=vals[vals.length-1];
+        const recent=vals.slice(-6), recentMax=Math.max.apply(null,recent);
+        const fading=(recentMax>=65)&&(rsiNow<=recentMax-8), hot=rsiNow>=70;
+        if(hot) rsiState={txt:'過熱 '+rsiNow.toFixed(0)+'（飛び乗り注意・降りる所）',cls:'wa'};
+        else if(fading) rsiState={txt:'失速 '+recentMax.toFixed(0)+'→'+rsiNow.toFixed(0)+'（体力落ち・新高値頼み注意）',cls:'ng'};
+        else if(rsiNow<=30) rsiState={txt:'冷え '+rsiNow.toFixed(0)+'（売られすぎ）',cls:'wa'};
+        else rsiState={txt:rsiNow.toFixed(0)+'（中立）',cls:''};
+      }
+    }
+  }
   let light, lightCls;
   if(roll||soon){ light='やめとけ'; lightCls='ng'; }
-  else if(inBand&&nOk===4){ light='いけそう'; lightCls='ok'; }
+  else if(inBand&&kata.brk&&kata.floor){ light='いけそう'; lightCls='ok'; }
   else { light='待て・準備'; lightCls='wa'; }
-  return {timeTxt,wxTxt,bias,upWall,dnWall,nOk,light,lightCls};
+  return {timeTxt,wxTxt,bias,upWall,dnWall,kata,light,lightCls,rsiNow,rsiState};
 }
 function updateVerdict(){
   const el=document.getElementById('verdict'); if(!el) return;
@@ -624,9 +670,14 @@ function updateVerdict(){
   else if(dir==='down'&&up&&dn){ advice='天井が固ければ '+dn.p.toFixed(0)+' 手前まで小さく売り／'+up.p.toFixed(0)+' 抜けたら撤退'; }
   else if(up&&dn){ advice='横ばい。無理押しNG。壁で跳ねたら小さく（上'+up.p.toFixed(0)+' 下'+dn.p.toFixed(0)+'）'; }
   else { advice='価格待ち…'; }
+  if(v.rsiState&&v.rsiState.cls==='ng'&&v.lightCls!=='ng'){ advice='⚠RSI失速＝新高値頼み注意(T-0022型)。'+advice; }
+  const ka=v.kata||{}; const mk=b=>b?'<span style="color:#56d364">✓</span>':'<span style="color:#8b949e">待</span>';
   let h='<div class="vhead"><span class="go '+v.lightCls+'">'+icon+' '+v.light+'</span> <span class="vsub">AURELの結論</span></div>';
-  h+='<div class="vrow">⏰ '+v.timeTxt+' ｜ 🌤 '+v.wxTxt+' ｜ ✓型 '+v.nOk+'/4</div>';
+  h+='<div class="vrow">⏰ '+v.timeTxt+' ｜ 🌤 '+v.wxTxt+'</div>';
+  h+='<div class="vrow">🧩 型(AI自動) ブレイク '+mk(ka.brk)+' ／ 床化 '+mk(ka.floor)+'</div>';
   if(up&&dn) h+='<div class="vrow">🎯 上の壁 <b>'+up.p.toFixed(0)+'</b>（'+up.name+'） ／ 🛡 下の壁 <b>'+dn.p.toFixed(0)+'</b>（'+dn.name+'）</div>';
+  if(ka.slRec!=null&&ka.tpRec!=null) h+='<div class="vrow" style="color:#8b949e">目安 SL '+ka.slRec.toFixed(0)+'（壁内側）／ TP '+ka.tpRec.toFixed(0)+'（次壁手前）</div>';
+  if(v.rsiState) h+='<div class="vrow">💪 体力(RSI14) '+(v.rsiState.cls?('<span class="go '+v.rsiState.cls+'">'+v.rsiState.txt+'</span>'):('<span style="color:#8b949e">'+v.rsiState.txt+'</span>'))+'</div>';
   h+='<div class="vrow vtip">→ '+advice+'</div>';
   el.innerHTML=h; el.style.display='block';
 }
@@ -696,7 +747,7 @@ setInterval(fetchInfo, 60000);
 
 // ── 🧭 判断パネル(2026-10-10): 会長『あちこち見ずにチャートとこの1枚で分かるように』。
 //    時間(帯・次の予定) / 天気(風向き・バイアス) / 地図(壁の一覧=箱・紫線・会長の線を現在値からの距離順) / 型チェック / 成績。
-let decideOn=false; const ckState={brk:false,floor:false,sl:false,tp:false};
+let decideOn=false;   // 型チェックは computeKata() で自動判定(手動タップ廃止・会長指示 2026-10-12)
 function cellPrice(){   // 1マス(cellPx)が何ドルか
   try{ if(curPx==null) return null; const y1=series.priceToCoordinate(curPx), y2=series.priceToCoordinate(curPx+10);
     if(y1==null||y2==null||y1===y2) return null; return 10*cellPx/Math.abs(y1-y2); }catch(e){ return null; }
@@ -754,23 +805,25 @@ function renderDecide(){
     const nearUp=above.length?above[above.length-1]:null, nearDn=below.length?below[0]:null;
     if(nearUp&&nearDn) h+='<span style="color:#8b949e">上の壁まで +'+nearUp.dist.toFixed(1)+'（'+nearUp.name+'） ／ 下の壁まで '+nearDn.dist.toFixed(1)+'（'+nearDn.name+'）</span>';
   } else h+='<span style="color:#8b949e">価格待ち…</span>';
-  h+='<div class="sec">■ 型チェック（タップで✓・4つ揃ったら黒板へ）</div>';
-  const ck=[['brk','外壁を明確にブレイク'],['floor','床/天井化を確認(2タッチ)'],['sl','SLは壁の内側・狭め'],['tp','TP控えめ(紫線/次壁の手前)']];
-  h+=ck.map(([k,t])=>'<span class="ck'+(ckState[k]?' on':'')+'" data-k="'+k+'">'+(ckState[k]?'✓ ':'□ ')+t+'</span>').join('');
-  const nOk=ck.filter(([k])=>ckState[k]).length, all=(nOk===ck.length);
+  h+='<div class="sec">■ 型チェック（AIが自動判定・会長も目で確認）</div>';
+  const ka=computeKata();
+  const krow=(ok,label,detail)=>'<span class="ck'+(ok?' on':'')+'">'+(ok?'✓ ':'□ ')+label+'</span> <span style="color:#8b949e">'+detail+'</span><br>';
+  h+=krow(ka.brk,'外壁を明確にブレイク',ka.brkTxt);
+  h+=krow(ka.floor,'床/天井化(2タッチ)',ka.floorTxt);
+  h+='<span class="ck">SL目安</span> <span style="color:#8b949e">'+(ka.slRec!=null?ka.slRec.toFixed(1)+'（壁の内側・狭め）':'ブレイク後に算出')+'</span><br>';
+  h+='<span class="ck">TP目安</span> <span style="color:#8b949e">'+(ka.tpRec!=null?ka.tpRec.toFixed(1)+'（次壁/紫線の手前）':'ブレイク後に算出')+'</span>';
+  const bothOk=ka.brk&&ka.floor;
   let verdict, vc;
-  if(!all){ verdict='型チェック '+nOk+'/4'; vc='wa'; }
-  else if(timeC==='ok'){ verdict='型OK・時間OK → 黒板にエントリー登録'; vc='ok'; }
-  else if(timeC==='ng'){ verdict='型OK・だが時間は待て'; vc='ng'; }
-  else { verdict='型OK・時間は帯外(慎重に)'; vc='wa'; }
-  h+='<br><span class="go '+vc+'">'+verdict+'</span> <span class="ck" id="ckReset">リセット</span>';
+  if(!bothOk){ verdict='型 '+ka.nOk+'/2（ブレイク＋床化を待つ）'; vc='wa'; }
+  else if(timeC==='ok'){ verdict='型そろった・時間OK → SL/TP目安で黒板に登録'; vc='ok'; }
+  else if(timeC==='ng'){ verdict='型そろった・だが時間は待て'; vc='ng'; }
+  else { verdict='型そろった・時間は帯外(慎重に)'; vc='wa'; }
+  h+='<br><span class="go '+vc+'">'+verdict+'</span>';
   h+='<div class="sec">■ 成績（台帳）</div>';
   if(tradeStats) h+=tradeStats.trades+'本(確定'+tradeStats.closed+') 勝率'+(tradeStats.winrate!=null?tradeStats.winrate+'%':'—')+' 合計'+(tradeStats.sumR>=0?'+':'')+tradeStats.sumR+'R 最大DD'+tradeStats.maxDD_R+'R <span style="color:#8b949e">'+(tradeStats.sample_note||'')+'</span>';
   else h+='<span style="color:#8b949e">読込中…</span>';
   el.innerHTML=h; el.style.display='block';
   document.getElementById('dcX').onclick=()=>{ decideOn=false; renderDecide(); document.getElementById('decideBtn').classList.remove('on'); };
-  el.querySelectorAll('.ck[data-k]').forEach(s=>{ s.onclick=()=>{ ckState[s.dataset.k]=!ckState[s.dataset.k]; renderDecide(); }; });
-  const rs=document.getElementById('ckReset'); if(rs) rs.onclick=()=>{ for(const k in ckState) ckState[k]=false; renderDecide(); };
 }
 document.getElementById('decideBtn').onclick=(e)=>{ decideOn=!decideOn; e.currentTarget.classList.toggle('on',decideOn);
   if(decideOn){ fetchInfo(); try{ fetchStats(); }catch(err){} } renderDecide(); };
