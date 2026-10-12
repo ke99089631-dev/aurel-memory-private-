@@ -359,3 +359,9 @@ MT5銘柄の答え: US100/NASDAQ100 = **NAS100.r（Cash）**。検証データ(u
   - AUREL作業: トークンを `~/.claude/.env` に `LINE_CHANNEL_TOKEN=`(秘密・画面に出さない・会長自身が貼るのが最善)。送信 `line_push.py "<msg>"`=broadcast(友だちが会長だけ=userId不要)。見張りwatcher(chartサーバ /api/data の break+床化 をポーリング)→条件成立でA/B/C発火。schtasksで常駐(Bash spawnは呼び出し終了で死ぬ=[[persistent-server-launch-schtasks]])。
   - 第2段階(将来): 会長→AUREL(LINEで指示を飛ばす)はwebhook+公開HTTPS必要。今はやらない。
 - 進め方: 送信コード+watcherは先にスカフォ可能(トークン投入で即稼働)。account作成は会長のみ。
+- **2026-10-12 夜 稼働開始(LIVE)**: 会長が公式アカウント『AUREL』作成→個人LINEに友だち追加→トークン投入。`C:/Users/user/.aurel/notify/` に実装:
+  - `line_push.py`: broadcast送信(トークンは `~/.claude/.env` の`LINE_CHANNEL_TOKEN`・画面非表示)。テスト送信status200で疎通確認済。
+  - `wall_watcher.py`: /api/data を60秒ポーリング→computeKata相当(break有無・box touches2+)で判定。状態遷移(none→🟡break→🟢ready)の前進時のみLINE送信(重複防止=watcher_state.json)。🟡=ブレイク検知、🟢=型そろった(壁付近エントリー準備・SL/TP目安・時間帯注意・『発注は会長判断』付記)。
+  - 常駐: schtasks /Createはサンドボックスで不可→**スタートアップ登録**(`Startup/AUREL_WallWatcher.vbs`=hidden起動)＋即時起動(cscript)。稼働確認=watcher_state.json更新。ログ=watcher.log(python -u)。
+  - 安全: 観測と通知のみ・発注しない・会長裁量を上書きしない。第2段階(会長→AURELの受信=webhook+公開HTTPS)は未着手。
+  - 残注意: XAUUSD(web)とXAUUSD+(会長MT5)の固定値差は未測定。合図価格が1-2pズレ得る→次セッションで同時刻値を数組記録して補正予定。
