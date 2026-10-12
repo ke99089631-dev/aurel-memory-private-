@@ -347,3 +347,13 @@ MT5銘柄の答え: US100/NASDAQ100 = **NAS100.r（Cash）**。検証データ(u
   - 配置は`#aipnl`のgetBoundingClientRectで追従。`setInterval(updateVerdict,1000)`。表示は`showPaper`連動(既定オン=常時)。z-index6で大パネル(7)が開けば隠れる。
   - 検証: 配信200・要素3種present・`node --check`でJS構文OK。バックアップは取らず(軽微な追加)。
 - 設計意図: コックピット原則([[webchart-cockpit-principle]])の徹底=「見た瞬間に1枚で判断」。詳細パネルは据え置き、入口に結論サマリを足した二層構成。
+
+## 2026-10-12 次にやる: 硬い一本の「GO合図」通知システム(会長帰宅後に着手)
+- 目的: 会長『硬い一本を早く取りたい・画面を見張らずに済むよう通知が欲しい』。型(ブレイク→床化)が整った瞬間にAURELが合図を出す。発注はしない・見張りと通知のみ。
+- 合図条件(段階): ①上壁 or 下壁をはっきりブレイク → ②抜けた壁が床/天井化(支持確認)=「🟡そろそろ」 → ③結論✅(本物帯+型4/4)=「🟢GO準備」。
+- 通知チャネル(総合=全部重ねる、会長の方針): (A)チャート画面が鳴る=音+navigator.vibrate+バナー(開いてる時・依存なし・すぐ作れる) (B)PushNotification=端末/スマホ(リモート操作接続時) (C)LINE。
+- **LINE方式の結論**: 個人LINEの自動操作は不可(正規API無し・裏ツールは凍結リスクで却下)。**無料のMessaging APIボットを作り、会長が個人LINEで友だち追加→普段のLINEにAURELから届く**形。LINE Notifyは2025-03終了で使えない。
+  - 会長作業(帰宅後): LINE Developersで Messaging APIチャネル作成→個人LINEで友だち追加→チャネルアクセストークン(長期)発行。
+  - AUREL作業: トークンを `~/.claude/.env` に `LINE_CHANNEL_TOKEN=`(秘密・画面に出さない・会長自身が貼るのが最善)。送信 `line_push.py "<msg>"`=broadcast(友だちが会長だけ=userId不要)。見張りwatcher(chartサーバ /api/data の break+床化 をポーリング)→条件成立でA/B/C発火。schtasksで常駐(Bash spawnは呼び出し終了で死ぬ=[[persistent-server-launch-schtasks]])。
+  - 第2段階(将来): 会長→AUREL(LINEで指示を飛ばす)はwebhook+公開HTTPS必要。今はやらない。
+- 進め方: 送信コード+watcherは先にスカフォ可能(トークン投入で即稼働)。account作成は会長のみ。
