@@ -256,7 +256,28 @@ def run(dry=True, armed=False, once=False):
             sess.shutdown()
 
 
+LOCK = os.path.join(HERE, "demo_exec.lock")
+
+def acquire_lock():
+    """単一インスタンス保証。既に生きているdemo_execがあれば起動しない（二重発注防止）。"""
+    if os.path.exists(LOCK):
+        try:
+            old = int(open(LOCK).read().strip())
+            # 同名プロセスが生きているか（tasklistで確認）
+            import subprocess
+            out = subprocess.run(["tasklist", "/fi", "PID eq %d" % old],
+                                 capture_output=True, text=True).stdout
+            if str(old) in out:
+                print("既に起動中(pid %d)→二重起動を回避して終了" % old)
+                return False
+        except Exception:
+            pass
+    open(LOCK, "w").write(str(os.getpid()))
+    return True
+
 def main():
+    if not acquire_lock():
+        return 0
     ap = argparse.ArgumentParser()
     ap.add_argument("--live", action="store_true", help="実デモ発注（既定はDRY）")
     ap.add_argument("--dry", action="store_true", help="明示的にDRY-RUN（既定・no-op）")
