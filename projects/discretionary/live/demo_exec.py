@@ -22,6 +22,13 @@ AUREL AIデモ執行（車線3の検証口）— MT5Demo(デモ口座)にだけ�
 """
 import os, sys, json, time, argparse
 
+# ★出力の文字コードで絶対に落ちないように（cp932コンソール/リダイレクトでもUTF-8・置換）
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+except Exception:
+    pass
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 SETUP_LEDGER = os.path.join(HERE, "setup_ledger.jsonl")
 EXEC_LEDGER = os.path.join(HERE, "demo_exec_ledger.jsonl")
@@ -246,10 +253,13 @@ def run(dry=True, armed=False, once=False):
         if once:
             one_scan()
         else:
-            print("[起動] デモ執行 %d秒おき（Ctrl+C / KILLファイルで停止）" % POLL_SEC)
+            print("[起動] デモ執行 %d秒おき（Ctrl+C / KILLファイルで停止）" % POLL_SEC, flush=True)
             while True:
-                if not one_scan():
-                    break
+                try:
+                    if not one_scan():
+                        break
+                except Exception as e:
+                    print("[loop error・継続] %r" % e, flush=True)
                 time.sleep(POLL_SEC)
     finally:
         if sess:
