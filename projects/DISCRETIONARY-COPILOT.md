@@ -365,3 +365,39 @@ MT5銘柄の答え: US100/NASDAQ100 = **NAS100.r（Cash）**。検証データ(u
   - 常駐: schtasks /Createはサンドボックスで不可→**スタートアップ登録**(`Startup/AUREL_WallWatcher.vbs`=hidden起動)＋即時起動(cscript)。稼働確認=watcher_state.json更新。ログ=watcher.log(python -u)。
   - 安全: 観測と通知のみ・発注しない・会長裁量を上書きしない。第2段階(会長→AURELの受信=webhook+公開HTTPS)は未着手。
   - 残注意: XAUUSD(web)とXAUUSD+(会長MT5)の固定値差は未測定。合図価格が1-2pズレ得る→次セッションで同時刻値を数組記録して補正予定。
+
+---
+
+## 2026-10-13 デモ連携アーキテクチャ確定（会長GO）: デモ1台集約
+**決定**: 車線3(AIシステム化)のデモ検証基盤は、MT5端末を**デモ1台に集約**する。リアル口座27972608はPythonから完全に切り離し、リアル発注は会長が携帯から手動で行う。
+
+**なぜ**: MT5のPython連携は1PCで同時に握れる端末接続が1本だけ。コックピット(serve_chart.py)がリアル端末の橋を常時保持しているため、デモ端末へ2本目を張ると必ずIPC timeout。デモもリアルも同じVantage・同じXAUUSDで価格は実質同一なので、デモ端末1台で「チャート読取＋AIデモ執行」を両立でき、かつリアルがPythonに繋がらない分だけ安全が上がる。
+
+**構築済み**:
+- `C:\Users\user\MT5Demo`(portable) = Program Filesのexe複製＋Vantage servers.datのみ配置・accounts.dat無し。デモ802307ログイン成功($1000)。
+- `demo_login.py` = ログイン＋デモ検証(発注なし)。安全弁: `login!=27972608` かつ `trade_mode==ACCOUNT_TRADE_MODE_DEMO(0)`。資格情報は`~/.claude/.env`。
+- 旧`AurelianMT5`は不適格(MetaQuotes汎用＋MCP同梱でIPC不可)→使わない。
+- デモ接続テスト手順: `schtasks /End /TN AUREL_ChartServe`→serve_chart消滅確認→test→`schtasks /Run`で復帰。
+
+**未実施(会長GO後・別セッション)**:
+1. `mt5_bridge.py`の読取元をMT5Demoへ切替(ALLOWED_LOGIN=802307・SYMBOL=XAUUSD(デモの金シンボル要確認)・TERMINAL_PATH=MT5Demo)。切替時はコックピット表示を必ず目視検証。
+2. 1端末に対しコックピット(読取)とデモ執行(発注)の**2プロセスが同時に橋を張れるか**要検証(1端末内の複数Python接続可否は未確認)。不可なら執行プロセスがコックピットのmt5接続を共有する設計にする。
+3. デモ執行モジュール: AssetEmpire `mt5_live.py`(Mt5Session/market_order_bracket/reconcile_sl, ARM="CHAIRMAN-GO"二重ロック)を再利用。発注前に毎回 login/trade_mode 再検証＋キルスイッチ。dry-run→初回のみ会長GO。
+
+### 2026-10-13 追記・訂正: 2端末共存を実証（集約は不要になった）
+**訂正**: 「MT5 Python橋は1PC1本/2端末不可」は誤り。実証済み: **コックピット(リアルXAUUSD+)稼働中に、同時にMT5Demo(802307)へ別プロセスで接続成功**。先の2端末失敗は壊れたAurelianMT5が原因の汚染結果だった。正しい制約は「1端末の橋は複数プロセスで共有可／良い端末同士なら2端末も並存可」。
+**よって新方針(上書き)**: コックピットは**今のままリアルXAUUSD+で据え置き**(会長の携帯と壁一致・オフセット問題なし)。デモ執行は**別プロセスでMT5Demoに並走**。集約・読取元切替は不要。変更最小・最安全。
+**実測メモ**: デモ金シンボル=「XAUUSD」(リアルは「XAUUSD+」)。同時刻 demo4155.71 vs real4155.53=差約0.2(実質一致)。デモ端末はM5足ライブ配信OK。2プロセス→1端末の同時接続もOK(親子テスト済)。
+
+### 2026-10-13 デモ執行モジュール demo_exec.py 構築・DRY検証済
+`...discretionary\live\demo_exec.py`。AIセットアップ(S系列)の発火(reaccel.status=='open'かつv1.keep)を検知し、MT5Demo(802307)へSL/TP付きブラケット成行をデモ発注する。コックピット(リアル読取)とは別プロセスで並走。
+- シンボル=XAUUSD(デモ)・LOT=0.01固定・magic=770613。
+- **二重ロック**: `--live` かつ `--arm CHAIRMAN-GO` の両方で初めてorder_send。既定は`--dry`(出す内容をログするだけ・MT5に接続すらしない)。
+- **毎回検証**: assert_demo()を発注直前に必ず通す=login!=27972608 かつ trade_mode==ACCOUNT_TRADE_MODE_DEMO(0)。崩れたら例外で発注中止。
+- **キルスイッチ**: 同フォルダに`KILL`ファイルがあれば即停止。
+- **バックフィル防止**: 起動時に既存の発火を全部「既見」登録し、以降の新規発火(かつentry_timeがFRESH_SEC=600s以内)だけ発注。seen は demo_exec_state.json。発注記録は demo_exec_ledger.jsonl。
+- DRY検証OK(初期化→新規なし→KILL停止)。**実デモ発注(--live --arm)は会長GOの実体=未実施**。次回会長GOで初回発火→スリッページ/約定を実執行コストとして検証開始。
+
+### 2026-10-13 デモ発注対象の方針（会長の型に一致させる）
+全205setupのうちv1.keep通過は20(外壁16/内壁mid4)。発火の本筋はreaccel(リテスト)、chaseはkeepに現状ゼロ。
+**方針**: demo_exec.pyは `FIRE_WALL_KINDS=("outer",)` `FIRE_MODES=("reaccel",)` で、**外壁×リテスト×keepだけ実デモ発注**(=会長の型T-0021/T-0023と同一=手トレードと比較可能)。内壁(mid)とchaseは `kind:"observe"` で発注せず記録のみ(紙で貯めて後日比較)。混在で優位の対象をぼかさない・サンプルを薄めないため。広げたくなったら定数2行で可変。
