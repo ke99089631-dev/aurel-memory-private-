@@ -413,3 +413,6 @@ MT5銘柄の答え: US100/NASDAQ100 = **NAS100.r（Cash）**。検証データ(u
 **結論**: demo_exec常駐は `HKCU\Software\Microsoft\Windows\CurrentVersion\Run` の値 `AUREL_DemoExec` = `"...ImperialFlow\venv\Scripts\pythonw.exe" -u "...live\demo_exec.py" --live --arm CHAIRMAN-GO` で実現。ログオン毎にExplorerがpythonwを独立プロセスで起動=落ちない・管理者不要。
 **ダメだった方法（教訓）**: ①schtasks /Create=この環境から access denied(サンドボックス) ②会長の管理者cmdでもタスク未作成 ③VBS/cmd→python(w)のランチャ起動=ランチャ(wscript)終了時にpythonごと道連れで死ぬ(起動→[接続]→[起動]まで出して消える・lock空=buffer未flushで強制終了の痕跡) ④Start-Process=ツールが承認要求で実行不可。⑤Bash起動=動くがセッション終了で死ぬ。
 **残課題(軽)**: demo_exec.py acquire_lockのlockファイルがclose/flush無しで、強制終了時に空になる→死活判定が紛らわしい。`with open`に直すと良い。Startupのvbs/Desktopのvbsは副次(Runキーが本線)。デモ執行の文字コード対策(sys.stdout.reconfigure utf-8)＋ループtry/exceptは実装済。
+
+### 2026-10-14 ★デモ発注エンドツーエンド成功（注文できることを証明）
+最後の壁=デモ端末の「アルゴ取引(AutoTrading)」がOFF→order_send retcode10027(CLIENT_DISABLES_AT)で全弾かれていた。会長がMT5Demo(802307)のアルゴ取引ボタンを緑=ONに→test_order.pyで BUY0.01→約定(retcode10009 約定4163.87)→即クローズ成功。残高1000→999.65(往復スプレッド$0.35=測りたい実コスト)。=AIデモ執行は実際に注文可能と確定。アルゴ取引ONは端末のGUIトグルで会長しか押せない(設定ファイル/APIから不可)・一度ONで保存。常駐=HKCU Runキー(前項)。test_order.py=接続テスト用に保管。
