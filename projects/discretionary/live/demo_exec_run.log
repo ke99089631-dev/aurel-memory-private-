@@ -1,4 +1,3 @@
 [モード] LIVE デモ発注（armed=True）
 [接続] デモ 802307 / VantageTradingLtd-Demo / 残高1000.0 検証OK
 [起動] デモ執行 20秒おき（Ctrl+C / KILLファイルで停止）
-[observe・発注せず記録のみ] S-0207 BUY mid(reaccel) SL4163.135 TP4172.982
