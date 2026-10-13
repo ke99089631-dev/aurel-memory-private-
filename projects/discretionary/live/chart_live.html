@@ -610,6 +610,38 @@ function computeKata(){
   const nOk=(brk?1:0)+(floor?1:0);
   return {brk,floor,dir,brkTxt,floorTxt,slRec,tpRec,nOk};
 }
+// 🧱 壁の混み具合（団子メーター・2026-10-13）: 実際の値動きのタッチ回数で壁を数え、
+//   現在値の近くに壁が密集(団子)してないか判定。団子=走る空間なし=だまし多発=見送り寄り。
+//   空間あり=クリーン=狙える。※ヒューリスティックv1・検証中（本採用ルールではない）。
+function computeCongestion(){
+  if(!allBars||allBars.length<30||typeof curPx!=='number'||curPx==null) return null;
+  const bars=allBars.slice(-144);            // 直近~12時間
+  const cnt={};
+  for(const b of bars){ for(const px of [b.high,b.low]){ const key=Math.round(px); cnt[key]=(cnt[key]||0)+1; } }
+  const keys=Object.keys(cnt).map(Number).sort((a,b)=>a-b);
+  if(!keys.length) return null;
+  let maxC=0; for(const k of keys) maxC=Math.max(maxC,cnt[k]);
+  const thr=Math.max(5, Math.round(0.35*maxC));   // 強い壁の閾値（適応的）
+  const walls=[];                                  // 隣接(1.5以内)バケツを1つの壁に併合
+  for(const k of keys){
+    if(cnt[k]<thr) continue;
+    const last=walls[walls.length-1];
+    if(last && (k-last.hi)<=1.5){ last.hi=k; last.touch+=cnt[k]; if(cnt[k]>last.peakC){last.peakC=cnt[k]; last.peak=k;} }
+    else walls.push({lo:k,hi:k,peak:k,peakC:cnt[k],touch:cnt[k]});
+  }
+  const BAND=8;
+  const near=walls.filter(w=> w.peak>=curPx-BAND && w.peak<=curPx+BAND);
+  const above=walls.filter(w=> w.peak>curPx+0.5).sort((a,b)=>a.peak-b.peak);
+  const below=walls.filter(w=> w.peak<curPx-0.5).sort((a,b)=>b.peak-a.peak);
+  const roomUp = above.length? (above[0].peak-curPx) : null;
+  const roomDn = below.length? (curPx-below[0].peak) : null;
+  const room   = Math.min(roomUp!=null?roomUp:99, roomDn!=null?roomDn:99);
+  let level,label,cls,icon;
+  if(near.length>=4 || room<2){ level='jam';   label='団子（見送り寄り）';   cls='ng'; icon='🔴'; }
+  else if(near.length<=1 && room>=4){ level='clean'; label='クリーン（走る余地）'; cls='ok'; icon='🟢'; }
+  else { level='mid'; label='やや混み'; cls='wa'; icon='🟡'; }
+  return {level,label,cls,icon,near:near.length,roomUp,roomDn,room,nwalls:walls.length};
+}
 function computeVerdict(){
   const nowS=Math.floor(Date.now()/1000);
   const d=(infoData&&infoData.ok)?infoData:null;
@@ -658,6 +690,7 @@ function updateVerdict(){
   const el=document.getElementById('verdict'); if(!el) return;
   if(!showPaper){ el.style.display='none'; return; }
   const v=computeVerdict();
+  const cg=computeCongestion();
   const ap=document.getElementById('aipnl');   // 🤖AI買いの直下に置く(高さが変わっても追従)
   let top=85;
   if(ap && ap.style.display!=='none'){ const r=ap.getBoundingClientRect(); if(r.height) top=Math.round(r.bottom)+4; }
@@ -671,9 +704,11 @@ function updateVerdict(){
   else if(up&&dn){ advice='横ばい。無理押しNG。壁で跳ねたら小さく（上'+up.p.toFixed(0)+' 下'+dn.p.toFixed(0)+'）'; }
   else { advice='価格待ち…'; }
   if(v.rsiState&&v.rsiState.cls==='ng'&&v.lightCls!=='ng'){ advice='⚠RSI失速＝新高値頼み注意(T-0022型)。'+advice; }
+  if(cg&&cg.level==='jam'&&v.lightCls!=='ng'){ advice='🔴壁が団子＝走る空間なし＝今日は見送り寄り。'+advice; }
   const ka=v.kata||{}; const mk=b=>b?'<span style="color:#56d364">✓</span>':'<span style="color:#8b949e">待</span>';
   let h='<div class="vhead"><span class="go '+v.lightCls+'">'+icon+' '+v.light+'</span> <span class="vsub">AURELの結論</span></div>';
   h+='<div class="vrow">⏰ '+v.timeTxt+' ｜ 🌤 '+v.wxTxt+'</div>';
+  if(cg){ let rd=''; if(cg.roomUp!=null&&cg.roomDn!=null) rd='<span style="color:#8b949e"> 上'+cg.roomUp.toFixed(0)+'/下'+cg.roomDn.toFixed(0)+'で壁</span>'; h+='<div class="vrow">🧱 壁の混み <span class="go '+cg.cls+'">'+cg.icon+' '+cg.label+'</span>'+rd+'</div>'; }
   h+='<div class="vrow">🧩 型(AI自動) ブレイク '+mk(ka.brk)+' ／ 床化 '+mk(ka.floor)+'</div>';
   if(up&&dn) h+='<div class="vrow">🎯 上の壁 <b>'+up.p.toFixed(0)+'</b>（'+up.name+'） ／ 🛡 下の壁 <b>'+dn.p.toFixed(0)+'</b>（'+dn.name+'）</div>';
   if(ka.slRec!=null&&ka.tpRec!=null) h+='<div class="vrow" style="color:#8b949e">目安 SL '+ka.slRec.toFixed(0)+'（壁内側）／ TP '+ka.tpRec.toFixed(0)+'（次壁手前）</div>';
