@@ -6,7 +6,7 @@
 # ★秘密保持: パスワードは絶対に画面に出さない・ログに残さない。
 import os, sys
 
-TERMINAL = r"C:\Users\user\AurelianMT5\terminal64.exe"
+TERMINAL = r"C:\Users\user\MT5Demo\terminal64.exe"
 REAL_FORBIDDEN = 27972608  # 会長のリアル口座。これには絶対ログインしない
 ENV_PATH = os.path.join(os.path.expanduser("~"), ".claude", ".env")
 
@@ -55,9 +55,13 @@ def main():
         mt5.shutdown()
         return 1
 
-    # trade_mode: 0=REAL, 1=DEMO, 2=CONTEST
-    MODE = {0: "REAL(実弾)", 1: "DEMO(デモ)", 2: "CONTEST(コンテスト)"}
+    # ★trade_mode は必ずMT5定数で判定（ハードコードは取り違え事故のもと）
+    #   MT5公式: ACCOUNT_TRADE_MODE_DEMO=0 / CONTEST=1 / REAL=2
+    MODE = {mt5.ACCOUNT_TRADE_MODE_DEMO: "DEMO(デモ)",
+            mt5.ACCOUNT_TRADE_MODE_CONTEST: "CONTEST(コンテスト)",
+            mt5.ACCOUNT_TRADE_MODE_REAL: "REAL(実弾)"}
     mode_txt = MODE.get(ai.trade_mode, "不明(%s)" % ai.trade_mode)
+    is_demo = (ai.trade_mode == mt5.ACCOUNT_TRADE_MODE_DEMO)
 
     print("=== ログイン成功 ===")
     print("口座番号 :", ai.login)
@@ -69,13 +73,13 @@ def main():
 
     verdict_ok = True
     if ai.login == REAL_FORBIDDEN:
-        print("⛔ 危険: リアル口座(27972608)にログインしている。即遮断。", file=sys.stderr)
+        print("[危険]: リアル口座(27972608)にログインしている。即遮断。", file=sys.stderr)
         verdict_ok = False
-    if ai.trade_mode != 1:
-        print("⛔ 危険: これはデモ口座ではない(trade_mode=%s)。デモ以外では発注させない。" % ai.trade_mode, file=sys.stderr)
+    if not is_demo:
+        print("[危険]: これはデモ口座ではない(trade_mode=%s=%s)。デモ以外では発注させない。" % (ai.trade_mode, mode_txt), file=sys.stderr)
         verdict_ok = False
     if verdict_ok:
-        print("✅ 安全確認OK: デモ口座・リアルではない。発注ガード通過（ただし発注は会長GO後のみ）。")
+        print("[OK] 安全確認OK: デモ口座・リアルではない。発注ガード通過（ただし発注は会長GO後のみ）。")
 
     mt5.shutdown()
     return 0 if verdict_ok else 3
