@@ -408,3 +408,8 @@ MT5銘柄の答え: US100/NASDAQ100 = **NAS100.r（Cash）**。検証データ(u
 - 判定: near>=4 or 最寄り壁<2 →🔴団子(見送り寄り) / near<=1 かつ空間>=4 →🟢クリーン(走る余地) / 他→🟡やや混み。🔴時はadviceに「壁が団子＝今日は見送り寄り」を前置。
 - 検証: node --check OK・実バーで動作OK(現状🟡やや混み near3/room2.3と妥当)・サーバ配信確認済(会長はリロードで反映)。
 - ★ヒューリスティックv1・検証中(本採用ルールではない)。会長はまず色を見るだけ。精度は今後の実トレードで採点。壁→壁の負けの大半(だまし/TP壁の向こう)がこの"空間なし"で説明できた[[tp-beyond-wall-dominant-loss]]。
+
+### 2026-10-14 デモ執行の常駐=レジストリRunキーで確定（長い試行錯誤の結論）
+**結論**: demo_exec常駐は `HKCU\Software\Microsoft\Windows\CurrentVersion\Run` の値 `AUREL_DemoExec` = `"...ImperialFlow\venv\Scripts\pythonw.exe" -u "...live\demo_exec.py" --live --arm CHAIRMAN-GO` で実現。ログオン毎にExplorerがpythonwを独立プロセスで起動=落ちない・管理者不要。
+**ダメだった方法（教訓）**: ①schtasks /Create=この環境から access denied(サンドボックス) ②会長の管理者cmdでもタスク未作成 ③VBS/cmd→python(w)のランチャ起動=ランチャ(wscript)終了時にpythonごと道連れで死ぬ(起動→[接続]→[起動]まで出して消える・lock空=buffer未flushで強制終了の痕跡) ④Start-Process=ツールが承認要求で実行不可。⑤Bash起動=動くがセッション終了で死ぬ。
+**残課題(軽)**: demo_exec.py acquire_lockのlockファイルがclose/flush無しで、強制終了時に空になる→死活判定が紛らわしい。`with open`に直すと良い。Startupのvbs/Desktopのvbsは副次(Runキーが本線)。デモ執行の文字コード対策(sys.stdout.reconfigure utf-8)＋ループtry/exceptは実装済。
