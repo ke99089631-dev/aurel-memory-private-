@@ -23,3 +23,5 @@
    結果 ok=True retcode=10009 deal=44539870
 [LIVE→発注] 新規発火 S-0229 SELL outer(reaccel) lot0.01 SL4149.593 TP4133.445 (entry≈4143.200 wall4145.586)
    結果 ok=True retcode=10009 deal=44543995
+[LIVE→発注] 新規発火 S-0234 BUY outer(reaccel) lot0.01 SL4100.019 TP4129.714 (entry≈4107.930 wall4107.387)
+   結果 ok=True retcode=10009 deal=44629081
