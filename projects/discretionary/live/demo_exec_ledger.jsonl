@@ -1,1 +1,2 @@
 {"kind": "observe", "sid": "S-0207", "side": "BUY", "wall_kind": "mid", "mode": "reaccel", "sl": 4163.135, "tp": 4172.982, "entry_ref": 4169.59, "logged_at": "2026-10-13 11:21:20"}
+{"kind": "live", "sid": "S-0221", "side": "SELL", "lot": 0.01, "sl": 4151.551, "tp": 4138.26, "entry_ref": 4145.97, "retcode": 10016, "deal": 0, "order": 0, "fill_price": 0.0, "ok": false, "logged_at": "2026-10-14 10:51:27"}
