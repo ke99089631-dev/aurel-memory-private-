@@ -1,110 +1,55 @@
 {
  "summary": {
-  "n": 2,
+  "n": 0,
   "entry_slip_0.3": {
-   "n": 2,
-   "median": 0.13,
-   "mean": 0.03,
-   "p90": 0.13,
-   "adverse_share": 50.0
-  },
-  "chase_slip_0.3": {
-   "n": 1,
-   "median": 0.11,
-   "p90": 0.11
-  },
-  "entry_slip_1": {
-   "n": 2,
-   "median": 0.12,
-   "mean": 0.055,
-   "p90": 0.12,
-   "adverse_share": 50.0
-  },
-  "chase_slip_1": {
-   "n": 1,
-   "median": -0.03,
-   "p90": -0.03
-  },
-  "entry_slip_3": {
-   "n": 2,
-   "median": 0.72,
-   "mean": 0.34,
-   "p90": 0.72,
-   "adverse_share": 50.0
-  },
-  "chase_slip_3": {
-   "n": 1,
-   "median": 0.78,
-   "p90": 0.78
-  },
-  "entry_slip_120": {
-   "n": 2,
-   "median": -0.28,
-   "mean": -0.35,
-   "p90": -0.28,
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
    "adverse_share": 0.0
   },
-  "chase_slip_120": {
-   "n": 1,
-   "median": -4.06,
-   "p90": -4.06
+  "entry_slip_1": {
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
+   "adverse_share": 0.0
+  },
+  "entry_slip_3": {
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
+   "adverse_share": 0.0
+  },
+  "entry_slip_120": {
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
+   "adverse_share": 0.0
   },
   "sl": {
-   "n": 1,
-   "measured": 1,
+   "n": 0,
+   "measured": 0,
    "not_triggered_on_tick": 0,
-   "median": 0.369,
-   "p90": 0.369,
-   "max": 0.369
+   "median": null,
+   "p90": null,
+   "max": null
   },
   "tp": {
-   "n": 1,
-   "fill_ok": 1,
+   "n": 0,
+   "fill_ok": 0,
    "fill_miss": 0
   },
   "spread_at_entry": {
-   "median": 0.22,
-   "p90": 0.22,
-   "max": 0.22
+   "median": null,
+   "p90": null,
+   "max": null
   },
-  "open_vs_tick_abs_median": 0.0,
+  "open_vs_tick_abs_median": null,
   "adopt_latency_s": 1.0,
-  "generated": "2026-10-14 11:03:21"
+  "generated": "2026-10-14 11:33:25"
  },
- "rows": [
-  {
-   "id": "S-0219",
-   "side": "SELL",
-   "risk": 6.507999999999811,
-   "exit_reason": "TP",
-   "R": 2.199,
-   "bid0": 4161.24,
-   "spread_pt": 0.22,
-   "slip_0.3": 0.13,
-   "slip_1": -0.01,
-   "slip_3": -0.04,
-   "slip_120": -0.28,
-   "open_vs_tick": 0.0,
-   "tp_fill_ok": true
-  },
-  {
-   "id": "S-0221",
-   "side": "SELL",
-   "risk": 5.4909999999999854,
-   "exit_reason": "SL",
-   "R": -1.0,
-   "bid0": 4146.06,
-   "spread_pt": 0.16,
-   "slip_0.3": -0.07,
-   "slip_1": 0.12,
-   "slip_3": 0.72,
-   "slip_120": -0.42,
-   "open_vs_tick": 0.0,
-   "chase_slip_0.3": 0.11,
-   "chase_slip_1": -0.03,
-   "chase_slip_3": 0.78,
-   "chase_slip_120": -4.06,
-   "sl_slip": 0.369
-  }
- ]
+ "rows": []
 }
