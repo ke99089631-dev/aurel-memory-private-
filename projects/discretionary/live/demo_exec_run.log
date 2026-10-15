@@ -28,3 +28,5 @@
 [LIVE→発注] 新規発火 S-0237 BUY outer(reaccel) lot0.01 SL4149.788 TP4173.211 (entry≈4155.630 wall4155.600)
    結果 ok=True retcode=10009 deal=44651050
 [observe・発注せず記録のみ] S-0238 SELL mid(reaccel) SL4148.080 TP4136.938
+[LIVE→発注] 新規発火 S-0239 SELL outer(reaccel) lot0.01 SL4140.534 TP4126.123 (entry≈4136.950 wall4136.958)
+   結果 ok=True retcode=10009 deal=44660973
