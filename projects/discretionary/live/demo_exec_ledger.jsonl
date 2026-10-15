@@ -6,3 +6,4 @@
 {"kind": "live", "sid": "S-0234", "side": "BUY", "lot": 0.01, "sl": 4100.019, "tp": 4129.714, "entry_ref": 4107.93, "retcode": 10009, "deal": 44629081, "order": 49219451, "fill_price": 4107.38, "ok": true, "logged_at": "2026-10-15 07:36:41"}
 {"kind": "live", "sid": "S-0237", "side": "BUY", "lot": 0.01, "sl": 4149.788, "tp": 4173.211, "entry_ref": 4155.63, "retcode": 10009, "deal": 44651050, "order": 49246905, "fill_price": 4151.13, "ok": true, "logged_at": "2026-10-15 12:21:12"}
 {"kind": "observe", "sid": "S-0238", "side": "SELL", "wall_kind": "mid", "mode": "reaccel", "sl": 4148.08, "tp": 4136.938, "entry_ref": 4145.08, "logged_at": "2026-10-15 14:05:31"}
+{"kind": "live", "sid": "S-0239", "side": "SELL", "lot": 0.01, "sl": 4140.534, "tp": 4126.123, "entry_ref": 4136.95, "retcode": 10009, "deal": 44660973, "order": 49258285, "fill_price": 4134.86, "ok": true, "logged_at": "2026-10-15 15:35:48"}
