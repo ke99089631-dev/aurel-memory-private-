@@ -4319,3 +4319,5 @@
 {"kind": "update", "target": "S-0273", "logged_at": "2026-10-19 22:51:37", "chase": {"entry": 4155.34, "status": "closed", "exit_reason": "TP", "R": 0.829, "mfe_R": 1.55, "mae_R": 0.3}, "chase_frozen": true}
 {"kind": "update", "target": "S-0260", "logged_at": "2026-10-19 22:51:37", "reaccel": {"retest_time": 1792163700, "retest_jst": "2026-10-17 00:15", "retest_tol": 3.58, "entry": 4178.82, "entry_time": 1792164000, "entry_jst": "2026-10-17 00:20", "sl": 4194.928, "tp": 4147.29, "swing": 4181.43, "wait_bars": 1, "status": "closed", "mfe_R": 2.2, "mae_R": 0.71, "hold_bars": 257, "exit": 4147.29, "exit_reason": "TP", "R": 1.957, "exit_time": 1792417500}, "reaccel_frozen": true}
 {"kind": "update", "target": "S-0272", "logged_at": "2026-10-19 22:53:37", "slip_src": "tick-sim L=1s", "spread_pt": 0.16, "slip_pt": 0.16, "tp_fill_ok": true}
+{"kind": "update", "target": "S-0273", "logged_at": "2026-10-19 23:41:44", "waiting_resolved": true, "status": "no_retest"}
+{"kind": "update", "target": "S-0273", "logged_at": "2026-10-19 23:41:44", "reaccel": {"status": "no_retest"}, "reaccel_frozen": true}
