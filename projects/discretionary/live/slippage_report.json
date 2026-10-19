@@ -1,41 +1,41 @@
 {
  "summary": {
-  "n": 2,
+  "n": 0,
   "entry_slip_0.3": {
-   "n": 2,
-   "median": 0.34,
-   "mean": 0.265,
-   "p90": 0.34,
-   "adverse_share": 100.0
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
+   "adverse_share": 0.0
   },
   "entry_slip_1": {
-   "n": 2,
-   "median": 0.32,
-   "mean": 0.18,
-   "p90": 0.32,
-   "adverse_share": 100.0
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
+   "adverse_share": 0.0
   },
   "entry_slip_3": {
-   "n": 2,
-   "median": 0.32,
-   "mean": 0.145,
-   "p90": 0.32,
-   "adverse_share": 50.0
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
+   "adverse_share": 0.0
   },
   "entry_slip_120": {
-   "n": 2,
-   "median": -0.14,
-   "mean": -1.46,
-   "p90": -0.14,
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
    "adverse_share": 0.0
   },
   "sl": {
-   "n": 2,
-   "measured": 2,
+   "n": 0,
+   "measured": 0,
    "not_triggered_on_tick": 0,
-   "median": 0.081,
-   "p90": 0.081,
-   "max": 0.081
+   "median": null,
+   "p90": null,
+   "max": null
   },
   "tp": {
    "n": 0,
@@ -43,44 +43,13 @@
    "fill_miss": 0
   },
   "spread_at_entry": {
-   "median": 0.16,
-   "p90": 0.16,
-   "max": 0.16
+   "median": null,
+   "p90": null,
+   "max": null
   },
-  "open_vs_tick_abs_median": 0.0,
+  "open_vs_tick_abs_median": null,
   "adopt_latency_s": 1.0,
-  "generated": "2026-10-19 11:21:52"
+  "generated": "2026-10-19 11:51:56"
  },
- "rows": [
-  {
-   "id": "S-0264",
-   "side": "SELL",
-   "risk": 5.837000000000444,
-   "exit_reason": "SL",
-   "R": -1.0,
-   "bid0": 4173.29,
-   "spread_pt": 0.15,
-   "slip_0.3": 0.34,
-   "slip_1": 0.32,
-   "slip_3": 0.32,
-   "slip_120": -0.14,
-   "open_vs_tick": 0.0,
-   "sl_slip": 0.003
-  },
-  {
-   "id": "S-0265",
-   "side": "BUY",
-   "risk": 3.719000000000051,
-   "exit_reason": "SL",
-   "R": -1.0,
-   "bid0": 4181.56,
-   "spread_pt": 0.16,
-   "slip_0.3": 0.19,
-   "slip_1": 0.04,
-   "slip_3": -0.03,
-   "slip_120": -2.78,
-   "open_vs_tick": 0.0,
-   "sl_slip": 0.081
-  }
- ]
+ "rows": []
 }
