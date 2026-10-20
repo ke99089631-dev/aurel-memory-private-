@@ -320,3 +320,7 @@ updated: 2026-07-28
 - **銘柄仕様**: 無印FX=DISABLED・「+」付き=FULL を発見→写像を FULL 優先に修正し 22/22 写像・unmapped 0（詳細 CIRCULATION-ARCHITECTURE 2026-10-20）。
 - **無影響**: Program Files 端末(27972608)・MT5Demo・コックピット(serve_chart 8793: プロセス/受け口生存・出力 setup_ledger 14:40 / spread_log 14:42 と実行中も更新継続)・デモ執行(demo_exec 14:42) いずれも無改変・継続稼働。MT5Aurelian 端末は読取後に停止。`executor_present=False` 据置。
 - **次（段3）は会長の手**: 機関口座への極小入金＋`LIVE_ARM.json`＋合言葉。AUREL 側の残工事＝E3 差分発注器の実口座向け配線（鏡の銘柄仕様で）＋紙で予算門が閉じる試験＝起案→会長GO。
+
+### 🔴 OPEN（実循環での実見待ち・2026-10-20 15:45・会長GO「GO」）: 段F『削る』＝3本の処遇＋休止表示
+- 実装・検証済（詳細 CIRCULATION-ARCHITECTURE 2026-10-20 段F）。event_driven 退役／tail_hedge 休眠／macro_causal センサー維持／stat_arb「休止」表示／朝報告に常設2行。
+- **完了の定義**: 明朝 2026-10-21 07:00 の autowrite.log に `tail_hedge: SKIP` `event_driven: SKIP` を実見し、他兵の step とブリーフ送信が従来どおり成功、朝報告に「stat_arb 休止（19/30で凍結・保有0）」と「■ 兵の名簿」行が出ること。異常なら `.pre-rosterF.20261020.bak` で即戻す。

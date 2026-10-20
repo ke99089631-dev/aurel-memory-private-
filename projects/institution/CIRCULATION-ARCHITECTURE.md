@@ -1641,3 +1641,11 @@ Tier0本命=逆ボラ(Sensor #10)を機関の恒久の血として組込。純�
 - **銘柄仕様の発見（段2の本丸）**: この口座種別は無印 FX（AUDUSD 等）が `trade_mode=DISABLED`、**「+」付き（AUDUSD+ 等）が FULL**。指数は `SP500.r / NAS100.r / US2000.r`、商品は `NG-Cr / COPPER-Cr / CL-OIL`、暗号は `BTCUSD/ETHUSD/SOLUSD/LTCUSD/XRPUSD`、金 `XAUUSD+`、銀 `XAGUSD`。鏡の写像を「候補順」→「**FULL 優先**＋`tradeable` フラグ」に修正し候補名を追加 → **22/22 写像・unmapped 0**。E1 翻訳器は `tradeable=False` を建てない（fail-closed）。
 - **境界**: 発注 API 呼び出しゼロ（selftest PASS）・拒否リスト不変・`LIVE_ARM.json` 不在・`executor_present=False` 据置・Program Files 端末(27972608)と MT5Demo は無改変・MT5Aurelian 端末は読取後に停止。
 - **段3 の前提（会長の手）**: 機関口座への極小入金 → `LIVE_ARM.json`＋合言葉。AUREL 側の残工事＝E3 差分発注器を鏡の銘柄仕様（contract_size/volume_min/step）で実口座向けに配線し、紙で「予算門が閉じる」試験を実見。
+
+## 2026-10-20 段F『削る』実行（会長GO「GO」）— 稼ぎ手にならない3本の処遇＋正直な表示
+- **裁定**: event_driven=**退役**（無料の清潔な事件源なし・再雇用は有料データ購入時のみ）／tail_hedge=**休眠**（保険であり稼ぎ手ではない・S3到達＋オプション実IV源で再点火）／macro_causal=**センサー維持**（朝報告「今日の世界」の源・価格由来で外部データ不要）。削除はしない・コードと帳簿は保管＝可逆。
+- **建設**: 新モジュール `circulation/roster.py`＋名簿 `data/circulation/soldier_roster.json`（真実源・status: active/sensor/dormant/retired）。`auto_writeback.py` は名簿で dormant/retired の兵を step せず `SKIP (roster=…)` をログ（`_RosterSkip`・失敗扱いにしない・名簿が読めなければ従来どおり全員 step）。
+- **正直な表示**: `s2_floor_monitor.py` に休止検知（帳簿 last_step_date 無し、または前進が10日以上停止 → `status=idle`・時計は凍結のまま）。stat_arb は 09-05 から idle。`chairman_brief.py` は idle 兵を「休止（19/30で凍結・保有0）」と出し、常設2行を追加: 「兵は教科書型の紙運転（探索ではない）。フロア到達＝生存と配管の証明で利益の証明ではない」＋「■ 兵の名簿: 現役5・センサー1・休眠1・退役1」。会長の操作行の「③-b設計」は「段3起案 EXECUTOR-STAGE3-PROPOSAL」に差替。
+- **検証**: 4モジュール compile OK／roster selftest PASS／`_roster_resting`: tail_hedge=True・event_driven=True・carry=False・macro=False／floor monitor peek: stat_arb idle(2026-09-05)・n_idle=1／brief selftest PASS（送信なし）。
+- **残る実見（完了の定義）**: 明朝 2026-10-21 07:00 の実循環 autowrite.log に `tail_hedge: SKIP` と `event_driven: SKIP` が出て他兵は従来どおり step、朝報告に「stat_arb 休止」「兵の名簿」行が出ること。
+- バックアップ: `auto_writeback.py / s2_floor_monitor.py / chairman_brief.py` の `.pre-rosterF.20261020.bak`。
