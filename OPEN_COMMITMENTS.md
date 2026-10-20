@@ -285,7 +285,7 @@ updated: 2026-07-28
 - **実見（2026-09-28 AUREL点検）**: `executor_shadow.json`（generated 09-28 07:02）= rejected=0 / ledger_chain_verified=true / money_moved=0 / skipped=53（全て below_min）。`executor_divergence.jsonl` 09-19〜09-26 の全56件が status=FILLED（影の約定のみ・skip/reject ゼロ）。autowrite.log は毎朝 `executor_shadow: SKIP nn` のみ（例外なし・09-17〜09-28 連続）。09-17〜09-26 で営業日8日＝5営業日を超過。
 - 段2/段3 は別GO（会長: 機関用口座の準備が段2の前提）。段2は下の 15:30 項（会長の公式MT5インストール待ち）。
 
-### 🔴 OPEN（会長判断待ち・2026-09-16 15:30）: 発注器 段2『口座の鏡（読むだけ）』＝端末との通信が通らず保留
+### ✅ CLOSED 2026-10-20（会長GO「GOしよう」→ 同日完了・下の 10-20 項に実見記録）: 発注器 段2『口座の鏡（読むだけ）』＝端末との通信が通らず保留
 - **できたこと**: 会長提供の機関専用口座（login 26608494 / VantageTradingLtd-Live）の資格情報を `empire/config/secrets/aurelian_executor.env` に保管（パスワードは記憶・会話に書かない）。機関専用の端末を `C:\Users\user\AurelianMT5`（Program Files の MT5 を複製・portable）に用意。**端末単体はこの口座に正常ログインできた**（ウィンドウ題名で実見＝資格情報は正しい）。読取専用モジュール `circulation/executor_mirror.py`（発注APIの呼び出しゼロ・期待口座ガード・拒否リスト＝selftest PASS）。
 - **できていないこと**: Python(MetaTrader5 5.0.5735) ↔ 端末の IPC が `-10005 IPC timeout` で一度も通らない。ログイン無しの素の attach でも同じ。サンドボックス外・スケジュールタスク（対話ユーザーセッション）からでも同じ。
 - **原因の見立て**: 複製端末が **自動更新（build 6090→6182）の失敗ループ**に入っている（約8分ごとに「自分の複製を liveupdate へ作れず失敗→再起動」）。更新保留状態の端末は IPC を受け付けない疑い。会長の Program Files 端末には保留更新なし。
@@ -312,6 +312,11 @@ updated: 2026-07-28
 - 段A（MT5読取収集器）・車線2（Dukascopy 機械壁検証）は別GO。金ゼロ・発注なし・口座27972608は読取のみ。
 - **[2026-09-22 00:20 会長GO → 建設完了・実見待ち] 携帯「壁→壁 検証室」(:8792)**: 記録フォーム＋写真複数＋台帳＋同じチャット。単体テスト・起動・エンドポイント・JS構文は検証済。**完了の定義＝会長が携帯から1件記録（写真付き）→ 会話タブで AUREL がその写真を見て返答するのを実見。** 転記は今後この部屋が担う（手動転記は不要になった）。
 
-### 🔴 OPEN（会長GO 2026-10-20「GOしよう」→ 着工）: 発注器 段2『口座の鏡（読むだけ）』再試行
+### ✅ CLOSED 2026-10-20 14:41（完了の定義を全て満たした）: 発注器 段2『口座の鏡（読むだけ）』再試行
 - 上の09-16 15:30項の続き。10-13のMT5Demo構築手順(クリーン複製・portable・servers.datのみ)で機関専用端末を作り直し、executor_mirror で読取接続を再試行する。発注なし・金ゼロ。
 - **完了の定義**: account_mirror.json に実equity・建玉・銘柄仕様が映る／E7ガードが期待口座のみ通し拒否リストを弾くのをselftestと実接続の両方で実見／executor_present=Falseのまま／cockpit(Program Files端末)に影響なし。
+- **実見（2026-10-20 14:38〜14:41）**: 新端末 MT5Aurelian フォルダ（ユーザー直下・portable・Program Files 6230 複製＋D0E8 servers.dat）で IPC 成立。端末ログ `'26608494': authorized on VantageTradingLtd-Live`。`account_mirror.json`＝login 26608494 / Aurelian / USD / レバ1000 / 残高0 / 建玉0 / algo無効 / orders_sent 0 / money_moved 0。
+- **E7 ガード実動**: 初回は認証完了前（login=0）を読んで DENY＝ガードが実際に弾くのを実見。selftest（裁量口座 DENY／プロップ端末 DENY／別サーバ DENY／期待口座 OK）PASS。鏡に認証待ち最大60秒を追加後に OK。
+- **銘柄仕様**: 無印FX=DISABLED・「+」付き=FULL を発見→写像を FULL 優先に修正し 22/22 写像・unmapped 0（詳細 CIRCULATION-ARCHITECTURE 2026-10-20）。
+- **無影響**: Program Files 端末(27972608)・MT5Demo・コックピット(serve_chart 8793: プロセス/受け口生存・出力 setup_ledger 14:40 / spread_log 14:42 と実行中も更新継続)・デモ執行(demo_exec 14:42) いずれも無改変・継続稼働。MT5Aurelian 端末は読取後に停止。`executor_present=False` 据置。
+- **次（段3）は会長の手**: 機関口座への極小入金＋`LIVE_ARM.json`＋合言葉。AUREL 側の残工事＝E3 差分発注器の実口座向け配線（鏡の銘柄仕様で）＋紙で予算門が閉じる試験＝起案→会長GO。

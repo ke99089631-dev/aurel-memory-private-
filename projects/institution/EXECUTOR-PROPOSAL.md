@@ -3,7 +3,7 @@ doc_id: AURELIAN-EXECUTOR-PROPOSAL-v1
 tags: [institution, executor, proposal, live-gate, pinned]
 type: build-proposal
 created: 2026-09-16
-status: 段1 着工GO（会長「GOだ」2026-09-16）→ executor_shadow.py 実装・selftest PASS・cadence 配線済（5営業日の実見待ち）。段2/段3 は別GO
+status: 段1 完了（2026-09-28 CLOSED・実循環8営業日）。段2『口座の鏡（読むだけ）』完了（会長GO 2026-10-20「GOしよう」→ 同日 MT5Aurelian 端末新設・account_mirror.json に実口座 26608494 が映る・22銘柄すべて取引可能名に写像・発注0・金0）。段3（極小実弾）は別GO＝会長の入金＋二重ロック
 owner: AUREL
 approver: 会長（KEIKI MAEDA）
 source: AURELIAN-REVIEW-2026-09.md §3-A「畑の鍬」

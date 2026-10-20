@@ -1632,3 +1632,12 @@ Tier0本命=逆ボラ(Sensor #10)を機関の恒久の血として組込。純�
 **実測（正直な壁）**: 壁 **13.68 → 12.28%/yr**、効率帯 12.26、edges 16→13、Sharpe 1.82→1.64（実市場バスケット基準・律速=DD）。＝練習血液と「目」が実力を約1.4ポイント押し上げていた。
 **現在の機関の稼ぎ手（正直な数え方）**: 現役5兵（戻り取り・裁定(0組休止)・トレンドv2・金利差v2・保険売りv2）／見習い2／目1。
 **完了の定義**: 明朝 07:00 実循環で frontier が `EXCLUDED_FROM_WALL` 適用で測り直され（壁≈12.3%）、digest/dashboard が rc=0 で通ること（本日の他6件と一括実見）。
+
+## 2026-10-20 発注器 段2『口座の鏡（読むだけ）』完了（会長GO「GOしよう」）
+- **経緯**: 09-16 以来の障害＝複製端末 `AurelianMT5` の IPC timeout（MetaQuotes 汎用 exe・servers.dat 27KB＝Vantage サーバ無し・更新失敗ループ）。10-13 に MT5Demo で実証した手順を適用。
+- **建設**: `C:\Users\user\MT5Aurelian`（新設・portable）= Program Files の Vantage 端末(6230) を robocopy（Config/uninstall 除外）＋ D0E8 の `servers.dat`(240KB) のみ配置・accounts.dat 無し。`aurelian_executor.env` は MT5_PATH 行だけ差替（backup `.bak_20261020_stage2`）。
+- **実見**: 端末ログ 14:38:12 `'26608494': authorized on VantageTradingLtd-Live`。初回の鏡は認証完了前の一瞬（login=0）を読んで **E7 ガードが正しく DENY**（＝ガードの実動確認）。鏡に「認証完了まで最大60秒待つ」を追加（`MT5_AUTH_WAIT_S`）→ 再実行 OK。
+- **account_mirror.json（14:40）**: login 26608494 / VantageTradingLtd-Live / name Aurelian / USD / レバ1000 / 残高0・建玉0（入金は段3直前・設計どおり）/ 端末 build 6230・**algo trading 無効**（端末側 trade_allowed=False）/ orders_sent=0 / money_moved=0。
+- **銘柄仕様の発見（段2の本丸）**: この口座種別は無印 FX（AUDUSD 等）が `trade_mode=DISABLED`、**「+」付き（AUDUSD+ 等）が FULL**。指数は `SP500.r / NAS100.r / US2000.r`、商品は `NG-Cr / COPPER-Cr / CL-OIL`、暗号は `BTCUSD/ETHUSD/SOLUSD/LTCUSD/XRPUSD`、金 `XAUUSD+`、銀 `XAGUSD`。鏡の写像を「候補順」→「**FULL 優先**＋`tradeable` フラグ」に修正し候補名を追加 → **22/22 写像・unmapped 0**。E1 翻訳器は `tradeable=False` を建てない（fail-closed）。
+- **境界**: 発注 API 呼び出しゼロ（selftest PASS）・拒否リスト不変・`LIVE_ARM.json` 不在・`executor_present=False` 据置・Program Files 端末(27972608)と MT5Demo は無改変・MT5Aurelian 端末は読取後に停止。
+- **段3 の前提（会長の手）**: 機関口座への極小入金 → `LIVE_ARM.json`＋合言葉。AUREL 側の残工事＝E3 差分発注器を鏡の銘柄仕様（contract_size/volume_min/step）で実口座向けに配線し、紙で「予算門が閉じる」試験を実見。
