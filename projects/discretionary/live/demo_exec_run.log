@@ -39,3 +39,6 @@
 [observe・発注せず記録のみ] S-0264 SELL mid(reaccel) SL4179.127 TP4156.971
 [LIVE→発注] 新規発火 S-0277 SELL outer(reaccel) lot0.01 SL4135.194 TP4120.033 (entry≈4129.160 wall4131.432)
    結果 ok=True retcode=10009 deal=44944917
+[モード] LIVE デモ発注（armed=True）
+[接続] デモ 802307 / VantageTradingLtd-Demo / 残高972.68 検証OK
+[起動] デモ執行 20秒おき（Ctrl+C / KILLファイルで停止）
