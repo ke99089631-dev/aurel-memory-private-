@@ -351,6 +351,7 @@ function updateStats(){
       h+='<br>差の判定は両者とも約100本から。AI同期間/全体は戻り目で入る＝会長と建値が違う。AI再加速は会長の入り方の写し(2026-09-29 GO)。</span>';
     }
   }
+  h+=progressHtml(false);
   el.innerHTML=h; el.style.display='block';
   const x=document.getElementById('stX'); if(x) x.onclick=()=>{ statsOn=false;
     el.style.display='none'; document.getElementById('statsBtn').classList.remove('on'); };
@@ -856,6 +857,7 @@ function renderDecide(){
   h+='<br><span class="go '+vc+'">'+verdict+'</span>';
   h+='<div class="sec">■ 成績（台帳）</div>';
   if(tradeStats) h+=tradeStats.trades+'本(確定'+tradeStats.closed+') 勝率'+(tradeStats.winrate!=null?tradeStats.winrate+'%':'—')+' 合計'+(tradeStats.sumR>=0?'+':'')+tradeStats.sumR+'R 最大DD'+tradeStats.maxDD_R+'R <span style="color:#8b949e">'+(tradeStats.sample_note||'')+'</span>';
+  if(progressData && !progressData.error) h+='<div class="sec">■ 進み具合（目安）</div>'+progressHtml(true);
   else h+='<span style="color:#8b949e">読込中…</span>';
   el.innerHTML=h; el.style.display='block';
   document.getElementById('dcX').onclick=()=>{ decideOn=false; renderDecide(); document.getElementById('decideBtn').classList.remove('on'); };
@@ -1013,7 +1015,38 @@ async function fetchTrades(){
 // D1 会長の現状成績: 台帳が携帯フォームから追記されるので 60秒ごとに取り直す（情報パネルに表示）
 async function fetchStats(){
   try{ const r=await fetch('/api/stats',{cache:'no-store'}); const d=await r.json();
-       if(d.ok){ tradeStats=d.stats; aiStats=d.ai||null; if(statsOn) updateStats(); } }catch(e){}
+       if(d.ok){ tradeStats=d.stats; aiStats=d.ai||null; progressData=d.progress||null; if(statsOn) updateStats(); } }catch(e){}
+}
+// ⏳ 検証の進み具合と到達の目安（会長依頼 2026-10-20）。節目=100本(優位の有無)/290本(大きさ)/650本(複利設計)。
+//   ペース=凍結後の営業日あたり本数→残り÷ペースで日付。目安であって約束ではない(ペースは相場で変わる)。
+let progressData = null;
+function progressHtml(compact){
+  const p=progressData; if(!p||p.error) return '';
+  const bar=(n,t)=>{ const seg=Math.round(Math.min(n,t)/t*10);
+    return '<span style="color:#e3c94a;letter-spacing:-1px">'+'█'.repeat(seg)+'</span><span style="color:#30363d;letter-spacing:-1px">'+'█'.repeat(10-seg)+'</span>'; };
+  const ms=(l)=>(l.milestones||[]).map(m=>m.done
+      ? '<span style="color:#56d364">'+m.target+'本✓</span>'
+      : m.target+'本('+m.label+')→<b>'+(m.date||'—')+'</b>'+(m.months!=null?'<span style="color:#8b949e">・約'+m.months+'か月</span>':'')).join(' ／ ');
+  const row=(name,l,note)=>'<tr><td>'+name+'</td><td><b>'+l.n+'</b>本 <span style="color:#8b949e">'+l.per_day+'/日・月'+l.per_month+'</span></td><td>'+ms(l)+(note?' <span style="color:#8b949e">'+note+'</span>':'')+'</td></tr>';
+  if(compact){
+    const d=p.demo_now, m=(d.milestones||[])[0]||{}, c=p.chairman, cm=c?((c.milestones||[])[0]||{}):null;
+    return 'AIデモ(外壁＋中壁×採用) '+d.n+'本・月'+d.per_month+' → 100本 <b>'+(m.done?'到達':(m.date||'—'))+'</b>'
+      +(c?' ／ 会長 '+c.n+'本 → 30本 <b>'+(cm.done?'到達':(cm.date||'—'))+'</b>':'')
+      +' ／ デモ中壁 '+p.demo_fired.mid+'/'+p.demo_fired.mid_exit_check_at+' ・ 雨除外 '+p.rain_drop.n+'/'+p.rain_drop.reeval_at;
+  }
+  let h='<hr style="border:0;border-top:1px solid #30363d;margin:5px 0">';
+  h+='<b>⏳ 検証の進み具合と到達の目安</b> <span style="color:#8b949e">凍結'+p.frozen_at+'から'+p.bdays_since_freeze+'営業日・ペースは凍結後の実測・日付は目安(相場で変わる)</span><br>';
+  h+='<table class="cmp"><tr><th>車線</th><th>今</th><th>節目 → 到達の目安</th></tr>';
+  if(p.chairman) h+=row('会長(実弾・台帳)',p.chairman,'');
+  h+=row('AIデモの型(外壁×採用)',p.demo_type,'');
+  h+=row('AI中壁(紙・全部)',p.mid,'');
+  h+=row('<b>AIデモ合算(外壁＋中壁×採用)</b>',p.demo_now,'=10-20からデモが撃つ型');
+  h+='</table>';
+  h+='<span style="color:#8b949e">出口の判定: デモで撃った中壁 </span>'+p.demo_fired.mid+'/'+p.demo_fired.mid_exit_check_at+' '+bar(p.demo_fired.mid,p.demo_fired.mid_exit_check_at)
+    +' <span style="color:#8b949e">(30本でネット<0なら外す) ／ 雨フィルタ再評価 雨除外 </span>'+p.rain_drop.n+'/'+p.rain_drop.reeval_at+' '+bar(p.rain_drop.n,p.rain_drop.reeval_at)
+    +' <span style="color:#8b949e">／ デモ実射 累計'+p.demo_fired.total+'本</span>';
+  h+='<br><span style="color:#8b949e">読み方: 100本=優位があるか無いか(±0.26R)・290本=優位の大きさ(±0.15R)・650本=複利の設計に使える(±0.10R)。本数に加えて3か月以上は相場の局面を跨ぐこと。</span>';
+  return h;
 }
 setInterval(()=>{ fetchStats(); fetchTrades(); }, 60000);
 fetchStats();

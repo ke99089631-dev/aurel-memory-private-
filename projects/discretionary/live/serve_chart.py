@@ -315,7 +315,11 @@ def build_stats():
         # 会長の最初の実弾以降＝「同期間」の境目（AI側を同じ期間で切って並べる）
         first_ts = min((_jst_epoch(t.get("ts")) or 1e18) for t in counted) if counted else None
         ai = build_ai_stats(first_ts)
-        return {"ok": True, "stats": st, "ai": ai, "since": first_ts,
+        try:
+            progress = build_progress(counted, first_ts)
+        except Exception as e:
+            progress = {"error": str(e)}
+        return {"ok": True, "stats": st, "ai": ai, "since": first_ts, "progress": progress,
                 "ledger_mtime": os.path.getmtime(LEDGER) if os.path.exists(LEDGER) else None}
     except Exception as e:
         return {"ok": False, "error": str(e)}
@@ -515,6 +519,100 @@ def build_ai_stats(since_epoch=None):
         "reaccel_mid": _r_stats(m_re),
         "same": _r_stats([x for x in o_net if x["bt"] >= since_epoch]) if since_epoch else {"n": 0},
     }
+    return out
+
+
+# ★検証の進み具合と到達の目安（会長依頼 2026-10-20『WEBチャートに目安として期間などを乗せてくれ』）。
+#   本数の節目(事前固定): 100本=優位の有無(±0.26R) / 290本=大きさの目安(±0.15R) / 650本=複利設計に使える(±0.10R)。
+#   ペースは凍結(rules_v1.FROZEN_AT)以降の営業日あたり本数。到達日=残り本数÷ペース(営業日→暦日×7/5)。目安であって約束ではない。
+MILESTONES = ((100, "優位の有無"), (290, "大きさの目安"), (650, "複利設計"))
+
+
+def _bdays(d0, d1):
+    import datetime as _dt
+    n = 0
+    d = d0
+    while d <= d1:
+        if d.weekday() < 5:
+            n += 1
+        d += _dt.timedelta(days=1)
+    return max(1, n)
+
+
+def _eta(n_now, target, per_bday, today):
+    import datetime as _dt
+    if n_now >= target:
+        return {"target": target, "done": True}
+    if not per_bday or per_bday <= 0:
+        return {"target": target, "done": False, "days": None, "date": None}
+    rem = target - n_now
+    bd = rem / per_bday
+    cal = int(round(bd * 7 / 5))
+    return {"target": target, "done": False, "remaining": rem, "months": round(bd / 21, 1),
+            "date": (today + _dt.timedelta(days=cal)).strftime("%m/%d")}
+
+
+def build_progress(counted, first_ts):
+    """車線ごとの『今の本数・ペース・節目までの目安日付』。紙=setup_ledger(再加速・凍結後・ネット)／デモ実射=demo_exec_ledger／会長=台帳。"""
+    import datetime as _dt
+    import rules_v1
+    today = _dt.date.today()
+    fz_date = _dt.date.fromisoformat(rules_v1.FROZEN_AT)
+    bd_fz = _bdays(fz_date, today)
+    recs = _load_setups()
+    closed_hist = [r for r in recs if r.get("status") == "closed"]
+    for r in recs:
+        if not isinstance(r.get("v1"), dict):
+            r["v1"] = rules_v1.evaluate(r, closed_hist)
+    fz = _jst_epoch(rules_v1.FROZEN_AT + "T00:00:00") or 0
+    lanes = {"outer_keep": 0, "mid_all": 0, "mid_keep": 0, "rain_drop": 0}
+    for r in recs:
+        ra = r.get("reaccel") if isinstance(r.get("reaccel"), dict) else None
+        if not ra or ra.get("status") != "closed" or ra.get("R") is None:
+            continue
+        if int(r.get("break_time") or 0) < fz:
+            continue
+        keep = bool(r["v1"].get("keep"))
+        kind = r.get("wall_kind")
+        if kind == "outer":
+            if keep:
+                lanes["outer_keep"] += 1
+            elif any(str(w).startswith("雨") for w in (r["v1"].get("drop_reasons") or [])):
+                lanes["rain_drop"] += 1
+        elif kind == "mid":
+            lanes["mid_all"] += 1
+            if keep:
+                lanes["mid_keep"] += 1
+    # デモで実際に撃った本数（live ok=True）。wall_kind は setup 側から引く（古い記録に無いため）。
+    kind_by_sid = {r["id"]: r.get("wall_kind") for r in recs}
+    demo_total = demo_mid = 0
+    exec_path = os.path.join(HERE, "demo_exec_ledger.jsonl")
+    if os.path.exists(exec_path):
+        with open(exec_path, encoding="utf-8") as f:
+            for ln in f:
+                try:
+                    d = json.loads(ln)
+                except Exception:
+                    continue
+                if d.get("kind") == "live" and d.get("ok"):
+                    demo_total += 1
+                    if (d.get("wall_kind") or kind_by_sid.get(d.get("sid"))) == "mid":
+                        demo_mid += 1
+    def lane(n, per_bday, targets=MILESTONES):
+        return {"n": n, "per_day": round(per_bday, 2), "per_month": int(round(per_bday * 21)),
+                "milestones": [dict(_eta(n, t, per_bday, today), label=lab) for t, lab in targets]}
+    out = {"frozen_at": rules_v1.FROZEN_AT, "bdays_since_freeze": bd_fz, "today": today.strftime("%Y-%m-%d"),
+           "demo_type": lane(lanes["outer_keep"], lanes["outer_keep"] / bd_fz),
+           "mid": lane(lanes["mid_all"], lanes["mid_all"] / bd_fz),
+           "demo_now": lane(lanes["outer_keep"] + lanes["mid_keep"], (lanes["outer_keep"] + lanes["mid_keep"]) / bd_fz),
+           "demo_fired": {"total": demo_total, "mid": demo_mid, "mid_exit_check_at": 30},
+           "rain_drop": {"n": lanes["rain_drop"], "reeval_at": 20}}
+    # 会長(台帳・確定のみ)。ペース=最初の実弾からの営業日あたり。節目=30(手順固定)/100(優位の有無)。
+    c_closed = [t for t in counted if t.get("R") is not None]
+    if first_ts:
+        d0 = _dt.datetime.fromtimestamp(first_ts).date()
+        bd_c = _bdays(d0, today)
+        out["chairman"] = lane(len(c_closed), len(c_closed) / bd_c, ((30, "手順固定"), (100, "優位の有無")))
     return out
 
 
