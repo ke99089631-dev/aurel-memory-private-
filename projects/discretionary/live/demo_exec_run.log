@@ -42,3 +42,5 @@
 [モード] LIVE デモ発注（armed=True）
 [接続] デモ 802307 / VantageTradingLtd-Demo / 残高972.68 検証OK
 [起動] デモ執行 20秒おき（Ctrl+C / KILLファイルで停止）
+[LIVE→発注] 新規発火 S-0282 BUY mid(reaccel) lot0.01 SL4108.375 TP4144.442 (entry≈4119.910 wall4117.324)
+   結果 ok=True retcode=10009 deal=44959118
