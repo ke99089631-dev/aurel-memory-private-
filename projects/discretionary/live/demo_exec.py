@@ -31,6 +31,7 @@ except Exception:
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SETUP_LEDGER = os.path.join(HERE, "setup_ledger.jsonl")
+T2SB_LEDGER = os.path.join(HERE, "touch2sb_ledger.jsonl")   # ★本命touch2sbの発火（setup_engineが書く・素の高安箱）
 EXEC_LEDGER = os.path.join(HERE, "demo_exec_ledger.jsonl")
 STATE = os.path.join(HERE, "demo_exec_state.json")
 KILL = os.path.join(HERE, "KILL")
@@ -55,8 +56,13 @@ ARM = "CHAIRMAN-GO"
 #   根拠=時代別+勝つ出口で再検証(gold_midwall_era.py)→中壁は全時代マイナス(近年も-0.69R・勝率24%)。
 #   昇格根拠だった「30本+0.32R」は余計な年+好窓の数字と判明。30本待たず降格(14年regime検証が優先)。
 #   中壁は FIRE_WALL_KINDS から外れても setup は記録される=observeで紙を貯め続ける。
-FIRE_WALL_KINDS = ("outer",)           # 発注してよい壁種別(中壁は2026-10-21降格・observe継続)
-FIRE_MODES = ("reaccel",)        # 発注してよい入り方（reaccel=リテスト引き寄せ）
+# ★2026-10-21 会長GO: デモの発火エンジンを「本命 touch2sb(素の高安箱・保ち2回・会長フィルタ・TP手前0.85)」に切替。
+#   根拠=時代別+忠実性検証で touch2sb=金近年+0.188R Sharpe1.0 p0.03。dynamic_box版reaccel(+0.046/近年)より本命が強い。
+#   旧reaccelは発注停止(FIRE_MODES空)=setup_ledgerに記録は残り observe(対照群)として並走。
+#   出口(事前固定)=デモ touch2sb が確定30本に達した時点でネット平均R<0 なら本切替を戻す(FIRE_ENGINE=reaccel)。
+FIRE_ENGINE = "touch2sb"               # 発注の主系統（touch2sb=本命 / reaccel=旧・観測のみ）
+FIRE_WALL_KINDS = ("outer",)           # (旧reaccel用)発注してよい壁種別。FIRE_MODES空なので実質observe
+FIRE_MODES = ()                        # ★旧reaccelは発注停止(observe継続)。本命は touch2sb_ledger から撃つ
 
 
 def load_env():
@@ -133,6 +139,32 @@ def fired_setups(setups):
     return out
 
 
+def touch2sb_fires():
+    """touch2sb_ledger の発火を読む（1行＝1発火）。sid は確認足tsで一意。
+       発注対象は外壁×保ち2回×会長フィルタに限って setup_engine が既に絞り済み＝ここでは全件が発注候補。"""
+    out = []
+    if not os.path.exists(T2SB_LEDGER):
+        return out
+    for ln in open(T2SB_LEDGER, encoding="utf-8"):
+        ln = ln.strip()
+        if not ln:
+            continue
+        try:
+            r = json.loads(ln)
+        except Exception:
+            continue
+        if r.get("kind") != "touch2sb":
+            continue
+        ct = int(r.get("confirm_time") or 0)
+        out.append({
+            "sid": "T2-%d" % ct, "mode": "touch2sb", "side": r.get("side"),
+            "entry": r.get("entry"), "sl": r.get("sl"), "tp": r.get("tp"),
+            "entry_time": r.get("entry_time") or ct, "wall": r.get("wall"),
+            "wall_kind": "outer_sb", "risk": r.get("risk"), "jst": r.get("jst"),
+        })
+    return out
+
+
 # ── MT5デモ接続（発注直前の毎回検証つき）──────────────────────────────
 class DemoSession:
     def __init__(self):
@@ -159,6 +191,14 @@ class DemoSession:
         if ai.trade_mode != self.mt5.ACCOUNT_TRADE_MODE_DEMO:
             raise RuntimeError("[%s] ⛔デモ口座ではない(trade_mode=%s)→発注中止" % (when, ai.trade_mode))
         return ai
+
+    def open_magic_positions(self):
+        """このエンジンのデモ建玉数（MAGIC一致）。read-only（positions_get）。非重複ガード用。"""
+        self.assert_demo("建玉確認")
+        ps = self.mt5.positions_get(symbol=SYMBOL)
+        if ps is None:
+            return 0
+        return sum(1 for p in ps if int(p.magic) == MAGIC)
 
     def bracket(self, side, lot, sl, tp, comment):
         """SL/TPを成行と同じorder_sendでサーバー側に載せる（約定と同時に床が立つ）。"""
@@ -206,6 +246,8 @@ def run(dry=True, armed=False, once=False):
             return False
         setups = fold_setups()
         fires = fired_setups(setups)
+        if FIRE_ENGINE == "touch2sb":
+            fires = fires + touch2sb_fires()      # 本命touch2sbの発火を発注候補に合流（旧reaccelはFIRE_MODES空でobserve）
         now = time.time()
         # 初回は既存の発火を全部「既見」にして、以降の新規発火だけ扱う
         if not state.get("initialized"):
@@ -223,8 +265,9 @@ def run(dry=True, armed=False, once=False):
             if not fresh:
                 print("[skip] %s %s（発火が古い>%ds・バックフィル防止）" % (f["sid"], f["side"], FRESH_SEC))
                 seen.add(f["sid"]); continue
-            # ★方針フィルタ: 外壁×reaccelだけ発注。それ以外は observe（記録のみ・発注しない）
-            do_fire = (f["wall_kind"] in FIRE_WALL_KINDS) and (f["mode"] in FIRE_MODES)
+            # ★方針フィルタ: 本命 touch2sb は発注。旧reaccel等は observe（FIRE_MODES空＝記録のみ）。
+            do_fire = (f["mode"] == "touch2sb") or \
+                      ((f["wall_kind"] in FIRE_WALL_KINDS) and (f["mode"] in FIRE_MODES))
             if not do_fire:
                 print("[observe・発注せず記録のみ] %s %s %s(%s) SL%.3f TP%.3f"
                       % (f["sid"], f["side"], f["wall_kind"], f["mode"], f["sl"], f["tp"]))
@@ -232,6 +275,18 @@ def run(dry=True, armed=False, once=False):
                           "wall_kind": f["wall_kind"], "mode": f["mode"],
                           "sl": f["sl"], "tp": f["tp"], "entry_ref": f["entry"]})
                 seen.add(f["sid"]); continue
+            # ★非重複ガード(touch2sb): 既にデモ建玉があれば今回の発火は撃たない＝backtest(+0.188)の「同時1本」に合わせる。
+            if f["mode"] == "touch2sb" and not dry and armed and sess is not None:
+                try:
+                    if sess.open_magic_positions() > 0:
+                        print("[observe・建玉中につき撃たず] %s %s SL%.3f TP%.3f" % (f["sid"], f["side"], f["sl"], f["tp"]))
+                        log_exec({"kind": "observe", "sid": f["sid"], "side": f["side"],
+                                  "wall_kind": f["wall_kind"], "mode": f["mode"],
+                                  "sl": f["sl"], "tp": f["tp"], "entry_ref": f["entry"], "why": "建玉中(非重複)"})
+                        seen.add(f["sid"]); continue
+                except Exception as e:
+                    print("[建玉確認エラー・安全側で撃たず] %s %r" % (f["sid"], e))
+                    seen.add(f["sid"]); continue
             line = ("%s %s %s %s(%s) lot%.2f SL%.3f TP%.3f (entry≈%.3f wall%.3f)"
                     % (tag, f["sid"], f["side"], f["wall_kind"], f["mode"], LOT,
                        f["sl"], f["tp"], f["entry"], f["wall"] or 0))
