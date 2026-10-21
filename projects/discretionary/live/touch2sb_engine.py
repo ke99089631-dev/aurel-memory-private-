@@ -56,13 +56,14 @@ def _wtouch(h, l, c, w0, i, side, wall, width):
     return reject
 
 
-def _confirm(o, h, l, c, i, side, wall, width, need_touches, n):
-    """ブレイク足 i の後、保ちタッチを数える。戻り=(enter_i or None, broke)。touch_testと同一。"""
+def _confirm(o, h, l, c, i, side, wall, width, need_touches, k_cap):
+    """ブレイク足 i の後、保ちタッチを数える。戻り=(enter_i or None, broke)。touch_testと同一。
+       k_cap=確認フェーズで見てよい最終バー添字(含む)。backtest=n-2 / ライブ=最終確定足n-1。"""
     if need_touches == 0:
         return i, False
     band = width * TOUCH_BAND; btol = width * BREAK_TOL
     touches = 0; enter_i = None
-    end = min(i + RETEST_BARS, n - 2)
+    end = min(i + RETEST_BARS, k_cap)
     for k in range(i + 1, end + 1):
         if side == "BUY":
             if c[k] < wall - btol:
@@ -115,7 +116,7 @@ def backtest(m5, need_touches, prof=None):
             i += 1; continue
         side, wall = br
         wt = _wtouch(h, l, c, w0, i, side, wall, width)
-        enter_i, broke = _confirm(o, h, l, c, i, side, wall, width, need_touches, n)
+        enter_i, broke = _confirm(o, h, l, c, i, side, wall, width, need_touches, n - 2)
         if broke or enter_i is None or enter_i + 1 > n - 1:
             if broke or enter_i is None:
                 i += 1; continue
@@ -150,9 +151,10 @@ def backtest(m5, need_touches, prof=None):
 
 
 def latest_signal(m5, need_touches=2, prof=CHAIRMAN):
-    """今まさに新しい足が開いた直前バーで確認完了→この足の始値で入る、を検出。
-       戻り: 発火=dict(side/wall/entry/sl/tp/risk/width/wtouch/jst/...) / 無し=None。
-       非重複は呼び出し側(demo_exec)の建玉管理に委ねる。先読みなし=確定足のみ使用。"""
+    """ライブ契約: m5 の最終行＝直近の【確定足】＝確認足。ここで保ちNが完了していれば、
+       次の形成足＝今の成行で入る合図を返す。戻り: 発火=dict / 無し=None。先読みなし。
+       entry は形成足始値の代理＝最終確定足の終値(demo_exec が実際は成行で約定)。
+       非重複(建玉中は撃たない)は呼び出し側 demo_exec の状態管理に委ねる。"""
     p = prof or {}
     tp_mm = p.get("tp_mm", TP_MM); risk_min = p.get("risk_min", 0.0)
     width_min = p.get("width_min", 0.0)
@@ -162,10 +164,13 @@ def latest_signal(m5, need_touches=2, prof=CHAIRMAN):
     idx = m5.index; n = len(c)
     if n < BOX_WINDOW + 2:
         return None
-    target = n - 1                 # 入る足（始値確定・まだ確定終値なし）
-    enter_i = target - 1           # 確認が完了している確定足
-    # ブレイク足 i は enter_i から最大 RETEST_BARS 遡った範囲。
-    # backtest と同じ「最初(最古)の有効ブレイク」を採用=i昇順で最初にenter_iへ確認完了したものを拾う。
+    enter_i = n - 1                # 最終確定足＝確認が完了していれば入る
+    entry_ts = int(pd.Timestamp(idx[enter_i]).timestamp()) + 300   # 次の形成足(=入る足)
+    if jst_lo is not None:         # 本物帯は「入る足(=次足)」のJST時刻で判定
+        hh = int(pd.Timestamp(entry_ts, unit="s", tz="UTC").tz_convert("Asia/Tokyo").hour)
+        if not (jst_lo <= hh < jst_hi):
+            return None
+    # ブレイク足 i は enter_i から最大 RETEST_BARS 遡る。backtest と同じ「最古の有効ブレイク」=i昇順先勝ち。
     i_lo = max(BOX_WINDOW, enter_i - RETEST_BARS)
     for i in range(i_lo, enter_i + 1):
         if need_touches == 0 and i != enter_i:
@@ -177,16 +182,10 @@ def latest_signal(m5, need_touches=2, prof=CHAIRMAN):
         if br is None:
             continue
         side, wall = br
-        ei, broke = _confirm(o, h, l, c, i, side, wall, width, need_touches, n)
-        if broke or ei is None:
+        ei, broke = _confirm(o, h, l, c, i, side, wall, width, need_touches, enter_i)
+        if broke or ei is None or ei != enter_i:   # 確認完了が最終確定足でない=今は撃たない
             continue
-        if ei != enter_i:          # 確認完了が今の直前足でない=今は発火しない
-            continue
-        if jst_lo is not None:
-            hh = int(pd.Timestamp(idx[target]).tz_convert("Asia/Tokyo").hour)
-            if not (jst_lo <= hh < jst_hi):
-                continue
-        entry = float(o[target])
+        entry = float(c[enter_i])                  # 形成足始値の代理(成行約定の基準)
         sl, tp = _levels(side, wall, width, tp_mm)
         ok, risk = _entry_ok(side, entry, sl, tp, risk_min)
         if not ok:
@@ -196,6 +195,7 @@ def latest_signal(m5, need_touches=2, prof=CHAIRMAN):
                 "width": round(float(width), 3), "touches": need_touches,
                 "wtouch": _wtouch(h, l, c, w0, i, side, wall, width),
                 "break_time": int(pd.Timestamp(idx[i]).timestamp()),
-                "entry_time": int(pd.Timestamp(idx[target]).timestamp()),
-                "jst": pd.Timestamp(idx[target]).tz_convert("Asia/Tokyo").strftime("%Y-%m-%d %H:%M")}
+                "confirm_time": int(pd.Timestamp(idx[enter_i]).timestamp()),
+                "entry_time": entry_ts,
+                "jst": pd.Timestamp(entry_ts, unit="s", tz="UTC").tz_convert("Asia/Tokyo").strftime("%Y-%m-%d %H:%M")}
     return None

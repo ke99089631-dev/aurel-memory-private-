@@ -24,10 +24,13 @@ import numpy as np
 import pandas as pd
 import wallbox
 from wallbox import pool_width, SL_PAD_FR
+import touch2sb_engine        # ★本命レシピ(素の高安箱・保ち2回・会長フィルタ)=デモ発火用の独立エンジン
 
 API = "http://100.73.107.61:8793/api/data?n=2000"   # サーバは Tailscale IP のみ bind
 TICK_API = "http://100.73.107.61:8793/api/tick"
 LEDGER = os.path.join(HERE, "setup_ledger.jsonl")
+T2SB_LEDGER = os.path.join(HERE, "touch2sb_ledger.jsonl")   # ★本命touch2sbの発火記録（demo_execが読んで撃つ・観測も兼ねる）
+T2SB_STATE = os.path.join(HERE, "touch2sb_state.json")      # 最後に書いた確認足ts（同じ足での二重記録を防ぐ）
 SPREAD_LOG = os.path.join(HERE, "spread_log.jsonl")   # 2分ごとの実測スプレッド(JST時間帯別の中央値→AI成績のコスト控除に使う)
 DAMASHI_FILE = os.path.join(HERE, "damashi_hour_jst.json")
 INTERVAL = 120          # 2分ごと（M5の確定足を拾う）
@@ -676,6 +679,30 @@ def sync_once(n_bars=None):
 SLIP_EVERY = 15          # 30分ごとに、決着済みで滑り未計測の記録をティック再現で埋める（読取のみ）
 
 
+def touch2sb_emit():
+    """本命レシピ(touch2sb)をライブ足で評価し、確認完了＝発火なら touch2sb_ledger に1行追記。
+       発注はしない（demo_exec が読んで撃つ）。同じ確認足での二重記録は confirm_time で防ぐ。
+       戻り: 新規発火を書いたら1、無ければ0。会長の壁の引き方(素の高安)＝dynamic_boxと別系統。"""
+    m5 = _fetch_bars()
+    if m5 is None or len(m5) < touch2sb_engine.BOX_WINDOW + 2:
+        return 0
+    sig = touch2sb_engine.latest_signal(m5, 2, touch2sb_engine.CHAIRMAN)
+    if sig is None:
+        return 0
+    try:
+        st = json.load(open(T2SB_STATE, encoding="utf-8"))
+    except Exception:
+        st = {"last_confirm": 0}
+    if int(sig.get("confirm_time", 0)) <= int(st.get("last_confirm", 0)):
+        return 0                                   # 同じ(以前の)確認足＝既出
+    rec = {"kind": "touch2sb", "logged_at": dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+    rec.update(sig)
+    with open(T2SB_LEDGER, "a", encoding="utf-8") as f:
+        f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+    json.dump({"last_confirm": int(sig["confirm_time"])}, open(T2SB_STATE, "w", encoding="utf-8"))
+    return 1
+
+
 def main():
     print("車線3 収束ループ・エンジン起動（2分ごと・発注なし・金ゼロ）", flush=True)
     cycle = 0
@@ -686,6 +713,11 @@ def main():
                 print("%s +%d 新規 / %d 更新" % (dt.datetime.now().strftime("%H:%M:%S"), a, u), flush=True)
         except Exception as e:
             sys.stderr.write("sync err: %s\n" % e)
+        try:
+            if touch2sb_emit():
+                print("%s ★touch2sb 発火を記録" % dt.datetime.now().strftime("%H:%M:%S"), flush=True)
+        except Exception as e:
+            sys.stderr.write("touch2sb err: %s\n" % e)
         cycle += 1
         if cycle % SLIP_EVERY == 0:
             try:
