@@ -36,3 +36,9 @@ audience: 会長(KEIKI MAEDA)
 
 ## 🔗 マップ: `projects/INVESTMENT-DIVISION-MAP.md` / 畑A仕様: `farms/FARM-A-US100-SPEC.md`
 結果: `AssetEmpire/empire/research/wall_to_wall/RESULTS_sweep_*.md`
+
+## 【1a完了】外壁×保ち×TP×SL スイープ結果 (2026-10-21)
+- RESULTS_sweep_us100_tune.md。18組合せ・14/18がFDR通過。
+- 一貫パターン: ①SL壁内側0.33→0.50に広げると滑らか(現farm Sharpe0.78→0.88・N2/TP0.85/SL0.50が最良OOS Sharpe0.88 p0.013) ②TP0.85が最良・TP1.0/1.5は悪化(落選は全てTP1.5系=TP壁の向こう=負けと一致) ③保ち2〜3が芯。
+- 現farm(N2/TP0.85/SL0.33)はほぼ最適。唯一の実質改善=SL0.50に広げる(選びすぎ上振れ注意だがパターンは一貫・FDR通過)。
+- 扱い: 凍結farmは勝手に変えない。SL0.50は改善候補→観測レーンに並走(SL0.50版)で前向き裏取り→良ければ昇格。
