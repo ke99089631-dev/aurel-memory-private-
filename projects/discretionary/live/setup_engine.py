@@ -214,17 +214,21 @@ def _reaccel_from(o, h, l, c, idx, ib, side, wall, sl_base, tp, n):
 #   床崩壊(invalid): 確定足終値が wall+btol を超える(SELLは上抜け/BUYは下抜け)。
 # 出口: TP=壁∓pool*TP_T2(手前0.85)・SL=壁±pool*SL_T2(内側0.33)。★measured move(まるごと)を使わない=勝つ出口。
 TOUCH2_N = 2          # 保ちタッチ要求数
-TP_T2 = 0.85          # TP=pool手前
+TP_T2 = 0.85          # TP=全幅手前
 SL_T2 = 0.33          # SL=壁内側
-BAND_FR = 0.08        # 壁タッチ許容(pool比)
-BTOL_FR = 0.15        # 床崩壊閾(pool比)
+BAND_FR = 0.08        # 壁タッチ許容(全幅比)
+BTOL_FR = 0.15        # 床崩壊閾(全幅比)
+TOUCH2_WIDTH_MIN = 10 # 箱が狭い日は見送り(本物帯フィルタ=touch_test再現)
 
 
-def _touch2_from(o, h, l, c, idx, ib, side, wall, pool, n):
+def _touch2_from(o, h, l, c, idx, ib, side, wall, width, n):
+    # ★width=箱の全幅(up-dn)。TP/SLは「次の壁(pool)」でなく「全幅」基準=touch_test再現(2026-10-21②修正)。
     sell = (side == "SELL")
-    band = pool * BAND_FR; btol = pool * BTOL_FR
-    tp = (wall - TP_T2 * pool) if sell else (wall + TP_T2 * pool)
-    sl = (wall + SL_T2 * pool) if sell else (wall - SL_T2 * pool)
+    if width < TOUCH2_WIDTH_MIN:
+        return {"status": "skip", "why": "箱が狭い(width<%d)" % TOUCH2_WIDTH_MIN}
+    band = width * BAND_FR; btol = width * BTOL_FR
+    tp = (wall - TP_T2 * width) if sell else (wall + TP_T2 * width)
+    sl = (wall + SL_T2 * width) if sell else (wall - SL_T2 * width)
     touches = 0; enter_i = None
     k_last = min(ib + RETRACE_BARS, n - 2)
     for k in range(ib + 1, k_last + 1):
@@ -362,7 +366,7 @@ def scan(m5, dm, start_t=None):
         # 再加速変種（会長型・第3レーン）。以後の前進は _advance_reaccel が記録済みの壁/SL/TPだけで行う（凍結）
         s["reaccel"] = _reaccel_from(o, h, l, c, idx, i, side, wall, sl, tp, n)
         # touch2 変種（会長の本命・2026-10-21②）=保ち2回確認×TP手前0.85×SL内側。outerのみ意味を持つ(検証済)。
-        s["touch2"] = _touch2_from(o, h, l, c, idx, i, side, wall, pool, n)
+        s["touch2"] = _touch2_from(o, h, l, c, idx, i, side, wall, float(up - dn), n)
 
         # 戻り目（壁リテスト）待ち
         j_enter = None
