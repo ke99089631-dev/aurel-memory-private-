@@ -207,6 +207,59 @@ def _reaccel_from(o, h, l, c, idx, ib, side, wall, sl_base, tp, n):
     return out
 
 
+# ── touch2 変種（会長の本命・2026-10-21 会長GO②）────────────────────────────────
+# touch_test(保ち2回・TP手前0.85・SL内側)＝金/US100の時代別検証で唯一の本物(+0.18R/Sharpe1.0)。
+# 入り: ブレイク足 ib → RETRACE_BARS内に壁へ戻り「保ちタッチ」をN回確認 → 次足始値で成行。
+#   保ちタッチ(SELL=壁が天井): 陽線 かつ 高値が壁近く(wall-band)まで戻り 終値は壁を抜けない(<=wall+btol)。
+#   床崩壊(invalid): 確定足終値が wall+btol を超える(SELLは上抜け/BUYは下抜け)。
+# 出口: TP=壁∓pool*TP_T2(手前0.85)・SL=壁±pool*SL_T2(内側0.33)。★measured move(まるごと)を使わない=勝つ出口。
+TOUCH2_N = 2          # 保ちタッチ要求数
+TP_T2 = 0.85          # TP=pool手前
+SL_T2 = 0.33          # SL=壁内側
+BAND_FR = 0.08        # 壁タッチ許容(pool比)
+BTOL_FR = 0.15        # 床崩壊閾(pool比)
+
+
+def _touch2_from(o, h, l, c, idx, ib, side, wall, pool, n):
+    sell = (side == "SELL")
+    band = pool * BAND_FR; btol = pool * BTOL_FR
+    tp = (wall - TP_T2 * pool) if sell else (wall + TP_T2 * pool)
+    sl = (wall + SL_T2 * pool) if sell else (wall - SL_T2 * pool)
+    touches = 0; enter_i = None
+    k_last = min(ib + RETRACE_BARS, n - 2)
+    for k in range(ib + 1, k_last + 1):
+        if sell:
+            if c[k] > wall + btol:
+                return {"status": "invalid", "why": "床崩壊(上抜け)"}
+            if c[k] > o[k] and h[k] >= wall - band and c[k] <= wall + btol:
+                touches += 1
+        else:
+            if c[k] < wall - btol:
+                return {"status": "invalid", "why": "床崩壊(下抜け)"}
+            if c[k] < o[k] and l[k] <= wall + band and c[k] >= wall - btol:
+                touches += 1
+        if touches >= TOUCH2_N:
+            enter_i = k; break
+    if enter_i is None:
+        return {"status": "waiting" if ib + RETRACE_BARS > n - 1 else "no_retest"}
+    ie = enter_i + 1
+    if ie > n - 1:
+        return {"status": "waiting"}
+    entry = float(o[ie])
+    sl = max(sl, entry + MIN_SL_W) if sell else min(sl, entry - MIN_SL_W)   # 最小SL幅フロア(建値基準)
+    ok = (sl > entry > tp) if sell else (tp > entry > sl)
+    if not ok:
+        return {"status": "invalid", "why": "建値がSL/TPの外"}
+    out = {"retest_time": _ts(idx, enter_i), "retest_jst": _jst(idx, enter_i),
+           "entry": round(entry, 3), "entry_time": _ts(idx, ie), "entry_jst": _jst(idx, ie),
+           "sl": round(float(sl), 3), "tp": round(float(tp), 3), "touches": TOUCH2_N}
+    r = _simulate(o, h, l, c, ie, side, entry, sl, tp, n)
+    out.update({"status": r["status"], "mfe_R": r["mfe_R"], "mae_R": r["mae_R"], "hold_bars": r["hold_bars"]})
+    if r["status"] == "closed":
+        out.update({"exit": r["exit"], "exit_reason": r["exit_reason"], "R": r["R"], "exit_time": _ts(idx, r["exit_k"])})
+    return out
+
+
 def scan(m5, dm, start_t=None):
     """過去→現在へ一方向に走査し、セットアップ記録の列を返す（先読みなし・確定的）。
        start_t: この epoch 以降のバーから走査を始める（台帳の続きから＝窓のズレで過去が湧かない）。"""
@@ -308,6 +361,8 @@ def scan(m5, dm, start_t=None):
             s["chase"] = {"entry": round(ch_entry, 3), "status": "invalid"}
         # 再加速変種（会長型・第3レーン）。以後の前進は _advance_reaccel が記録済みの壁/SL/TPだけで行う（凍結）
         s["reaccel"] = _reaccel_from(o, h, l, c, idx, i, side, wall, sl, tp, n)
+        # touch2 変種（会長の本命・2026-10-21②）=保ち2回確認×TP手前0.85×SL内側。outerのみ意味を持つ(検証済)。
+        s["touch2"] = _touch2_from(o, h, l, c, idx, i, side, wall, pool, n)
 
         # 戻り目（壁リテスト）待ち
         j_enter = None
