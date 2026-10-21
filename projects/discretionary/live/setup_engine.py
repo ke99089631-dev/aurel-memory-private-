@@ -703,23 +703,31 @@ def touch2sb_emit():
     return 1
 
 
+T2SB_TICK = 30          # ★本命touch2sbの発火だけ速い刻みで評価(late fill退治・会長GO 2026-10-22)。重い走査はINTERVALのまま。
+SLIP_SEC = 1800         # 滑り実測は30分ごと(時刻ベース・刻み変更に非依存)
+
+
 def main():
-    print("車線3 収束ループ・エンジン起動（2分ごと・発注なし・金ゼロ）", flush=True)
-    cycle = 0
+    print("車線3 収束ループ・エンジン起動（走査2分ごと・touch2sb発火は30秒ごと・発注なし・金ゼロ）", flush=True)
+    last_sync = 0.0; last_slip = 0.0
     while True:
-        try:
-            a, u = sync_once()
-            if a or u:
-                print("%s +%d 新規 / %d 更新" % (dt.datetime.now().strftime("%H:%M:%S"), a, u), flush=True)
-        except Exception as e:
-            sys.stderr.write("sync err: %s\n" % e)
+        now = time.time()
+        if now - last_sync >= INTERVAL:
+            last_sync = now
+            try:
+                a, u = sync_once()
+                if a or u:
+                    print("%s +%d 新規 / %d 更新" % (dt.datetime.now().strftime("%H:%M:%S"), a, u), flush=True)
+            except Exception as e:
+                sys.stderr.write("sync err: %s\n" % e)
+        # ★touch2sb の発火は毎tick(30s)評価＝確認足直後に出す→demo_execが鮮度内に撃てる
         try:
             if touch2sb_emit():
                 print("%s ★touch2sb 発火を記録" % dt.datetime.now().strftime("%H:%M:%S"), flush=True)
         except Exception as e:
             sys.stderr.write("touch2sb err: %s\n" % e)
-        cycle += 1
-        if cycle % SLIP_EVERY == 0:
+        if now - last_slip >= SLIP_SEC:
+            last_slip = now
             try:
                 import slippage_sim
                 s, n = slippage_sim.run(apply_updates=True, only_missing=True)
@@ -727,7 +735,7 @@ def main():
                     print("%s 滑り実測 追記 %d 本" % (dt.datetime.now().strftime("%H:%M:%S"), n), flush=True)
             except Exception as e:
                 sys.stderr.write("slip err: %s\n" % e)
-        time.sleep(INTERVAL)
+        time.sleep(T2SB_TICK)
 
 
 def backfill_reaccel(n_bars=5000):
