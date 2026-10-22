@@ -104,15 +104,17 @@ class FarmSession:
         # 形成中の最新足は落とす(確定足のみ)
         return df.iloc[:-1]
 
-    def lot_for(self, risk_points):
-        """口座0.4%/trade からロット概算。point価値はsymbol_infoから。失敗時は最小。"""
+    def lot_for(self, risk_price):
+        """口座0.4%/trade からロット。risk_price=SL幅(価格単位)。1価格単位あたりの$=tick_value/tick_size。"""
         mt5 = self.mt5
         ai = mt5.account_info(); si = mt5.symbol_info(self.sym)
         try:
             tick_val = si.trade_tick_value; tick_sz = si.trade_tick_size
-            val_per_point = tick_val / tick_sz * si.point
+            val_per_price = tick_val / tick_sz            # $ / 1価格単位 / 1lot (×pointしない)
             risk_usd = ai.balance * RISK_FRAC
-            lot = risk_usd / (risk_points * val_per_point)
+            if risk_price <= 0 or val_per_price <= 0:
+                return float(si.volume_min or 0.01)
+            lot = risk_usd / (risk_price * val_per_price)
             step = si.volume_step or 0.01
             lot = max(si.volume_min or 0.01, round(lot / step) * step)
             return float(min(lot, si.volume_max or lot))
