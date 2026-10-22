@@ -203,3 +203,7 @@
 [探索観測] yfinance EURUSD=X 取得中...
   M5 16926本 (2026-07-30 23:00:00+00:00..2026-10-22 11:35:00+00:00)
   新規記録 0本 / 台帳累計 65本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_c_eur_explore_ledger.jsonl
+[探索観測] yfinance EURUSD=X 取得中...
+  M5 16932本 (2026-07-30 23:00:00+00:00..2026-10-22 12:05:00+00:00)
+  新規記録 1本 / 台帳累計 66本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_c_eur_explore_ledger.jsonl
+    2026-10-22 11:45:00+00:00 SELL entry1.12045 risk0.00200 R-0.29 net-0.32
