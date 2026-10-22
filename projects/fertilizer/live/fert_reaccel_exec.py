@@ -38,6 +38,7 @@ REAL_FORBIDDEN = 27972608
 MAGIC = 909090                   # 肥料レーン専用マジック(運用と混ざらない)
 FRESH_SEC = 180                  # 鮮度(late fill除外。EV測定を汚さない)
 RISK_FRAC = 0.02                 # ★肥料=攻め(2%/trade)。荒くてよい(会長)。本番ハイレバはさらに別途。
+MAX_CONCURRENT = 0               # ★同時ポジ上限。0=無制限(会長2026-10-22 A: 重複許可・速さ優先)。将来ゼロカット率で調整するつまみ。
 NOTIFY = False                   # 手動エントリー用LINE通知=準備済だが一旦オフ(会長2026-10-22「準備だけ・様子見」)。要時Trueで即稼働。
 _NOTIFY_DIR = r"C:\Users\user\.aurel\notify"
 if _NOTIFY_DIR not in sys.path:
@@ -225,9 +226,9 @@ def scan_once(sess, state, armed):
             base["result"] = "observe-would-fire"; _log(base)
             print("[観測・撃たない] %s %s %s SL%.2f TP%.2f" % (f["sid"], f["side"], f.get("wall_kind"), f["sl"], f["tp"]))
             seen.add(f["sid"]); continue
-        if sess.open_magic() > 0:
-            base["result"] = "skip-overlap"; _log(base)
-            print("[建玉中につき撃たず] %s" % f["sid"]); seen.add(f["sid"]); continue
+        if MAX_CONCURRENT and sess.open_magic() >= MAX_CONCURRENT:
+            base["result"] = "skip-maxpos"; _log(base)
+            print("[同時ポジ上限%dにつき撃たず] %s" % (MAX_CONCURRENT, f["sid"])); seen.add(f["sid"]); continue
         lot = sess.lot_for(f["entry"], f["sl"])
         r = sess.bracket(f["side"], lot, f["sl"], f["tp"], "fert-%s" % f["sid"])
         ok = (r is not None and r.retcode == sess.mt5.TRADE_RETCODE_DONE)
