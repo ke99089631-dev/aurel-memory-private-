@@ -152,6 +152,22 @@ def reaccel_fires():
     return dx.fired_setups(setups)
 
 
+def _gold_er(win=288, th=0.12):
+    """発火時点の相場メーター(ER=効率比)を金ライブ足で測る。予想でなく記録ラベル=旬の炙り出し用。
+       ★発注判定には使わない(メーターは予想フィルタとしてはOOSで降格)。各トレードに貼るだけ。"""
+    try:
+        import numpy as np, setup_engine as se
+        m5 = se._fetch_bars()
+        if m5 is None or len(m5) < win + 2:
+            return None, None
+        c = m5["close"].to_numpy()[-win:]
+        path = float(np.abs(np.diff(c)).sum())
+        er = abs(float(c[-1]) - float(c[0])) / path if path > 0 else 0.0
+        return round(er, 4), ("chop" if er < th else "trend")
+    except Exception:
+        return None, None
+
+
 def scan_once(sess, state, armed):
     if os.path.exists(KILL):
         print("[KILL_FERT] 停止"); return True
@@ -167,9 +183,11 @@ def scan_once(sess, state, armed):
         fresh = ((now - float(f["entry_time"])) <= FRESH_SEC) if f.get("entry_time") else False
         if not fresh:
             seen.add(f["sid"]); continue
+        ger, greg = _gold_er()        # ★発火時の相場メーター値を各トレードに紐付け(旬の炙り出し用・発注には不使用)
         base = {"lane": "fert-reaccel", "ts": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
                 "sid": f["sid"], "side": f["side"], "wall_kind": f.get("wall_kind"), "mode": f.get("mode"),
-                "entry_ref": f.get("entry"), "sl": f.get("sl"), "tp": f.get("tp")}
+                "entry_ref": f.get("entry"), "sl": f.get("sl"), "tp": f.get("tp"),
+                "gold_er": ger, "gold_regime": greg}
         if not armed:
             base["result"] = "observe-would-fire"; _log(base)
             print("[観測・撃たない] %s %s %s SL%.2f TP%.2f" % (f["sid"], f["side"], f.get("wall_kind"), f["sl"], f["tp"]))
