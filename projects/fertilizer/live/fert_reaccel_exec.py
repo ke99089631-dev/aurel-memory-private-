@@ -73,14 +73,19 @@ class FertSession:
         import MetaTrader5 as mt5
         self.mt5 = mt5
         self.sym = env.get("FERT_SYMBOL", "XAUUSD")
-        login = int(env.get("FERT_LOGIN", "0"))
-        if login in (0, REAL_FORBIDDEN):
+        self.login = int(env.get("FERT_LOGIN", "0"))
+        pw = env.get("FERT_PASSWORD", ""); srv = env.get("FERT_SERVER", "")
+        if self.login in (0, REAL_FORBIDDEN):
             raise RuntimeError("FERT_LOGIN が不正/リアル→中止")
-        ok = mt5.initialize(path=env.get("FERT_TERMINAL", ""), login=login,
-                            password=env.get("FERT_PASSWORD", ""),
-                            server=env.get("FERT_SERVER", ""), portable=True)
+        ok = mt5.initialize(path=env.get("FERT_TERMINAL", ""), login=self.login,
+                            password=pw, server=srv, portable=True)
         if not ok:
             raise RuntimeError("FERT initialize失敗: %s" % (mt5.last_error(),))
+        # ★複製端末がキャッシュ口座を自動ログインする事故対策=明示的に期待口座へ切替し検証
+        ai = mt5.account_info()
+        if ai is None or int(ai.login) != self.login:
+            if not mt5.login(self.login, password=pw, server=srv):
+                mt5.shutdown(); raise RuntimeError("FERT login %d 切替失敗: %s" % (self.login, mt5.last_error()))
         self.assert_demo("起動")
         mt5.symbol_select(self.sym, True)
 
@@ -90,6 +95,8 @@ class FertSession:
             raise RuntimeError("[%s] account_info取得不可→中止" % when)
         if int(ai.login) == REAL_FORBIDDEN:
             self.mt5.shutdown(); raise RuntimeError("[%s] リアル27972608→緊急停止" % when)
+        if int(ai.login) != self.login:   # ★期待口座(肥料806809)以外には絶対に撃たない
+            self.mt5.shutdown(); raise RuntimeError("[%s] 接続口座%s≠肥料%s→緊急停止(誤口座防止)" % (when, ai.login, self.login))
         if int(getattr(ai, "trade_mode", -1)) != 0:
             raise RuntimeError("[%s] trade_mode非DEMO→中止" % when)
         return ai

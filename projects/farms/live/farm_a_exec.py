@@ -71,14 +71,19 @@ class FarmSession:
         self.mt5 = mt5
         self.env = env
         self.sym = env.get("FARM_A_SYMBOL", "NAS100.r")
-        login = int(env.get("FARM_A_LOGIN", "0"))
-        if login in (0, REAL_FORBIDDEN):
+        self.login = int(env.get("FARM_A_LOGIN", "0"))
+        pw = env.get("FARM_A_PASSWORD", ""); srv = env.get("FARM_A_SERVER", "")
+        if self.login in (0, REAL_FORBIDDEN):
             raise RuntimeError("FARM_A_LOGIN が不正/リアル→中止")
-        ok = mt5.initialize(path=env.get("FARM_A_TERMINAL", ""), login=login,
-                            password=env.get("FARM_A_PASSWORD", ""),
-                            server=env.get("FARM_A_SERVER", ""), portable=True)
+        ok = mt5.initialize(path=env.get("FARM_A_TERMINAL", ""), login=self.login,
+                            password=pw, server=srv, portable=True)
         if not ok:
             raise RuntimeError("MT5Farm initialize失敗: %s" % (mt5.last_error(),))
+        # ★複製端末がキャッシュ口座を自動ログインする事故対策=明示的に期待口座へ切替し検証
+        ai = mt5.account_info()
+        if ai is None or int(ai.login) != self.login:
+            if not mt5.login(self.login, password=pw, server=srv):
+                mt5.shutdown(); raise RuntimeError("FARM_A login %d 切替失敗: %s" % (self.login, mt5.last_error()))
         self.assert_demo("起動")
         mt5.symbol_select(self.sym, True)
 
@@ -89,6 +94,9 @@ class FarmSession:
         if int(ai.login) == REAL_FORBIDDEN:
             self.mt5.shutdown()
             raise RuntimeError("[%s] リアル27972608に接続→緊急停止" % when)
+        if int(ai.login) != self.login:   # ★期待口座(畑A806782)以外には絶対に撃たない
+            self.mt5.shutdown()
+            raise RuntimeError("[%s] 接続口座%s≠畑A%s→緊急停止(誤口座防止)" % (when, ai.login, self.login))
         if int(getattr(ai, "trade_mode", -1)) != 0:
             raise RuntimeError("[%s] trade_mode非DEMO→発注中止" % when)
         return ai
