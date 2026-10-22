@@ -135,3 +135,6 @@
 [live観測] yfinance NQ=F 取得中...
   M5 13625本 (2026-08-12 04:05:00+00:00..2026-10-22 00:05:00+00:00)
   新規記録 0本 / 台帳累計 25本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_a_forward_ledger.jsonl
+[live観測] yfinance NQ=F 取得中...
+  M5 13631本 (2026-08-12 04:05:00+00:00..2026-10-22 00:35:00+00:00)
+  新規記録 0本 / 台帳累計 25本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_a_forward_ledger.jsonl
