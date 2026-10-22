@@ -23,3 +23,4 @@
 {"farm": "A-US100", "entry_time": "2026-10-19 15:50:00+00:00", "side": "BUY", "entry": 29954.0, "risk": 230.82, "R": -1.0, "netR": -1.011, "reason": "SL", "wtouch": 2, "need_touches": 2, "mode": "observe", "logged_at": "2026-10-21 10:48:57"}
 {"farm": "A-US100", "entry_time": "2026-08-13 15:35:00+00:00", "side": "BUY", "entry": 30146.25, "risk": 114.83, "R": -1.0, "netR": -1.021, "reason": "SL", "wtouch": 1, "need_touches": 2, "mode": "observe", "logged_at": "2026-10-21 13:19:10"}
 {"farm": "A-US100", "entry_time": "2026-10-21 16:05:00+00:00", "side": "BUY", "entry": 30024.5, "risk": 131.07, "R": -0.076, "netR": -0.095, "reason": "TIME", "wtouch": 4, "need_touches": 2, "mode": "observe", "logged_at": "2026-10-22 01:19:09"}
+{"farm": "A-US100", "entry_time": "2026-08-14 16:20:00+00:00", "side": "SELL", "entry": 30081.5, "risk": 80.06, "R": -1.0, "netR": -1.03, "reason": "SL", "wtouch": 2, "need_touches": 2, "mode": "observe", "logged_at": "2026-10-22 13:19:09"}
