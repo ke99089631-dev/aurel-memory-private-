@@ -38,6 +38,38 @@ REAL_FORBIDDEN = 27972608
 MAGIC = 909090                   # 肥料レーン専用マジック(運用と混ざらない)
 FRESH_SEC = 180                  # 鮮度(late fill除外。EV測定を汚さない)
 RISK_FRAC = 0.02                 # ★肥料=攻め(2%/trade)。荒くてよい(会長)。本番ハイレバはさらに別途。
+NOTIFY = False                   # 手動エントリー用LINE通知=準備済だが一旦オフ(会長2026-10-22「準備だけ・様子見」)。要時Trueで即稼働。
+_NOTIFY_DIR = r"C:\Users\user\.aurel\notify"
+if _NOTIFY_DIR not in sys.path:
+    sys.path.insert(0, _NOTIFY_DIR)
+
+
+def fert_line_msg(f, ger, greg):
+    """肥料ブースター(再加速)の手動エントリー用サイン。入り/SL/TP+メーター+ラグ対応。"""
+    side = "売り" if f["side"] == "SELL" else "買い"
+    e = f.get("entry"); sl = f.get("sl"); tp = f.get("tp")
+    try:
+        risk = abs(float(e) - float(sl)); rr = abs(float(tp) - float(e)) / risk if risk > 0 else 0
+        chase = round(risk * 0.5, 2)
+    except Exception:
+        risk = rr = chase = 0
+    reg = ("チョップ" if greg == "chop" else "トレンド") if greg else "—"
+    kind = "中壁" if f.get("wall_kind") == "mid" else "外壁"
+    return (f"🟠 肥料ブースター（再加速・{kind}）｜ {side}  [手動用]\n"
+            f"入り {e:.2f} / SL {sl:.2f} / TP {tp:.2f} ／ RR≈{rr:.1f}\n"
+            f"相場メーター ER {ger}（{reg}）\n"
+            f"※紙と同条件。デモ(806809)は自動発注済み。\n"
+            f"※遅れたら: 建値がTP方向に {chase} 以上動いてたら見送り推奨(RR悪化)。")
+
+
+def notify(f, ger, greg):
+    if not NOTIFY:
+        return
+    try:
+        import line_push
+        line_push.send(fert_line_msg(f, ger, greg))
+    except Exception as e:
+        print("notify err:", e)
 
 
 def load_env(path):
@@ -188,6 +220,7 @@ def scan_once(sess, state, armed):
                 "sid": f["sid"], "side": f["side"], "wall_kind": f.get("wall_kind"), "mode": f.get("mode"),
                 "entry_ref": f.get("entry"), "sl": f.get("sl"), "tp": f.get("tp"),
                 "gold_er": ger, "gold_regime": greg}
+        notify(f, ger, greg)          # ★手動エントリー用LINE(紙と同条件・自動/手動の両用)
         if not armed:
             base["result"] = "observe-would-fire"; _log(base)
             print("[観測・撃たない] %s %s %s SL%.2f TP%.2f" % (f["sid"], f["side"], f.get("wall_kind"), f["sl"], f["tp"]))
