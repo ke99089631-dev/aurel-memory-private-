@@ -13,3 +13,8 @@ Identity/Master-Private.md
 # OS junk
 Thumbs.db
 .DS_Store
+
+# MT5 demo account credentials — must never be committed/pushed (2026-10-23)
+# ファイルはディスクに残す(実行機が読む)。gitからのみ外す。履歴には残存=要ローテーション検討。
+projects/**/live/*.env
+!projects/**/*.env.template
