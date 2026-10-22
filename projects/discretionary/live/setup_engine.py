@@ -33,7 +33,7 @@ T2SB_LEDGER = os.path.join(HERE, "touch2sb_ledger.jsonl")   # ★本命touch2sb�
 T2SB_STATE = os.path.join(HERE, "touch2sb_state.json")      # 最後に書いた確認足ts（同じ足での二重記録を防ぐ）
 SPREAD_LOG = os.path.join(HERE, "spread_log.jsonl")   # 2分ごとの実測スプレッド(JST時間帯別の中央値→AI成績のコスト控除に使う)
 DAMASHI_FILE = os.path.join(HERE, "damashi_hour_jst.json")
-INTERVAL = 120          # 2分ごと（M5の確定足を拾う）
+INTERVAL = 15           # ★2026-10-22 会長GO: 再加速(肥料)を紙に近づけるため2分→15秒(sync_once実測0.51s=激軽)。setup_ledger/reaccelが15秒更新=fertが鮮度内で掴む
 RETRACE_BARS = 12       # 戻り目を待つ本数（1時間）
 MAX_HOLD = 288          # 最長保有（24h）
 MID_POOL_BARS = 6       # 中間ブレイク認定: 直前この本数の終値が全て反対側（溜まりがあった）
@@ -703,7 +703,7 @@ def touch2sb_emit():
     return 1
 
 
-T2SB_TICK = 30          # ★本命touch2sbの発火だけ速い刻みで評価(late fill退治・会長GO 2026-10-22)。重い走査はINTERVALのまま。
+T2SB_TICK = 15          # ★ループ間隔。2026-10-22 会長GO: 15秒に(再加速も15秒更新=紙に近づける)。touch2sbも更に新鮮化(害なし)。sync_once0.51s×毎15s=CPU3%で無害。
 SLIP_SEC = 1800         # 滑り実測は30分ごと(時刻ベース・刻み変更に非依存)
 
 
