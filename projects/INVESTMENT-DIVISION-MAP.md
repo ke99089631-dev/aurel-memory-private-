@@ -103,3 +103,23 @@ audience: 会長(KEIKI MAEDA) — 専門用語ゼロ・畑メタファーで読�
 - 裁量（型・ゴールド）運用の正本: `projects/DISCRETIONARY-COPILOT.md`
 - 検証の素データ/結果: `AssetEmpire/empire/research/wall_to_wall/`（RESULTS_gate_us100_wall.md ほか）
 - 関連メモ（.claude）: north-star-mechanized-discretion / structural-edge-cross-market / prop-maintenance-machine-is-the-funded-运用-machine / reaccel-recipe-16y-no-edge-gold
+
+---
+
+## 🌾 将来の形＝畑のスケール（会長ビジョン 2026-10-22）
+現状：実質2畑（金touch2sb＝レンジ床・もろい／畑A US100＝トレンド床・本物）＋肥料（再加速ハイレバ・転がし）。
+
+**到達点：5畑 ×（取引会社4社に同じ畑を複製）＝20インスタンス。**
+
+★正体の分解（過大評価しないため）：
+- **5畑が独立＝“滑らかさ”の源泉**（各Sharpe~0.6なら束ねで√5倍≈1.3級。谷が互い違い）＝分散の本体。
+- **4社×同じ畑＝分散でなく“資金の天井外し”**（同じ動き・相関1＝Sharpeは上がらない）。価値＝①資金容量（1社の建玉/入金上限を超える）②業者リスク分散（1社が制限/破綻しても他が生存）③執行多様性。
+- ∴20＝「Sharpe1.3級の5畑 × 4倍の資金」。20本の独立ではない。それでも破壊力大（同じ安全さで4倍の金額）。
+
+★勝敗を決める肝（掛け算は中身を増幅するだけ）：
+1. 本当の仕事＝**genuinely 相関の低い+畑を5本そろえる**。残り3本（3〜5本目）を、それぞれ実射＋OOS生存証明。弱い優位を20倍しても薄いまま/損。
+2. 同じ壁→壁を別銘柄で並べると**共通の弱点**（壁が尊重されない相場が世界同時）で全部死ぬ恐れ→銘柄だけでなく**型も変える**（トレンド追随/平均回帰/キャリー）＝本物の分散。
+3. 運用負荷＝20端末/口座/執行機の監視保守→**複数PC/VPS**前提で設計（今1台4端末で既に重い）。
+
+★順番（不変）：①今の2畑を実射で証明→②3〜5本目を違う型で発掘＋OOS証明（質が全て）→③証明済みを4社に複製（資金天井外し）→肥料は別枠で旬を刈る。
+関連メモ(.claude): gold-chop-us100-trend-complementary / operating-baseline-gold-us100 / reaccel-highlev-booster-fertilizer / feedback-keep-positive-findings
