@@ -1,53 +1,33 @@
 {
  "summary": {
-  "n": 1,
+  "n": 0,
   "entry_slip_0.3": {
-   "n": 1,
-   "median": -0.19,
-   "mean": -0.19,
-   "p90": -0.19,
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
    "adverse_share": 0.0
-  },
-  "chase_slip_0.3": {
-   "n": 1,
-   "median": 0.02,
-   "p90": 0.02
   },
   "entry_slip_1": {
-   "n": 1,
-   "median": -0.24,
-   "mean": -0.24,
-   "p90": -0.24,
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
    "adverse_share": 0.0
-  },
-  "chase_slip_1": {
-   "n": 1,
-   "median": 0.41,
-   "p90": 0.41
   },
   "entry_slip_3": {
-   "n": 1,
-   "median": 0.19,
-   "mean": 0.19,
-   "p90": 0.19,
-   "adverse_share": 100.0
-  },
-  "chase_slip_3": {
-   "n": 1,
-   "median": 1.0,
-   "p90": 1.0
-  },
-  "entry_slip_120": {
-   "n": 1,
-   "median": -0.41,
-   "mean": -0.41,
-   "p90": -0.41,
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
    "adverse_share": 0.0
   },
-  "chase_slip_120": {
-   "n": 1,
-   "median": -1.84,
-   "p90": -1.84
+  "entry_slip_120": {
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
+   "adverse_share": 0.0
   },
   "sl": {
    "n": 0,
@@ -58,38 +38,18 @@
    "max": null
   },
   "tp": {
-   "n": 1,
-   "fill_ok": 1,
+   "n": 0,
+   "fill_ok": 0,
    "fill_miss": 0
   },
   "spread_at_entry": {
-   "median": 0.15,
-   "p90": 0.15,
-   "max": 0.15
+   "median": null,
+   "p90": null,
+   "max": null
   },
-  "open_vs_tick_abs_median": 0.0,
+  "open_vs_tick_abs_median": null,
   "adopt_latency_s": 1.0,
-  "generated": "2026-10-22 13:30:12"
+  "generated": "2026-10-22 14:00:26"
  },
- "rows": [
-  {
-   "id": "S-0309",
-   "side": "SELL",
-   "risk": 16.966999999999643,
-   "exit_reason": "TP",
-   "R": 0.483,
-   "bid0": 4097.17,
-   "spread_pt": 0.15,
-   "slip_0.3": -0.19,
-   "slip_1": -0.24,
-   "slip_3": 0.19,
-   "slip_120": -0.41,
-   "open_vs_tick": 0.0,
-   "chase_slip_0.3": 0.02,
-   "chase_slip_1": 0.41,
-   "chase_slip_3": 1.0,
-   "chase_slip_120": -1.84,
-   "tp_fill_ok": true
-  }
- ]
+ "rows": []
 }
