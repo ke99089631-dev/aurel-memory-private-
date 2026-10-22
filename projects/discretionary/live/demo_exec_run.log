@@ -56,3 +56,4 @@
 [接続] デモ 802307 / VantageTradingLtd-Demo / 残高996.91 検証OK
 [起動] デモ執行 20秒おき（Ctrl+C / KILLファイルで停止）
 [skip] S-0307 SELL（発火が古い>180s・バックフィル防止）
+[skip] S-0308 SELL（発火が古い>180s・バックフィル防止）
