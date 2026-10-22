@@ -227,3 +227,6 @@
   M5 13529本 (2026-08-13 04:05:00+00:00..2026-10-22 15:05:00+00:00)
   新規記録 1本 / 台帳累計 27本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_a_forward_ledger.jsonl
     2026-10-22 14:55:00+00:00 SELL entry29291.5 risk308.1 R+0.12 net+0.11
+[live観測] yfinance NQ=F 取得中...
+  M5 13535本 (2026-08-13 04:05:00+00:00..2026-10-22 15:35:00+00:00)
+  新規記録 0本 / 台帳累計 27本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_a_forward_ledger.jsonl
