@@ -268,8 +268,20 @@ def compute_arm(sess, a):
     if m5 is None or len(m5) < 2:
         return None
     sell = (a["side"] == "SELL")
+    # ★ブローカー(Vantage)のM5足時刻はサーバTZ(実測UTC+3)で、信号(8793=UTC)とズレる。
+    #   retest_time(信号UTC)をブローカー時間基準へ整数時間オフセットで合わせてから窓を切る。
+    #   (2026-10-23: このズレでS-0323のextが3h前の高値を拾いSL過大化=初約定のバグ源)。
     rt = pd.to_datetime(a["retest_time"], unit="s", utc=True)
+    try:
+        feed = se._fetch_bars()
+        off_h = round((m5.index[-1] - feed.index[-1]).total_seconds() / 3600.0)
+        rt = rt + pd.Timedelta(hours=off_h)
+    except Exception:
+        pass
     seg = m5[m5.index >= rt]
+    # 保険: reaccel窓はリテスト→トリガーで最大~12本。異常に広い窓は時刻ズレの兆候=末尾30本に制限。
+    if len(seg) > 30:
+        seg = seg.iloc[-30:]
     if len(seg) < 1:
         seg = m5.iloc[-1:]
     last = m5.iloc[-1]

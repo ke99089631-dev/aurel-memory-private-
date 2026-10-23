@@ -68,3 +68,5 @@
 [起動] デモ執行 20秒おき（Ctrl+C / KILLファイルで停止）
 [LIVE→発注] 新規発火 T2-1792716000 SELL outer_sb(touch2sb) lot0.01 SL4055.670 TP3928.372 (entry≈4020.270 wall4020.070)
    結果 ok=True retcode=10009 deal=45532762
+[skip] S-0323 SELL（発火が古い>180s・バックフィル防止）
+[observe・建玉中につき撃たず] T2-1792718400 SELL SL4052.892 TP3923.800

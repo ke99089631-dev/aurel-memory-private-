@@ -4,3 +4,5 @@
 [!!] LIVEデモ発注モード(逆指値を実際に置く/変える/消す)
 [逆指値設置OK] S-0323 SELL entry4011.98 SL4032.83 TP4010.06 ret=10009
 [約定検知] S-0323 建値4011.98 lot0.01 pos50412351
+[接続] 肥料reaccel(逆指値) 806809 / VantageTradingLtd-Demo / 残高1000.0 / XAUUSD  armed=True risk2.0% runtime=C:\Users\user\MT5Fert\fert_reaccel_runtime
+[!!] LIVEデモ発注モード(逆指値を実際に置く/変える/消す)
