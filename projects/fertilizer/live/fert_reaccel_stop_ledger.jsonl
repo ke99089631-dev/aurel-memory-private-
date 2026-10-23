@@ -2,3 +2,5 @@
 {"event": "fill", "sid": "S-0323", "side": "SELL", "fill_price": 4011.98, "sl": 4032.83, "tp": 4010.06, "volume": 0.01, "position": 50412351, "gold_er": 0.161, "gold_regime": "trend", "ts": "2026-10-23T01:18:09"}
 {"event": "place", "sid": "S-0325", "side": "SELL", "wall_kind": "outer", "entry": 4009.03, "sl": 4015.753, "tp": 4000.344, "lot": 0.03, "order": 50428690, "retcode": 10009, "ts": "2026-10-23T02:15:12"}
 {"event": "modify", "sid": "S-0325", "order": 50428690, "entry": 4011.13, "sl": 4017.68, "tp": 4000.344, "retcode": 10009, "ts": "2026-10-23T02:20:18"}
+{"event": "modify", "sid": "S-0325", "order": 50428690, "entry": 4013.1, "sl": 4017.68, "tp": 4000.344, "retcode": 10009, "ts": "2026-10-23T02:25:03"}
+{"event": "fill", "sid": "S-0325", "side": "SELL", "fill_price": 4013.1, "sl": 4017.68, "tp": 4000.34, "volume": 0.03, "position": 50428690, "gold_er": 0.1444, "gold_regime": "trend", "ts": "2026-10-23T02:30:08"}
