@@ -16,3 +16,4 @@
 {"kind": "live", "sid": "S-0277", "side": "SELL", "lot": 0.01, "sl": 4135.194, "tp": 4120.033, "entry_ref": 4129.16, "retcode": 10009, "deal": 44944917, "order": 49715668, "fill_price": 4124.92, "ok": true, "logged_at": "2026-10-20 14:50:19"}
 {"kind": "live", "sid": "S-0282", "side": "BUY", "lot": 0.01, "sl": 4108.375, "tp": 4144.442, "entry_ref": 4119.91, "retcode": 10009, "deal": 44959118, "order": 49757494, "fill_price": 4120.21, "ok": true, "logged_at": "2026-10-20 19:41:14"}
 {"kind": "live", "sid": "T2-1792716000", "side": "SELL", "lot": 0.01, "sl": 4055.67, "tp": 3928.372, "entry_ref": 4020.27, "retcode": 10009, "deal": 45532762, "order": 50402957, "fill_price": 4020.92, "ok": true, "logged_at": "2026-10-23 09:45:13"}
+{"kind": "observe", "sid": "T2-1792718400", "side": "SELL", "wall_kind": "outer_sb", "mode": "touch2sb", "sl": 4052.892, "tp": 3923.8, "entry_ref": 4019.38, "why": "建玉中(非重複)", "logged_at": "2026-10-23 10:25:27"}
