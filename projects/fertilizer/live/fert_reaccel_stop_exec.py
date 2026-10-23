@@ -299,6 +299,10 @@ def compute_arm(sess, a):
     ok = (sl > entry > tp) if sell else (tp > entry > sl)
     if not ok:
         return None
+    # ★2026-10-24 会長GO: 利幅が MIN_TP_W(紙と同じ定数) 未満なら置かない=紙の「利幅が薄すぎ→invalid」と同じ判定。
+    #   根拠=S-0332 利幅0.22 < デモ実スプレッド0.42 → 紙TP/実SL。
+    if abs(float(tp) - entry) < getattr(se, "MIN_TP_W", 1.0):
+        return {"collapse": False, "thin": True}
     return {"entry": round(entry, 3), "sl": round(sl, 3), "tp": round(tp, 3),
             "ext": round(ext, 3), "collapse": False}
 
@@ -337,6 +341,14 @@ def scan_once(sess, armed_flag, observe):
                 _log({"event": "cancel", "sid": sid, "why": "床崩壊(終値が構造の外)",
                       "retcode": getattr(r, "retcode", None), "observe": observe})
                 print("[取消・崩壊] %s" % sid)
+            continue
+        if arm.get("thin"):
+            # 利幅が薄すぎ(紙はinvalid)=置かない。既存pendingがあれば取り下げて紙とそろえる。
+            if sid in pend:
+                r = sess.cancel(pend[sid].ticket) if not observe else None
+                _log({"event": "cancel", "sid": sid, "why": "利幅が薄すぎ(<MIN_TP_W)",
+                      "retcode": getattr(r, "retcode", None), "observe": observe})
+                print("[取消・利幅薄] %s" % sid)
             continue
         side = a["side"]; sell = (side == "SELL")
         t = sess.tick()

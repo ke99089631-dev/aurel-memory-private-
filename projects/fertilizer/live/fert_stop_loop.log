@@ -24,3 +24,7 @@
 [取消・崩壊] S-0331
 [逆指値設置OK] S-0332 BUY entry4029.85 SL4023.33 TP4030.12 ret=10009
 [約定検知] S-0332 建値4029.85 lot0.03 pos50596383
+[KILL_FERT] 停止
+[終了]
+[接続] 肥料reaccel(逆指値) 806809 / VantageTradingLtd-Demo / 残高956.07 / XAUUSD  armed=True risk2.0% runtime=C:\Users\user\MT5Fert\fert_reaccel_runtime
+[!!] LIVEデモ発注モード(逆指値を実際に置く/変える/消す)

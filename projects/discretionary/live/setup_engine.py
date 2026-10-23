@@ -41,6 +41,10 @@ COOLDOWN = 3
 LATE_LOOKBACK = 24      # 壁の乗り換え後に価格が既に外だった時、何本前までブレイク足を遡って探すか
 REACCEL_BARS = 12       # 再加速変種: 壁リテスト後、直前足の安値割れ(買いは高値超え)を待つ最大本数（1時間）
 REACCEL_PAD = 0.2       # 再加速変種: SL＝リテスト区間の極値の外側にこのpt
+MIN_TP_W = 1.0          # ★2026-10-24 会長GO: 最小利幅(建値↔TP・ドル)。これ未満のTPは紙でも「invalid(利幅が薄すぎ)」=勝ちに数えない。
+                        #   根拠=肥料デモ初日(10-23) S-0332: 紙の利幅0.22 < デモ実スプレッド0.42 → 紙TP/実SL。デモ実スプレッド(≈0.4)の2.5倍・リアル実測中央値0.16の6倍を事前固定。
+FEED_TOL = 0.1          # ★2026-10-24 会長GO: 紙の決着を保守側に寄せる足違い許容(ドル)。SLは手前0.1で触れたら損切り扱い・TPは0.1先まで届いて初めて利確扱い。
+                        #   根拠=10-23 S-0329(紙の安値がSLの0.04上で生還→デモはSL)・S-0332(同0.07)=コックピット(リアル足)とデモ足の差0.05〜0.1でTP/SLが逆転。同足SL/TP同時はSL優先(従来通り)。
 MIN_SL_W = 3.0          # AI最小SL幅(建値↔SL・ドル)。極小SLがR分散の主因(S-0051 SL0.09→net-5.76 / S-0105 SL1.34→+11R)＝当たりくじ化。会長委任で3.0固定(2026-09-30・会長の型の最小実SL2.72に整合)。同期間再シミュ: sd2.58→1.88・標準誤差0.39→0.29・DD-11.6→-6.9、平均Rは+0.36→+0.30でほぼ不変。TPは据え置き、SLだけ外側へ広げる。
 
 
@@ -136,12 +140,13 @@ def _simulate(o, h, l, c, ie, side, entry, sl, tp, n):
         else:
             fav = (h[k] - entry) / risk; adv = (entry - l[k]) / risk
         mfe = max(mfe, fav); mae = max(mae, adv)
+        # ★保守側の決着(2026-10-24 会長GO): SLは FEED_TOL 手前で触れたら損切り・TPは FEED_TOL 先まで届いて利確。同足両方ならSL優先(従来通り)。
         if side == "SELL":
-            if h[k] >= sl: exit_px, reason, exit_k = sl, "SL", k; break
-            if l[k] <= tp: exit_px, reason, exit_k = tp, "TP", k; break
+            if h[k] >= sl - FEED_TOL: exit_px, reason, exit_k = sl, "SL", k; break
+            if l[k] <= tp - FEED_TOL: exit_px, reason, exit_k = tp, "TP", k; break
         else:
-            if l[k] <= sl: exit_px, reason, exit_k = sl, "SL", k; break
-            if h[k] >= tp: exit_px, reason, exit_k = tp, "TP", k; break
+            if l[k] <= sl + FEED_TOL: exit_px, reason, exit_k = sl, "SL", k; break
+            if h[k] >= tp + FEED_TOL: exit_px, reason, exit_k = tp, "TP", k; break
     if exit_px is None:
         if ie + MAX_HOLD <= n - 1:
             exit_k = k_end; exit_px = c[k_end]; reason = "TIME"
@@ -198,6 +203,9 @@ def _reaccel_from(o, h, l, c, idx, ib, side, wall, sl_base, tp, n):
             ok = (sl > entry > tp) if sell else (tp > entry > sl)
             if not ok:
                 out["status"] = "invalid"; out["why"] = "建値がSL/TPの外"
+                return out
+            if abs(float(tp) - entry) < MIN_TP_W:     # ★2026-10-24: 利幅がスプレッド未満のTPは勝ちに数えない(invalid)
+                out["status"] = "invalid"; out["why"] = "利幅が薄すぎ(<%.1f)" % MIN_TP_W
                 return out
             r = _simulate(o, h, l, c, k, side, entry, sl, tp, n)
             out.update({"status": r["status"], "mfe_R": r["mfe_R"], "mae_R": r["mae_R"], "hold_bars": r["hold_bars"]})
@@ -257,6 +265,8 @@ def _touch2_from(o, h, l, c, idx, ib, side, wall, width, n):
     ok = (sl > entry > tp) if sell else (tp > entry > sl)
     if not ok:
         return {"status": "invalid", "why": "建値がSL/TPの外"}
+    if abs(float(tp) - entry) < MIN_TP_W:         # ★2026-10-24: 利幅がスプレッド未満のTPは勝ちに数えない(invalid)
+        return {"status": "invalid", "why": "利幅が薄すぎ(<%.1f)" % MIN_TP_W}
     out = {"retest_time": _ts(idx, enter_i), "retest_jst": _jst(idx, enter_i),
            "entry": round(entry, 3), "entry_time": _ts(idx, ie), "entry_jst": _jst(idx, ie),
            "sl": round(float(sl), 3), "tp": round(float(tp), 3), "touches": TOUCH2_N}
