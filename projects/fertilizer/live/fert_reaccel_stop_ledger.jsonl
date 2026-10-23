@@ -1,0 +1,2 @@
+{"event": "place", "sid": "S-0323", "side": "SELL", "wall_kind": "outer", "entry": 4011.98, "sl": 4032.83, "tp": 4010.064, "lot": 0.01, "order": 50412351, "retcode": 10009, "ts": "2026-10-23T01:15:48"}
+{"event": "fill", "sid": "S-0323", "side": "SELL", "fill_price": 4011.98, "sl": 4032.83, "tp": 4010.06, "volume": 0.01, "position": 50412351, "gold_er": 0.161, "gold_regime": "trend", "ts": "2026-10-23T01:18:09"}
