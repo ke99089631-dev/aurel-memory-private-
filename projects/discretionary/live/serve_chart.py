@@ -436,6 +436,15 @@ def build_ai_stats(since_epoch=None):
                     "avg_cost_pt": round(sum(costs) / len(costs), 3) if costs else None,
                     "sources": src_count, "slip_measured": slip_n,
                     "slip_default_pt": cm.get("slippage_pt"), "slip_summary": slip_sum}}
+    # ★2026-10-24 会長GO(次の一手②): 再加速×地合い(紙・reaccel_regime_forward.py)と肥料デモ成績(fert_reaccel_stats.py)を
+    #   コックピットへ(会長方針: 材料はチャートに描いて見た瞬間に判断)。どちらも日次schtask AUREL_ReaccelReports が書くJSONを読むだけ。
+    for key, fn in (("regime", os.path.join(HERE, "reaccel_regime_forward.json")),
+                    ("fert", os.path.join(HERE, "..", "..", "fertilizer", "live", "fert_reaccel_stats.json"))):
+        try:
+            with open(fn, encoding="utf-8") as f:
+                out[key] = json.load(f)
+        except Exception:
+            out[key] = {}
     # 再加速変種（会長型・第3レーン・会長GO 2026-09-29）: 同じ壁/TP・入り方だけ違う。コストは建玉時刻の時間帯中央値(or仮値)＋手数料。
     re_net, re_gross, re_status = [], [], {}
     for r in sorted(recs, key=lambda r: int(r.get("break_time") or 0)):

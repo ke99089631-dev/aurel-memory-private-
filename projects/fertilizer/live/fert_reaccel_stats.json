@@ -1,0 +1,67 @@
+{
+ "generated": "2026-10-24 14:38",
+ "n_fill": 6,
+ "n_open": 0,
+ "all": {
+  "n": 6,
+  "sum_R": -2.29,
+  "avg_R": -0.382,
+  "win": 33.3,
+  "max_dd_R": -3.0,
+  "profit_usd": -43.93
+ },
+ "keep": {
+  "n": 6,
+  "sum_R": -2.29,
+  "avg_R": -0.382,
+  "win": 33.3,
+  "max_dd_R": -3.0,
+  "profit_usd": -43.93
+ },
+ "drop": {
+  "n": 0
+ },
+ "v1_unknown": {
+  "n": 0
+ },
+ "trend": {
+  "n": 2,
+  "sum_R": -0.91,
+  "avg_R": -0.454,
+  "win": 50.0,
+  "max_dd_R": -1.0,
+  "profit_usd": -11.82
+ },
+ "chop": {
+  "n": 4,
+  "sum_R": -1.38,
+  "avg_R": -0.346,
+  "win": 25.0,
+  "max_dd_R": -3.0,
+  "profit_usd": -32.11
+ },
+ "keep_trend": {
+  "n": 2,
+  "sum_R": -0.91,
+  "avg_R": -0.454,
+  "win": 50.0,
+  "max_dd_R": -1.0,
+  "profit_usd": -11.82
+ },
+ "drop_trend": {
+  "n": 0
+ },
+ "since_fire_all": {
+  "n": 0
+ },
+ "exit_rule": {
+  "n_needed": 30,
+  "rule": "全部撃ちが確定30本でネット平均R<0 → FIRE_V1='keep' に戻す",
+  "n_now": 0,
+  "verdict": "判定前(0/30本)"
+ },
+ "trend_milestone": {
+  "n_needed": 30,
+  "n_now": 2
+ }
+}

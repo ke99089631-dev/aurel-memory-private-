@@ -333,6 +333,17 @@ function updateStats(){
         h+='<br><span style="color:#f0a35e">AI再加速</span>(会長型: リテスト後の直前足安値割れで入る・壁/TPは同じ・SLは構造の外) 決着'+reAll.n+'本 全体'+fR(reAll.sumR)+'(平均'+fR(reAll.avgR)+')'
           +' ／ 控除前: 同期間'+(rsg.n?fR(rsg.sumR):'-')+'・全体'+(rg.n?fR(rg.sumR):'-')
           +' ／ 不発'+(rst.no_trigger||0)+'・崩壊'+(rst.invalid||0)+'・戻りなし'+(rst.no_retest||0); }
+      // ★2026-10-24 会長GO: 再加速×地合い(会長仮説『トレンドでも保つ』の採点欄)＋肥料デモ(全部撃ち)の出口判定
+      const rgm=ai.regime||{}, rl=(rgm.lanes||{})['再加速(全)'], fert=ai.fert||{};
+      if(rl){ const t=rl.trend||{n:0}, c=rl.chop||{n:0}, cov=rgm.coverage||{};
+        h+='<br><span style="color:#f0a35e">再加速×地合い</span>(会長仮説10-24『トレンドでも保つ』・ブレイク時ER≥'+rgm.trend_th+'=トレンド・ラベル済'+(cov.reaccel_closed_labeled||0)+'/'+(cov.reaccel_closed_total||0)+'本=部分)'
+          +' トレンド <b>'+t.n+'/30本</b> '+(t.n?fR(t.sum_R)+'(平均'+fR(t.avg_R)+')':'-')
+          +' ／ チョップ '+c.n+'本 '+(c.n?fR(c.sum_R)+'(平均'+fR(c.avg_R)+')':'-')
+          +(t.n<30?' ＝<span style="color:#8b949e">サンプル不足・30本まで判定しない</span>':''); }
+      if(fert.all){ const fa=fert.all||{n:0}, fk=fert.keep||{n:0}, fd=fert.drop||{n:0}, ex=fert.exit_rule||{}, ft=fert.trend||{n:0};
+        h+='<br><span style="color:#f0a35e">肥料デモ806809</span>(再加速・逆指値=紙と同じ点火・10-24GO 採用+除外 全部撃ち) 確定'+fa.n+'本 '+(fa.n?fR(fa.sum_R)+'(平均'+fR(fa.avg_R)+'・'+fa.profit_usd+'$)':'-')
+          +' ／ 採用 '+fk.n+'本 '+(fk.n?fR(fk.sum_R):'-')+'・除外 '+fd.n+'本 '+(fd.n?fR(fd.sum_R):'-')
+          +' ／ トレンド側 '+ft.n+'/30本 ／ 出口(事前固定・全部撃ち30本でネット<0なら採用のみへ): '+(ex.verdict||'-'); }
       const v1=ai.v1||{};
       if(v1.keep){ const w=v1.weather||{}, k=v1.keep, d=v1.drop||{n:0}, fw=v1.forward||{n:0}, rk=v1.reaccel_keep||{n:0};
         const wx = w.rain_rate==null ? '判定保留' : ((w.rain?'<b style="color:#f85149">☔ 雨</b>':'<b style="color:#56d364">☀ 晴れ</b>')+'(直前'+w.rain_n+'本ダマシ'+Math.round(w.rain_rate*100)+'%)');
