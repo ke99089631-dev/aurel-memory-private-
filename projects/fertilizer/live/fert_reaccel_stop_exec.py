@@ -48,6 +48,12 @@ REAL_FORBIDDEN = 27972608
 MAGIC = 909090                   # 肥料レーン専用マジック(運用と混ざらない)
 RISK_FRAC = 0.02                 # 肥料=攻め(2%/trade・会長)。実弾ハイレバは別途GO。
 MAX_CONCURRENT = 0               # 同時ポジ上限。0=無制限(会長2026-10-22 A)。将来ゼロカット率で絞るつまみ。
+# ★2026-10-24 会長GO(次の一手①): 撃つ集合を「v1.keep(雨フィルタ採用側)のみ」→「再加速 全部(keep+drop)」へ。
+#   根拠: 会長が見ているコックピット「AI再加速」(+29.6R/208本)は keep+drop の全部。10-20以降は keep +1.4R(16本) /
+#   drop +9.5R(27本)=除外側が稼いでいる。デモが紙と同じ集合を撃たないと「紙と同じ点火」にならない。
+#   台帳(place/fill)に v1_keep / v1_drop を貼り分け、集計は fert_reaccel_stats.py で keep/drop 別に見る。
+#   出口(事前固定): デモ全部が確定30本に達した時点でネット平均R<0 なら FIRE_V1="keep" に戻す(この1行だけ)。
+FIRE_V1 = "all"                  # "all"=keep+drop 全部撃つ / "keep"=採用側のみ(10-23〜10-24 14時台の旧動作)
 BARS = 80                        # ブローカーM5確定足の取得本数(リテスト窓≤24本に十分)
 PRICE_EPS = 0.02                 # 逆指値/SL の変更を発注し直す閾値(ドル)。微小差で連打しない。
 NOTIFY = False
@@ -243,21 +249,87 @@ class FertSession:
         self.mt5.shutdown()
 
 
+_SETUPS = {}                     # 直近 fold_setups の写し(約定/決着ログに v1 ラベルを貼るため)
+
+
+def _v1_of(sid):
+    """台帳ラベル用: (v1_keep, drop_reasons)。setup に v1 が無い(凍結前の古い記録)なら None。"""
+    s = _SETUPS.get(sid) or {}
+    v1 = s.get("v1")
+    if not isinstance(v1, dict):
+        return None, []
+    return bool(v1.get("keep", False)), list(v1.get("drop_reasons") or [])
+
+
 def reaccel_armed():
-    """リテスト確定・トリガー待ちの窓(reaccel.status=='waiting' かつ retest_time有り)。lane3(外壁+中壁)全部・v1.keep。"""
+    """リテスト確定・トリガー待ちの窓(reaccel.status=='waiting' かつ retest_time有り)。lane3(外壁+中壁)全部。
+       FIRE_V1="all" なら v1 の keep/drop を問わず撃つ(ラベルだけ貼る)／"keep" なら採用側のみ(旧動作)。"""
+    global _SETUPS
     setups = dx.fold_setups()
+    _SETUPS = setups
     out = []
     for sid, s in setups.items():
         if s.get("lane") != "3":
             continue
-        if not (s.get("v1") or {}).get("keep", False):
+        keep = bool((s.get("v1") or {}).get("keep", False))
+        if FIRE_V1 == "keep" and not keep:
             continue
         blk = s.get("reaccel") or {}
         if blk.get("status") == "waiting" and blk.get("retest_time"):
             out.append({"sid": sid, "side": s.get("side"), "wall": s.get("wall"),
                         "wall_kind": s.get("wall_kind"), "sl_base": float(s.get("sl")),
-                        "tp": float(s.get("tp")), "retest_time": int(blk["retest_time"])})
+                        "tp": float(s.get("tp")), "retest_time": int(blk["retest_time"]),
+                        "v1_keep": keep, "v1_drop": list((s.get("v1") or {}).get("drop_reasons") or [])})
     return out
+
+
+def _ledger_rows():
+    rows = []
+    if not os.path.exists(LEDGER):
+        return rows
+    for ln in open(LEDGER, encoding="utf-8"):
+        ln = ln.strip()
+        if ln:
+            try:
+                rows.append(json.loads(ln))
+            except Exception:
+                pass
+    return rows
+
+
+def record_closes(sess, posn, done):
+    """★2026-10-24: 決着の自記録。done(約定済み)で建玉に無い sid は決着済み → ブローカー履歴から出口を引いて
+       close イベント(出口値・損益・R・理由)を台帳へ。これで肥料の成績(ネットR)は台帳だけで集計できる(MT5二重接続不要)。
+       R = 方向付き(出口-建値)/(建値-SL)。手数料/スワップは profit に含まれる実額を併記。"""
+    rows = _ledger_rows()
+    fills = {r["sid"]: r for r in rows if r.get("event") == "fill"}
+    closed = {r["sid"] for r in rows if r.get("event") == "close"}
+    mt5 = sess.mt5
+    for sid in sorted(done):
+        if sid in posn or sid in closed or sid not in fills:
+            continue
+        f = fills[sid]
+        try:
+            deals = mt5.history_deals_get(position=int(f["position"])) or []
+        except Exception:
+            deals = []
+        outs = [d for d in deals if int(getattr(d, "entry", -1)) == 1]      # DEAL_ENTRY_OUT
+        if not outs:
+            continue
+        d = outs[-1]
+        side = f["side"]; fp = float(f["fill_price"]); sl = float(f.get("sl") or 0); tp = float(f.get("tp") or 0)
+        risk = abs(fp - sl)
+        ex = float(d.price)
+        R = ((fp - ex) if side == "SELL" else (ex - fp)) / risk if risk > 0 else None
+        reason = "TP" if (tp and abs(ex - tp) <= 0.15) else ("SL" if (sl and abs(ex - sl) <= 0.15) else "other")
+        profit = float(d.profit) + float(getattr(d, "commission", 0.0) or 0.0) + float(getattr(d, "swap", 0.0) or 0.0)
+        keep, drop = _v1_of(sid)
+        _log({"event": "close", "sid": sid, "side": side, "position": int(f["position"]), "fill_price": fp,
+              "exit_price": ex, "exit_time": datetime.fromtimestamp(int(d.time), timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
+              "sl": sl, "tp": tp, "volume": f.get("volume"), "R": None if R is None else round(R, 3), "reason": reason,
+              "profit": round(profit, 2), "v1_keep": keep if keep is not None else f.get("v1_keep"),
+              "gold_er": f.get("gold_er"), "gold_regime": f.get("gold_regime")})
+        print("[決着記録] %s %s 建値%.2f→出口%.2f %s R%s 損益%.2f" % (sid, side, fp, ex, reason, None if R is None else round(R, 2), profit))
 
 
 def compute_arm(sess, a):
@@ -321,11 +393,18 @@ def scan_once(sess, armed_flag, observe):
     for sid, p in posn.items():
         if sid not in done:
             ger, greg = _gold_er()
+            keep, drop = _v1_of(sid)
             _log({"event": "fill", "sid": sid, "side": ("SELL" if p.type == sess.mt5.POSITION_TYPE_SELL else "BUY"),
                   "fill_price": p.price_open, "sl": p.sl, "tp": p.tp, "volume": p.volume,
-                  "position": p.ticket, "gold_er": ger, "gold_regime": greg})
-            print("[約定検知] %s 建値%.2f lot%.2f pos%d" % (sid, p.price_open, p.volume, p.ticket))
+                  "position": p.ticket, "gold_er": ger, "gold_regime": greg,
+                  "v1_keep": keep, "v1_drop": drop})
+            print("[約定検知] %s 建値%.2f lot%.2f pos%d v1=%s" % (sid, p.price_open, p.volume, p.ticket, "keep" if keep else "drop"))
             done.add(sid); save_done(done)
+    # 1b) 決着の自記録(建玉から消えた約定済みsid→履歴から出口を引いて close を台帳へ)
+    try:
+        record_closes(sess, posn, done)
+    except Exception as e:
+        print("[決着記録エラー] %s" % e)
 
     # 2) armed を処理: 置く / 追従変更
     for a in armed:
@@ -380,16 +459,18 @@ def scan_once(sess, armed_flag, observe):
                 ger, greg = _gold_er()
                 _log({"event": "would-place", "sid": sid, "side": side, "wall_kind": a["wall_kind"],
                       "entry": arm["entry"], "sl": arm["sl"], "tp": arm["tp"], "lot": lot,
-                      "gold_er": ger, "gold_regime": greg})
+                      "gold_er": ger, "gold_regime": greg, "v1_keep": a.get("v1_keep"), "v1_drop": a.get("v1_drop")})
                 print("[観測・置くはず] %s %s entry%.2f SL%.2f TP%.2f lot%.2f" % (sid, side, arm["entry"], arm["sl"], arm["tp"], lot))
             else:
                 r = sess.place_stop(side, lot, arm["entry"], arm["sl"], arm["tp"], comment)
                 ok = (r is not None and r.retcode == sess.mt5.TRADE_RETCODE_DONE)
                 _log({"event": "place" if ok else "place-ng", "sid": sid, "side": side, "wall_kind": a["wall_kind"],
                       "entry": arm["entry"], "sl": arm["sl"], "tp": arm["tp"], "lot": lot,
-                      "order": getattr(r, "order", None), "retcode": getattr(r, "retcode", None)})
-                print("[逆指値設置%s] %s %s entry%.2f SL%.2f TP%.2f ret=%s" % (
-                    "OK" if ok else "NG", sid, side, arm["entry"], arm["sl"], arm["tp"], getattr(r, "retcode", None)))
+                      "order": getattr(r, "order", None), "retcode": getattr(r, "retcode", None),
+                      "v1_keep": a.get("v1_keep"), "v1_drop": a.get("v1_drop")})
+                print("[逆指値設置%s] %s %s entry%.2f SL%.2f TP%.2f ret=%s v1=%s" % (
+                    "OK" if ok else "NG", sid, side, arm["entry"], arm["sl"], arm["tp"], getattr(r, "retcode", None),
+                    "keep" if a.get("v1_keep") else "drop"))
 
     # 3) もう armed でない pending = 窓切れ/無効 → 取消(約定済みは done で既に処理済)
     for sid, o in pend.items():
