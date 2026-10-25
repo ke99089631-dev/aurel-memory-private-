@@ -3261,3 +3261,33 @@ OpenBLAS error: Memory allocation still failed after 10 retries, giving up.
 [接続] 畑A 806782 / VantageTradingLtd-Demo / 残高1000.0 / NAS100.r  armed=True
 [!!] 二重ロック解錠=LIVEデモ発注モード。NAS100.rに実際に撃ちます。
 [終了]
+Traceback (most recent call last):
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_a_exec.py", line 33, in <module>
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\pandas\__init__.py", line 58, in <module>
+    from pandas.core.api import (
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\pandas\core\api.py", line 23, in <module>
+    from pandas.core.algorithms import (
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\pandas\core\algorithms.py", line 83, in <module>
+    from pandas.core.array_algos.take import take_nd
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\pandas\core\array_algos\take.py", line 24, in <module>
+    from pandas.core.construction import ensure_wrapped_if_datetimelike
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\pandas\core\construction.py", line 17, in <module>
+    from numpy import ma
+  File "<frozen importlib._bootstrap>", line 1412, in _handle_fromlist
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\numpy\__init__.py", line 737, in __getattr__
+    import numpy.ma as ma
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\numpy\ma\__init__.py", line 42, in <module>
+    from . import core, extras
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 991, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1124, in get_code
+  File "<frozen importlib._bootstrap_external>", line 753, in _compile_bytecode
+MemoryError
+[接続] 畑A 806782 / VantageTradingLtd-Demo / 残高1000.0 / NAS100.r  armed=True
+[!!] 二重ロック解錠=LIVEデモ発注モード。NAS100.rに実際に撃ちます。
+[終了]
+[接続] 畑A 806782 / VantageTradingLtd-Demo / 残高1000.0 / NAS100.r  armed=True
+[!!] 二重ロック解錠=LIVEデモ発注モード。NAS100.rに実際に撃ちます。
+[終了]

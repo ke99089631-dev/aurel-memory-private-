@@ -698,3 +698,30 @@ OpenBLAS error: Memory allocation still failed after 10 retries, giving up.
 [live観測] yfinance ES=F 取得中...
   M5 13401本 (2026-08-16 22:10:00+00:00..2026-10-25 22:20:00+00:00)
   新規記録 0本 / 台帳累計 33本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_b_forward_ledger.jsonl
+[live観測] yfinance ES=F 取得中...
+Traceback (most recent call last):
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_b_forward.py", line 148, in <module>
+    main()
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_b_forward.py", line 143, in main
+    run_live_observe(); return
+    ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_b_forward.py", line 121, in run_live_observe
+    m5 = fetch_live_m5()
+         ^^^^^^^^^^^^^^^
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_b_forward.py", line 93, in fetch_live_m5
+    import yfinance as yf
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\yfinance\__init__.py", line 25, in <module>
+    from .ticker import Ticker
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\yfinance\ticker.py", line 28, in <module>
+    from .base import TickerBase
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\yfinance\base.py", line 38, in <module>
+    from .live import WebSocket
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\yfinance\live.py", line 12, in <module>
+    from google.protobuf.json_format import MessageToDict
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 991, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1087, in get_code
+  File "<frozen importlib._bootstrap_external>", line 1187, in get_data
+MemoryError
