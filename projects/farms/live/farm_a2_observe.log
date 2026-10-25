@@ -444,3 +444,24 @@ OpenBLAS error: Memory allocation still failed after 10 retries, giving up.
 新規0 / 累計22 → C:\Users\user\.aurel\memory\projects\farms\live\farm_a2_sl050_forward_ledger.jsonl
 [畑A' SL0.50観測] NQ=F取得...
 新規0 / 累計22 → C:\Users\user\.aurel\memory\projects\farms\live\farm_a2_sl050_forward_ledger.jsonl
+[畑A' SL0.50観測] NQ=F取得...
+Traceback (most recent call last):
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_a2_sl050_forward.py", line 87, in <module>
+    run_live() if a.live else print("--live で観測")
+    ^^^^^^^^^^
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_a2_sl050_forward.py", line 61, in run_live
+    m5 = fetch()
+         ^^^^^^^
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_a2_sl050_forward.py", line 43, in fetch
+    import yfinance as yf
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\yfinance\__init__.py", line 23, in <module>
+    from .search import Search
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\yfinance\search.py", line 24, in <module>
+    from . import utils
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 991, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1087, in get_code
+  File "<frozen importlib._bootstrap_external>", line 1187, in get_data
+MemoryError

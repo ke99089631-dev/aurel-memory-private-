@@ -697,3 +697,29 @@ OpenBLAS error: Memory allocation still failed after 10 retries, giving up.
 [live観測] yfinance NQ=F 取得中...
   M5 13396本 (2026-08-16 22:10:00+00:00..2026-10-23 20:55:00+00:00)
   新規記録 0本 / 台帳累計 27本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_a_forward_ledger.jsonl
+Traceback (most recent call last):
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_a_forward.py", line 31, in <module>
+    import pandas as pd
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\pandas\__init__.py", line 58, in <module>
+    from pandas.core.api import (
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\pandas\core\api.py", line 46, in <module>
+    from pandas.core.groupby import (
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\pandas\core\groupby\__init__.py", line 1, in <module>
+    from pandas.core.groupby.generic import (
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\pandas\core\groupby\generic.py", line 64, in <module>
+    from pandas.core.frame import DataFrame
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\pandas\core\frame.py", line 154, in <module>
+    from pandas.core.generic import NDFrame
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\pandas\core\generic.py", line 145, in <module>
+    from pandas.core import (
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\pandas\core\indexing.py", line 74, in <module>
+    from pandas.core.indexes.api import (
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\pandas\core\indexes\api.py", line 19, in <module>
+    from pandas.core.indexes.base import (
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 991, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1087, in get_code
+  File "<frozen importlib._bootstrap_external>", line 1187, in get_data
+MemoryError
