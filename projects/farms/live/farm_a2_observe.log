@@ -467,3 +467,23 @@ Traceback (most recent call last):
 MemoryError
 [畑A' SL0.50観測] NQ=F取得...
 新規0 / 累計22 → C:\Users\user\.aurel\memory\projects\farms\live\farm_a2_sl050_forward_ledger.jsonl
+[畑A' SL0.50観測] NQ=F取得...
+Exception ignored from cffi callback <function buffer_callback at 0x0000019F05E936A0>:
+Traceback (most recent call last):
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\curl_cffi\curl.py", line 130, in buffer_callback
+    buffer.write(ffi.buffer(ptr, nmemb)[:])
+MemoryError: 
+$NQ=F: possibly delisted; no price data found  (period=60d)
+
+1 Failed download:
+['NQ=F']: possibly delisted; no price data found  (period=60d)
+Traceback (most recent call last):
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_a2_sl050_forward.py", line 87, in <module>
+    run_live() if a.live else print("--live で観測")
+    ^^^^^^^^^^
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_a2_sl050_forward.py", line 61, in run_live
+    m5 = fetch()
+         ^^^^^^^
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_a2_sl050_forward.py", line 46, in fetch
+    raise RuntimeError("yfinance NQ=F 0件")
+RuntimeError: yfinance NQ=F 0件

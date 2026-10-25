@@ -743,3 +743,29 @@ Traceback (most recent call last):
   File "<frozen importlib._bootstrap_external>", line 1124, in get_code
   File "<frozen importlib._bootstrap_external>", line 753, in _compile_bytecode
 MemoryError
+[live観測] yfinance NQ=F 取得中...
+Traceback (most recent call last):
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_a_forward.py", line 159, in <module>
+    main()
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_a_forward.py", line 118, in main
+    run_live_observe()
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_a_forward.py", line 145, in run_live_observe
+    m5 = fetch_live_m5()
+         ^^^^^^^^^^^^^^^
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_a_forward.py", line 125, in fetch_live_m5
+    import yfinance as yf
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\yfinance\__init__.py", line 23, in <module>
+    from .search import Search
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\yfinance\search.py", line 27, in <module>
+    from .data import YfData
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\yfinance\data.py", line 13, in <module>
+    from . import utils, cache
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\yfinance\cache.py", line 1, in <module>
+    import peewee as _peewee
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 991, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1087, in get_code
+  File "<frozen importlib._bootstrap_external>", line 1187, in get_data
+MemoryError
