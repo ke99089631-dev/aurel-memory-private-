@@ -465,3 +465,5 @@ Traceback (most recent call last):
   File "<frozen importlib._bootstrap_external>", line 1087, in get_code
   File "<frozen importlib._bootstrap_external>", line 1187, in get_data
 MemoryError
+[畑A' SL0.50観測] NQ=F取得...
+新規0 / 累計22 → C:\Users\user\.aurel\memory\projects\farms\live\farm_a2_sl050_forward_ledger.jsonl

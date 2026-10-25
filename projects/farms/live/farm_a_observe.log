@@ -723,3 +723,23 @@ Traceback (most recent call last):
   File "<frozen importlib._bootstrap_external>", line 1087, in get_code
   File "<frozen importlib._bootstrap_external>", line 1187, in get_data
 MemoryError
+Traceback (most recent call last):
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_a_forward.py", line 31, in <module>
+    import pandas as pd
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\pandas\__init__.py", line 58, in <module>
+    from pandas.core.api import (
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\pandas\core\api.py", line 27, in <module>
+    from pandas.core.arrays import Categorical
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\pandas\core\arrays\__init__.py", line 1, in <module>
+    from pandas.core.arrays.arrow import ArrowExtensionArray
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\pandas\core\arrays\arrow\__init__.py", line 5, in <module>
+    from pandas.core.arrays.arrow.array import ArrowExtensionArray
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\pandas\core\arrays\arrow\array.py", line 75, in <module>
+    from pandas.core.arrays.base import (
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 991, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1124, in get_code
+  File "<frozen importlib._bootstrap_external>", line 753, in _compile_bytecode
+MemoryError
