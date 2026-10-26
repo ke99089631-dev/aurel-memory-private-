@@ -46,3 +46,4 @@
 {"event": "modify", "sid": "S-0346", "order": 51571988, "entry": 4020.78, "sl": 4015.352, "tp": 4026.414, "retcode": 10009, "ts": "2026-10-26T12:10:45"}
 {"event": "modify", "sid": "S-0346", "order": 51571988, "entry": 4017.79, "sl": 4014.66, "tp": 4026.414, "retcode": 10009, "ts": "2026-10-26T12:15:08"}
 {"event": "fill", "sid": "S-0346", "side": "BUY", "fill_price": 4017.79, "sl": 4014.66, "tp": 4026.41, "volume": 0.05, "position": 51571988, "gold_er": 0.0209, "gold_regime": "chop", "v1_keep": true, "v1_drop": [], "ts": "2026-10-26T12:15:29"}
+{"event": "close", "sid": "S-0346", "side": "BUY", "position": 51571988, "fill_price": 4017.79, "exit_price": 4014.66, "exit_time": "2026-10-26T16:01:06", "sl": 4014.66, "tp": 4026.41, "volume": 0.05, "R": -1.0, "reason": "SL", "profit": -15.65, "v1_keep": true, "gold_er": 0.0209, "gold_regime": "chop", "ts": "2026-10-26T13:01:23"}
