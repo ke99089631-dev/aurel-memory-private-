@@ -45,6 +45,11 @@ MIN_TP_W = 1.0          # ★2026-10-24 会長GO: 最小利幅(建値↔TP・ド
                         #   根拠=肥料デモ初日(10-23) S-0332: 紙の利幅0.22 < デモ実スプレッド0.42 → 紙TP/実SL。デモ実スプレッド(≈0.4)の2.5倍・リアル実測中央値0.16の6倍を事前固定。
 FEED_TOL = 0.1          # ★2026-10-24 会長GO: 紙の決着を保守側に寄せる足違い許容(ドル)。SLは手前0.1で触れたら損切り扱い・TPは0.1先まで届いて初めて利確扱い。
                         #   根拠=10-23 S-0329(紙の安値がSLの0.04上で生還→デモはSL)・S-0332(同0.07)=コックピット(リアル足)とデモ足の差0.05〜0.1でTP/SLが逆転。同足SL/TP同時はSL優先(従来通り)。
+TRIG_SPREAD = 0.22      # ★2026-10-26 会長GO(本筋=紙を実射に寄せる): 買いの逆指値はASKで発動する。紙はbid足なので
+                        #   買いトリガー判定を「高値＋スプレッド ≥ トリガー」にする(売りは bid 発動=従来通り)。値=実口座スプレッド実測
+                        #   (spread_log 40,977点: 中央値0.16・p90/最大0.22)の上端0.22を事前固定。根拠=10-26 S-0344: 18:15足のbid高値4016.70は
+                        #   トリガー4016.89未満だが ask が届いてデモ約定→SL(-1R)、紙は18:25に低く入りSLも低く生還=紙が甘かった。
+                        #   建値は従来どおりトリガー価格(=ask約定値・損益はbid基準で整合)。残る近似: 売りのSL/TPはask決着だがFEED_TOL=0.1のまま。
 MIN_SL_W = 3.0          # AI最小SL幅(建値↔SL・ドル)。極小SLがR分散の主因(S-0051 SL0.09→net-5.76 / S-0105 SL1.34→+11R)＝当たりくじ化。会長委任で3.0固定(2026-09-30・会長の型の最小実SL2.72に整合)。同期間再シミュ: sd2.58→1.88・標準誤差0.39→0.29・DD-11.6→-6.9、平均Rは+0.36→+0.30でほぼ不変。TPは据え置き、SLだけ外側へ広げる。
 
 
@@ -193,7 +198,8 @@ def _reaccel_from(o, h, l, c, idx, ib, side, wall, sl_base, tp, n):
             out["status"] = "invalid"; out["why"] = "リテスト中に終値が構造の外"
             return out
         trig = l[k - 1] if sell else h[k - 1]
-        if (sell and l[k] < trig) or ((not sell) and h[k] > trig):
+        # ★2026-10-26: 買いは ask(=bid+TRIG_SPREAD) がトリガーに届けば約定扱い。売りは bid 発動なので従来どおり。
+        if (sell and l[k] < trig) or ((not sell) and h[k] + TRIG_SPREAD > trig):
             entry = float(trig)
             sl = max(sl_base, ext + REACCEL_PAD) if sell else min(sl_base, ext - REACCEL_PAD)
             sl = max(sl, entry + MIN_SL_W) if sell else min(sl, entry - MIN_SL_W)   # 最小SL幅フロア(会長委任 2026-09-30・建値基準)
