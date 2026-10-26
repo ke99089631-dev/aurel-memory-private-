@@ -20,7 +20,7 @@ AUREL AIデモ執行（車線3の検証口）— MT5Demo(デモ口座)にだけ�
   python demo_exec.py --dry --once     # 1回だけスキャン
   python demo_exec.py --live --arm CHAIRMAN-GO   # 実デモ発注（会長GOの実体）
 """
-import os, sys, json, time, argparse
+import os, sys, json, time, argparse, datetime
 
 # ★出力の文字コードで絶対に落ちないように（cp932コンソール/リダイレクトでもUTF-8・置換）
 try:
@@ -34,6 +34,7 @@ SETUP_LEDGER = os.path.join(HERE, "setup_ledger.jsonl")
 T2SB_LEDGER = os.path.join(HERE, "touch2sb_ledger.jsonl")   # ★本命touch2sbの発火（setup_engineが書く・素の高安箱）
 EXEC_LEDGER = os.path.join(HERE, "demo_exec_ledger.jsonl")
 STATE = os.path.join(HERE, "demo_exec_state.json")
+POS_SNAPSHOT = os.path.join(HERE, "demo_positions.json")   # ★2026-10-26: デモ建玉/決着のスナップショット(読取のみ・チャート表示用)
 KILL = os.path.join(HERE, "KILL")
 ENV_PATH = os.path.join(os.path.expanduser("~"), ".claude", ".env")
 
@@ -225,6 +226,108 @@ class DemoSession:
                 return r
         return r
 
+    def snapshot(self, path, days=14):
+        """★2026-10-26 会長GO: デモ建玉と決着を read-only で書き出す(コックピット表示用)。
+           positions_get / history_deals_get のみ・発注系は呼ばない。MT5の時刻はサーバ時刻(GMT+3)なので真UTCへ-3h補正。"""
+        mt5 = self.mt5
+        OFF = 3 * 3600
+        now = time.time()
+        opens = []
+        ps = mt5.positions_get(symbol=SYMBOL) or []
+        for p in ps:
+            if int(p.magic) != MAGIC:
+                continue
+            opens.append({"ticket": int(p.ticket), "comment": p.comment, "sid": p.comment.replace("ai-demo-", ""),
+                          "side": "BUY" if p.type == mt5.POSITION_TYPE_BUY else "SELL",
+                          "entry": float(p.price_open), "sl": float(p.sl), "tp": float(p.tp),
+                          "lot": float(p.volume), "profit": float(p.profit), "swap": float(p.swap),
+                          "time": int(p.time) - OFF})
+        closed = []
+        try:
+            import datetime as _dt
+            deals = mt5.history_deals_get(_dt.datetime.utcfromtimestamp(now - days * 86400 + OFF),
+                                          _dt.datetime.utcfromtimestamp(now + 86400 + OFF)) or []
+            by_pos = {}
+            for d in deals:
+                if int(d.magic) != MAGIC or d.symbol != SYMBOL:
+                    continue
+                g = by_pos.setdefault(int(d.position_id), {"in": None, "out": None})
+                if d.entry == mt5.DEAL_ENTRY_IN:
+                    g["in"] = d
+                elif d.entry in (mt5.DEAL_ENTRY_OUT, mt5.DEAL_ENTRY_INOUT, mt5.DEAL_ENTRY_OUT_BY):
+                    g["out"] = d
+            for pid, g in by_pos.items():
+                i, o = g["in"], g["out"]
+                if i is None or o is None:
+                    continue
+                closed.append({"ticket": pid, "comment": i.comment, "sid": i.comment.replace("ai-demo-", ""),
+                               "side": "BUY" if i.type == mt5.DEAL_TYPE_BUY else "SELL",
+                               "entry": float(i.price), "exit": float(o.price),
+                               "profit": float(o.profit), "swap": float(o.swap), "commission": float(o.commission),
+                               "time": int(i.time) - OFF, "exit_time": int(o.time) - OFF,
+                               "exit_reason": ("TP" if "tp" in (o.comment or "").lower() else
+                                               "SL" if "sl" in (o.comment or "").lower() else "manual")})
+        except Exception as e:
+            closed = [{"error": repr(e)}]
+        snap = {"ts": int(now), "login": int(self.mt5.account_info().login), "open": opens, "closed": closed}
+        tmp = path + ".tmp"
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(snap, f, ensure_ascii=False)
+        os.replace(tmp, path)
+
+    def snapshot(self):
+        """★読取専用: このエンジン(MAGIC)のデモ建玉と直近45日の決着を demo_positions.json に書く。
+           コックピット(serve_chart 8793)がこれを読んで2タッチ型の建玉・決着をチャートに描く。
+           positions_get / history_deals_get のみ。発注系APIは使わない。失敗しても発注ループには影響させない(呼び側でtry)。"""
+        mt5 = self.mt5
+        ai = self.assert_demo("スナップショット")
+        off = SERVER_UTC_OFFSET_S
+        buy_pos = getattr(mt5, "POSITION_TYPE_BUY", 0)
+        opens = []
+        for p in (mt5.positions_get(symbol=SYMBOL) or []):
+            if int(p.magic) != MAGIC:
+                continue
+            opens.append({"ticket": int(p.ticket), "sid": (p.comment or "").replace("ai-demo-", ""),
+                          "side": "BUY" if int(p.type) == buy_pos else "SELL",
+                          "entry": float(p.price_open), "sl": float(p.sl), "tp": float(p.tp),
+                          "time_open": int(p.time) - off, "profit": float(p.profit),
+                          "volume": float(p.volume), "price_now": float(p.price_current)})
+        d_in = getattr(mt5, "DEAL_ENTRY_IN", 0)
+        d_out = (getattr(mt5, "DEAL_ENTRY_OUT", 1), getattr(mt5, "DEAL_ENTRY_INOUT", 2), getattr(mt5, "DEAL_ENTRY_OUT_BY", 3))
+        r_sl = getattr(mt5, "DEAL_REASON_SL", 4); r_tp = getattr(mt5, "DEAL_REASON_TP", 5)
+        buy_deal = getattr(mt5, "DEAL_TYPE_BUY", 0)
+        now = datetime.datetime.now()
+        deals = mt5.history_deals_get(now - datetime.timedelta(days=45), now + datetime.timedelta(days=2)) or []
+        by_pos = {}
+        for d in deals:
+            if int(d.magic) != MAGIC or d.symbol != SYMBOL:
+                continue
+            slot = by_pos.setdefault(int(d.position_id), {})
+            if int(d.entry) == d_in:
+                slot["in"] = d
+            elif int(d.entry) in d_out:
+                slot["out"] = d
+        closed = []
+        for pid, io in by_pos.items():
+            i = io.get("in"); o = io.get("out")
+            if i is None or o is None:
+                continue
+            reason = "TP" if int(o.reason) == r_tp else ("SL" if int(o.reason) == r_sl else "manual")
+            closed.append({"position_id": pid, "sid": (i.comment or "").replace("ai-demo-", ""),
+                           "side": "BUY" if int(i.type) == buy_deal else "SELL",
+                           "entry": float(i.price), "exit": float(o.price),
+                           "time_open": int(i.time) - off, "time_close": int(o.time) - off,
+                           "profit": round(float(o.profit) + float(o.swap) + float(o.commission) + float(i.commission), 2),
+                           "reason": reason})
+        closed.sort(key=lambda x: x["time_close"])
+        snap = {"ts": int(time.time()), "login": int(ai.login), "balance": float(ai.balance),
+                "equity": float(ai.equity), "tz_offset_s": off, "open": opens, "closed": closed[-100:]}
+        tmp = POS_SNAPSHOT + ".tmp"
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(snap, f, ensure_ascii=False)
+        os.replace(tmp, POS_SNAPSHOT)
+        return snap
+
     def shutdown(self):
         self.mt5.shutdown()
 
@@ -245,6 +348,11 @@ def run(dry=True, armed=False, once=False):
         if os.path.exists(KILL):
             print("[KILL] キルスイッチ検知→発注せず停止")
             return False
+        if sess is not None:
+            try:
+                sess.snapshot()          # 読取のみ。失敗は発注ループに影響させない
+            except Exception as e:
+                print("[snapshot error・継続] %r" % e, flush=True)
         setups = fold_setups()
         fires = fired_setups(setups)
         if FIRE_ENGINE == "touch2sb":
@@ -311,6 +419,11 @@ def run(dry=True, armed=False, once=False):
             seen.add(f["sid"])
         state["seen"] = sorted(seen)
         save_state(state)
+        if sess is not None:
+            try:
+                sess.snapshot(POS_SNAPSHOT)      # 読取のみ・コックピットが建玉/決着を描く材料
+            except Exception as e:
+                print("[snapshot error・継続] %r" % e, flush=True)
         return True
 
     try:

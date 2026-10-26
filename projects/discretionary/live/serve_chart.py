@@ -118,6 +118,161 @@ def latest_ai_position(tick):
     }
 
 
+def build_t2(tick):
+    """★2026-10-26 会長GO: 2タッチ型(touch2sb)のデモ執行をチャートに出す材料。
+       執行台帳(demo_exec_ledger: live=撃った / observe=撃たず)と demo_exec が書く建玉スナップショット(demo_positions.json)を合わせる。
+       読取のみ。発注系は一切触らない。"""
+    import datetime as dt
+    here = os.path.dirname(os.path.abspath(__file__))
+    led = os.path.join(here, "demo_exec_ledger.jsonl")
+    snp = os.path.join(here, "demo_positions.json")
+    def _ep(s):
+        try:
+            d = dt.datetime.strptime(s, "%Y-%m-%d %H:%M:%S")
+            return int(d.replace(tzinfo=dt.timezone(dt.timedelta(hours=9))).timestamp())
+        except Exception:
+            return None
+    snap = {}
+    try:
+        snap = json.load(open(snp, encoding="utf-8"))
+    except Exception:
+        snap = {}
+    open_by_sid = {p.get("sid"): p for p in (snap.get("open") or []) if p.get("sid")}
+    closed_by_sid = {p.get("sid"): p for p in (snap.get("closed") or []) if p.get("sid")}
+    price = ((tick["bid"] + tick["ask"]) / 2.0) if tick else None
+    trades, observed = [], []
+    if os.path.exists(led):
+        for ln in open(led, encoding="utf-8"):
+            try:
+                r = json.loads(ln)
+            except Exception:
+                continue
+            sid = r.get("sid") or ""
+            if not sid.startswith("T2-"):
+                continue
+            k = r.get("kind")
+            if k == "observe":
+                observed.append({"sid": sid, "side": r.get("side"), "entry": r.get("entry_ref"),
+                                 "sl": r.get("sl"), "tp": r.get("tp"), "time": _ep(r.get("logged_at")),
+                                 "why": r.get("why") or "観測"})
+                continue
+            if k != "live" or not r.get("ok"):
+                continue
+            entry = r.get("fill_price") or r.get("entry_ref")
+            t = {"sid": sid, "side": r.get("side"), "entry": entry, "sl": r.get("sl"), "tp": r.get("tp"),
+                 "lot": r.get("lot"), "time": _ep(r.get("logged_at")), "order": r.get("order"),
+                 "status": "unknown", "exit": None, "exit_time": None, "exit_reason": None, "profit": None, "R": None}
+            risk = abs(float(entry) - float(r.get("sl"))) if entry and r.get("sl") else None
+            po = open_by_sid.get(sid); pc = closed_by_sid.get(sid)
+            if po:
+                t["status"] = "open"; t["profit"] = po.get("profit"); t["sl"] = po.get("sl"); t["tp"] = po.get("tp")
+                if price is not None and risk:
+                    t["R"] = round(((entry - price) if t["side"] == "SELL" else (price - entry)) / risk, 2)
+            elif pc:
+                t["status"] = "closed"; t["exit"] = pc.get("exit"); t["exit_time"] = pc.get("exit_time")
+                t["exit_reason"] = pc.get("exit_reason"); t["profit"] = pc.get("profit")
+                if risk and pc.get("exit") is not None:
+                    t["R"] = round(((entry - pc["exit"]) if t["side"] == "SELL" else (pc["exit"] - entry)) / risk, 2)
+            trades.append(t)
+    return {"snapshot_ts": snap.get("ts"), "snapshot_age_s": (int(time.time()) - int(snap["ts"])) if snap.get("ts") else None,
+            "login": snap.get("login"), "trades": trades, "observed": observed[-20:]}
+
+
+EXEC_LEDGER_PATH = os.path.join(HERE, "demo_exec_ledger.jsonl")
+T2SB_LEDGER_PATH = os.path.join(HERE, "touch2sb_ledger.jsonl")
+POS_SNAPSHOT_PATH = os.path.join(HERE, "demo_positions.json")
+
+
+def _jst_str_epoch(s):
+    """'2026-10-23 09:45:13'(JST naive) → epoch秒。"""
+    import datetime as dt
+    d = dt.datetime.strptime(s, "%Y-%m-%d %H:%M:%S").replace(tzinfo=dt.timezone(dt.timedelta(hours=9)))
+    return int(d.timestamp())
+
+
+def build_t2(tick=None):
+    """★2026-10-26 会長GO: 本命 touch2sb(2タッチ型)のデモ実射をチャート用に束ねる。
+       点火=touch2sb_ledger(全発火・撃たなかった分も) / 実射=demo_exec_ledger(kind=live, ok) /
+       今の建玉と決着=demo_positions.json(demo_exec が20秒毎に書く読取スナップショット・MT5Demo 802307)。
+       読取のみ。発注なし。"""
+    out = {"positions": [], "fires": [], "snapshot_age_s": None, "balance": None, "equity": None}
+    lives = {}
+    try:
+        for ln in open(EXEC_LEDGER_PATH, encoding="utf-8"):
+            ln = ln.strip()
+            if not ln:
+                continue
+            try:
+                r = json.loads(ln)
+            except Exception:
+                continue
+            if r.get("kind") == "live" and str(r.get("sid", "")).startswith("T2-") and r.get("ok"):
+                lives[r["sid"]] = r
+    except Exception:
+        pass
+    try:
+        for ln in open(T2SB_LEDGER_PATH, encoding="utf-8"):
+            ln = ln.strip()
+            if not ln:
+                continue
+            try:
+                r = json.loads(ln)
+            except Exception:
+                continue
+            if r.get("kind") != "touch2sb":
+                continue
+            sid = "T2-%d" % int(r.get("confirm_time") or 0)
+            out["fires"].append({"sid": sid, "side": r.get("side"), "entry": r.get("entry"),
+                                 "sl": r.get("sl"), "tp": r.get("tp"), "wall": r.get("wall"),
+                                 "entry_time": int(r.get("entry_time") or r.get("confirm_time") or 0),
+                                 "jst": r.get("jst"), "executed": sid in lives})
+    except Exception:
+        pass
+    snap = None
+    try:
+        with open(POS_SNAPSHOT_PATH, encoding="utf-8") as f:
+            snap = json.load(f)
+        out["snapshot_age_s"] = int(time.time()) - int(snap.get("ts", 0))
+        out["balance"] = snap.get("balance"); out["equity"] = snap.get("equity")
+    except Exception:
+        snap = None
+    price = ((tick["bid"] + tick["ask"]) / 2.0) if tick else None
+    open_by = {p.get("sid"): p for p in (snap or {}).get("open", [])}
+    closed_by = {}
+    for c in (snap or {}).get("closed", []):
+        closed_by[c.get("sid")] = c
+    for sid, r in lives.items():
+        side = r.get("side")
+        entry = r.get("fill_price") or r.get("entry_ref")
+        sl = r.get("sl"); tp = r.get("tp")
+        if entry is None or sl is None or tp is None:
+            continue
+        pos = {"sid": sid, "side": side, "entry": float(entry), "sl": float(sl), "tp": float(tp),
+               "lot": r.get("lot"), "order": r.get("order"), "status": "unknown"}
+        try:
+            pos["entry_time"] = _jst_str_epoch(r.get("logged_at"))
+        except Exception:
+            pos["entry_time"] = None
+        if sid in open_by:
+            p = open_by[sid]
+            pos.update({"status": "open", "entry": p["entry"], "sl": p["sl"], "tp": p["tp"],
+                        "entry_time": p["time_open"], "profit": p.get("profit")})
+            px = price if price is not None else p.get("price_now")
+            risk = abs(pos["entry"] - pos["sl"]) or 1e-9
+            if px:
+                pos["live_r"] = round(((pos["entry"] - px) if side == "SELL" else (px - pos["entry"])) / risk, 2)
+        elif sid in closed_by:
+            c = closed_by[sid]
+            risk = abs(c["entry"] - pos["sl"]) or 1e-9
+            R = ((c["entry"] - c["exit"]) if side == "SELL" else (c["exit"] - c["entry"])) / risk
+            pos.update({"status": "closed", "entry": c["entry"], "exit": c["exit"],
+                        "entry_time": c["time_open"], "exit_time": c["time_close"],
+                        "exit_reason": c.get("reason"), "profit": c.get("profit"), "R": round(R, 2)})
+        out["positions"].append(pos)
+    out["positions"].sort(key=lambda x: x.get("entry_time") or 0)
+    return out
+
+
 def fixed_box_and_break(m5):
     """効いてる固定の壁(スイング＋タッチ)で箱を決める。ローリング最安値のように価格を追わない。
        価格が壁の外に出ていれば break(メジャードムーブ目標つき)を返す。"""
@@ -184,6 +339,20 @@ def build_data(n=1500):
     if box is None:
         box = chart_gen.current_box(m5); brk = None  # 予備2: 旧ローリング
     ai_pos = latest_ai_position(tick)
+    # ★2026-10-26: 2タッチ型デモ(touch2sb・MT5Demo 802307)の建玉と点火。本線に建玉が無ければ見出しもこちらを出す。
+    t2 = None
+    try:
+        t2 = build_t2(tick)
+        if ai_pos is None:
+            t2open = [t for t in t2.get("trades", []) if t.get("status") == "open"]
+            if t2open:
+                t = t2open[-1]
+                ai_pos = {"id": t["sid"], "side": t["side"], "entry": t["entry"], "sl": t["sl"], "tp": t["tp"],
+                          "entry_time": t.get("time"), "entry_jst": None, "wall": None, "width": None,
+                          "real_rate": None, "reason": "2タッチ型デモ(802307) " + ("%+.2f$" % t["profit"] if t.get("profit") is not None else ""),
+                          "open": True, "live_r": t.get("R") or 0.0, "lane": "t2"}
+    except Exception:
+        t2 = None
     # 大箱＝直近24h(288本・形成中は除く)の高安。会長が黄で引く「セッションの壁」と同じ定義(旧backtest Ver.1の箱)。
     # 小箱(dynamic_box)＝今の締まった範囲＝ノイズを除いた溜まり。2層を同じ画面に置いて尺度のずれを防ぐ(2026-09-25 会長)。
     bigbox = None
@@ -220,6 +389,7 @@ def build_data(n=1500):
                    for k, v in brk.items()} if brk else None),
         "damashi": damashi,
         "ai_pos": ai_pos,
+        "t2": t2,
         "range_w": chart_gen.RANGE_W,
     }
 

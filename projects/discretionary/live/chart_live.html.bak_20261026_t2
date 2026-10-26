@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>壁→壁 ライブチャート（金M5）</title>
+<style>
+  html,body{margin:0;height:100%;background:#0d1117;color:#c9d1d9;
+    font-family:-apple-system,Segoe UI,Roboto,sans-serif;-webkit-text-size-adjust:100%;overflow:hidden}
+  #hd{position:fixed;top:0;left:0;right:0;z-index:5;padding:6px 10px;font-size:12px;line-height:1.4;
+    background:rgba(13,17,23,.85);border-bottom:1px solid #21262d;backdrop-filter:blur(4px)}
+  #hd b{color:#e6edf3}
+  #badge{float:right;font-size:11px;padding:1px 8px;border-radius:10px}
+  #sub{color:#8b949e;font-size:11px}
+  /* 2026-09-25 会長: ボタン列を画面下→ヘッダー直下へ（iPhoneの下端はホームバーが反応するため）。
+     ヘッダー44px ＋ ボタン列38px ＝ 82px から下がチャート。下端は余白ゼロで安全域だけ空ける。 */
+  #chart{position:fixed;top:82px;left:0;right:0;bottom:env(safe-area-inset-bottom,0px)}
+  #zones{position:fixed;top:82px;left:0;right:0;bottom:env(safe-area-inset-bottom,0px);pointer-events:none;z-index:1}
+  #fixgrid{position:fixed;top:82px;left:0;right:0;bottom:env(safe-area-inset-bottom,0px);pointer-events:none;z-index:2}
+  #trades{position:fixed;top:82px;left:0;right:0;bottom:env(safe-area-inset-bottom,0px);pointer-events:none;z-index:3}
+  #ai{position:fixed;top:82px;left:0;right:0;bottom:env(safe-area-inset-bottom,0px);pointer-events:none;z-index:4}
+  /* 2026-10-10 情報レイヤー: 指標・構造の時刻の縦線(キャンバス) と 左下HUD(風向き/帯/次の予定/バイアス) */
+  #info{position:fixed;top:82px;left:0;right:0;bottom:env(safe-area-inset-bottom,0px);pointer-events:none;z-index:4}
+  #infohud{position:fixed;bottom:26px;left:8px;right:8px;z-index:6;display:none;font-size:11px;color:#c9d1d9;
+    background:rgba(13,17,23,.78);border:1px solid #30363d;border-radius:8px;padding:3px 8px;pointer-events:none;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #ctrl{position:fixed;left:0;right:0;top:44px;height:38px;z-index:6;display:flex;
+    align-items:center;gap:4px;padding:0 8px;background:rgba(13,17,23,.92);
+    border-bottom:1px solid #21262d;font-size:12px;overflow-x:auto;white-space:nowrap}
+  .cbtn{background:#1b2230;color:#c9d1d9;border:1px solid #30363d;border-radius:6px;
+    padding:4px 9px;font-size:13px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .cbtn:active{background:#2a3446}
+  .cbtn.on{background:#0f2b17;color:#56d364;border-color:#238636}
+  #ctrl .lab{color:#8b949e;font-size:11px}
+  #linebar{position:fixed;left:0;right:0;top:82px;height:36px;z-index:8;display:none;
+    align-items:center;gap:5px;padding:0 8px;background:rgba(13,17,23,.96);
+    border-bottom:1px solid #30363d;overflow-x:auto;white-space:nowrap;font-size:12px}
+  #linebar.on{display:flex}
+  #lbInfo{color:#c9d1d9;font-size:11px;min-width:64px}
+  .sw{display:inline-block;width:20px;height:20px;border-radius:4px;margin:0 1px;cursor:pointer;
+    border:2px solid transparent;vertical-align:middle}
+  .sw.sel{border-color:#fff}
+  #aipnl{position:fixed;top:85px;left:6px;right:6px;z-index:5;display:none;
+    background:rgba(13,17,23,.9);border:1px solid #30363d;border-radius:8px;
+    padding:5px 9px;font-size:12px;color:#e6edf3;line-height:1.45}
+  #aipnl b{color:#fff}
+  /* 2026-10-12 会長『判断を全部そのくらい簡単にまとめて出すパネルを🤖AIの買いの下に』: 信号1個＋一言 */
+  #verdict{position:fixed;top:112px;left:6px;right:6px;z-index:6;display:none;
+    background:rgba(13,17,23,.94);border:1px solid #30363d;border-left:3px solid #58a6ff;border-radius:8px;
+    padding:6px 10px;font-size:12px;color:#e6edf3;line-height:1.5}
+  #verdict .vhead{font-size:14px;margin-bottom:2px}
+  #verdict .go{display:inline-block;padding:1px 9px;border-radius:9px;font-weight:bold}
+  #verdict .ok{background:#0f2b17;color:#56d364}#verdict .ng{background:#3a1113;color:#f85149}#verdict .wa{background:#3a2a10;color:#f0a35e}
+  #verdict .vsub{color:#8b949e;font-size:11px}
+  #verdict .vrow{margin-top:1px}
+  #verdict .vtip{color:#f0a35e}
+  #verdict b{color:#fff}
+  #tradeInfo,#stats,#paper,#decide{position:fixed;top:86px;left:8px;right:8px;z-index:7;display:none;
+    background:rgba(20,26,36,.96);border:1px solid #30363d;border-radius:8px;
+    padding:7px 10px;font-size:12px;line-height:1.6;color:#e6edf3;max-height:70vh;overflow-y:auto}
+  #tradeInfo b,#stats b,#paper b,#decide b{color:#fff}
+  #tradeInfo .x,#stats .x,#paper .x,#decide .x{float:right;color:#8b949e;cursor:pointer;padding:0 4px}
+  /* 2026-10-10 判断パネル: 会長『あちこち見ずにチャートとこの1枚で分かるように』 */
+  #decide .sec{margin:5px 0 2px;color:#8b949e;font-size:11px;border-top:1px solid #21262d;padding-top:4px}
+  #decide .go{display:inline-block;padding:1px 8px;border-radius:8px;font-weight:bold}
+  #decide .ok{background:#0f2b17;color:#56d364}#decide .ng{background:#3a1113;color:#f85149}#decide .wa{background:#3a2a10;color:#f0a35e}
+  #decide table{border-collapse:collapse;width:100%}
+  #decide td{padding:0 4px;white-space:nowrap;border-bottom:1px solid #1b2230}
+  #decide td.r{text-align:right}
+  #decide tr.now td{color:#e6edf3;background:#1b2230}
+  #decide .ck{display:inline-block;margin:2px 6px 2px 0;padding:2px 8px;border:1px solid #30363d;border-radius:12px;cursor:pointer;color:#c9d1d9}
+  #decide .ck.on{background:#0f2b17;color:#56d364;border-color:#238636}
+  .chip{background:#1b2230;border:1px solid #30363d;border-radius:12px;padding:3px 9px;
+    font-size:12px;cursor:pointer;margin-left:4px;white-space:nowrap;color:#c9d1d9}
+  .chip .d{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle}
+  .tag{display:inline-block;padding:0 6px;border-radius:8px;font-size:10px;margin-right:3px}
+  .yel{background:#3a3410;color:#e3c94a}.blu{background:#0e2740;color:#58a6ff}
+  .grn{background:#0f2b17;color:#56d364}.red{background:#3a1113;color:#f85149}
+  #err{position:fixed;bottom:8px;left:10px;font-size:11px;color:#f85149;z-index:6}
+  .cmp{border-collapse:collapse;margin:2px 0;font-size:12px}
+  .cmp th,.cmp td{padding:1px 6px;text-align:right;border-bottom:1px solid #21262d;white-space:nowrap}
+  .cmp th{color:#8b949e;font-weight:normal}
+  .cmp td:first-child,.cmp th:first-child{text-align:left;color:#8b949e}
+</style></head><body>
+<div id="hd">
+  <span id="badge"></span>
+  <b id="sym">XAUUSD 金 M5</b> <span id="px"></span><br>
+  <span id="sub">
+    <span class="tag yel">黄=箱上下壁</span><span class="tag blu">青=中間</span>
+    <span class="tag grn">緑=TP</span><span class="tag red">赤=SL</span>
+    <span id="wallinfo"></span>
+  </span>
+</div>
+<div id="chart"></div>
+<canvas id="zones"></canvas>
+<canvas id="fixgrid"></canvas>
+<canvas id="trades"></canvas>
+<canvas id="ai"></canvas>
+<canvas id="info"></canvas>
+<div id="ctrl">
+  <button class="cbtn" id="addLine" title="水平線を追加">＋線</button>
+  <span class="lab">マス</span>
+  <button class="cbtn" id="cellDn">−</button>
+  <button class="cbtn" id="cellUp">＋</button>
+  <button class="cbtn" id="fit" title="全体表示に戻す">⤢ 全体</button>
+  <button class="cbtn on" id="zonesBtn" title="時間帯シェード(本物帯/ダマシ巣)">時間帯</button>
+  <button class="cbtn" id="statsBtn" title="溜まり幅・壁までの余地">📊 情報</button>
+  <button class="cbtn" id="paperBtn" title="AIのセットアップ記録（集計・会長トレードとの紐付け）">🤖 AI</button>
+  <button class="cbtn on" id="infoBtn" title="情報レイヤー: 厚い行使価格(紫)・指標時刻(縦線)・風向き/帯/バイアス(左下)">📡 材料</button>
+  <button class="cbtn" id="decideBtn" title="判断パネル: 時間・天気・地図(壁の一覧)・型チェック・成績を1枚に">🧭 判断</button>
+</div>
+<div id="linebar">
+  <span id="lbInfo">線</span>
+  <span id="swatches"></span>
+  <span class="lab" style="margin-left:4px">太</span>
+  <button class="cbtn" id="wDn">−</button><button class="cbtn" id="wUp">＋</button>
+  <button class="cbtn" id="delLine" style="color:#f85149">削除</button>
+  <button class="cbtn on" id="doneLine">確定</button>
+</div>
+<div id="aipnl"></div>
+<div id="verdict"></div>
+<div id="stats"></div>
+<div id="paper"></div>
+<div id="tradeInfo"></div>
+<div id="decide"></div>
+<div id="err"></div>
+<div id="infohud"></div>
+<script src="/lightweight-charts.js"></script>
+<script>
+const LWC = window.LightweightCharts;
+const JST = 9*3600;                       // epoch(UTC秒)→JST表示用オフセット
+function jstLabel(t, withDate){
+  const d = new Date((t + JST)*1000);
+  const hh = String(d.getUTCHours()).padStart(2,'0');
+  const mm = String(d.getUTCMinutes()).padStart(2,'0');
+  if (withDate){ return (d.getUTCMonth()+1)+'/'+d.getUTCDate()+' '+hh+':'+mm; }
+  return hh+':'+mm;
+}
+const chart = LWC.createChart(document.getElementById('chart'), {
+  autoSize:true,
+  layout:{ background:{color:'#0d1117'}, textColor:'#c9d1d9' },
+  grid:{ vertLines:{visible:false}, horzLines:{visible:false} },   // 標準格子はオフ→固定ピクセルのマスを別途描く
+  crosshair:{ mode: LWC.CrosshairMode.Normal },
+  rightPriceScale:{ borderColor:'#30363d' },
+  // MT5同様: 指ドラッグで縦横に動かす・ピンチ/ホイールでズーム・軸ドラッグでスケール
+  handleScroll:{ mouseWheel:true, pressedMouseMove:true, horzTouchDrag:true, vertTouchDrag:true },
+  handleScale:{ mouseWheel:true, pinch:true, axisPressedMouseMove:{time:true, price:true} },
+  timeScale:{ borderColor:'#30363d', timeVisible:true, secondsVisible:false,
+    rightOffset:6, barSpacing:9, minBarSpacing:2,
+    tickMarkFormatter:(t)=>jstLabel(t,false) },
+  localization:{ timeFormatter:(t)=>jstLabel(t,true), priceFormatter:(p)=>p.toFixed(2) },
+});
+const series = chart.addCandlestickSeries({
+  upColor:'#2f81f7', downColor:'#e6edf3', borderUpColor:'#2f81f7',    // 上昇=青 / 下降=白（会長のMT5に合わせる）
+  borderDownColor:'#c9d1d9', wickUpColor:'#2f81f7', wickDownColor:'#c9d1d9',
+  priceFormat:{ type:'price', precision:2, minMove:0.01 },
+});
+
+let lastTime = 0;         // 既知の最終バー時刻
+let allBars = [];         // 直近バー配列（トレード時刻のバー吸着・先端合わせ用）
+let wallLines = [];       // 壁/TP/SL（10秒ごと更新）
+let statsOn = false, lastBox = null, lastBreak = null, curPx = null;  // B2/B3 情報パネル用
+let lastDamashi = null;   // C1 ダマシ確率メーター（時間帯本物率）
+let lastBig = null;       // 大箱(直近24hの高安)＝会長の黄壁の尺度
+let tradeStats = null;    // D1 会長の現状成績（/api/stats・台帳の集計）
+let aiStats = null;       // D1 AI側の成績（同じ /api/stats の ai: all=全期間 / same=会長の初弾以降）
+let curLine = null;       // 現在価格ライン（毎秒 applyOptions で追従）
+let firstLoad = true;
+
+function setBadge(live){
+  const badge = document.getElementById('badge');
+  badge.textContent = live ? '● LIVE' : '○ 履歴';
+  badge.style.cssText = 'float:right;font-size:11px;padding:1px 8px;border-radius:10px;'+
+    (live?'background:#0f2b17;color:#56d364':'background:#2a2a2a;color:#999');
+}
+function setWallLines(box, brk, big){
+  for (const pl of wallLines) series.removePriceLine(pl);
+  wallLines = [];
+  const add = (price,color,style,title)=>{ if(price==null) return;
+    wallLines.push(series.createPriceLine({ price, color, lineWidth:1,
+      lineStyle:style, axisLabelVisible:true, title })); };
+  if (big){                                              // 大箱(24h高安)=会長の黄壁と同じ定義。細い黄破線
+    add(big.up,'rgba(227,201,74,0.55)',LWC.LineStyle.Dashed,'大箱上');
+    add(big.dn,'rgba(227,201,74,0.55)',LWC.LineStyle.Dashed,'大箱下');
+  }
+  if (box){
+    add(box.up,'#e3c94a',LWC.LineStyle.Solid,'上壁');    // 壁は実線
+    add(box.dn,'#e3c94a',LWC.LineStyle.Solid,'下壁');
+    add(box.mid,'#58a6ff',LWC.LineStyle.Solid,'中間');
+  }
+  if (brk){
+    add(brk.tp,'#56d364',LWC.LineStyle.Dashed,'TP');
+    add(brk.sl,'#f85149',LWC.LineStyle.Dotted,'SL');
+  }
+}
+function setCurrent(nowPx){
+  if (nowPx==null) return;
+  if (curLine==null){
+    curLine = series.createPriceLine({ price:nowPx, color:'#c9d1d9',
+      lineWidth:1, lineStyle:LWC.LineStyle.Dotted, axisLabelVisible:true, title:'現在' });   // 現在価格=点線
+  } else {
+    curLine.applyOptions({ price:nowPx });
+  }
+}
+
+// フル更新（バー全体＋壁）: 初回とその後10秒ごと
+async function pollData(){
+  try{
+    const r = await fetch('/api/data?n=1500', {cache:'no-store'});
+    const d = await r.json();
+    document.getElementById('err').textContent = '';
+    const bars = d.bars || [];
+    if (firstLoad){ series.setData(bars); chart.timeScale().fitContent(); firstLoad=false; }
+    else { for (const b of bars){ if (b.time >= lastTime) series.update(b); } }
+    if (bars.length){ lastTime = bars[bars.length-1].time; allBars = bars; }
+    setWallLines(d.box, d.break, d.bigbox);
+    lastBox = d.box; lastBreak = d.break; lastDamashi = d.damashi; lastBig = d.bigbox||null;   // B2/B3/C1 用に保持
+    setBadge(d.source==='live');
+    let wi = '';
+    if (d.box) wi += ' ｜ 箱幅'+d.box.width.toFixed(1);
+    if (d.break) wi += ' ｜ 直近ブレイク'+(d.break.dir==='UP'?'上':'下')+' 壁'+d.break.wall.toFixed(1)
+      +'→TP'+d.break.tp.toFixed(1)+'/SL'+d.break.sl.toFixed(1);
+    document.getElementById('wallinfo').textContent = wi;
+    aiPos = d.ai_pos || null; updateAiPnl();   // AURELの建玉（見出し）
+    fetchSetups();   // AURELのセットアップ記録（MT5式オーバーレイ）
+    fetchTrades();   // 会長の過去トレード（既定オフ）
+    fetchInfo();     // 情報レイヤー（厚い行使価格・指標時刻・風向き）
+  }catch(e){ document.getElementById('err').textContent = '接続待ち… '+(e&&e.message?e.message:e); }
+}
+
+// 常時追従（軽量）: 毎秒 現在値＋形成中ローソクだけ更新（パン/ズームは壊さない）
+async function pollTick(){
+  try{
+    const r = await fetch('/api/tick', {cache:'no-store'});
+    const d = await r.json();
+    for (const b of (d.lastbars||[])){ if (b.time >= lastTime) series.update(b); }
+    if (d.lastbars && d.lastbars.length) lastTime = Math.max(lastTime, d.lastbars[d.lastbars.length-1].time);
+    const tick = d.tick, nowPx = tick ? (tick.bid+tick.ask)/2 : null;
+    setCurrent(nowPx);
+    curPx = nowPx; updateStats(); updateAiPnl();   // 毎秒: AI建玉の損益も追う
+    updateInfoHud();                                // 毎秒: 次の予定までのカウントダウン
+    setBadge(d.source==='live');
+    document.getElementById('px').textContent = tick
+      ? ('  '+nowPx.toFixed(2)+'  (spread '+tick.spread_bps.toFixed(2)+'bps)') : '';
+  }catch(e){ /* 毎秒なので一時失敗は無視（次の tick で復帰） */ }
+}
+
+// ── B2 溜まり幅メーター ＋ B3 次壁までの余地ゲージ（常時読める情報パネル）──
+function fmtSigned(v){ return (v>=0?'+':'')+v.toFixed(1); }
+function updateStats(){
+  const el=document.getElementById('stats'); if(!el) return;
+  if(!statsOn){ el.style.display='none'; return; }
+  if(curPx==null||!lastBox){ el.innerHTML='データ待ち…'; el.style.display='block'; return; }
+  const b=lastBox, up=b.up-curPx, dn=curPx-b.dn;
+  const near=Math.min(Math.abs(up),Math.abs(dn)), warn = near<=b.width*0.10;
+  let h='<span class="x" id="stX">✕</span>';
+  h+='<b>現在 '+curPx.toFixed(2)+'</b><br>';
+  h+='小箱(今): 上'+b.up.toFixed(1)+' / 中'+b.mid.toFixed(1)+' / 下'+b.dn.toFixed(1)
+     +' ・ 溜まり幅 <b>'+b.width.toFixed(1)+'</b><br>';
+  if(lastBig){                                          // 大箱＝24h高安。会長の黄壁の尺度。目安=小箱の溜まり分を壁から測った到達点
+    h+='<span style="color:#e3c94a">大箱(24h): 上'+lastBig.up.toFixed(1)+' / 下'+lastBig.dn.toFixed(1)+' ・ 幅 <b>'+lastBig.width.toFixed(1)+'</b></span>'
+      +' <span style="color:#8b949e">溜まり分の目安: 下抜けなら'+(b.dn-b.width).toFixed(1)+' / 上抜けなら'+(b.up+b.width).toFixed(1)+'</span><br>';
+  }
+  h+='余地: 上壁まで <b>'+fmtSigned(up)+'</b> ／ 下壁まで <b>'+fmtSigned(-dn)+'</b>'
+     +(warn?' <span style="color:#f0a35e">← 壁に接近</span>':'')+'<br>';
+  const k=lastBreak;
+  if(k){
+    const tpRem=Math.abs(k.tp-curPx), rr=Math.abs(k.tp-k.wall)/Math.max(1e-9,Math.abs(k.wall-k.sl));
+    const prog=(curPx-k.wall)/((k.tp-k.wall)||1)*100;
+    h+='直近ブレイク: '+(k.dir==='UP'?'上▲':'下▼')+' 壁'+k.wall.toFixed(1)+' 幅'+k.width.toFixed(1)
+      +' → TP'+k.tp.toFixed(1)+'（残り<b>'+tpRem.toFixed(1)+'</b>）／ SL'+k.sl.toFixed(1)
+      +' ・ RR≈'+rr.toFixed(1)
+      +'<br>メジャードムーブ達成 <b>'+Math.max(0,Math.min(100,prog)).toFixed(0)+'%</b>';
+  } else { h+='直近ブレイク: なし（レンジ内）'; }
+  // C1 ダマシ確率メーター（時間帯本物率）
+  const dm=lastDamashi;
+  if(dm){
+    const rr=dm.real_rate, base=dm.base;
+    const col = rr>=base+3?'#56d364' : (rr<=base-3?'#f85149':'#e3c94a');
+    const bar = '█'.repeat(Math.round(rr/5)) ;
+    h+='<br><span style="color:'+col+'">本物率(JST'+dm.jst_hour+'時) <b>'+rr.toFixed(0)+'%</b></span>'
+      +' <span style="color:#8b949e">(平均'+base.toFixed(0)+'% / 機械n='+dm.n+')</span>'
+      +'<br><span style="color:'+col+';letter-spacing:-1px">'+bar+'</span>'
+      +(rr<=base-3?' <span style="color:#f85149">ダマシ多め</span>':'')
+      +(rr>=base+3?' <span style="color:#56d364">本物寄り</span>':'');
+  }
+  // D1 会長の現状成績（台帳・実弾のみ。数字は検証室 aurel_trade_room.stats と同一＝チャットの『成績:』行と揃う）
+  const ts=tradeStats;
+  if(ts){
+    const fR=v=>v==null?'-':(v>=0?'+':'')+Number(v).toFixed(2)+'R';
+    const cR=v=>v==null?'#8b949e':(v>=0?'#56d364':'#f85149');
+    const dots=(rs,pre)=>(rs||[]).map(t=>'<span style="color:'+cR(t.R)+'">●</span>').join('');
+    const n=ts.trades, c=ts.closed, o=ts.open;
+    h+='<hr style="border:0;border-top:1px solid #30363d;margin:5px 0">';
+    h+='<b>📒 成績くらべ</b> <span style="color:#8b949e">会長=実弾(台帳) ／ AI=戻り目エントリーの紙・スプレッド＋手数料を控除済み(net)</span><br>';
+    // 3列: 会長 / AI(会長の初弾以降＝同期間) / AI(全期間)
+    const ai=aiStats||{}, same=ai.same||{n:0}, all=ai.all||{n:0}, re=ai.reaccel_same||{n:0}, reAll=ai.reaccel||{n:0};
+    const ow=ai.outer||{}, owAll=ow.all||{n:0};
+    const cols=[{k:'会長',s:{n:c,wins:ts.wins,losses:ts.losses,winrate:ts.winrate,sumR:ts.sumR,avgR:ts.avgR,maxDD_R:ts.maxDD_R,recent:ts.recent}},
+                {k:'AI同期間',s:same},{k:'AI全体',s:all},{k:'<span style="color:#58a6ff">AI外壁</span>',s:owAll},{k:'<span style="color:#f0a35e">AI再加速</span>',s:re}];
+    const cell=(f)=>cols.map(cl=>'<td>'+(cl.s.n?f(cl.s):'-')+'</td>').join('');
+    h+='<table class="cmp"><tr><th></th>'+cols.map(cl=>'<th>'+cl.k+'</th>').join('')+'</tr>';
+    h+='<tr><td>本数</td>'+cols.map(cl=>'<td>'+(cl.s.n||0)+(cl.k==='会長'&&o?'<span style="color:#8b949e">+'+o+'</span>':'')+'</td>').join('')+'</tr>';
+    h+='<tr><td>勝敗</td>'+cell(s=>s.wins+'勝'+s.losses+'敗')+'</tr>';
+    h+='<tr><td>勝率</td>'+cell(s=>Number(s.winrate).toFixed(0)+'%')+'</tr>';
+    h+='<tr><td>合計R</td>'+cell(s=>'<b style="color:'+cR(s.sumR)+'">'+fR(s.sumR)+'</b>')+'</tr>';
+    h+='<tr><td>平均R</td>'+cell(s=>'<span style="color:'+cR(s.avgR)+'">'+fR(s.avgR)+'</span>')+'</tr>';
+    h+='<tr><td>最大DD</td>'+cell(s=>Number(s.maxDD_R).toFixed(1)+'R')+'</tr>';
+    h+='<tr><td>直近</td>'+cell(s=>'<span style="letter-spacing:-1px">'+dots(s.recent)+'</span>')+'</tr>';
+    h+='</table>';
+    if(c){
+      h+='<span style="color:#8b949e">会長の直近:</span> '+(ts.recent||[]).map(t=>
+          '<span style="color:'+cR(t.R)+'">●</span>'+t.id.replace(/^T-0+/,'T')+(t.R==null?'(建玉中)':'('+fR(t.R)+')')).join(' ')+'<br>';
+    } else { h+='会長の確定トレードなし<br>'; }
+    const fixN=30, seg=Math.round(Math.min(fixN,c)/fixN*10);
+    h+='<span style="color:#8b949e">会長 手順固定まで '+c+'/'+fixN+' </span>'
+      +'<span style="color:#e3c94a;letter-spacing:-1px">'+'█'.repeat(seg)+'</span>'
+      +'<span style="color:#30363d;letter-spacing:-1px">'+'█'.repeat(10-seg)+'</span>'
+      +' <span style="color:#8b949e">事前'+ts.pre+'/事後'+ts.post_only+'</span>'
+      +(c<fixN?' <span style="color:#f0a35e">サンプル不足</span>':' <span style="color:#56d364">30本到達</span>');
+    if(all.n){
+      const cst=ai.cost||{}, g=ai.all_gross||{}, sg=ai.same_gross||{};
+      const srcs=Object.entries(cst.sources||{}).map(([k,v])=>k+v).join('/');
+      h+='<br><span style="color:#8b949e">AI 決着'+all.n+'本'+(ai.open?'・建玉中'+ai.open:'')
+        +' ／ コスト平均'+(cst.avg_cost_pt!=null?cst.avg_cost_pt.toFixed(2):'-')+'pt(スプレッド'+(srcs||'-')+'＋手数料'+cst.commission_pt+')'
+        +' ／ 控除前: 同期間'+(sg.n?fR(sg.sumR):'-')+'・全体'+(g.n?fR(g.sumR):'-');
+      const ss=cst.slip_summary;
+      if(ss && ss.entry_slip_1){
+        h+='<br>滑り(ティック再現・1秒後約定): 入口 中央値'+ss.entry_slip_1.median+'pt/上位10%'+ss.entry_slip_1.p90+'pt'
+          +' ／ SL発動 中央値'+(ss.sl.median!=null?ss.sl.median:'-')+'pt/最大'+(ss.sl.max!=null?ss.sl.max:'-')+'pt'
+          +' ／ 実測'+(cst.slip_measured||0)+'本';
+      }
+      if((ai.tp_miss||[]).length){ h+='<br><span style="color:#f0a35e">TP不成立 '+ai.tp_miss.length+'本('+ai.tp_miss.join(',')+')＝紙はTP到達だが実際の指値は届かず→netから除外</span>'; }
+      if(reAll.n){ const rg=ai.reaccel_gross||{}, rsg=ai.reaccel_same_gross||{}, rst=ai.reaccel_status||{};
+        h+='<br><span style="color:#f0a35e">AI再加速</span>(会長型: リテスト後の直前足安値割れで入る・壁/TPは同じ・SLは構造の外) 決着'+reAll.n+'本 全体'+fR(reAll.sumR)+'(平均'+fR(reAll.avgR)+')'
+          +' ／ 控除前: 同期間'+(rsg.n?fR(rsg.sumR):'-')+'・全体'+(rg.n?fR(rg.sumR):'-')
+          +' ／ 不発'+(rst.no_trigger||0)+'・崩壊'+(rst.invalid||0)+'・戻りなし'+(rst.no_retest||0); }
+      // ★2026-10-24 会長GO: 再加速×地合い(会長仮説『トレンドでも保つ』の採点欄)＋肥料デモ(全部撃ち)の出口判定
+      const rgm=ai.regime||{}, rl=(rgm.lanes||{})['再加速(全)'], fert=ai.fert||{};
+      if(rl){ const t=rl.trend||{n:0}, c=rl.chop||{n:0}, cov=rgm.coverage||{};
+        h+='<br><span style="color:#f0a35e">再加速×地合い</span>(会長仮説10-24『トレンドでも保つ』・ブレイク時ER≥'+rgm.trend_th+'=トレンド・ラベル済'+(cov.reaccel_closed_labeled||0)+'/'+(cov.reaccel_closed_total||0)+'本=部分)'
+          +' トレンド <b>'+t.n+'/30本</b> '+(t.n?fR(t.sum_R)+'(平均'+fR(t.avg_R)+')':'-')
+          +' ／ チョップ '+c.n+'本 '+(c.n?fR(c.sum_R)+'(平均'+fR(c.avg_R)+')':'-')
+          +(t.n<30?' ＝<span style="color:#8b949e">サンプル不足・30本まで判定しない</span>':''); }
+      if(fert.all){ const fa=fert.all||{n:0}, fk=fert.keep||{n:0}, fd=fert.drop||{n:0}, ex=fert.exit_rule||{}, ft=fert.trend||{n:0};
+        h+='<br><span style="color:#f0a35e">肥料デモ806809</span>(再加速・逆指値=紙と同じ点火・10-24GO 採用+除外 全部撃ち) 確定'+fa.n+'本 '+(fa.n?fR(fa.sum_R)+'(平均'+fR(fa.avg_R)+'・'+fa.profit_usd+'$)':'-')
+          +' ／ 採用 '+fk.n+'本 '+(fk.n?fR(fk.sum_R):'-')+'・除外 '+fd.n+'本 '+(fd.n?fR(fd.sum_R):'-')
+          +' ／ トレンド側 '+ft.n+'/30本 ／ 出口(事前固定・全部撃ち30本でネット<0なら採用のみへ): '+(ex.verdict||'-'); }
+      const v1=ai.v1||{};
+      if(v1.keep){ const w=v1.weather||{}, k=v1.keep, d=v1.drop||{n:0}, fw=v1.forward||{n:0}, rk=v1.reaccel_keep||{n:0};
+        const wx = w.rain_rate==null ? '判定保留' : ((w.rain?'<b style="color:#f85149">☔ 雨</b>':'<b style="color:#56d364">☀ 晴れ</b>')+'(直前'+w.rain_n+'本ダマシ'+Math.round(w.rain_rate*100)+'%)');
+        h+='<br><span style="color:#e3c94a">雨の日ルール v1</span>(会長GO '+v1.frozen_at+'・しきい値凍結) 今: '+wx
+          +' ／ 採用側 '+k.n+'本 '+fR(k.sumR)+'(勝率'+Number(k.winrate).toFixed(0)+'%・DD'+Number(k.maxDD_R).toFixed(1)+'R)'
+          +' ／ 除外側 '+d.n+'本 '+(d.n?fR(d.sumR):'-')
+          +' ／ 再加速×採用 '+rk.n+'本 '+(rk.n?fR(rk.sumR):'-')
+          +'<br><span style="color:#8b949e">凍結後(前向き・本番の答え合わせ): 採用 '+fw.n+'/30本 '+(fw.n?fR(fw.sumR):'-')+'・除外 '+((v1.forward_drop||{}).n||0)+'本 '+(((v1.forward_drop||{}).n)?fR(v1.forward_drop.sumR):'-')+'</span>'; }
+      if(owAll.n){ const ok=ow.keep||{n:0}, om=ow.mid||{n:0}, omk=ow.mid_keep||{n:0}, ofk=ow.forward_keep||{n:0}, of=ow.forward||{n:0}, ork=ow.reaccel_keep||{n:0}, or_=ow.reaccel||{n:0};
+        const w3=(s)=>s.n?(s.n+'本 '+fR(s.sumR)+'(勝率'+Number(s.winrate).toFixed(0)+'%・DD'+Number(s.maxDD_R).toFixed(1)+'R)'):'-';
+        h+='<br><span style="color:#58a6ff">外壁のみ</span>(会長GO '+(ow.go||'')+'・影欄: 箱の外壁(黄)ブレイクだけ・中間(青)を除く・表示のみ)'
+          +' 外壁 '+w3(owAll)+' ／ 中間 '+(om.n?om.n+'本 '+fR(om.sumR):'-')
+          +' ／ <b>外壁×採用</b> '+w3(ok)+' ／ 中間×採用 '+(omk.n?omk.n+'本 '+fR(omk.sumR):'-')
+          +' ／ 再加速×外壁 '+(or_.n?or_.n+'本 '+fR(or_.sumR):'-')+'・再加速×外壁×採用 '+w3(ork)
+          +'<br><span style="color:#8b949e">凍結後(前向き): <b>外壁×採用 '+ofk.n+'/30本 '+(ofk.n?fR(ofk.sumR):'-')+'</b>・外壁全部 '+of.n+'本 '+(of.n?fR(of.sumR):'-')+' ＝本命の物差し。30本まで判定しない。</span>'; }
+      h+='<br>差の判定は両者とも約100本から。AI同期間/全体は戻り目で入る＝会長と建値が違う。AI再加速は会長の入り方の写し(2026-09-29 GO)。</span>';
+    }
+  }
+  h+=progressHtml(false);
+  el.innerHTML=h; el.style.display='block';
+  const x=document.getElementById('stX'); if(x) x.onclick=()=>{ statsOn=false;
+    el.style.display='none'; document.getElementById('statsBtn').classList.remove('on'); };
+}
+document.getElementById('statsBtn').onclick=(e)=>{ statsOn=!statsOn;
+  e.currentTarget.classList.toggle('on',statsOn); updateStats(); };
+
+// ── 収束ループ: AURELのセットアップ記録（/api/setups）。チャートにMT5式で乗せ、集計は短く。──
+let setups=[], setupSummary=null, paperOn=false;
+async function fetchSetups(){
+  try{ const r=await fetch('/api/setups',{cache:'no-store'}); const d=await r.json();
+       setups=d.setups||[]; setupSummary=d.summary||null; drawSetups(); updateAiPnl(); if(paperOn) updatePaper(); }catch(e){}
+}
+function fmtR(v){ return (v>=0?'+':'')+Number(v).toFixed(2)+'R'; }
+function updatePaper(){
+  const el=document.getElementById('paper'); if(!el) return;
+  if(!paperOn){ el.style.display='none'; return; }
+  el.style.display='block';
+  const s=setupSummary;
+  let h='<span class="x" id="pX">✕</span>';
+  if(!s||!s.n_setups){ h+='🤖 AI: まだ記録なし（2分ごとに貯まる）'; }
+  else{
+    const a=s.all||{n:0}, rc=(a.avg_r>=0)?'#56d364':'#f85149';
+    h+='<b>🤖 AIのセットアップ記録</b> <span style="color:#8b949e">（紙・発注なし・会長の実とは別）</span><br>';
+    h+='決着 <b>'+s.n_closed+'</b>本（建玉中'+(s.status.open||0)+'・戻りなし'+(s.status.no_retest||0)+'・失敗'+(s.status.invalid||0)+'）<br>';
+    if(a.n){
+      h+='本物率 実測 <b>'+a.tp_rate+'%</b> ／ AI事前予測 '+(a.pred_rate!=null?a.pred_rate+'%':'-')
+        +' ／ 平均R <b style="color:'+rc+'">'+fmtR(a.avg_r)+'</b><br>';
+      const g=(x,lab)=>x&&x.n?('　'+lab+' n'+x.n+' 本物率'+x.tp_rate+'% '+fmtR(x.avg_r)+'<br>'):'';
+      h+=g(s.outer,'外壁(黄)')+g(s.mid,'中間(青)');
+      h+=g(s.chase,'即追い変種');
+      h+=g(s.reaccel,'<span style="color:#f0a35e">再加速変種(会長型)</span>');
+      if(s.reaccel_status){ const q=s.reaccel_status; h+='　<span style="color:#8b949e">再加速: 建玉中'+(q.open||0)+'・待ち'+(q.waiting||0)+'・不発'+(q.no_trigger||0)+'・崩壊'+(q.invalid||0)+'・戻りなし'+(q.no_retest||0)+'</span><br>'; }
+      const zc={'本物帯':'#56d364','ダマシ巣':'#f85149','中立':'#e3c94a'};
+      for(const z of ['本物帯','中立','ダマシ巣']){ const v=s.by_zone&&s.by_zone[z]; if(!v||!v.n) continue;
+        h+='　<span style="color:'+zc[z]+'">'+z+'</span> n'+v.n+' 本物率'+v.tp_rate+'% '+fmtR(v.avg_r)+'<br>'; }
+    }
+    h+='会長の実トレードと紐付け <b>'+s.linked+'</b>本（評価一致 '+s.agree+'）<br>';
+    h+='<span style="color:#f0a35e">信頼度 '+s.confidence+'</span><br>';
+    const last=setups.filter(x=>x.status==='closed'||x.status==='open').slice(-5).reverse();
+    if(last.length){ h+='<span style="color:#8b949e">直近:</span><br>';
+      for(const t of last){ const c=t.exit_reason==='TP'?'#56d364':(t.exit_reason==='SL'?'#f85149':'#8b949e');
+        const res=t.status==='open'?('建玉中 '+(t.live_r!=null?fmtR(t.live_r):'')):(t.outcome||'')+' '+(t.R!=null?fmtR(t.R):'');
+        h+='　'+t.id+' '+(t.side==='BUY'?'買':'売')+(t.wall_kind==='mid'?'(青)':'(黄)')
+          +' <span style="color:'+c+'">'+res+'</span> <span style="color:#8b949e">'+(t.entry_jst||t.break_jst||'')
+          +(t.chairman?' ⇔ '+t.chairman.id:'')+'</span><br>'; } }
+    h+='<span style="color:#8b949e;font-size:11px">※gross・スプレッド未控除。TP=溜まり幅1個(壁↔中間)、SL=壁の内側。</span><br>';
+    h+='<button class="cbtn'+(showAiHistory?' on':'')+'" id="aiHistBtn" style="margin-top:4px">過去のAI建玉もチャートに描く</button>';
+  }
+  el.innerHTML=h;
+  const hb=document.getElementById('aiHistBtn'); if(hb) hb.onclick=()=>{ showAiHistory=!showAiHistory; drawSetups(); updatePaper(); };
+  const x=document.getElementById('pX'); if(x) x.onclick=()=>{ paperOn=false; el.style.display='none';
+    document.getElementById('paperBtn').classList.remove('on'); };
+}
+document.getElementById('paperBtn').onclick=(e)=>{ paperOn=!paperOn;
+  e.currentTarget.classList.toggle('on',paperOn); updatePaper(); };
+
+pollData();
+setInterval(pollData, 10000);     // フルは10秒ごと（壁の再計算・取りこぼし補正）
+setInterval(pollTick, 1000);      // 現在値は毎秒＝常に追ってる状態
+
+const DPR = Math.max(1, window.devicePixelRatio||1);
+const chartEl = document.getElementById('chart');
+
+// ── 固定ピクセルのマス（MT5式）: マスは画面に固定＝何を動かしても動かない/大きさ不変。
+//    チャートを縦(価格軸ドラッグ)・横に伸縮させ、壁線をこの固定マスに合わせてマス数を数える。──
+const fixCanvas=document.getElementById('fixgrid'), fgctx=fixCanvas.getContext('2d');
+let cellPx=42;                       // マスの1辺(画面px・固定)。「マス −/＋」でだけ変わる
+function drawFixedGrid(){
+  const w=chartEl.clientWidth, h=chartEl.clientHeight;
+  fitCanvas(fixCanvas,w,h);
+  fgctx.setTransform(DPR,0,0,DPR,0,0); fgctx.clearRect(0,0,w,h);
+  fgctx.strokeStyle='rgba(140,160,190,0.15)'; fgctx.lineWidth=1;
+  for(let y=0;y<=h;y+=cellPx){ fgctx.beginPath(); fgctx.moveTo(0,Math.round(y)+0.5); fgctx.lineTo(w,Math.round(y)+0.5); fgctx.stroke(); }
+  for(let x=0;x<=w;x+=cellPx){ fgctx.beginPath(); fgctx.moveTo(Math.round(x)+0.5,0); fgctx.lineTo(Math.round(x)+0.5,h); fgctx.stroke(); }
+}
+document.getElementById('cellUp').onclick=()=>{ cellPx=Math.min(120,cellPx+6); drawFixedGrid(); };
+document.getElementById('cellDn').onclick=()=>{ cellPx=Math.max(16,cellPx-6); drawFixedGrid(); };
+drawFixedGrid();
+
+// ── A2: JST時間帯シェード（本物帯07-12=緑 / ダマシ巣00-05=赤）──
+const zonesCanvas = document.getElementById('zones');
+const zctx = zonesCanvas.getContext('2d');
+let showZones = true;
+function zoneOf(t){ const jh=Math.floor(((t+JST)%86400)/3600);
+  if(jh>=7&&jh<12) return 'real'; if(jh>=0&&jh<5) return 'trap'; if(jh===6) return 'roll'; return null; }   // 06時台=ロールオーバー(スプレッド拡大)
+function drawZones(){
+  const w=chartEl.clientWidth, h=chartEl.clientHeight;
+  fitCanvas(zonesCanvas,w,h);
+  zctx.setTransform(DPR,0,0,DPR,0,0); zctx.clearRect(0,0,w,h);
+  if(!showZones||!allBars.length) return;
+  const tsc=chart.timeScale(); const sp=(tsc.options().barSpacing||8);
+  // 表示中のバーだけを見る（全1500本を毎回計算しない＝パンを重くしない）
+  const lr=tsc.getVisibleLogicalRange();
+  let i0=0, i1=allBars.length-1;
+  if(lr){ i0=Math.max(0,Math.floor(lr.from)-1); i1=Math.min(allBars.length-1,Math.ceil(lr.to)+1); }
+  let runZone=null, runStartX=null, prevX=null;
+  const flush=(endX)=>{ if(runZone&&runStartX!=null&&endX!=null){
+    zctx.fillStyle = runZone==='real'?'rgba(38,166,65,0.09)':(runZone==='roll'?'rgba(240,163,94,0.11)':'rgba(248,81,73,0.09)');
+    zctx.fillRect(runStartX,0,Math.max(1,endX-runStartX),h); } };
+  for(let i=i0;i<=i1;i++){
+    const b=allBars[i]; const x=tsc.timeToCoordinate(b.time);
+    if(x==null){ if(runZone){ flush(prevX!=null?prevX+sp/2:null); runZone=null; } continue; }
+    const z=zoneOf(b.time);
+    if(z!==runZone){ flush(prevX!=null?prevX+sp/2:null); runZone=z; runStartX=x-sp/2; }
+    prevX=x;
+  }
+  flush(prevX!=null?prevX+sp/2:null);
+}
+document.getElementById('zonesBtn').onclick=(e)=>{ showZones=!showZones;
+  e.currentTarget.classList.toggle('on',showZones); redrawOverlays(); };
+
+// ── AURELの建玉を MT5式に重ねる: 建値線＋SL赤帯＋TP緑帯を「入った所から出た所まで」だけ、薄く。建玉中は濃く。──
+const aiCanvas=document.getElementById('ai'), aictx=aiCanvas.getContext('2d');
+let aiPos=null;              // /api/data の ai_pos（建玉中の見出し用）
+// ★キャンバスの実サイズ(=DPR倍)とCSS表示サイズを必ず一致させる。
+//   これが無いとスマホ(DPR=3)で描画が3倍に引き伸ばされ「文字が巨大・位置がズレて自由に動く」ように見える。
+function fitCanvas(cv,w,h){
+  const W=Math.round(w*DPR), H=Math.round(h*DPR);
+  if(cv.width!==W||cv.height!==H){ cv.width=W; cv.height=H; }
+  if(cv.style.width!==w+'px'){ cv.style.width=w+'px'; }
+  if(cv.style.height!==h+'px'){ cv.style.height=h+'px'; }
+}
+let showAiHistory=false;     // 既定: チャートには「今のAI建玉」だけ。過去は🤖AIパネルの一覧で見る
+function drawSetups(){
+  const w=chartEl.clientWidth, h=chartEl.clientHeight;
+  fitCanvas(aiCanvas,w,h);
+  aictx.setTransform(DPR,0,0,DPR,0,0); aictx.clearRect(0,0,w,h);
+  if(!showPaper||!setups.length||!allBars.length) return;
+  const tsc=chart.timeScale();
+  const lr=tsc.getVisibleLogicalRange();
+  const tFrom = lr ? (allBars[Math.max(0,Math.floor(lr.from))]||allBars[0]).time - 300 : 0;
+  const tTo   = lr ? (allBars[Math.min(allBars.length-1,Math.ceil(lr.to))]||allBars[allBars.length-1]).time + 300 : 1e12;
+  for(const s of setups){
+    if(!(s.status==='open'||s.status==='closed') || s.entry==null || s.entry_time==null) continue;
+    if(!showAiHistory && s.status!=='open') continue;              // 過去の建玉は既定で描かない（引き算）
+    const et=nearestBarTime(s.entry_time); if(et==null) continue;
+    const xt = s.exit_time!=null ? nearestBarTime(s.exit_time) : null;
+    const endT = xt!=null ? xt : allBars[allBars.length-1].time;
+    if(endT < tFrom || et > tTo) continue;                       // 画面外
+    const x1=tsc.timeToCoordinate(et); if(x1==null) continue;
+    let x2 = xt!=null ? tsc.timeToCoordinate(xt) : w;
+    if(x2==null) x2=w;
+    if(x2 - x1 < 3) x2 = x1 + 3;
+    const yE=series.priceToCoordinate(s.entry), ySL=series.priceToCoordinate(s.sl), yTP=series.priceToCoordinate(s.tp);
+    if(yE==null||ySL==null||yTP==null) continue;
+    const live = s.status==='open';
+    // MT5式: 線が主役。帯はごく薄く（建玉中だけ少し濃く）
+    const a = live?0.12:0.05;
+    aictx.fillStyle='rgba(248,81,73,'+a+')'; aictx.fillRect(x1,Math.min(yE,ySL),x2-x1,Math.abs(ySL-yE));
+    aictx.fillStyle='rgba(38,166,65,'+a+')'; aictx.fillRect(x1,Math.min(yE,yTP),x2-x1,Math.abs(yTP-yE));
+    const seg=(y,col,dash,lw)=>{ aictx.strokeStyle=col; aictx.lineWidth=lw||1; aictx.setLineDash(dash||[]);
+      aictx.beginPath(); aictx.moveTo(x1,y); aictx.lineTo(x2,y); aictx.stroke(); aictx.setLineDash([]); };
+    seg(yE,'rgba(88,166,255,'+(live?1:0.75)+')',[],live?2:1.2);                 // 建値＝青実線
+    seg(ySL,'rgba(248,81,73,'+(live?0.9:0.45)+')',[3,3]);                         // SL＝赤点線
+    seg(yTP,'rgba(86,211,100,'+(live?0.9:0.45)+')',[3,3]);                        // TP＝緑点線
+    // 入口: 建値線の左端に小さな▲▼と短いラベル（線に貼り付く）
+    const buy = s.side==='BUY';
+    aictx.fillStyle = buy?'#58a6ff':'#f0a35e';
+    aictx.beginPath();
+    if(buy){ aictx.moveTo(x1,yE-1); aictx.lineTo(x1-4,yE+6); aictx.lineTo(x1+4,yE+6); }
+    else   { aictx.moveTo(x1,yE+1); aictx.lineTo(x1-4,yE-6); aictx.lineTo(x1+4,yE-6); }
+    aictx.closePath(); aictx.fill();
+    aictx.font=(live?'bold ':'')+'9px monospace'; aictx.textBaseline='middle'; aictx.textAlign='left';
+    aictx.fillStyle='rgba(200,220,255,'+(live?1:0.75)+')';
+    aictx.fillText('AI'+(buy?'買':'売')+' '+s.entry.toFixed(1)+(live?' '+s.id:''), x1+6, buy?yE+7:yE-7);
+    // 出口: 結果の点＋R（決済価格の位置＝SLかTPの線の上に乗る）
+    if(!live && s.exit!=null){
+      const yX=series.priceToCoordinate(s.exit); if(yX==null) continue;
+      const win = s.exit_reason==='TP';
+      aictx.fillStyle = win?'#56d364':(s.exit_reason==='SL'?'#f85149':'#8b949e');
+      aictx.beginPath(); aictx.arc(x2,yX,3,0,7); aictx.fill();
+      aictx.font='9px monospace'; aictx.fillText(fmtR(s.R||0)+(s.chairman?' ⇔'+s.chairman.id:''), x2+4, yX);
+    }
+  }
+  // 第3印: 再加速変種（会長型）＝橙の点線（建値→決済）と小さな◆。主レーンと独立に描く（no_retest でも再加速だけ入ることがある）
+  for(const s of setups){
+    const ra=s.reaccel; if(!ra||!(ra.status==='open'||ra.status==='closed')||ra.entry==null||ra.entry_time==null) continue;
+    if(!showAiHistory && ra.status!=='open') continue;
+    const et=nearestBarTime(ra.entry_time); if(et==null) continue;
+    const xt = ra.exit_time!=null ? nearestBarTime(ra.exit_time) : null;
+    const endT = xt!=null ? xt : allBars[allBars.length-1].time;
+    if(endT < tFrom || et > tTo) continue;
+    const x1=tsc.timeToCoordinate(et); if(x1==null) continue;
+    let x2 = xt!=null ? tsc.timeToCoordinate(xt) : w; if(x2==null) x2=w; if(x2-x1<3) x2=x1+3;
+    const yE=series.priceToCoordinate(ra.entry); if(yE==null) continue;
+    const live = ra.status==='open';
+    aictx.strokeStyle='rgba(240,163,94,'+(live?1:0.7)+')'; aictx.lineWidth=live?2:1; aictx.setLineDash([2,3]);
+    aictx.beginPath(); aictx.moveTo(x1,yE); aictx.lineTo(x2,yE); aictx.stroke(); aictx.setLineDash([]);
+    aictx.fillStyle='#f0a35e'; aictx.beginPath();
+    aictx.moveTo(x1,yE-5); aictx.lineTo(x1+4,yE); aictx.lineTo(x1,yE+5); aictx.lineTo(x1-4,yE); aictx.closePath(); aictx.fill();
+    if(live){ const ySL=series.priceToCoordinate(ra.sl); if(ySL!=null){ aictx.strokeStyle='rgba(240,163,94,0.6)'; aictx.setLineDash([3,3]);
+      aictx.beginPath(); aictx.moveTo(x1,ySL); aictx.lineTo(x2,ySL); aictx.stroke(); aictx.setLineDash([]); } }
+    aictx.font=(live?'bold ':'')+'9px monospace'; aictx.textBaseline='middle'; aictx.textAlign='left';
+    aictx.fillStyle='rgba(240,163,94,'+(live?1:0.8)+')';
+    aictx.fillText('再'+(s.side==='BUY'?'買':'売')+' '+ra.entry.toFixed(1)+(!live&&ra.R!=null?' '+fmtR(ra.R):''), x1+6, yE+(s.side==='BUY'?9:-9));
+  }
+}
+// 見出し1行（常時）: 建玉中なら損益、無ければスコープ（本物率・AI実測・信頼度）
+function updateAiPnl(){
+  const el=document.getElementById('aipnl'); if(!el) return;
+  if(!showPaper){ el.style.display='none'; return; }
+  el.style.display='block';
+  const p=aiPos;
+  if(p && p.open){
+    const risk=Math.abs(p.entry-p.sl)||1e-9;
+    let lr=p.live_r;
+    if(curPx!=null){ lr = (p.side==='SELL') ? (p.entry-curPx)/risk : (curPx-p.entry)/risk; }
+    const col = lr>=0?'#56d364':'#f85149';
+    el.innerHTML='<b>🤖 AI '+(p.side==='BUY'?'買い':'売り')+'</b> @'+p.entry.toFixed(2)
+      +' <span style="color:#8b949e">SL'+p.sl.toFixed(2)+' TP'+p.tp.toFixed(2)+'</span>'
+      +' ｜ <b style="color:'+col+'">'+(lr>=0?'+':'')+lr.toFixed(2)+'R</b>'
+      +' <span style="color:#8b949e;font-size:11px">'+(p.reason||'')+'</span>';
+    return;
+  }
+  const s=setupSummary, dm=lastDamashi, k=lastBreak;
+  let h='<b>🎯 AI</b> ';
+  if(k){ h+=(k.dir==='UP'?'上':'下')+'ブレイク中 → 戻り目'+k.wall.toFixed(1)+'で入る構え'; }
+  else { h+='待機（箱の中）'; }
+  if(dm){ const col = dm.real_rate>=dm.base+3?'#56d364':(dm.real_rate<=dm.base-3?'#f85149':'#e3c94a');
+    h+=' ｜ 今の時間帯の本物率 <b style="color:'+col+'">'+dm.real_rate.toFixed(0)+'%</b>'; }
+  if(s && s.all && s.all.n){ h+=' ｜ AI実測 '+s.all.tp_rate+'%（n'+s.all.n+'・'+fmtR(s.all.avg_r)+'）'; }
+  if(s){ h+=' <span style="color:#f0a35e;font-size:11px">信頼度 '+s.confidence.split('（')[0]+'</span>'; }
+  el.innerHTML=h;
+}
+
+// ── 🧭 結論パネル(2026-10-12): 会長『4つの判断を小学生でも分かるくらい簡単に1枚に』。
+//    判断パネルの時間/天気/地図/型チェックと同じ材料から、信号1個(✅/⏳/❌)＋一言(どこで買う・どこで撤退)を出す。🤖AI買い(#aipnl)の直下に常時。──
+function rsiSeries(bars, period){   // Wilder RSI。会長『RSIは残り体力メーター』=失速(70→49等)を赤で警告する用。
+  const n=bars.length; if(n<period+1) return null;
+  let gain=0, loss=0;
+  for(let i=1;i<=period;i++){ const ch=bars[i].close-bars[i-1].close; if(ch>=0) gain+=ch; else loss-=ch; }
+  gain/=period; loss/=period;
+  const out=new Array(n).fill(null);
+  out[period]= loss===0?100:100-100/(1+gain/loss);
+  for(let i=period+1;i<n;i++){
+    const ch=bars[i].close-bars[i-1].close, g=ch>0?ch:0, l=ch<0?-ch:0;
+    gain=(gain*(period-1)+g)/period; loss=(loss*(period-1)+l)/period;
+    out[i]= loss===0?100:100-100/(1+gain/loss);
+  }
+  return out;
+}
+// 型チェックのAI自動判定(2026-10-12 会長『形チェックは俺でなくAIが確認して表示・俺も指標として自分で確認』)。
+// ブレイク/床化は壁データから自動判定、SL/TPは機械目安を表示。会長はこれを見て最終は自分の目で確認。
+function computeKata(){
+  const k=lastBreak, box=lastBox;
+  let brk=false, dir=null, brkTxt='ブレイクなし（箱の中）';
+  if(k && k.wall!=null){ brk=true; dir=k.dir; brkTxt=(k.dir==='UP'?'上':'下')+'ブレイク 壁'+Number(k.wall).toFixed(1); }
+  let floor=false, floorTxt='（壁ブレイク後に判定）';
+  if(box){
+    const ut=box.up_touches||0, dt=box.dn_touches||0;
+    if(dir==='UP'){ floor=dt>=2; floorTxt='床タッチ '+dt+'回'+(floor?'＝床化OK':'＝あと'+Math.max(0,2-dt)+'回'); }
+    else if(dir==='DN'){ floor=ut>=2; floorTxt='天井タッチ '+ut+'回'+(floor?'＝天井化OK':'＝あと'+Math.max(0,2-ut)+'回'); }
+    else { floorTxt='床'+dt+'/天井'+ut+'タッチ（ブレイク待ち）'; }
+  }
+  const slRec=(k&&k.sl!=null)?k.sl:null, tpRec=(k&&k.tp!=null)?k.tp:null;
+  const nOk=(brk?1:0)+(floor?1:0);
+  return {brk,floor,dir,brkTxt,floorTxt,slRec,tpRec,nOk};
+}
+// 🧱 壁の混み具合（団子メーター・2026-10-13）: 実際の値動きのタッチ回数で壁を数え、
+//   現在値の近くに壁が密集(団子)してないか判定。団子=走る空間なし=だまし多発=見送り寄り。
+//   空間あり=クリーン=狙える。※ヒューリスティックv1・検証中（本採用ルールではない）。
+function computeCongestion(){
+  if(!allBars||allBars.length<30||typeof curPx!=='number'||curPx==null) return null;
+  const bars=allBars.slice(-144);            // 直近~12時間
+  const cnt={};
+  for(const b of bars){ for(const px of [b.high,b.low]){ const key=Math.round(px); cnt[key]=(cnt[key]||0)+1; } }
+  const keys=Object.keys(cnt).map(Number).sort((a,b)=>a-b);
+  if(!keys.length) return null;
+  let maxC=0; for(const k of keys) maxC=Math.max(maxC,cnt[k]);
+  const thr=Math.max(5, Math.round(0.35*maxC));   // 強い壁の閾値（適応的）
+  const walls=[];                                  // 隣接(1.5以内)バケツを1つの壁に併合
+  for(const k of keys){
+    if(cnt[k]<thr) continue;
+    const last=walls[walls.length-1];
+    if(last && (k-last.hi)<=1.5){ last.hi=k; last.touch+=cnt[k]; if(cnt[k]>last.peakC){last.peakC=cnt[k]; last.peak=k;} }
+    else walls.push({lo:k,hi:k,peak:k,peakC:cnt[k],touch:cnt[k]});
+  }
+  const BAND=8;
+  const near=walls.filter(w=> w.peak>=curPx-BAND && w.peak<=curPx+BAND);
+  const above=walls.filter(w=> w.peak>curPx+0.5).sort((a,b)=>a.peak-b.peak);
+  const below=walls.filter(w=> w.peak<curPx-0.5).sort((a,b)=>b.peak-a.peak);
+  const roomUp = above.length? (above[0].peak-curPx) : null;
+  const roomDn = below.length? (curPx-below[0].peak) : null;
+  const room   = Math.min(roomUp!=null?roomUp:99, roomDn!=null?roomDn:99);
+  let level,label,cls,icon;
+  if(near.length>=4 || room<2){ level='jam';   label='団子（見送り寄り）';   cls='ng'; icon='🔴'; }
+  else if(near.length<=1 && room>=4){ level='clean'; label='クリーン（走る余地）'; cls='ok'; icon='🟢'; }
+  else { level='mid'; label='やや混み'; cls='wa'; icon='🟡'; }
+  return {level,label,cls,icon,near:near.length,roomUp,roomDn,room,nwalls:walls.length};
+}
+function computeVerdict(){
+  const nowS=Math.floor(Date.now()/1000);
+  const d=(infoData&&infoData.ok)?infoData:null;
+  const jh=Math.floor(((nowS+JST)%86400)/3600);
+  const inBand=(jh>=7&&jh<12), roll=(jh===6);
+  const nxHi=d?(d.events||[]).find(e=>e.t>nowS&&e.impact==='High'):null;
+  const soon=!!(nxHi&&(nxHi.t-nowS)<=1800);
+  let timeTxt;
+  if(roll) timeTxt='ロールオーバー(危険)';
+  else if(soon) timeTxt='指標直前';
+  else if(!inBand) timeTxt='帯外(慎重)';
+  else timeTxt='本物帯(OK)';
+  const bias=d&&d.bias?d.bias:null;
+  const dirMap={up:'上',down:'下',flat:'横'};
+  const wxTxt = (bias&&bias.dir) ? (dirMap[bias.dir]+' '+Math.round((bias.conf||0)*100)+'%') : '未宣言';
+  let upWall=null, dnWall=null;
+  if(curPx!=null){
+    const rows=levelRows().map(r=>Object.assign({},r,{dist:r.p-curPx})).sort((a,b)=>b.p-a.p);
+    const above=rows.filter(r=>r.dist>0), below=rows.filter(r=>r.dist<=0);
+    upWall=above.length?above[above.length-1]:null;   // 現在値のすぐ上
+    dnWall=below.length?below[0]:null;                // 現在値のすぐ下
+  }
+  const kata=computeKata();
+  // RSI(14)=体力。失速(直近ピーク65+から8以上低下)=赤=新高値頼み注意(T-0022型)。過熱70+=飛び乗り注意。
+  let rsiNow=null, rsiState=null;
+  if(allBars&&allBars.length>20){
+    const s=rsiSeries(allBars,14);
+    if(s){ const vals=s.filter(x=>x!=null);
+      if(vals.length){ rsiNow=vals[vals.length-1];
+        const recent=vals.slice(-6), recentMax=Math.max.apply(null,recent);
+        const fading=(recentMax>=65)&&(rsiNow<=recentMax-8), hot=rsiNow>=70;
+        if(hot) rsiState={txt:'過熱 '+rsiNow.toFixed(0)+'（飛び乗り注意・降りる所）',cls:'wa'};
+        else if(fading) rsiState={txt:'失速 '+recentMax.toFixed(0)+'→'+rsiNow.toFixed(0)+'（体力落ち・新高値頼み注意）',cls:'ng'};
+        else if(rsiNow<=30) rsiState={txt:'冷え '+rsiNow.toFixed(0)+'（売られすぎ）',cls:'wa'};
+        else rsiState={txt:rsiNow.toFixed(0)+'（中立）',cls:''};
+      }
+    }
+  }
+  let light, lightCls;
+  if(roll||soon){ light='やめとけ'; lightCls='ng'; }
+  else if(inBand&&kata.brk&&kata.floor){ light='いけそう'; lightCls='ok'; }
+  else { light='待て・準備'; lightCls='wa'; }
+  return {timeTxt,wxTxt,bias,upWall,dnWall,kata,light,lightCls,rsiNow,rsiState};
+}
+function updateVerdict(){
+  const el=document.getElementById('verdict'); if(!el) return;
+  if(!showPaper){ el.style.display='none'; return; }
+  const v=computeVerdict();
+  const cg=computeCongestion();
+  const ap=document.getElementById('aipnl');   // 🤖AI買いの直下に置く(高さが変わっても追従)
+  let top=85;
+  if(ap && ap.style.display!=='none'){ const r=ap.getBoundingClientRect(); if(r.height) top=Math.round(r.bottom)+4; }
+  el.style.top=top+'px';
+  const icon = v.lightCls==='ok'?'✅':(v.lightCls==='ng'?'❌':'⏳');
+  const up=v.upWall, dn=v.dnWall, dir=v.bias&&v.bias.dir;
+  let advice;
+  if(v.lightCls==='ng'){ advice='今は手を出さない（'+v.timeTxt+'）。'; }
+  else if(dir==='up'&&up&&dn){ advice='床が固ければ '+up.p.toFixed(0)+' 手前まで小さく買い／'+dn.p.toFixed(0)+' 割れたら撤退'; }
+  else if(dir==='down'&&up&&dn){ advice='天井が固ければ '+dn.p.toFixed(0)+' 手前まで小さく売り／'+up.p.toFixed(0)+' 抜けたら撤退'; }
+  else if(up&&dn){ advice='横ばい。無理押しNG。壁で跳ねたら小さく（上'+up.p.toFixed(0)+' 下'+dn.p.toFixed(0)+'）'; }
+  else { advice='価格待ち…'; }
+  if(v.rsiState&&v.rsiState.cls==='ng'&&v.lightCls!=='ng'){ advice='⚠RSI失速＝新高値頼み注意(T-0022型)。'+advice; }
+  if(cg&&cg.level==='jam'&&v.lightCls!=='ng'){ advice='🔴壁が団子＝走る空間なし＝今日は見送り寄り。'+advice; }
+  const ka=v.kata||{}; const mk=b=>b?'<span style="color:#56d364">✓</span>':'<span style="color:#8b949e">待</span>';
+  let h='<div class="vhead"><span class="go '+v.lightCls+'">'+icon+' '+v.light+'</span> <span class="vsub">AURELの結論</span></div>';
+  h+='<div class="vrow">⏰ '+v.timeTxt+' ｜ 🌤 '+v.wxTxt+'</div>';
+  if(cg){ let rd=''; if(cg.roomUp!=null&&cg.roomDn!=null) rd='<span style="color:#8b949e"> 上'+cg.roomUp.toFixed(0)+'/下'+cg.roomDn.toFixed(0)+'で壁</span>'; h+='<div class="vrow">🧱 壁の混み <span class="go '+cg.cls+'">'+cg.icon+' '+cg.label+'</span>'+rd+'</div>'; }
+  h+='<div class="vrow">🧩 型(AI自動) ブレイク '+mk(ka.brk)+' ／ 床化 '+mk(ka.floor)+'</div>';
+  if(up&&dn) h+='<div class="vrow">🎯 上の壁 <b>'+up.p.toFixed(0)+'</b>（'+up.name+'） ／ 🛡 下の壁 <b>'+dn.p.toFixed(0)+'</b>（'+dn.name+'）</div>';
+  if(ka.slRec!=null&&ka.tpRec!=null) h+='<div class="vrow" style="color:#8b949e">目安 SL '+ka.slRec.toFixed(0)+'（壁内側）／ TP '+ka.tpRec.toFixed(0)+'（次壁手前）</div>';
+  if(v.rsiState) h+='<div class="vrow">💪 体力(RSI14) '+(v.rsiState.cls?('<span class="go '+v.rsiState.cls+'">'+v.rsiState.txt+'</span>'):('<span style="color:#8b949e">'+v.rsiState.txt+'</span>'))+'</div>';
+  h+='<div class="vrow vtip">→ '+advice+'</div>';
+  el.innerHTML=h; el.style.display='block';
+}
+setInterval(updateVerdict, 1000);   // 即実行しない: showPaper等は後方で宣言(let)=TDZ回避。タイマーは宣言後に発火するので安全
+
+// ── 情報レイヤー(/api/info・2026-10-10): 厚い行使価格=紫の横線 / 指標・構造の時刻=縦線+カウントダウン / 風向き・帯・バイアス=左下HUD。
+//    goldinfo が毎朝06:50に書いた材料を描くだけ。会長『WEBチャートを見ればすぐ判断がつくように』。──
+const infoCanvas=document.getElementById('info'), ictx=infoCanvas.getContext('2d');
+let infoData=null, infoLines=[], showInfo=true, infoBasis=null, infoBasisGen=null;   // infoBasis=先物−CFDの鞘(ドル)
+function setInfoLines(){
+  for(const pl of infoLines) series.removePriceLine(pl); infoLines=[];
+  if(!showInfo||!infoData||!infoData.ok) return;
+  // 行使価格の換算値(s.xau)は先物(GC=F)基準。CFDは先物より20ドル前後安い(限月の鞘)ので、
+  // 「材料生成時の先物価格 − 今のCFD価格」を鞘として一度だけ測り、全部の線を同じ分だけずらす(材料が更新されたら測り直す)。
+  if(infoBasisGen!==infoData.generated){ infoBasis=null; infoBasisGen=infoData.generated; }
+  if(infoBasis==null && curPx!=null && infoData.gold && infoData.gold.last){ infoBasis=infoData.gold.last-curPx; }
+  for(const s of (infoData.strikes||[])){
+    const price=s.xau-(infoBasis||0);
+    infoLines.push(series.createPriceLine({ price, color:'rgba(192,132,252,0.75)', lineWidth:1,
+      lineStyle:LWC.LineStyle.LargeDashed, axisLabelVisible:true, title:'建玉'+(s.oi/10000).toFixed(1)+'万' }));
+  }
+}
+function futureX(t){   // 未来時刻→x座標（最終バーから5分=1本で外挿）
+  if(!allBars.length) return null;
+  return chart.timeScale().logicalToCoordinate(allBars.length-1+(t-lastTime)/300);
+}
+function cdText(dt){ if(dt<=0) return '済'; return 'あと'+(dt>=3600?Math.floor(dt/3600)+'h':'')+String(Math.floor((dt%3600)/60)).padStart(2,'0')+'m'; }
+function drawInfo(){
+  const w=chartEl.clientWidth, h=chartEl.clientHeight;
+  fitCanvas(infoCanvas,w,h);
+  ictx.setTransform(DPR,0,0,DPR,0,0); ictx.clearRect(0,0,w,h);
+  if(!showInfo||!infoData||!infoData.ok||!allBars.length) return;
+  const nowS=Math.floor(Date.now()/1000); const tsc=chart.timeScale();
+  let lane=0;
+  for(const e of (infoData.events||[])){
+    const x=(e.t<=lastTime)?tsc.timeToCoordinate(e.t):futureX(e.t);
+    if(x==null||x<-20||x>w+20) continue;
+    const hi=(e.impact==='High'), st=(e.kind==='struct');
+    ictx.strokeStyle= hi?'rgba(248,81,73,0.85)':(st?'rgba(139,148,158,0.55)':'rgba(240,163,94,0.75)');
+    ictx.lineWidth= hi?1.5:1; ictx.setLineDash(st?[2,4]:[6,4]);
+    ictx.beginPath(); ictx.moveTo(Math.round(x)+0.5,0); ictx.lineTo(Math.round(x)+0.5,h); ictx.stroke(); ictx.setLineDash([]);
+    const label=jstLabel(e.t,false)+' '+e.title.slice(0,14)+' '+cdText(e.t-nowS);
+    ictx.font='11px -apple-system,Segoe UI,sans-serif';
+    const tw=ictx.measureText(label).width+8, y=6+lane*16; lane=(lane+1)%6;
+    ictx.fillStyle='rgba(13,17,23,0.85)'; ictx.fillRect(x+3,y,tw,14);
+    ictx.fillStyle= hi?'#f85149':(st?'#8b949e':'#f0a35e'); ictx.fillText(label,x+7,y+11);
+  }
+}
+function updateInfoHud(){
+  const el=document.getElementById('infohud'); if(!el) return;
+  if(!showInfo||!infoData||!infoData.ok){ el.style.display='none'; return; }
+  const d=infoData, n=d.now||{}; const parts=[];
+  parts.push(n.in_band?'<b style="color:#56d364">本物帯</b>':(n.rollover?'<b style="color:#f0a35e">ロールオーバー注意</b>':'<span style="color:#8b949e">帯外</span>'));
+  if(d.verdict) parts.push('風向き '+d.verdict.split('(')[0]);
+  if(d.bias&&d.bias.dir) parts.push('バイアス '+({up:'上',down:'下',flat:'横'}[d.bias.dir]||d.bias.dir)+' '+Math.round((d.bias.conf||0)*100)+'%');
+  const nowS=Math.floor(Date.now()/1000);
+  const nx=(d.events||[]).find(e=>e.t>nowS&&e.impact==='High');
+  if(nx) parts.push('<b style="color:#f85149">次 '+jstLabel(nx.t,false)+' '+nx.title.slice(0,12)+' '+cdText(nx.t-nowS)+'</b>');
+  if(n.triple_swap) parts.push('水曜3倍スワップ');
+  if(d.opex&&d.opex.days_left!=null&&d.opex.days_left<=3) parts.push('OPEXあと'+d.opex.days_left+'日');
+  el.innerHTML=parts.join(' ｜ ')+' <span style="color:#6e7681">('+String(d.generated||'').slice(-5)+')</span>';
+  el.style.display='block';
+}
+async function fetchInfo(){ try{ const r=await fetch('/api/info',{cache:'no-store'}); infoData=await r.json(); setInfoLines(); updateInfoHud(); drawInfo(); }catch(e){} }
+document.getElementById('infoBtn').onclick=(e)=>{ showInfo=!showInfo; e.currentTarget.classList.toggle('on',showInfo); setInfoLines(); updateInfoHud(); redrawOverlays(); };
+setInterval(fetchInfo, 60000);
+
+// ── 🧭 判断パネル(2026-10-10): 会長『あちこち見ずにチャートとこの1枚で分かるように』。
+//    時間(帯・次の予定) / 天気(風向き・バイアス) / 地図(壁の一覧=箱・紫線・会長の線を現在値からの距離順) / 型チェック / 成績。
+let decideOn=false;   // 型チェックは computeKata() で自動判定(手動タップ廃止・会長指示 2026-10-12)
+function cellPrice(){   // 1マス(cellPx)が何ドルか
+  try{ if(curPx==null) return null; const y1=series.priceToCoordinate(curPx), y2=series.priceToCoordinate(curPx+10);
+    if(y1==null||y2==null||y1===y2) return null; return 10*cellPx/Math.abs(y1-y2); }catch(e){ return null; }
+}
+function levelRows(){
+  const rows=[]; const add=(p,name,cls)=>{ if(p!=null&&isFinite(p)) rows.push({p:+p,name,cls}); };
+  if(lastBig){ add(lastBig.up,'大箱 上','yel'); add(lastBig.dn,'大箱 下','yel'); }
+  if(lastBox){ add(lastBox.up,'小箱 上','yel'); add(lastBox.mid,'中間','blu'); add(lastBox.dn,'小箱 下','yel'); }
+  if(lastBreak){ add(lastBreak.tp,'機械TP','grn'); add(lastBreak.sl,'機械SL','red'); }
+  if(showInfo&&infoData&&infoData.ok){ for(const s of (infoData.strikes||[])) add(s.xau-(infoBasis||0),'紫 建玉'+(s.oi/10000).toFixed(1)+'万','pur'); }
+  for(const L of userLines) add(L.price,'会長の線','wht');
+  return rows;
+}
+function renderDecide(){
+  const el=document.getElementById('decide'); if(!el) return;
+  if(!decideOn){ el.style.display='none'; return; }
+  const nowS=Math.floor(Date.now()/1000); const d=(infoData&&infoData.ok)?infoData:null; const n=(d&&d.now)||{};
+  const jh=Math.floor(((nowS+JST)%86400)/3600), jm=Math.floor(((nowS+JST)%3600)/60);
+  const inBand=(jh>=7&&jh<12), roll=(jh===6);
+  const nxHi=d?(d.events||[]).find(e=>e.t>nowS&&e.impact==='High'):null;
+  const nxAny=d?(d.events||[]).find(e=>e.t>nowS):null;
+  const soon=!!(nxHi&&(nxHi.t-nowS)<=1800);
+  let timeV, timeC;
+  if(roll){ timeV='待て: ロールオーバー(06時台)'; timeC='ng'; }
+  else if(soon){ timeV='待て: 指標まで'+cdText(nxHi.t-nowS).replace('あと',''); timeC='ng'; }
+  else if(!inBand){ timeV='帯外: 新規は慎重(本物帯は07-12)'; timeC='wa'; }
+  else { timeV='入ってよい時間'; timeC='ok'; }
+  let h='<span class="x" id="dcX">✕</span><b>🧭 判断パネル</b> <span style="color:#8b949e">JST '+String(jh).padStart(2,'0')+':'+String(jm).padStart(2,'0')+(d?'・材料'+String(d.generated||'').slice(5):'・材料なし')+'</span>';
+  h+='<div class="sec">■ 時間</div>';
+  h+='<span class="go '+timeC+'">'+timeV+'</span>';
+  if(lastDamashi&&lastDamashi.real_rate!=null) h+=' <span style="color:#8b949e">この時間の本物率 '+Number(lastDamashi.real_rate).toFixed(0)+'%(平均'+Number(lastDamashi.base||0).toFixed(0)+'%)</span>';
+  h+='<br>';
+  if(nxAny) h+='次: '+jstLabel(nxAny.t,false)+' '+nxAny.title.slice(0,16)+' '+cdText(nxAny.t-nowS);
+  if(nxHi&&nxHi!==nxAny) h+=' ／ <span style="color:#f85149">指標 '+jstLabel(nxHi.t,false)+' '+nxHi.title.slice(0,14)+' '+cdText(nxHi.t-nowS)+'</span>';
+  if(n.triple_swap) h+=' ／ 水曜=3倍スワップ';
+  h+='<div class="sec">■ 天気（今日の追い風）</div>';
+  if(d){
+    h+='風向き <b>'+(d.verdict||'—')+'</b><br>';
+    const c=d.corr||{}; const parts=[];
+    for(const k of ['dxy','us10y','usdjpy','real10y']){ const x=c[k]; if(x&&x.last!=null){ const ch=x.chg5d;
+      parts.push(x.label+' '+x.last+(ch!=null?'('+(ch>=0?'+':'')+Number(ch).toFixed(2)+(k==='real10y'?'':'%')+'/5日)':'')); } }
+    if(parts.length) h+='<span style="color:#8b949e">'+parts.join(' ・ ')+'</span><br>';
+    if(d.fed&&d.fed.yes_pct!=null) h+='<span style="color:#8b949e">FRB予測市場: '+String(d.fed.q||'').replace('Will the Fed ','').replace('Will there be ','').slice(0,44)+' '+d.fed.yes_pct+'%</span><br>';
+    h+='AURELバイアス: '+(d.bias&&d.bias.dir?('<b>'+({up:'上',down:'下',flat:'横'}[d.bias.dir]||d.bias.dir)+' '+Math.round((d.bias.conf||0)*100)+'%</b> 「'+(d.bias.why||'')+'」 <span style="color:#8b949e">'+String(d.bias.at||'').slice(5)+'</span>'):'<span style="color:#8b949e">未宣言(平日07:06に宣言)</span>');
+    if(d.opex&&d.opex.days_left!=null) h+='<br><span style="color:#8b949e">COMEX金オプション満期 '+d.opex.date+'(あと'+d.opex.days_left+'日)</span>';
+  } else h+='<span style="color:#8b949e">材料なし(06:50に自動更新)</span>';
+  const cp=cellPrice();
+  h+='<div class="sec">■ 地図（現在 '+(curPx!=null?curPx.toFixed(2):'—')+(cp?' ・ 1マス≈'+cp.toFixed(1)+'ドル':'')+'）</div>';
+  if(curPx!=null){
+    const rows=levelRows().map(r=>Object.assign({},r,{dist:r.p-curPx})).sort((a,b)=>b.p-a.p);
+    const above=rows.filter(r=>r.dist>0).slice(-5), below=rows.filter(r=>r.dist<=0).slice(0,5);
+    const col={yel:'#e3c94a',blu:'#58a6ff',grn:'#56d364',red:'#f85149',pur:'#c084fc',wht:'#ffffff'};
+    const tr=(r)=>'<tr><td style="color:'+col[r.cls]+'">'+r.name+'</td><td class="r">'+r.p.toFixed(1)+'</td><td class="r">'+(r.dist>=0?'+':'')+r.dist.toFixed(1)+'</td><td class="r" style="color:#8b949e">'+(cp?((r.dist>=0?'+':'')+(r.dist/cp).toFixed(1)+'マス'):'')+'</td></tr>';
+    h+='<table>'+above.map(tr).join('')+'<tr class="now"><td>現在</td><td class="r">'+curPx.toFixed(2)+'</td><td></td><td></td></tr>'+below.map(tr).join('')+'</table>';
+    const nearUp=above.length?above[above.length-1]:null, nearDn=below.length?below[0]:null;
+    if(nearUp&&nearDn) h+='<span style="color:#8b949e">上の壁まで +'+nearUp.dist.toFixed(1)+'（'+nearUp.name+'） ／ 下の壁まで '+nearDn.dist.toFixed(1)+'（'+nearDn.name+'）</span>';
+  } else h+='<span style="color:#8b949e">価格待ち…</span>';
+  h+='<div class="sec">■ 型チェック（AIが自動判定・会長も目で確認）</div>';
+  const ka=computeKata();
+  const krow=(ok,label,detail)=>'<span class="ck'+(ok?' on':'')+'">'+(ok?'✓ ':'□ ')+label+'</span> <span style="color:#8b949e">'+detail+'</span><br>';
+  h+=krow(ka.brk,'外壁を明確にブレイク',ka.brkTxt);
+  h+=krow(ka.floor,'床/天井化(2タッチ)',ka.floorTxt);
+  h+='<span class="ck">SL目安</span> <span style="color:#8b949e">'+(ka.slRec!=null?ka.slRec.toFixed(1)+'（壁の内側・狭め）':'ブレイク後に算出')+'</span><br>';
+  h+='<span class="ck">TP目安</span> <span style="color:#8b949e">'+(ka.tpRec!=null?ka.tpRec.toFixed(1)+'（次壁/紫線の手前）':'ブレイク後に算出')+'</span>';
+  const bothOk=ka.brk&&ka.floor;
+  let verdict, vc;
+  if(!bothOk){ verdict='型 '+ka.nOk+'/2（ブレイク＋床化を待つ）'; vc='wa'; }
+  else if(timeC==='ok'){ verdict='型そろった・時間OK → SL/TP目安で黒板に登録'; vc='ok'; }
+  else if(timeC==='ng'){ verdict='型そろった・だが時間は待て'; vc='ng'; }
+  else { verdict='型そろった・時間は帯外(慎重に)'; vc='wa'; }
+  h+='<br><span class="go '+vc+'">'+verdict+'</span>';
+  h+='<div class="sec">■ 成績（台帳）</div>';
+  if(tradeStats) h+=tradeStats.trades+'本(確定'+tradeStats.closed+') 勝率'+(tradeStats.winrate!=null?tradeStats.winrate+'%':'—')+' 合計'+(tradeStats.sumR>=0?'+':'')+tradeStats.sumR+'R 最大DD'+tradeStats.maxDD_R+'R <span style="color:#8b949e">'+(tradeStats.sample_note||'')+'</span>';
+  if(progressData && !progressData.error) h+='<div class="sec">■ 進み具合（目安）</div>'+progressHtml(true);
+  else h+='<span style="color:#8b949e">読込中…</span>';
+  el.innerHTML=h; el.style.display='block';
+  document.getElementById('dcX').onclick=()=>{ decideOn=false; renderDecide(); document.getElementById('decideBtn').classList.remove('on'); };
+}
+document.getElementById('decideBtn').onclick=(e)=>{ decideOn=!decideOn; e.currentTarget.classList.toggle('on',decideOn);
+  if(decideOn){ fetchInfo(); try{ fetchStats(); }catch(err){} } renderDecide(); };
+setInterval(()=>{ if(decideOn) renderDecide(); }, 5000);
+
+// オーバーレイ(時間帯/トレード/AI建玉/情報)は「表示範囲が変わった時」だけ再描画＝パンを重くしない
+function redrawOverlays(){ try{ drawZones(); drawTrades(); drawSetups(); drawInfo(); }catch(e){} }
+chart.timeScale().subscribeVisibleLogicalRangeChange(redrawOverlays);   // パン/ズームに追従
+window.addEventListener('resize', ()=>setTimeout(()=>{ drawFixedGrid(); redrawOverlays(); },60));
+setInterval(redrawOverlays, 300);   // 保険(ライブ更新・トグル反映)
+// 縦の伸縮（価格軸ドラッグ）にはイベントが無いので、毎フレーム「座標が変わったか」だけ見て変わった時だけ描き直す
+// ＝オーバーレイがローソクから遅れて浮いて見えない。判定は座標2点の比較だけなので軽い。
+(function(){ let sig='';
+  function tick(){
+    try{
+      const tsc=chart.timeScale(); const lr=tsc.getVisibleLogicalRange();
+      const p=(curPx!=null)?curPx:(lastBox?lastBox.mid:null);
+      const y=(p!=null)?series.priceToCoordinate(p):null;
+      const y2=(lastBox)?series.priceToCoordinate(lastBox.up):null;
+      const s=(lr?lr.from.toFixed(2)+'/'+lr.to.toFixed(2):'')+'|'+y+'|'+y2+'|'+chartEl.clientWidth+'x'+chartEl.clientHeight;
+      if(s!==sig){ sig=s; redrawOverlays(); }
+    }catch(e){}
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+redrawOverlays();
+
+// 「全体」ボタン: 自動スケール＋全体表示に戻す
+document.getElementById('fit').onclick=()=>{
+  chart.priceScale('right').applyOptions({autoScale:true}); chart.timeScale().fitContent(); };
+
+// ── 水平線ツール（多色・太さ・複数・追加/削除・タップで選択→ドラッグ移動。保存でAURELも読める）──
+let userLines=[], uLineObjs={}, selLine=null, lineEdit=false;
+const COLORS=['#ffffff','#2f81f7','#e3c94a','#f85149','#56d364','#22d3ee','#c084fc','#f0a35e'];
+const _sScroll={ mouseWheel:true, pressedMouseMove:true, horzTouchDrag:true, vertTouchDrag:true };
+const _sScale={ mouseWheel:true, pinch:true, axisPressedMouseMove:{time:true, price:true} };
+function renderUserLines(){
+  for(const id in uLineObjs){ series.removePriceLine(uLineObjs[id]); } uLineObjs={};
+  for(const L of userLines){ uLineObjs[L.id]=series.createPriceLine({ price:L.price, color:L.color,
+    lineWidth:L.width, lineStyle:LWC.LineStyle.Solid, axisLabelVisible:true,
+    title:(L.id===selLine?'◆':'') }); }
+}
+async function loadLines(){ try{ const r=await fetch('/api/lines'); const d=await r.json();
+  userLines=(d.lines||[]).map(L=>({id:L.id,price:L.price,color:L.color,width:L.width||2})); renderUserLines(); }catch(e){} }
+async function saveLines(){ try{ await fetch('/api/lines',{method:'POST',
+  headers:{'Content-Type':'application/json'}, body:JSON.stringify({lines:userLines})}); }catch(e){} }
+function curL(){ return userLines.find(L=>L.id===selLine); }
+function lbInfo(){ const L=curL(); if(L) document.getElementById('lbInfo').textContent='線 '+L.price.toFixed(2)+' / 太'+L.width; }
+function markSwatch(c){ document.querySelectorAll('.sw').forEach(s=>s.classList.toggle('sel',s.dataset.c===c)); }
+function buildSwatches(){ const box=document.getElementById('swatches'); box.innerHTML='';
+  for(const c of COLORS){ const s=document.createElement('span'); s.className='sw'; s.style.background=c;
+    s.dataset.c=c; s.onclick=()=>{ const L=curL(); if(!L)return; L.color=c; renderUserLines(); markSwatch(c); saveLines(); };
+    box.appendChild(s); } }
+function enterEdit(){ lineEdit=true; chart.applyOptions({handleScroll:false,handleScale:false});
+  document.getElementById('linebar').classList.add('on'); const L=curL(); if(L) markSwatch(L.color); lbInfo(); }
+function exitEdit(){ lineEdit=false; chart.applyOptions({handleScroll:_sScroll,handleScale:_sScale});
+  document.getElementById('linebar').classList.remove('on'); selLine=null; renderUserLines(); }
+document.getElementById('addLine').onclick=()=>{
+  const price=(curPx!=null)?curPx:(lastBox?lastBox.mid:(series.coordinateToPrice(chartEl.clientHeight/2)||4330));
+  const id='L'+Date.now(); userLines.push({id, price:Math.round(price*100)/100, color:'#ffffff', width:2});
+  selLine=id; renderUserLines(); saveLines(); enterEdit(); };
+document.getElementById('delLine').onclick=()=>{ if(!selLine)return;
+  userLines=userLines.filter(L=>L.id!==selLine); saveLines(); exitEdit(); };
+document.getElementById('doneLine').onclick=()=>{ saveLines(); exitEdit(); };
+document.getElementById('wUp').onclick=()=>{ const L=curL(); if(!L)return; L.width=Math.min(6,L.width+1); renderUserLines(); lbInfo(); saveLines(); };
+document.getElementById('wDn').onclick=()=>{ const L=curL(); if(!L)return; L.width=Math.max(1,L.width-1); renderUserLines(); lbInfo(); saveLines(); };
+// タップで線を選択→編集（近い線だけ掴む＝勝手に動かない）
+chart.subscribeClick((param)=>{ if(lineEdit||!param.point) return;
+  let best=null,bd=1e9; for(const L of userLines){ const yb=series.priceToCoordinate(L.price);
+    if(yb==null) continue; const d=Math.abs(yb-param.point.y); if(d<bd){bd=d;best=L;} }
+  if(best && bd<=12){ selLine=best.id; renderUserLines(); enterEdit(); } });
+// 編集中のみ縦ドラッグで移動
+(function(){ let drag=false;
+  const yToP=(cy)=>{ const r=chartEl.getBoundingClientRect(); return series.coordinateToPrice(cy-r.top); };
+  const down=(e)=>{ if(!lineEdit||!selLine) return; drag=true; mv(e); };
+  const mv=(e)=>{ if(!drag) return; const y=(e.touches?e.touches[0].clientY:e.clientY);
+    const p=yToP(y); const L=curL(); if(p!=null&&L){ L.price=Math.round(p*100)/100; renderUserLines(); lbInfo(); } if(e.cancelable) e.preventDefault(); };
+  const up=()=>{ if(drag){ drag=false; saveLines(); } };
+  chartEl.addEventListener('touchstart',down,{passive:false});
+  chartEl.addEventListener('touchmove',mv,{passive:false});
+  chartEl.addEventListener('touchend',up);
+  chartEl.addEventListener('mousedown',down); chartEl.addEventListener('mousemove',mv); chartEl.addEventListener('mouseup',up);
+})();
+buildSwatches(); loadLines();
+
+// ── A3: 自分の過去トレード重ね描き（台帳ledger→E/SL/TP/決済を地図に）──
+const tradesCanvas = document.getElementById('trades');
+const tctx = tradesCanvas.getContext('2d');
+let tradesData = [];
+let showTrades = false;      // 会長の過去トレード(B)は既定オフ。今回の主役はAのAI建玉
+let showPaper = true;        // AIの建玉オーバーレイ（MT5式・時間区間限定・薄い）は既定オン
+function nearestBarTime(t){
+  const n=allBars.length; if(!n) return null;
+  if(t<=allBars[0].time) return allBars[0].time;
+  if(t>=allBars[n-1].time) return allBars[n-1].time;
+  let lo=0,hi=n-1;
+  while(lo<=hi){ const m=(lo+hi)>>1; const bt=allBars[m].time;
+    if(bt===t) return bt; if(bt<t) lo=m+1; else hi=m-1; }
+  const a=allBars[Math.max(0,hi)].time, b=allBars[Math.min(n-1,lo)].time;
+  return (t-a)<=(b-t)?a:b;
+}
+function nearestBar(time){
+  const bt=nearestBarTime(time); if(bt==null) return null;
+  for(const b of allBars){ if(b.time===bt) return b; } return null;
+}
+function tradeR(t){
+  if(t.exit==null||t.sl==null||t.entry==null) return null;
+  const risk=Math.abs(t.entry-t.sl); if(!risk) return null;
+  const pnl = t.side==='BUY' ? (t.exit-t.entry) : (t.entry-t.exit);
+  return pnl/risk;
+}
+function tradeWin(t){ if(t.exit==null) return null;
+  return t.side==='BUY' ? (t.exit>t.entry) : (t.exit<t.entry); }
+function focusTrade(t){
+  const et=nearestBarTime(t.entry_time);
+  let xt = t.exit_time!=null ? nearestBarTime(t.exit_time)
+         : (allBars.length?allBars[allBars.length-1].time:et);
+  if(et==null) return;
+  const pad=25*300;                       // 前後25本(=125分)の余白
+  try{ chart.priceScale('right').applyOptions({autoScale:true});
+       chart.timeScale().setVisibleRange({from:et-pad, to:(xt||et)+pad}); }catch(e){}
+  const R=tradeR(t), win=tradeWin(t);
+  const info=document.getElementById('tradeInfo');
+  const col = win===null?'#8b949e':(win?'#56d364':'#f85149');
+  info.innerHTML='<span class="x" id="tiX">✕</span>'
+    +'<b>'+t.id+' '+(t.side==='BUY'?'買い▲':'売り▼')+'</b>'
+    +' 建値'+t.entry+' ／ SL'+(t.sl??'-')+' ／ TP'+(t.tp??'-')+'<br>'
+    +'決済'+(t.exit!=null?t.exit:'（建玉中）')
+    +(t.post?' ・<span style="color:'+col+'">'+t.post+'</span>':'')
+    +(R!=null?' <b style="color:'+col+'">'+(R>=0?'+':'')+R.toFixed(2)+'R</b>':'')
+    +(t.wall?'<br><span style="color:#8b949e">壁: '+t.wall+'</span>':'');
+  info.style.display='block';
+  document.getElementById('tiX').onclick=()=>{ info.style.display='none'; };
+}
+function renderChips(){
+  const box=document.getElementById('tradeChips'); if(!box) return;
+  box.innerHTML='';
+  for(const t of tradesData){
+    const win=tradeWin(t);
+    const c=document.createElement('span'); c.className='chip';
+    const col=win===null?'#8b949e':(win?'#56d364':'#f85149');
+    c.innerHTML='<span class="d" style="background:'+col+'"></span>'+t.id+(t.side==='BUY'?' 買':' 売');
+    c.onclick=()=>focusTrade(t);
+    box.appendChild(c);
+  }
+}
+async function fetchTrades(){
+  try{ const r=await fetch('/api/trades',{cache:'no-store'}); const d=await r.json();
+       tradesData=d.trades||[]; renderChips(); }catch(e){}
+}
+// D1 会長の現状成績: 台帳が携帯フォームから追記されるので 60秒ごとに取り直す（情報パネルに表示）
+async function fetchStats(){
+  try{ const r=await fetch('/api/stats',{cache:'no-store'}); const d=await r.json();
+       if(d.ok){ tradeStats=d.stats; aiStats=d.ai||null; progressData=d.progress||null; if(statsOn) updateStats(); } }catch(e){}
+}
+// ⏳ 検証の進み具合と到達の目安（会長依頼 2026-10-20）。節目=100本(優位の有無)/290本(大きさ)/650本(複利設計)。
+//   ペース=凍結後の営業日あたり本数→残り÷ペースで日付。目安であって約束ではない(ペースは相場で変わる)。
+let progressData = null;
+function progressHtml(compact){
+  const p=progressData; if(!p||p.error) return '';
+  const bar=(n,t)=>{ const seg=Math.round(Math.min(n,t)/t*10);
+    return '<span style="color:#e3c94a;letter-spacing:-1px">'+'█'.repeat(seg)+'</span><span style="color:#30363d;letter-spacing:-1px">'+'█'.repeat(10-seg)+'</span>'; };
+  const ms=(l)=>(l.milestones||[]).map(m=>m.done
+      ? '<span style="color:#56d364">'+m.target+'本✓</span>'
+      : m.target+'本('+m.label+')→<b>'+(m.date||'—')+'</b>'+(m.months!=null?'<span style="color:#8b949e">・約'+m.months+'か月</span>':'')).join(' ／ ');
+  const row=(name,l,note)=>'<tr><td>'+name+'</td><td><b>'+l.n+'</b>本 <span style="color:#8b949e">'+l.per_day+'/日・月'+l.per_month+'</span></td><td>'+ms(l)+(note?' <span style="color:#8b949e">'+note+'</span>':'')+'</td></tr>';
+  if(compact){
+    const d=p.demo_now, m=(d.milestones||[])[0]||{}, c=p.chairman, cm=c?((c.milestones||[])[0]||{}):null;
+    return 'AIデモ(外壁＋中壁×採用) '+d.n+'本・月'+d.per_month+' → 100本 <b>'+(m.done?'到達':(m.date||'—'))+'</b>'
+      +(c?' ／ 会長 '+c.n+'本 → 30本 <b>'+(cm.done?'到達':(cm.date||'—'))+'</b>':'')
+      +' ／ デモ中壁 '+p.demo_fired.mid+'/'+p.demo_fired.mid_exit_check_at+' ・ 雨除外 '+p.rain_drop.n+'/'+p.rain_drop.reeval_at;
+  }
+  let h='<hr style="border:0;border-top:1px solid #30363d;margin:5px 0">';
+  h+='<b>⏳ 検証の進み具合と到達の目安</b> <span style="color:#8b949e">凍結'+p.frozen_at+'から'+p.bdays_since_freeze+'営業日・ペースは凍結後の実測・日付は目安(相場で変わる)</span><br>';
+  h+='<table class="cmp"><tr><th>車線</th><th>今</th><th>節目 → 到達の目安</th></tr>';
+  if(p.chairman) h+=row('会長(実弾・台帳)',p.chairman,'');
+  h+=row('AIデモの型(外壁×採用)',p.demo_type,'');
+  h+=row('AI中壁(紙・全部)',p.mid,'');
+  h+=row('<b>AIデモ合算(外壁＋中壁×採用)</b>',p.demo_now,'=10-20からデモが撃つ型');
+  h+='</table>';
+  h+='<span style="color:#8b949e">出口の判定: デモで撃った中壁 </span>'+p.demo_fired.mid+'/'+p.demo_fired.mid_exit_check_at+' '+bar(p.demo_fired.mid,p.demo_fired.mid_exit_check_at)
+    +' <span style="color:#8b949e">(30本でネット<0なら外す) ／ 雨フィルタ再評価 雨除外 </span>'+p.rain_drop.n+'/'+p.rain_drop.reeval_at+' '+bar(p.rain_drop.n,p.rain_drop.reeval_at)
+    +' <span style="color:#8b949e">／ デモ実射 累計'+p.demo_fired.total+'本</span>';
+  h+='<br><span style="color:#8b949e">読み方: 100本=優位があるか無いか(±0.26R)・290本=優位の大きさ(±0.15R)・650本=複利の設計に使える(±0.10R)。本数に加えて3か月以上は相場の局面を跨ぐこと。</span>';
+  return h;
+}
+setInterval(()=>{ fetchStats(); fetchTrades(); }, 60000);
+fetchStats();
+function drawTrades(){
+  const w=chartEl.clientWidth, h=chartEl.clientHeight;
+  fitCanvas(tradesCanvas,w,h);
+  tctx.setTransform(DPR,0,0,DPR,0,0);
+  tctx.clearRect(0,0,w,h);
+  if(!showTrades) return;
+  const tsc=chart.timeScale();
+  for(const t of tradesData){
+    if(t.entry_time==null || t.entry==null) continue;
+    const et=nearestBarTime(t.entry_time); if(et==null) continue;   // トレード時刻→最寄りバーに吸着
+    const x1=tsc.timeToCoordinate(et);
+    if(x1==null) continue;                                   // 画面外(時間)ならスキップ
+    let x2 = w;
+    if(t.exit_time!=null){ const xt=nearestBarTime(t.exit_time);
+      const cx = xt!=null ? tsc.timeToCoordinate(xt) : null; x2 = cx==null ? w : cx; }
+    const yE=series.priceToCoordinate(t.entry);
+    const ySL=t.sl!=null?series.priceToCoordinate(t.sl):null;
+    const yTP=t.tp!=null?series.priceToCoordinate(t.tp):null;
+    const yX=t.exit!=null?series.priceToCoordinate(t.exit):null;
+    const seg=(y,color,dash)=>{ if(y==null)return; tctx.strokeStyle=color; tctx.lineWidth=1.4;
+      tctx.setLineDash(dash||[]); tctx.beginPath();
+      tctx.moveTo(x1,y); tctx.lineTo(Math.max(x1+2,x2),y); tctx.stroke(); tctx.setLineDash([]); };
+    seg(ySL,'rgba(248,81,73,0.85)',[3,3]);                   // SL 赤破線
+    seg(yTP,'rgba(86,211,100,0.85)',[6,4]);                  // TP 緑破線
+    seg(yE,'rgba(235,235,235,0.9)',[]);                      // 建値 白実線
+    if(yE!=null){                                            // entryマーカー
+      const buy=t.side==='BUY'; tctx.fillStyle=buy?'#26a641':'#f85149';
+      tctx.beginPath();
+      if(buy){ tctx.moveTo(x1,yE+9); tctx.lineTo(x1-5,yE+18); tctx.lineTo(x1+5,yE+18); }
+      else   { tctx.moveTo(x1,yE-9); tctx.lineTo(x1-5,yE-18); tctx.lineTo(x1+5,yE-18); }
+      tctx.closePath(); tctx.fill();
+      tctx.fillStyle='#c9d1d9'; tctx.font='10px monospace'; tctx.textBaseline='middle';
+      tctx.fillText(t.id+' '+(buy?'買':'売'), x1+7, buy?yE+14:yE-14);
+    }
+    if(yX!=null && t.exit_time!=null){                       // exitマーカー
+      const win = t.side==='BUY' ? (t.exit>t.entry) : (t.exit<t.entry);
+      tctx.fillStyle = win?'#56d364':'#f85149';
+      tctx.beginPath(); tctx.arc(x2,yX,4,0,7); tctx.fill();
+      if(t.post){ tctx.fillStyle='#f0a35e'; tctx.font='10px monospace';
+        tctx.textBaseline='middle'; tctx.fillText(t.post, x2+6, yX); }
+    }
+  }
+}
+fetchTrades();
+</script></body></html>
