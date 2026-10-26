@@ -809,3 +809,6 @@ MemoryError
 [live観測] yfinance ES=F 取得中...
   M5 13505本 (2026-08-17 04:00:00+00:00..2026-10-26 12:50:00+00:00)
   新規記録 0本 / 台帳累計 33本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_b_forward_ledger.jsonl
+[live観測] yfinance ES=F 取得中...
+  M5 13511本 (2026-08-17 04:00:00+00:00..2026-10-26 13:20:00+00:00)
+  新規記録 0本 / 台帳累計 33本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_b_forward_ledger.jsonl
