@@ -99,3 +99,4 @@ UnicodeDecodeError: 'utf-8' codec can't decode byte 0x8f in position 0: invalid 
 [モード] LIVE デモ発注（armed=True）
 [接続] デモ 802307 / VantageTradingLtd-Demo / 残高1010.99 検証OK
 [起動] デモ執行 20秒おき（Ctrl+C / KILLファイルで停止）
+[skip] S-0342 BUY（発火が古い>180s・バックフィル防止）
