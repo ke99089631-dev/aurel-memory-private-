@@ -65,3 +65,4 @@
 {"event": "place", "sid": "S-0352", "side": "BUY", "wall_kind": "mid", "entry": 4019.72, "sl": 4015.293, "tp": 4026.07, "lot": 0.04, "order": 51650214, "retcode": 10009, "v1_keep": false, "v1_drop": ["雨(直前10本ダマシ80%)", "時間帯(本物率14.6<21.1)", "箱の締まり(0.235≧0.159)"], "ts": "2026-10-26T16:11:30"}
 {"event": "cancel", "sid": "S-0352", "why": "窓切れ/非armed", "order": 51650214, "retcode": 10009, "ts": "2026-10-26T16:15:13"}
 {"event": "place", "sid": "S-0353", "side": "BUY", "wall_kind": "outer", "entry": 4029.2, "sl": 4023.07, "tp": 4033.606, "lot": 0.03, "order": 51693677, "retcode": 10009, "v1_keep": false, "v1_drop": ["時間帯(本物率20.9<21.1)"], "ts": "2026-10-26T17:20:31"}
+{"event": "cancel", "sid": "S-0353", "why": "窓切れ/非armed", "order": 51693677, "retcode": 10009, "ts": "2026-10-26T17:25:14"}
