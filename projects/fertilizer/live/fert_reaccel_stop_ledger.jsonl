@@ -26,3 +26,5 @@
 {"event": "close", "sid": "S-0332", "side": "BUY", "position": 50596383, "fill_price": 4029.85, "exit_price": 4023.33, "exit_time": "2026-10-23T15:43:24", "sl": 4023.33, "tp": 4030.13, "volume": 0.03, "R": -1.0, "reason": "SL", "profit": -19.56, "v1_keep": true, "gold_er": 0.0602, "gold_regime": "chop", "ts": "2026-10-24T05:37:22"}
 {"event": "place", "sid": "S-0339", "side": "BUY", "wall_kind": "mid", "entry": 3997.79, "sl": 3991.007, "tp": 4002.762, "lot": 0.03, "order": 51400243, "retcode": 10009, "v1_keep": true, "v1_drop": [], "ts": "2026-10-26T01:25:17"}
 {"event": "cancel", "sid": "S-0339", "why": "床崩壊(終値が構造の外)", "retcode": 10009, "observe": false, "ts": "2026-10-26T01:30:00"}
+{"event": "place", "sid": "S-0340", "side": "BUY", "wall_kind": "mid", "entry": 3995.12, "sl": 3990.61, "tp": 4002.606, "lot": 0.04, "order": 51413306, "retcode": 10009, "v1_keep": true, "v1_drop": [], "ts": "2026-10-26T02:15:33"}
+{"event": "fill", "sid": "S-0340", "side": "BUY", "fill_price": 3995.12, "sl": 3990.61, "tp": 4002.61, "volume": 0.04, "position": 51413306, "gold_er": 0.0361, "gold_regime": "chop", "v1_keep": true, "v1_drop": [], "ts": "2026-10-26T02:15:53"}
