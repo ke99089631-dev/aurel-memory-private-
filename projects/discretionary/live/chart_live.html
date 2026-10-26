@@ -478,8 +478,7 @@ document.getElementById('zonesBtn').onclick=(e)=>{ showZones=!showZones;
 // ── AURELの建玉を MT5式に重ねる: 建値線＋SL赤帯＋TP緑帯を「入った所から出た所まで」だけ、薄く。建玉中は濃く。──
 const aiCanvas=document.getElementById('ai'), aictx=aiCanvas.getContext('2d');
 let aiPos=null;              // /api/data の ai_pos（建玉中の見出し用）
-let t2Data=null;             // /api/data の t2（2タッチ型デモ: 建玉/決着/点火・MT5Demo 802307・2026-10-26 会長GO）
-let t2Data=null;             // ★2026-10-26: /api/data の t2（2タッチ型デモ=MT5Demo 802307 の建玉/決着/点火）。紫で描く
+let t2Data=null;             // /api/data の t2（2タッチ型デモ: positions=実射の建玉/決着・fires=点火(撃った/撃たず)・MT5Demo 802307・2026-10-26 会長GO）。紫で描く
 // ★キャンバスの実サイズ(=DPR倍)とCSS表示サイズを必ず一致させる。
 //   これが無いとスマホ(DPR=3)で描画が3倍に引き伸ばされ「文字が巨大・位置がズレて自由に動く」ように見える。
 function fitCanvas(cv,w,h){
@@ -567,12 +566,12 @@ function drawSetups(){
   //   データ源=demo_exec_ledger(撃った記録)＋demo_positions.json(MT5Demoの建玉/決着スナップショット)。チャート側は描くだけ。
   const PUR='192,132,252';
   const nowT = allBars[allBars.length-1].time;
-  for(const t of ((t2Data&&t2Data.trades)||[])){
-    if(t.entry==null||t.time==null) continue;
+  for(const t of ((t2Data&&t2Data.positions)||[])){
+    if(t.entry==null||t.entry_time==null) continue;
     const live = t.status==='open';
     const recent = (t.exit_time!=null) ? (nowT - t.exit_time) < 48*3600 : true;
     if(!live && !showAiHistory && !recent) continue;
-    const et=nearestBarTime(t.time); if(et==null) continue;
+    const et=nearestBarTime(t.entry_time); if(et==null) continue;
     const xt = t.exit_time!=null ? nearestBarTime(t.exit_time) : null;
     const endT = xt!=null ? xt : nowT;
     if(endT < tFrom || et > tTo) continue;
@@ -594,7 +593,9 @@ function drawSetups(){
     aictx.fillStyle='rgba('+PUR+','+(live?1:0.85)+')';
     const buy=t.side==='BUY';
     let lab='2T'+(buy?'買':'売')+' '+Number(t.entry).toFixed(1);
-    if(live){ lab+=' デモ'+(t.R!=null?' '+fmtR(t.R):'')+(t.profit!=null?' '+(t.profit>=0?'+':'')+Number(t.profit).toFixed(2)+'$':''); }
+    if(live){ let lr=(t.live_r!=null?t.live_r:null); const rk=Math.abs(t.entry-t.sl)||1e-9;
+      if(curPx!=null){ lr=(t.side==='SELL')?(t.entry-curPx)/rk:(curPx-t.entry)/rk; }
+      lab+=' デモ'+(lr!=null?' '+fmtR(lr):'')+(t.profit!=null?' '+(t.profit>=0?'+':'')+Number(t.profit).toFixed(2)+'$':''); }
     else if(t.R!=null){ lab+=' '+fmtR(t.R)+(t.exit_reason?'('+t.exit_reason+')':''); }
     aictx.fillText(lab, x1+7, buy?yE+9:yE-9);
     if(!live && t.exit!=null){
@@ -603,11 +604,11 @@ function drawSetups(){
         aictx.beginPath(); aictx.arc(x2,yX,3,0,7); aictx.fill(); }
     }
   }
-  // 撃たなかった点火(建玉中で非重複など)=小さな紫の◇。直近48hのみ(履歴トグルで全部)。
-  for(const o of ((t2Data&&t2Data.observed)||[])){
-    if(o.entry==null||o.time==null) continue;
-    if(!showAiHistory && (nowT - o.time) > 48*3600) continue;
-    const et=nearestBarTime(o.time); if(et==null) continue;
+  // 撃たなかった点火(建玉中で非重複・古い発火など)=小さな紫の◇。直近48hのみ(履歴トグルで全部)。撃った点火は上の◆が兼ねる。
+  for(const o of ((t2Data&&t2Data.fires)||[])){
+    if(o.executed||o.entry==null||!o.entry_time) continue;
+    if(!showAiHistory && (nowT - o.entry_time) > 48*3600) continue;
+    const et=nearestBarTime(o.entry_time); if(et==null) continue;
     if(et < tFrom || et > tTo) continue;
     const x=tsc.timeToCoordinate(et), y=series.priceToCoordinate(o.entry); if(x==null||y==null) continue;
     aictx.strokeStyle='rgba('+PUR+',0.8)'; aictx.lineWidth=1; aictx.beginPath();
@@ -627,11 +628,26 @@ function updateAiPnl(){
     let lr=p.live_r;
     if(curPx!=null){ lr = (p.side==='SELL') ? (p.entry-curPx)/risk : (curPx-p.entry)/risk; }
     const col = lr>=0?'#56d364':'#f85149';
-    const lane = p.lane==='t2' ? '<span style="color:#c084fc">2タッチ型デモ</span> ' : '';
-    el.innerHTML='<b>🤖 AI '+lane+(p.side==='BUY'?'買い':'売り')+'</b> @'+p.entry.toFixed(2)
+    el.innerHTML='<b>🤖 AI '+(p.side==='BUY'?'買い':'売り')+'</b> @'+p.entry.toFixed(2)
       +' <span style="color:#8b949e">SL'+p.sl.toFixed(2)+' TP'+p.tp.toFixed(2)+'</span>'
       +' ｜ <b style="color:'+col+'">'+(lr>=0?'+':'')+lr.toFixed(2)+'R</b>'
       +' <span style="color:#8b949e;font-size:11px">'+(p.reason||'')+'</span>';
+    return;
+  }
+  // 2タッチ型デモ建玉(MT5Demo 802307)が開いていればそれを見出しに(2026-10-26 会長GO)。損益Rは現在値(リアル)で毎秒追う。
+  const t2open=(t2Data&&t2Data.positions||[]).filter(q=>q.status==='open');
+  if(t2open.length){
+    const q=t2open[t2open.length-1], risk=Math.abs(q.entry-q.sl)||1e-9;
+    let lr=(q.live_r!=null?q.live_r:0);
+    if(curPx!=null){ lr=(q.side==='SELL')?(q.entry-curPx)/risk:(curPx-q.entry)/risk; }
+    const col=lr>=0?'#56d364':'#f85149';
+    const age=t2Data.snapshot_age_s;
+    el.innerHTML='<b style="color:#c084fc">🟣 2タッチ デモ'+(q.side==='BUY'?'買い':'売り')+'</b> @'+q.entry.toFixed(2)
+      +' <span style="color:#8b949e">SL'+q.sl.toFixed(2)+' TP'+q.tp.toFixed(2)+'</span>'
+      +' ｜ <b style="color:'+col+'">'+(lr>=0?'+':'')+lr.toFixed(2)+'R</b>'
+      +(q.profit!=null?' <span style="color:#8b949e">('+(q.profit>=0?'+':'')+q.profit.toFixed(2)+'$)</span>':'')
+      +(t2open.length>1?' <span style="color:#8b949e">他'+(t2open.length-1)+'本</span>':'')
+      +(age!=null&&age>120?' <span style="color:#f0a35e;font-size:11px">⚠デモ更新'+Math.round(age/60)+'分前</span>':'');
     return;
   }
   const s=setupSummary, dm=lastDamashi, k=lastBreak;

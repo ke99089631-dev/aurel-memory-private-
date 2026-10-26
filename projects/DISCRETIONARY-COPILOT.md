@@ -435,3 +435,10 @@ MT5銘柄の答え: US100/NASDAQ100 = **NAS100.r（Cash）**。検証データ(u
 2. **地合い別の前向き採点**: `discretionary/live/reaccel_regime_forward.py`(紙: ブレイク時24h ER をラベル化してキャッシュ `reaccel_regime_labels.json` に貯める=API5000本上限を前向きで克服・閾値 ER≥0.12=トレンド・肥料の `_gold_er` と同値) ＋ `fertilizer/live/fert_reaccel_stats.py`(デモ: 台帳のみで keep/drop×地合い×出口判定)。日次 schtask `AUREL_ReaccelReports` 06:45(`run_reaccel_reports.cmd`)。コックピットに2行追加(`serve_chart.py build_ai_stats` が `ai.regime`/`ai.fert` を出し `chart_live.html` が「再加速×地合い」「肥料デモ806809」を表示)。
    - 初回結果(158/234本=部分): 再加速 トレンド n=11 **-0.38R** / チョップ n=147 +0.19R。外壁も同じ向き。**固定閾値では会長仮説は不支持**(ただし11本=サンプル不足・節目トレンド側30本)。※14時台の第一報「三分位で高ほど良い(+0.36)」は上位境界0.07でチョップ圏内の相対区分=誤り、訂正。
 3. 16年バックテスト(≈0)と前向き(+0.17R/本)の矛盾は保留。前向き100本(10-24採点ルール変更以降で区切る)を待つ。
+
+## 2026-10-26 会長GO: 2タッチ型(touch2sb)デモの建玉・決着・点火をWebチャートに表示（紫）
+- きっかけ: PC復旧後の点検で会長『デモで建玉中なのにWebチャートは持っていない。ズレか？』→ ズレでなく表示の穴。チャートの建玉見出しは setup_ledger(本線S番号)の open だけを読み、demo_exec が撃つ本命 touch2sb(T2-xxxx) は描画対象外だった(10-24に「未着手」と記録済み)。
+- 実装(読取のみ・発注系不変): `demo_exec.py DemoSession.snapshot()` が20秒毎に MT5Demo(802307) の建玉(positions_get)と直近45日の決着(history_deals_get・deal.reason で TP/SL/manual)を `live/demo_positions.json` に書く(サーバ時刻GMT+3→-3h補正)。`serve_chart.py build_t2()` が demo_exec_ledger(live=撃った) + touch2sb_ledger(全点火・executed印) + スナップショットを束ね `/api/data` の `t2` {positions, fires, snapshot_age_s, balance, equity} で配る。`chart_live.html`: 見出し🟣「2タッチ デモ売り @建値 SL/TP ±R (±$)」(本線に建玉が無い時・スナップショットが2分超古いと⚠)、チャートに紫の建値線＋SL赤帯/TP緑帯(建玉中)＋◆、決着は直近48hのみ◆＋R(それ以前は履歴トグル)、撃たなかった点火は小さな◇「2T点火(撃たず)」。
+- 検証: py_compile/node --check OK。再起動後 `/api/data` に t2(T2-1792716000 SELL 4020.92 open +34.27$・点火4件/撃った1件・残高996.91)。demo_exec 新pid 12796 / 8793 pid 13848。
+- 作法メモ: 同じGOを2セッション(本部屋と検証室)が同時に実装して衝突(`let t2Data` 二重宣言でJSが壊れる所だった)。以後、同じ会長GOを受けた別セッションがいたら SendMessage で先に所有者を決める。
+- 併記: S-0336(+6.28R)はv1除外(時間帯)の紙のみ。10-23 23:55時点の肥料は keep のみ発火(全部撃ちは10-24 14:37から)でデモ未エントリー。会長『336は全撃ち設定前だったということね』=その通り。
