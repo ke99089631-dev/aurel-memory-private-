@@ -63,6 +63,15 @@ ARM = "CHAIRMAN-GO"
 #   根拠=時代別+忠実性検証で touch2sb=金近年+0.188R Sharpe1.0 p0.03。dynamic_box版reaccel(+0.046/近年)より本命が強い。
 #   旧reaccelは発注停止(FIRE_MODES空)=setup_ledgerに記録は残り observe(対照群)として並走。
 #   出口(事前固定)=デモ touch2sb が確定30本に達した時点でネット平均R<0 なら本切替を戻す(FIRE_ENGINE=reaccel)。
+# ★2026-10-26 会長GO(事前固定・以後触らない): 紙(touch2sb_engine.backtest)と実射を同じ物差しにする2点。
+#   ① MAX_HOLD_BARS=288: 約定から取引M5足288本(≈24h)で成行クローズ。紙の TIME 切れと同じ。
+#      根拠=金近年266本: 24h切れ +0.188R/Sharpe1.02 vs 無制限 +0.118/Sharpe0.57(関門落選)。時間切れ45本を持ち続けると+33.4R→+24.9R。
+#   ② MAX_CONCURRENT=2: 同時建玉2本まで(3本目の点火は observe)。
+#      根拠=同時1本 合計+55.9R/Sharpe1.09/DD-11.6 → 2本 +105.0/1.55/-15.1(OOS +0.567 Sharpe3.09 p0.002)。3本以上は上積み無しでDDだけ増。
+#   出口(事前固定)=新ルールで確定30本に達した時点でネット平均R<0 なら MAX_CONCURRENT=1 に戻す(時間切れは残す)。
+#   RESULTS: AssetEmpire/empire/research/wall_to_wall/RESULTS_touch2sb_hold_and_concurrency.md
+MAX_HOLD_BARS = 288
+MAX_CONCURRENT = 2
 FIRE_ENGINE = "touch2sb"               # 発注の主系統（touch2sb=本命 / reaccel=旧・観測のみ）
 FIRE_WALL_KINDS = ("outer",)           # (旧reaccel用)発注してよい壁種別。FIRE_MODES空なので実質observe
 FIRE_MODES = ()                        # ★旧reaccelは発注停止(observe継続)。本命は touch2sb_ledger から撃つ
@@ -203,6 +212,51 @@ class DemoSession:
             return 0
         return sum(1 for p in ps if int(p.magic) == MAGIC)
 
+    def bars_since(self, t_open):
+        """約定(サーバ時刻epoch)から現在までの確定M5足の本数。MT5の rates.time も同じサーバ時刻基準なので補正不要。"""
+        mt5 = self.mt5
+        r = mt5.copy_rates_from_pos(SYMBOL, mt5.TIMEFRAME_M5, 0, 3000)
+        if r is None:
+            return None
+        return int(sum(1 for x in r if int(x["time"]) > int(t_open)))
+
+    def close_expired(self, dry=False):
+        """★時間切れ(MAX_HOLD_BARS)の建玉を成行でクローズ。デモ限定・毎回 assert_demo。戻り値=クローズした記録のリスト。"""
+        mt5 = self.mt5
+        self.assert_demo("時間切れ確認")
+        out = []
+        for p in (mt5.positions_get(symbol=SYMBOL) or []):
+            if int(p.magic) != MAGIC:
+                continue
+            nb = self.bars_since(p.time)
+            if nb is None or nb < MAX_HOLD_BARS:
+                continue
+            sid = (p.comment or "").replace("ai-demo-", "")
+            is_buy = int(p.type) == mt5.POSITION_TYPE_BUY
+            t = mt5.symbol_info_tick(SYMBOL)
+            price = t.bid if is_buy else t.ask
+            rec = {"kind": "close", "sid": sid, "ticket": int(p.ticket), "reason": "TIME", "bars": nb,
+                   "side": "BUY" if is_buy else "SELL", "entry": float(p.price_open), "exit_ref": float(price),
+                   "profit_before": float(p.profit)}
+            if dry:
+                rec["dry"] = True; out.append(rec); continue
+            self.assert_demo("時間切れクローズ直前")
+            r = None
+            for filling in (mt5.ORDER_FILLING_IOC, mt5.ORDER_FILLING_FOK, mt5.ORDER_FILLING_RETURN):
+                req = {"action": mt5.TRADE_ACTION_DEAL, "symbol": SYMBOL, "position": int(p.ticket),
+                       "volume": float(p.volume), "type": (mt5.ORDER_TYPE_SELL if is_buy else mt5.ORDER_TYPE_BUY),
+                       "price": price, "deviation": 20, "magic": MAGIC, "comment": "ai-demo-TIME",
+                       "type_time": mt5.ORDER_TIME_GTC, "type_filling": filling}
+                r = mt5.order_send(req)
+                if r is None:
+                    continue
+                if r.retcode == mt5.TRADE_RETCODE_DONE or r.retcode not in (mt5.TRADE_RETCODE_INVALID_FILL,):
+                    break
+            rec["retcode"] = getattr(r, "retcode", None); rec["exit"] = getattr(r, "price", None)
+            rec["ok"] = (r is not None and r.retcode == mt5.TRADE_RETCODE_DONE)
+            out.append(rec)
+        return out
+
     def bracket(self, side, lot, sl, tp, comment):
         """SL/TPを成行と同じorder_sendでサーバー側に載せる（約定と同時に床が立つ）。"""
         mt5 = self.mt5
@@ -264,7 +318,8 @@ class DemoSession:
             i = io.get("in"); o = io.get("out")
             if i is None or o is None:
                 continue
-            reason = "TP" if int(o.reason) == r_tp else ("SL" if int(o.reason) == r_sl else "manual")
+            reason = "TP" if int(o.reason) == r_tp else ("SL" if int(o.reason) == r_sl else
+                     ("TIME" if "TIME" in (o.comment or "") else "manual"))   # 時間切れクローズは comment "ai-demo-TIME"
             closed.append({"position_id": pid, "sid": (i.comment or "").replace("ai-demo-", ""),
                            "side": "BUY" if int(i.type) == buy_deal else "SELL",
                            "entry": float(i.price), "exit": float(o.price),
@@ -300,6 +355,17 @@ def run(dry=True, armed=False, once=False):
         if os.path.exists(KILL):
             print("[KILL] キルスイッチ検知→発注せず停止")
             return False
+        # ★時間切れ(288本)の建玉を先にクローズ(紙のTIME切れと同じ)。dryなら表示のみ。
+        if sess is not None and armed:
+            try:
+                for rec in sess.close_expired(dry=dry):
+                    print("[時間切れクローズ%s] %s %s bars=%d entry=%.2f exit=%s ok=%s" % (
+                        "(DRY)" if dry else "", rec["sid"], rec["side"], rec["bars"], rec["entry"],
+                        rec.get("exit") or rec.get("exit_ref"), rec.get("ok")), flush=True)
+                    if not dry:
+                        log_exec(rec)
+            except Exception as e:
+                print("[時間切れ確認エラー・継続] %r" % e, flush=True)
         if sess is not None:
             try:
                 sess.snapshot()          # 読取のみ。失敗は発注ループに影響させない
@@ -339,11 +405,12 @@ def run(dry=True, armed=False, once=False):
             # ★非重複ガード(touch2sb): 既にデモ建玉があれば今回の発火は撃たない＝backtest(+0.188)の「同時1本」に合わせる。
             if f["mode"] == "touch2sb" and not dry and armed and sess is not None:
                 try:
-                    if sess.open_magic_positions() > 0:
-                        print("[observe・建玉中につき撃たず] %s %s SL%.3f TP%.3f" % (f["sid"], f["side"], f["sl"], f["tp"]))
+                    nopen = sess.open_magic_positions()
+                    if nopen >= MAX_CONCURRENT:
+                        print("[observe・同時%d本の枠が埋まり撃たず] %s %s SL%.3f TP%.3f" % (MAX_CONCURRENT, f["sid"], f["side"], f["sl"], f["tp"]))
                         log_exec({"kind": "observe", "sid": f["sid"], "side": f["side"],
                                   "wall_kind": f["wall_kind"], "mode": f["mode"],
-                                  "sl": f["sl"], "tp": f["tp"], "entry_ref": f["entry"], "why": "建玉中(非重複)"})
+                                  "sl": f["sl"], "tp": f["tp"], "entry_ref": f["entry"], "why": "同時%d本の枠が埋まり(非重複)" % MAX_CONCURRENT})
                         seen.add(f["sid"]); continue
                 except Exception as e:
                     print("[建玉確認エラー・安全側で撃たず] %s %r" % (f["sid"], e))

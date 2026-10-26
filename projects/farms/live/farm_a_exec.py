@@ -38,6 +38,9 @@ REAL_FORBIDDEN = 27972608
 NEED_TOUCHES = 2
 PROF = {"tp_mm": 0.85}        # 金固有閾値なし・NYはセッションで担保
 RISK_FRAC = 0.004             # 口座の0.4%/トレード(凍結仕様)
+# ★2026-10-26 会長GO: 紙(touch2sb_engine.backtest MAX_HOLD=288)と同じ時間切れを実射に入れる。
+#   約定から確定M5足288本(≈24h取引時間)で成行クローズ。TP/SL式・入り方は不変。同時2本化は NAS100 で別途測ってから(今は非重複のまま)。
+MAX_HOLD_BARS = 288
 BARS = sb.BOX_WINDOW + sb.RETEST_BARS + 10   # 信号判定に足りる本数
 
 
@@ -133,6 +136,51 @@ class FarmSession:
         ps = self.mt5.positions_get(symbol=self.sym) or []
         return sum(1 for p in ps if int(p.magic) == magic)
 
+    def bars_since(self, t_open):
+        """約定(サーバ時刻epoch)からの確定M5足本数。rates.time も同じサーバ時刻基準なので補正不要。"""
+        mt5 = self.mt5
+        r = mt5.copy_rates_from_pos(self.sym, mt5.TIMEFRAME_M5, 0, 3000)
+        if r is None:
+            return None
+        return int(sum(1 for x in r if int(x["time"]) > int(t_open)))
+
+    def close_expired(self, magic, dry=False):
+        """★時間切れ(MAX_HOLD_BARS)の建玉を成行クローズ。畑Aデモ限定・毎回 assert_demo。"""
+        mt5 = self.mt5
+        self.assert_demo("時間切れ確認")
+        out = []
+        for p in (mt5.positions_get(symbol=self.sym) or []):
+            if int(p.magic) != magic:
+                continue
+            nb = self.bars_since(p.time)
+            if nb is None or nb < MAX_HOLD_BARS:
+                continue
+            is_buy = int(p.type) == mt5.POSITION_TYPE_BUY
+            t = mt5.symbol_info_tick(self.sym)
+            price = t.bid if is_buy else t.ask
+            rec = {"farm": "A-US100", "ts": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
+                   "symbol": self.sym, "mode": "close", "reason": "TIME", "bars": nb, "ticket": int(p.ticket),
+                   "comment": p.comment, "side": "BUY" if is_buy else "SELL", "entry": float(p.price_open),
+                   "exit_ref": float(price), "profit_before": float(p.profit), "lot": float(p.volume)}
+            if dry:
+                rec["dry"] = True; out.append(rec); continue
+            self.assert_demo("時間切れクローズ直前")
+            r = None
+            for filling in (mt5.ORDER_FILLING_IOC, mt5.ORDER_FILLING_FOK, mt5.ORDER_FILLING_RETURN):
+                req = {"action": mt5.TRADE_ACTION_DEAL, "symbol": self.sym, "position": int(p.ticket),
+                       "volume": float(p.volume), "type": (mt5.ORDER_TYPE_SELL if is_buy else mt5.ORDER_TYPE_BUY),
+                       "price": price, "deviation": 20, "magic": magic, "comment": "farmA-TIME",
+                       "type_time": mt5.ORDER_TIME_GTC, "type_filling": filling}
+                r = mt5.order_send(req)
+                if r is None:
+                    continue
+                if r.retcode == mt5.TRADE_RETCODE_DONE or r.retcode not in (mt5.TRADE_RETCODE_INVALID_FILL,):
+                    break
+            rec["retcode"] = getattr(r, "retcode", None); rec["exit"] = getattr(r, "price", None)
+            rec["ok"] = (r is not None and r.retcode == mt5.TRADE_RETCODE_DONE)
+            out.append(rec)
+        return out
+
     def bracket(self, side, lot, sl, tp, comment, magic):
         mt5 = self.mt5
         self.assert_demo("発注直前")       # ★毎回再検証
@@ -166,6 +214,15 @@ MAGIC = 806782
 def scan_once(sess, state, armed):
     if os.path.exists(KILL):
         print("[KILL_FARM_A] 停止"); return state, True
+    # ★時間切れ(288本)の建玉を先にクローズ(紙のTIME切れと同じ)。armed時のみ実行・記録。
+    if armed:
+        try:
+            for rec in sess.close_expired(MAGIC):
+                _log(rec)
+                print("[時間切れクローズ] %s bars=%d entry=%.2f exit=%s ok=%s" % (
+                    rec["side"], rec["bars"], rec["entry"], rec.get("exit"), rec.get("ok")))
+        except Exception as e:
+            print("[時間切れ確認エラー・継続] %r" % e)
     m5 = sess.bars()
     if m5 is None:
         print("[%s] バー不足/未取得→スキップ" % datetime.now().strftime("%H:%M:%S")); return state, False
