@@ -41,6 +41,12 @@ RISK_FRAC = 0.004             # 口座の0.4%/トレード(凍結仕様)
 # ★2026-10-26 会長GO: 紙(touch2sb_engine.backtest MAX_HOLD=288)と同じ時間切れを実射に入れる。
 #   約定から確定M5足288本(≈24h取引時間)で成行クローズ。TP/SL式・入り方は不変。同時2本化は NAS100 で別途測ってから(今は非重複のまま)。
 MAX_HOLD_BARS = 288
+# ★2026-10-26 会長GO(17:30)『畑Aも2本までにしよう』: 同時建玉2本まで(3本目の点火は observe)。
+#   根拠(US100 NY 2024-01〜26-06・24h切れ固定・コスト0.81bps): 単ポジ 合計+35.1R/年≈+14/Sharpe0.55/DD-18.7
+#   → 同時2本 +88.6R/年≈+36/Sharpe0.96/DD-22.6(OOS +0.168→+0.207)。3本以上は伸びるがDDも伸びる(無制限DD-30.8・最大同時8本)。
+#   出口(事前固定)=新ルールで確定30本に達した時点でネット平均R<0 なら MAX_CONCURRENT=1 に戻す(時間切れは残す)。
+#   RESULTS: AssetEmpire/empire/research/wall_to_wall/RESULTS_touch2sb_hold_and_concurrency.md
+MAX_CONCURRENT = 2
 BARS = sb.BOX_WINDOW + sb.RETEST_BARS + 10   # 信号判定に足りる本数
 
 
@@ -244,10 +250,10 @@ def scan_once(sess, state, armed):
     base = {"farm": "A-US100", "ts": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
             "symbol": sess.sym, "side": side, "wall": wall, "sl": sl, "tp": tp, "risk": risk,
             "confirm_id": cid}
-    # 非重複(建玉中は撃たない)
-    if armed and sess.open_magic_positions(MAGIC) > 0:
-        base.update({"mode": "observe", "why": "建玉中(非重複)"}); _log(base)
-        print("[observe・建玉中につき撃たず] %s SL%.2f TP%.2f" % (side, sl, tp)); return state, False
+    # 同時建玉の上限(MAX_CONCURRENT本まで・枠が埋まっていれば撃たない)
+    if armed and sess.open_magic_positions(MAGIC) >= MAX_CONCURRENT:
+        base.update({"mode": "observe", "why": "同時%d本の枠が埋まり(非重複)" % MAX_CONCURRENT}); _log(base)
+        print("[observe・同時%d本の枠が埋まり撃たず] %s SL%.2f TP%.2f" % (MAX_CONCURRENT, side, sl, tp)); return state, False
     if not armed:
         base.update({"mode": "observe-would-fire"}); _log(base)
         print("[観測・撃たない] %s wall%.2f SL%.2f TP%.2f risk%.2f" % (side, wall or 0, sl, tp, risk or 0))
