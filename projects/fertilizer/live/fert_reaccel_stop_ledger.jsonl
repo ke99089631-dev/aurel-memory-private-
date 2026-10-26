@@ -34,3 +34,5 @@
 {"event": "modify", "sid": "S-0342", "order": 51499962, "entry": 4009.69, "sl": 4006.616, "tp": 4017.075, "retcode": 10009, "ts": "2026-10-26T07:45:23"}
 {"event": "fill", "sid": "S-0342", "side": "BUY", "fill_price": 4009.69, "sl": 4006.62, "tp": 4017.08, "volume": 0.05, "position": 51499962, "gold_er": 0.0114, "gold_regime": "chop", "v1_keep": true, "v1_drop": [], "ts": "2026-10-26T07:46:44"}
 {"event": "close", "sid": "S-0342", "side": "BUY", "position": 51499962, "fill_price": 4009.69, "exit_price": 4006.62, "exit_time": "2026-10-26T10:52:29", "sl": 4006.62, "tp": 4017.08, "volume": 0.05, "R": -1.0, "reason": "SL", "profit": -15.35, "v1_keep": true, "gold_er": 0.0114, "gold_regime": "chop", "ts": "2026-10-26T07:52:46"}
+{"event": "place", "sid": "S-0344", "side": "BUY", "wall_kind": "outer", "entry": 4021.83, "sl": 4014.075, "tp": 4023.545, "lot": 0.02, "order": 51521911, "retcode": 10009, "v1_keep": true, "v1_drop": [], "ts": "2026-10-26T09:00:44"}
+{"event": "modify", "sid": "S-0344", "order": 51521911, "entry": 4018.68, "sl": 4014.075, "tp": 4023.545, "retcode": 10009, "ts": "2026-10-26T09:05:07"}
