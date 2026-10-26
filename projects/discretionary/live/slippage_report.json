@@ -1,33 +1,53 @@
 {
  "summary": {
-  "n": 0,
+  "n": 2,
   "entry_slip_0.3": {
-   "n": 0,
-   "median": null,
-   "mean": 0.0,
-   "p90": null,
-   "adverse_share": 0.0
+   "n": 2,
+   "median": 0.18,
+   "mean": -0.015,
+   "p90": 0.18,
+   "adverse_share": 50.0
+  },
+  "chase_slip_0.3": {
+   "n": 1,
+   "median": 0.06,
+   "p90": 0.06
   },
   "entry_slip_1": {
-   "n": 0,
-   "median": null,
-   "mean": 0.0,
-   "p90": null,
-   "adverse_share": 0.0
+   "n": 2,
+   "median": 0.22,
+   "mean": -0.11,
+   "p90": 0.22,
+   "adverse_share": 50.0
+  },
+  "chase_slip_1": {
+   "n": 1,
+   "median": 0.48,
+   "p90": 0.48
   },
   "entry_slip_3": {
-   "n": 0,
-   "median": null,
-   "mean": 0.0,
-   "p90": null,
-   "adverse_share": 0.0
+   "n": 2,
+   "median": 0.24,
+   "mean": 0.065,
+   "p90": 0.24,
+   "adverse_share": 50.0
+  },
+  "chase_slip_3": {
+   "n": 1,
+   "median": 0.66,
+   "p90": 0.66
   },
   "entry_slip_120": {
-   "n": 0,
-   "median": null,
-   "mean": 0.0,
-   "p90": null,
-   "adverse_share": 0.0
+   "n": 2,
+   "median": 3.64,
+   "mean": 2.57,
+   "p90": 3.64,
+   "adverse_share": 100.0
+  },
+  "chase_slip_120": {
+   "n": 1,
+   "median": -1.02,
+   "p90": -1.02
   },
   "sl": {
    "n": 0,
@@ -38,18 +58,53 @@
    "max": null
   },
   "tp": {
-   "n": 0,
-   "fill_ok": 0,
+   "n": 2,
+   "fill_ok": 2,
    "fill_miss": 0
   },
   "spread_at_entry": {
-   "median": null,
-   "p90": null,
-   "max": null
+   "median": 0.16,
+   "p90": 0.16,
+   "max": 0.16
   },
-  "open_vs_tick_abs_median": null,
+  "open_vs_tick_abs_median": 0.0,
   "adopt_latency_s": 1.0,
-  "generated": "2026-10-26 09:28:30"
+  "generated": "2026-10-26 09:58:27"
  },
- "rows": []
+ "rows": [
+  {
+   "id": "S-0336",
+   "side": "SELL",
+   "risk": 2.6790000000000873,
+   "exit_reason": "TP",
+   "R": 6.28,
+   "bid0": 4004.21,
+   "spread_pt": 0.15,
+   "slip_0.3": -0.21,
+   "slip_1": -0.44,
+   "slip_3": -0.11,
+   "slip_120": 1.5,
+   "open_vs_tick": 0.0,
+   "tp_fill_ok": true
+  },
+  {
+   "id": "S-0338",
+   "side": "SELL",
+   "risk": 3.418999999999869,
+   "exit_reason": "TP",
+   "R": 1.425,
+   "bid0": 3993.0,
+   "spread_pt": 0.16,
+   "slip_0.3": 0.18,
+   "slip_1": 0.22,
+   "slip_3": 0.24,
+   "slip_120": 3.64,
+   "open_vs_tick": 0.0,
+   "chase_slip_0.3": 0.06,
+   "chase_slip_1": 0.48,
+   "chase_slip_3": 0.66,
+   "chase_slip_120": -1.02,
+   "tp_fill_ok": true
+  }
+ ]
 }

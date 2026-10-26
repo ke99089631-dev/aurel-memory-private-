@@ -1,2 +1,3 @@
 {"ts": "2026-10-22T05:18:44", "gold_er": 0.066, "gold_regime": "chop", "gold_favorable": true, "us100_er": 0.0693, "us100_regime": "chop", "us100_favorable": false}
 {"ts": "2026-10-22T22:11:19", "gold_er": 0.166, "gold_regime": "trend", "gold_favorable": false, "us100_er": 0.1954, "us100_regime": "trend", "us100_favorable": true}
+{"ts": "2026-10-26T00:56:40", "gold_er": 0.0613, "gold_regime": "chop", "gold_favorable": true, "us100_er": 0.0152, "us100_regime": "chop", "us100_favorable": false}
