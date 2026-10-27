@@ -56,6 +56,14 @@ MAX_CONCURRENT = 0               # 同時ポジ上限。0=無制限(会長2026-1
 FIRE_V1 = "all"                  # "all"=keep+drop 全部撃つ / "keep"=採用側のみ(10-23〜10-24 14時台の旧動作)
 BARS = 80                        # ブローカーM5確定足の取得本数(リテスト窓≤24本に十分)
 PRICE_EPS = 0.02                 # 逆指値/SL の変更を発注し直す閾値(ドル)。微小差で連打しない。
+# ★2026-10-27 会長GO: ハイブリッド執行(逆指値＋成行フォロー)。
+#   紙は「トリガーに触れたら約定」。逆指値は「価格が通過しないと約定せず、既に抜けていると置けない」=速いブレイクで取りこぼす(窓切れ)。
+#   その差を埋める: 価格が既にトリガーを抜けていても、行き過ぎがリスク幅×MKT_CHASE_FRAC 以内なら成行で追って拾う。
+#   飛び乗り防止: 行き過ぎがそれを超えたら見送り(skip-too-late)。SL/TPは壁基準(arm)のまま=紙と同じ出口。
+#   計測: 成行約定は entry_mode="market"・slip(建値-trig)を台帳に残し、紙との2軸でズレを可視化。
+HYBRID_MARKET = True             # 成行フォロー 有効/無効のつまみ
+MKT_CHASE_FRAC = 0.33            # トリガー超過が「リスク幅×この割合」以内なら成行で拾う(超=遅すぎ見送り)
+MKT_DEVIATION_PT = 50            # 成行の許容スリッページ(ポイント)。0.01刻みなら≈0.50ドル。これ超は約定拒否
 NOTIFY = False
 
 # runtime(done集合)は git同期の外へ=消失/巻き戻しに強い。MT5Fert端末の隣に置く。
@@ -244,6 +252,32 @@ class FertSession:
         self.assert_demo("取消直前")
         req = {"action": mt5.TRADE_ACTION_REMOVE, "order": int(ticket)}
         return mt5.order_send(req)
+
+    def place_market(self, side, lot, sl, tp, comment, deviation=MKT_DEVIATION_PT):
+        """成行発注(ハイブリッドの追いかけ側)。逆指値が置けない速いブレイクを拾う。
+           現値(BUY=ask/SELL=bid)で約定・SL/TPは壁基準(紙と同じ)。deviation超の滑りは約定拒否。"""
+        mt5 = self.mt5
+        self.assert_demo("成行発注直前")
+        mt5.symbol_select(self.sym, True)
+        t = mt5.symbol_info_tick(self.sym)
+        if t is None:
+            return None
+        otype = mt5.ORDER_TYPE_SELL if side == "SELL" else mt5.ORDER_TYPE_BUY
+        price = float(t.bid if side == "SELL" else t.ask)
+        r = None
+        for filling in (mt5.ORDER_FILLING_IOC, mt5.ORDER_FILLING_FOK):
+            req = {"action": mt5.TRADE_ACTION_DEAL, "symbol": self.sym, "volume": float(lot),
+                   "type": otype, "price": price, "sl": float(sl), "tp": float(tp),
+                   "deviation": int(deviation), "magic": MAGIC, "comment": comment,
+                   "type_filling": filling}
+            r = mt5.order_send(req)
+            if r is None:
+                continue
+            if r.retcode == mt5.TRADE_RETCODE_DONE:
+                return r
+            if r.retcode not in (mt5.TRADE_RETCODE_INVALID_FILL,):
+                return r
+        return r
 
     def shutdown(self):
         self.mt5.shutdown()
@@ -434,10 +468,55 @@ def scan_once(sess, armed_flag, observe):
         if t is None:
             continue
         # 逆指値の有効条件: SELL_STOPは現値(bid)より下・BUY_STOPは現値(ask)より上。stops_levelぶん離す。
-        if sell and arm["entry"] >= t.bid - stops:
-            # 既に割り込み済み=クリーンな入りを逃した→追わない(飛び乗り禁止)。既存pendingは残す(次足で更新)。
-            continue
-        if (not sell) and arm["entry"] <= t.ask + stops:
+        passed = (arm["entry"] >= t.bid - stops) if sell else (arm["entry"] <= t.ask + stops)
+        if passed:
+            # 価格が既にトリガーを抜けた=クリーンな逆指値は置けない(=窓切れの発生点)。
+            # ★2026-10-27 会長GO ハイブリッド: 行き過ぎが小さければ成行で追って拾う(紙に寄せる)。遠すぎは飛び乗りNG=見送り。
+            if not HYBRID_MARKET:
+                continue
+            if sid in posn or sid in done:
+                continue
+            if MAX_CONCURRENT and len(posn) >= MAX_CONCURRENT:
+                _log({"event": "skip-maxpos", "sid": sid}); continue
+            risk = abs(float(arm["entry"]) - float(arm["sl"]))
+            now = float(t.bid if sell else t.ask)
+            over = (arm["entry"] - now) if sell else (now - arm["entry"])     # トリガーからの行き過ぎ(＋=抜けた分)
+            if risk <= 0 or over > MKT_CHASE_FRAC * risk:
+                _log({"event": "skip-too-late", "sid": sid, "side": side, "entry_ref": arm["entry"],
+                      "now": round(now, 3), "over": round(over, 3), "risk": round(risk, 3),
+                      "cap": round(MKT_CHASE_FRAC * risk, 3)})
+                print("[成行見送り・遅] %s over%.2f>cap%.2f" % (sid, over, MKT_CHASE_FRAC * risk))
+                continue
+            lot = sess.lot_for(now, arm["sl"])
+            if observe:
+                _log({"event": "would-market", "sid": sid, "side": side, "wall_kind": a["wall_kind"],
+                      "entry_ref": arm["entry"], "now": round(now, 3), "over": round(over, 3),
+                      "sl": arm["sl"], "tp": arm["tp"], "lot": lot,
+                      "v1_keep": a.get("v1_keep"), "v1_drop": a.get("v1_drop")})
+                print("[観測・成行フォローするはず] %s %s now%.2f over%.2f" % (sid, side, now, over))
+                continue
+            if sid in pend:                                                  # 停滞した逆指値は取消してから成行(二重建玉防止)
+                sess.cancel(pend[sid].ticket)
+            r = sess.place_market(side, lot, arm["sl"], arm["tp"], "fert-%s" % sid)
+            ok = (r is not None and r.retcode == sess.mt5.TRADE_RETCODE_DONE)
+            fp = float(getattr(r, "price", now) or now)
+            pos_id = getattr(r, "order", None)
+            if ok and not pos_id:
+                pp = sess.positions_by_sid().get(sid)
+                pos_id = getattr(pp, "ticket", None) if pp else None
+            ger, greg = _gold_er()
+            keep, drop = _v1_of(sid)
+            _log({"event": "fill" if ok else "market-ng", "sid": sid, "side": side,
+                  "fill_price": round(fp, 3), "sl": arm["sl"], "tp": arm["tp"], "volume": lot,
+                  "position": pos_id, "entry_mode": "market", "entry_ref": arm["entry"],
+                  "over": round(over, 3), "slip": round(abs(fp - arm["entry"]), 3),
+                  "gold_er": ger, "gold_regime": greg,
+                  "v1_keep": keep if keep is not None else a.get("v1_keep"), "v1_drop": drop,
+                  "retcode": getattr(r, "retcode", None)})
+            print("[成行フォロー%s] %s %s 建値%.2f(trig%.2f over%.2f) ret=%s" % (
+                "OK" if ok else "NG", sid, side, fp, arm["entry"], over, getattr(r, "retcode", None)))
+            if ok:
+                done.add(sid); save_done(done)
             continue
         lot = sess.lot_for(arm["entry"], arm["sl"])
         comment = "fert-%s" % sid
