@@ -106,3 +106,5 @@ UnicodeDecodeError: 'utf-8' codec can't decode byte 0x8f in position 0: invalid 
 [skip] S-0347 BUY（発火が古い>180s・バックフィル防止）
 [skip] S-0355 SELL（発火が古い>180s・バックフィル防止）
 [skip] S-0356 BUY（発火が古い>180s・バックフィル防止）
+[skip] S-0359 BUY（発火が古い>180s・バックフィル防止）
+[skip] S-0360 BUY（発火が古い>180s・バックフィル防止）
