@@ -71,3 +71,4 @@
 {"event": "modify", "sid": "S-0354", "order": 51694908, "entry": 4018.91, "sl": 4028.176, "tp": 3989.315, "retcode": 10009, "ts": "2026-10-26T18:00:06"}
 {"event": "modify", "sid": "S-0354", "order": 51694908, "entry": 4019.03, "sl": 4028.176, "tp": 3989.315, "retcode": 10009, "ts": "2026-10-26T18:05:10"}
 {"event": "cancel", "sid": "S-0354", "why": "窓切れ/非armed", "order": 51694908, "retcode": 10009, "ts": "2026-10-26T18:05:30"}
+{"event": "place", "sid": "S-0356", "side": "BUY", "wall_kind": "mid", "entry": 4013.13, "sl": 4005.202, "tp": 4015.796, "lot": 0.02, "order": 52539427, "retcode": 10009, "v1_keep": true, "v1_drop": [], "ts": "2026-10-27T11:05:17"}
