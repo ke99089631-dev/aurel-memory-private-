@@ -104,3 +104,5 @@
 [決着記録] S-0360 BUY 建値4037.70→出口4042.86 TP R0.39 損益5.16
 [決着記録] S-0361 BUY 建値4041.61→出口4047.63 TP R0.4 損益6.02
 [成行フォローOK] S-0362 BUY 建値4062.68(trig4062.71 over-0.05) ret=10009
+[接続] 肥料reaccel(逆指値) 806809 / VantageTradingLtd-Demo / 残高1009.46 / XAUUSD  armed=True risk2.0% runtime=C:\Users\user\MT5Fert\fert_reaccel_runtime
+[!!] LIVEデモ発注モード(逆指値を実際に置く/変える/消す)
