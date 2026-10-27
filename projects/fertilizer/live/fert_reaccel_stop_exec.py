@@ -63,6 +63,9 @@ PRICE_EPS = 0.02                 # 逆指値/SL の変更を発注し直す閾�
 #   計測: 成行約定は entry_mode="market"・slip(建値-trig)を台帳に残し、紙との2軸でズレを可視化。
 HYBRID_MARKET = True             # 成行フォロー 有効/無効のつまみ
 MKT_CHASE_FRAC = 0.33            # トリガー超過が「リスク幅×この割合」以内なら成行で拾う(超=遅すぎ見送り)
+STALE_SEC = 600                  # ★2026-10-28 会長GO: 鮮度ガード。ブローカーM5確定足が現在からこの秒数(=2本)以上古ければ、
+                                 #   逆指値も成行も一切出さない。S-0359の「10分古いトリガーを現値が上回る→行き過ぎ小と誤読して成行暴発」を断つ。
+                                 #   これはレシピ変更でなく計測の汚れ(足フィードの遅延)対策。通常 age<300s・2本遅延で~900s=検知。
 MKT_DEVIATION_PT = 50            # 成行の許容スリッページ(ポイント)。0.01刻みなら≈0.50ドル。これ超は約定拒否
 NOTIFY = False
 
@@ -358,10 +361,15 @@ def record_closes(sess, posn, done):
         reason = "TP" if (tp and abs(ex - tp) <= 0.15) else ("SL" if (sl and abs(ex - sl) <= 0.15) else "other")
         profit = float(d.profit) + float(getattr(d, "commission", 0.0) or 0.0) + float(getattr(d, "swap", 0.0) or 0.0)
         keep, drop = _v1_of(sid)
+        # ★2026-10-28 会長GO: 「紙invalid・実約定」バケツ。決着時点の紙の最終status(fold_setups)と入り方(逆指値/成行)を併記。
+        #   紙は足内先読みで同一足を無効化するが実射は約定しうる(S-0358)。この差を集計で貯める(紙のコードは不変)。
+        paper_status = ((_SETUPS.get(sid) or {}).get("reaccel") or {}).get("status")
         _log({"event": "close", "sid": sid, "side": side, "position": int(f["position"]), "fill_price": fp,
               "exit_price": ex, "exit_time": datetime.fromtimestamp(int(d.time), timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
               "sl": sl, "tp": tp, "volume": f.get("volume"), "R": None if R is None else round(R, 3), "reason": reason,
               "profit": round(profit, 2), "v1_keep": keep if keep is not None else f.get("v1_keep"),
+              "entry_mode": f.get("entry_mode", "stop"), "paper_status": paper_status,
+              "paper_invalid_fill": bool(paper_status == "invalid"),
               "gold_er": f.get("gold_er"), "gold_regime": f.get("gold_regime")})
         print("[決着記録] %s %s 建値%.2f→出口%.2f %s R%s 損益%.2f" % (sid, side, fp, ex, reason, None if R is None else round(R, 2), profit))
 
@@ -440,8 +448,22 @@ def scan_once(sess, armed_flag, observe):
     except Exception as e:
         print("[決着記録エラー] %s" % e)
 
+    # ★2026-10-28 会長GO: 鮮度ガード。足フィードが2本以上古ければ section2(置く/追従/成行)を丸ごと止める。
+    #   古い足で compute_arm すると古トリガー/古extを掴み、成行フォローが「行き過ぎ小」と誤読して暴発する(S-0359)。
+    #   section1(約定検知)・section3(窓切れ取消)は安全なので継続。取消は常に安全側。
+    stale = False
+    m5f = sess.bars()
+    t0 = sess.tick()
+    if m5f is not None and len(m5f) and t0 is not None:
+        age = float(t0.time) - (m5f.index[-1].timestamp() + 300.0)
+        if age > STALE_SEC:
+            stale = True
+            _log({"event": "skip-stale", "age_s": round(age, 1),
+                  "last_bar": m5f.index[-1].strftime("%Y-%m-%dT%H:%M:%S"), "now_ts": int(t0.time)})
+            print("[鮮度ガード] 足が%.0fs古い=section2停止(置く/追従/成行を全スキップ)" % age)
+
     # 2) armed を処理: 置く / 追従変更
-    for a in armed:
+    for a in ([] if stale else armed):
         sid = a["sid"]
         if sid in posn or sid in done:
             continue                       # 既に約定/決着
