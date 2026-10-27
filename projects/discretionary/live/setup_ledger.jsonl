@@ -5980,3 +5980,5 @@
 {"kind": "update", "target": "S-0358", "logged_at": "2026-10-27 21:45:08", "reaccel": {"retest_time": 1793104800, "retest_jst": "2026-10-27 21:40", "retest_tol": 0.99, "status": "waiting"}, "reaccel_frozen": true}
 {"kind": "update", "target": "S-0358", "logged_at": "2026-10-27 21:50:02", "waiting_resolved": true, "entry": 4021.15, "entry_time": 1793105100, "entry_jst": "2026-10-27 21:45", "status": "invalid"}
 {"kind": "update", "target": "S-0358", "logged_at": "2026-10-27 21:55:11", "reaccel": {"retest_time": 1793104800, "retest_jst": "2026-10-27 21:40", "retest_tol": 0.99, "status": "invalid", "why": "リテスト中に終値が構造の外"}, "reaccel_frozen": true}
+{"kind": "update", "target": "S-0357", "logged_at": "2026-10-27 22:25:09", "waiting_resolved": true, "status": "no_retest"}
+{"kind": "update", "target": "S-0357", "logged_at": "2026-10-27 22:25:09", "reaccel": {"status": "no_retest"}, "reaccel_frozen": true}
