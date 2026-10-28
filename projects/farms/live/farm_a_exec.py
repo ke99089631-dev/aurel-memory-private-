@@ -166,6 +166,7 @@ class FarmSession:
             price = t.bid if is_buy else t.ask
             rec = {"farm": "A-US100", "ts": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
                    "symbol": self.sym, "mode": "close", "reason": "TIME", "bars": nb, "ticket": int(p.ticket),
+                   "position": int(p.ticket),
                    "comment": p.comment, "side": "BUY" if is_buy else "SELL", "entry": float(p.price_open),
                    "exit_ref": float(price), "profit_before": float(p.profit), "lot": float(p.volume)}
             if dry:
@@ -220,11 +221,21 @@ MAGIC = 806782
 def scan_once(sess, state, armed):
     if os.path.exists(KILL):
         print("[KILL_FARM_A] 停止"); return state, True
+    # ★2026-10-28 会長GO: まずブローカー履歴から決着(SL/TP/TIME)を照合してR記録(漏れていたSL/TP決済を拾う)。
+    if armed:
+        try:
+            for rec in reconcile_closes(sess):
+                print("[決着記録] %s %s 建値%.2f→出口%.2f %s R%s 損益%s" % (
+                    rec["side"], rec["position"], rec["entry"], rec["exit"], rec["reason"],
+                    rec.get("R"), rec.get("profit")))
+        except Exception as e:
+            print("[決着照合エラー・継続] %r" % e)
     # ★時間切れ(288本)の建玉を先にクローズ(紙のTIME切れと同じ)。armed時のみ実行・記録。
     if armed:
         try:
+            # ★2026-10-28: close_expired は成行クローズ"動作"のみ。台帳記録は reconcile_closes に一本化
+            #   (次パスで履歴からR付きで記録=TIME決済にもRが付く)。ここで_logすると重複+R無しになるので記録しない。
             for rec in sess.close_expired(MAGIC):
-                _log(rec)
                 print("[時間切れクローズ] %s bars=%d entry=%.2f exit=%s ok=%s" % (
                     rec["side"], rec["bars"], rec["entry"], rec.get("exit"), rec.get("ok")))
         except Exception as e:
@@ -264,9 +275,85 @@ def scan_once(sess, state, armed):
     r = sess.bracket(side, lot, sl, tp, "farmA-%s" % cid, MAGIC)
     ok = (r is not None and r.retcode == sess.mt5.TRADE_RETCODE_DONE)
     base.update({"mode": "fire", "lot": lot, "retcode": getattr(r, "retcode", None),
-                 "deal": getattr(r, "deal", None), "ok": ok}); _log(base)
+                 "deal": getattr(r, "deal", None), "position": getattr(r, "order", None), "ok": ok}); _log(base)
     print("[発注%s] %s lot%.2f SL%.2f TP%.2f ret=%s" % ("OK" if ok else "NG", side, lot, sl, tp, getattr(r, "retcode", None)))
     return state, False
+
+
+def reconcile_closes(sess):
+    """★2026-10-28 会長GO: 決着の自記録。畑A execは今までTIME切れしか記録せずSL/TP決済が台帳から漏れていた
+       (ブローカー側で約定して消えるだけ=紙との成績比較が不能)。ブローカー履歴(magic=806782)から
+       約定済みポジションのOUT決済を拾い、未記録のものだけ close(R・損益・理由)を台帳へ。これで畑Aも台帳だけで
+       ネットR集計でき、紙(forward)との差分が測れる。R=方向付き(出口-建値)/(建値-SL)。読取のみ発注しない。"""
+    mt5 = sess.mt5
+    sess.assert_demo("決着照合")
+    logged = set(); fires = {}; fires_all = []
+    if os.path.exists(LEDGER):
+        for line in open(LEDGER, encoding="utf-8"):
+            try:
+                d = json.loads(line)
+            except Exception:
+                continue
+            if d.get("mode") == "close":
+                pid0 = d.get("position") if d.get("position") is not None else d.get("ticket")
+                if pid0 is not None:
+                    logged.add(int(pid0))        # ★position/ticketどちらでも重複判定(旧TIME記録はticketのみ)
+            if d.get("mode") == "fire":
+                fires_all.append(d)
+                if d.get("position") is not None:
+                    fires[int(d["position"])] = d
+    from datetime import timedelta
+    now = datetime.now(timezone.utc)
+    deals = mt5.history_deals_get(now - timedelta(days=21), now + timedelta(hours=1)) or []
+    bypos = {}
+    for dl in deals:
+        if int(getattr(dl, "magic", -1)) != MAGIC:
+            continue
+        bypos.setdefault(int(dl.position_id), []).append(dl)
+    out = []
+    for pid, dls in bypos.items():
+        if pid in logged:
+            continue
+        ins = [d for d in dls if int(getattr(d, "entry", -1)) == 0]
+        outs = [d for d in dls if int(getattr(d, "entry", -1)) == 1]
+        if not ins or not outs:
+            continue                      # まだ建玉中(OUT無し)=次回へ
+        din = ins[0]; dout = outs[-1]
+        entry = float(din.price); ex = float(dout.price)
+        side = "BUY" if int(din.type) == mt5.DEAL_TYPE_BUY else "SELL"
+        fr = fires.get(pid)
+        if fr is None:                   # 古い約定(position未記録)=約定時刻 ≈ confirm_id+300s で fire を照合しsl/tpを復元
+            dt_in = int(din.time); best = None; bestdiff = 1e18
+            for f in fires_all:
+                cid = f.get("confirm_id")
+                if not cid:
+                    continue
+                diff = abs(dt_in - (int(cid) + 300))
+                if diff < bestdiff:
+                    bestdiff = diff; best = f
+            fr = best if (best is not None and bestdiff <= 900) else {}
+        fr = fr or {}
+        sl = float(fr["sl"]) if fr.get("sl") is not None else None
+        tp = float(fr["tp"]) if fr.get("tp") is not None else None
+        risk = abs(entry - sl) if sl is not None else (float(fr["risk"]) if fr.get("risk") else None)
+        R = (((entry - ex) if side == "SELL" else (ex - entry)) / risk) if risk else None
+        ocmt = str(getattr(dout, "comment", "") or "")
+        if "TIME" in ocmt:
+            reason = "TIME"
+        elif tp is not None and sl is not None:
+            reason = "TP" if abs(ex - tp) <= abs(ex - sl) else "SL"
+        else:
+            reason = "other"
+        profit = sum(float(getattr(d, "profit", 0.0)) + float(getattr(d, "commission", 0.0) or 0.0)
+                     + float(getattr(d, "swap", 0.0) or 0.0) for d in outs)
+        rec = {"farm": "A-US100", "ts": now.strftime("%Y-%m-%dT%H:%M:%S"), "symbol": sess.sym,
+               "mode": "close", "reason": reason, "position": pid, "side": side,
+               "entry": round(entry, 3), "exit": round(ex, 3),
+               "exit_time": datetime.fromtimestamp(int(dout.time), timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
+               "sl": sl, "tp": tp, "R": None if R is None else round(R, 3),
+               "profit": round(profit, 2), "confirm_id": fr.get("confirm_id"), "lot": fr.get("lot")}
+        _log(rec); out.append(rec)
+    return out
 
 
 def _log(rec):

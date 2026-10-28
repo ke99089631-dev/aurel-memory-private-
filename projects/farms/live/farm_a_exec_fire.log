@@ -5331,3 +5331,23 @@ OpenBLAS error: Memory allocation still failed after 10 retries, giving up.
 [接続] 畑A 806782 / VantageTradingLtd-Demo / 残高1025.58 / NAS100.r  armed=True
 [!!] 二重ロック解錠=LIVEデモ発注モード。NAS100.rに実際に撃ちます。
 [終了]
+[接続] 畑A 806782 / VantageTradingLtd-Demo / 残高1025.58 / NAS100.r  armed=True
+[!!] 二重ロック解錠=LIVEデモ発注モード。NAS100.rに実際に撃ちます。
+[終了]
+[接続] 畑A 806782 / VantageTradingLtd-Demo / 残高1025.58 / NAS100.r  armed=True
+[!!] 二重ロック解錠=LIVEデモ発注モード。NAS100.rに実際に撃ちます。
+[終了]
+[接続] 畑A 806782 / VantageTradingLtd-Demo / 残高1025.58 / NAS100.r  armed=True
+[!!] 二重ロック解錠=LIVEデモ発注モード。NAS100.rに実際に撃ちます。
+[決着記録] SELL 50242628 建値29111.69→出口29002.50 other RNone 損益11.4
+[決着記録] BUY 51622554 建値29199.90→出口29532.05 other RNone 損益32.9
+[決着記録] BUY 51639922 建値29393.90→出口29209.93 other RNone 損益-18.72
+[終了]
+[接続] 畑A 806782 / VantageTradingLtd-Demo / 残高1025.58 / NAS100.r  armed=True
+[!!] 二重ロック解錠=LIVEデモ発注モード。NAS100.rに実際に撃ちます。
+[終了]
+[接続] 畑A 806782 / VantageTradingLtd-Demo / 残高1025.58 / NAS100.r  armed=True
+[!!] 二重ロック解錠=LIVEデモ発注モード。NAS100.rに実際に撃ちます。
+[決着記録] BUY 51622554 建値29199.90→出口29532.05 TP R2.965 損益32.9
+[決着記録] BUY 51639922 建値29393.90→出口29209.93 SL R-1.0 損益-18.72
+[終了]
