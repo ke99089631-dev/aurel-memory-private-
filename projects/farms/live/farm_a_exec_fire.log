@@ -5853,3 +5853,18 @@ OpenBLAS error: Memory allocation still failed after 10 retries, giving up.
 [接続] 畑A 806782 / VantageTradingLtd-Demo / 残高1034.32 / NAS100.r  armed=True
 [!!] 二重ロック解錠=LIVEデモ発注モード。NAS100.rに実際に撃ちます。
 [終了]
+[接続] 畑A 806782 / VantageTradingLtd-Demo / 残高1034.32 / NAS100.r  armed=True
+[!!] 二重ロック解錠=LIVEデモ発注モード。NAS100.rに実際に撃ちます。
+[終了]
+[接続] 畑A 806782 / VantageTradingLtd-Demo / 残高1034.32 / NAS100.r  armed=True
+[!!] 二重ロック解錠=LIVEデモ発注モード。NAS100.rに実際に撃ちます。
+[終了]
+Traceback (most recent call last):
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_a_exec.py", line 493, in <module>
+    main()
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_a_exec.py", line 473, in main
+    sess = FarmSession(env)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_a_exec.py", line 90, in __init__
+    raise RuntimeError("MT5Farm initialize失敗: %s" % (mt5.last_error(),))
+RuntimeError: MT5Farm initialize失敗: (-6, 'Terminal: Authorization failed')

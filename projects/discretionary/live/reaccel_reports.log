@@ -46,3 +46,15 @@ Traceback (most recent call last):
   File "C:\Users\user\.aurel\memory\projects\fertilizer\live\fert_reaccel_stats.py", line 109, in main
     print(md)
 UnicodeEncodeError: 'cp932' codec can't encode character '\u2014' in position 25: illegal multibyte sequence
+Traceback (most recent call last):
+  File "C:\Users\user\.aurel\memory\projects\discretionary\live\reaccel_regime_forward.py", line 153, in <module>
+    main()
+  File "C:\Users\user\.aurel\memory\projects\discretionary\live\reaccel_regime_forward.py", line 149, in main
+    print(md)
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2265' in position 167: illegal multibyte sequence
+Traceback (most recent call last):
+  File "C:\Users\user\.aurel\memory\projects\fertilizer\live\fert_reaccel_stats.py", line 113, in <module>
+    main()
+  File "C:\Users\user\.aurel\memory\projects\fertilizer\live\fert_reaccel_stats.py", line 109, in main
+    print(md)
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2014' in position 25: illegal multibyte sequence
