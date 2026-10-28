@@ -123,3 +123,5 @@
 [終了]
 [接続] 肥料reaccel(逆指値) 806809 / VantageTradingLtd-Demo / 残高991.12 / XAUUSD  armed=True risk2.0% runtime=C:\Users\user\MT5Fert\fert_reaccel_runtime
 [!!] LIVEデモ発注モード(逆指値を実際に置く/変える/消す)
+[逆指値設置OK] S-0365 BUY entry4048.43 SL4042.04 TP4053.42 ret=10009 v1=keep
+[約定検知] S-0365 建値4048.43 lot0.03 pos52640613 v1=keep
