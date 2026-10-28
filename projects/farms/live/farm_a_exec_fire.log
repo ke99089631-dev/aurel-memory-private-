@@ -5688,3 +5688,13 @@ OpenBLAS error: Memory allocation still failed after 10 retries, giving up.
 [接続] 畑A 806782 / VantageTradingLtd-Demo / 残高1033.17 / NAS100.r  armed=True
 [!!] 二重ロック解錠=LIVEデモ発注モード。NAS100.rに実際に撃ちます。
 [終了]
+[接続] 畑A 806782 / VantageTradingLtd-Demo / 残高1033.17 / NAS100.r  armed=True
+[!!] 二重ロック解錠=LIVEデモ発注モード。NAS100.rに実際に撃ちます。
+[終了]
+[接続] 畑A 806782 / VantageTradingLtd-Demo / 残高1033.17 / NAS100.r  armed=True
+[!!] 二重ロック解錠=LIVEデモ発注モード。NAS100.rに実際に撃ちます。
+[終了]
+[接続] 畑A 806782 / VantageTradingLtd-Demo / 残高1033.17 / NAS100.r  armed=True
+[!!] 二重ロック解錠=LIVEデモ発注モード。NAS100.rに実際に撃ちます。
+[時間切れクローズ] BUY bars=288 entry=29705.41 exit=29720.11 ok=True
+[終了]
