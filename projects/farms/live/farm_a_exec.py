@@ -217,6 +217,92 @@ class FarmSession:
 
 MAGIC = 806782
 
+# ★2026-10-28 会長GO: 紙の双子レーン。execが使うブローカー足(NAS100.r・ブローカー時計)から、同じ信号で
+#   touch=約定を模擬し、同じ出口(TP/SL・MAX_HOLD288 TIME)でRを確定する=execと「同じ足・同じ時計・同じ信号」。
+#   既存 farm_a_forward は別フィード(yfinance NQ=F・真UTC)で双子にならないと判明(obs#24)。これが真の紙双子。
+#   cid はexecの confirm_id と同一(ブローカー時刻)なので差分突合がTZ補正なしで噛み合う。0円・記録のみ。
+PAPER_LEDGER = os.path.join(HERE, "farm_a_paper_ledger.jsonl")
+PAPER_STATE = os.path.join(HERE, "farm_a_paper_state.json")
+PAPER_COST_BPS = 0.81          # forward と同じコスト前提でnetRを併記
+
+
+def _paper_log(rec):
+    with open(PAPER_LEDGER, "a", encoding="utf-8") as f:
+        f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+
+
+def _paper_load():
+    open_tr = []
+    if os.path.exists(PAPER_STATE):
+        try:
+            open_tr = json.load(open(PAPER_STATE, encoding="utf-8")).get("open", [])
+        except Exception:
+            open_tr = []
+    done = set()
+    if os.path.exists(PAPER_LEDGER):
+        for ln in open(PAPER_LEDGER, encoding="utf-8"):
+            try:
+                done.add(str(json.loads(ln)["cid"]))
+            except Exception:
+                pass
+    return open_tr, done
+
+
+def _paper_save(open_tr):
+    json.dump({"open": open_tr}, open(PAPER_STATE, "w", encoding="utf-8"))
+
+
+def _paper_close_rec(t, exit_px, reason, nbars):
+    buy = (t["side"] == "BUY"); e = float(t["entry"]); risk = float(t["risk"])
+    R = ((exit_px - e) if buy else (e - exit_px)) / risk if risk else None
+    netR = None if R is None else R - (e * PAPER_COST_BPS / 10000.0) / risk
+    return {"farm": "A-US100", "cid": t["cid"], "entry_time": t.get("entry_jst"),
+            "side": t["side"], "entry": round(e, 2), "sl": t["sl"], "tp": t["tp"],
+            "risk": round(risk, 2), "R": None if R is None else round(R, 3),
+            "netR": None if netR is None else round(netR, 3), "reason": reason,
+            "bars": nbars, "mode": "paper", "logged_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")}
+
+
+def _paper_simulate(t, seg):
+    """seg=約定確認足より後の確定足(時系列)。先に触れたTP/SL、同一足両方はSL優先(保守)、288本でTIME。未決着はNone。"""
+    buy = (t["side"] == "BUY"); sl = float(t["sl"]); tp = float(t["tp"])
+    rows = list(seg.itertuples())
+    for i, row in enumerate(rows):
+        hi = float(row.high); lo = float(row.low)
+        hit_sl = (lo <= sl) if buy else (hi >= sl)
+        hit_tp = (hi >= tp) if buy else (lo <= tp)
+        if hit_sl:                       # 同一足で両方→SL優先(保守)
+            return _paper_close_rec(t, sl, "SL", i + 1)
+        if hit_tp:
+            return _paper_close_rec(t, tp, "TP", i + 1)
+        if i + 1 >= MAX_HOLD_BARS:
+            return _paper_close_rec(t, float(row.close), "TIME", i + 1)
+    return None
+
+
+def paper_step(sess, sig_cid=None, sig=None, entry_px=None, entry_jst=None):
+    """紙双子の1ステップ: 既存の未決着を確定足で解決し、新規信号があれば touch=約定で開始。execと同feed/clock。"""
+    open_tr, done = _paper_load()
+    m5 = sess.bars(400)
+    if m5 is not None and len(m5):
+        still = []
+        for t in open_tr:
+            seg = m5[m5.index > pd.to_datetime(int(t["cid"]) + 300, unit="s", utc=True)]  # 確認足の次足(=約定足)以降
+            res = _paper_simulate(t, seg)
+            if res is None:
+                t["bars"] = len(seg); still.append(t)
+            else:
+                _paper_log(res); done.add(str(t["cid"]))
+                print("[紙双子・決着] cid%s %s %s R%s" % (t["cid"], t["side"], res["reason"], res.get("R")))
+        open_tr = still
+    # 新規信号(重複でなければ touch=約定で開始)
+    if sig_cid is not None and str(sig_cid) not in done and not any(t["cid"] == str(sig_cid) for t in open_tr):
+        open_tr.append({"cid": str(sig_cid), "side": sig["side"], "entry": float(entry_px),
+                        "sl": float(sig["sl"]), "tp": float(sig["tp"]), "risk": float(sig["risk"]),
+                        "entry_jst": entry_jst, "bars": 0})
+        print("[紙双子・新規] cid%s %s entry%.2f" % (sig_cid, sig["side"], entry_px))
+    _paper_save(open_tr)
+
 
 def scan_once(sess, state, armed):
     if os.path.exists(KILL):
@@ -244,16 +330,28 @@ def scan_once(sess, state, armed):
     if m5 is None:
         print("[%s] バー不足/未取得→スキップ" % datetime.now().strftime("%H:%M:%S")); return state, False
     sig = sb.latest_signal(m5, NEED_TOUCHES, PROF)
+    # NYセッション判定(入る足=確定足+5分)・cid・紙双子用の入り値
+    ny_ok = False; cid = None; entry_px = None; entry_jst = None
+    if sig is not None:
+        entry_bar = pd.Timestamp(m5.index[-1]) + pd.Timedelta(minutes=5)
+        ser = pd.Series(pd.to_datetime([entry_bar], utc=True))
+        m = rg.ny_session_mask(ser)
+        mv = m.iloc[0] if hasattr(m, "iloc") else m[0]
+        ny_ok = bool(mv)
+        cid = str(int(pd.Timestamp(m5.index[-1]).timestamp()))
+        entry_px = sig.get("entry") if sig.get("entry") is not None else float(m5["close"].iloc[-1])
+        entry_jst = (entry_bar + pd.Timedelta(hours=9)).strftime("%Y-%m-%d %H:%M")
+    # ★紙双子: 毎スキャンで未決着を解決。新規NY信号があれば touch=約定で開始(execの枠/armedと無関係・0円)。
+    try:
+        paper_step(sess, sig_cid=(cid if (sig is not None and ny_ok) else None),
+                   sig=sig, entry_px=entry_px, entry_jst=entry_jst)
+    except Exception as e:
+        print("[紙双子エラー・継続] %r" % e)
+    # ここから exec の実発注判定(従来)
     if sig is None:
         return state, False
-    # NYセッション判定(入る足=確定足+5分)
-    entry_bar = pd.Timestamp(m5.index[-1]) + pd.Timedelta(minutes=5)
-    ser = pd.Series(pd.to_datetime([entry_bar], utc=True))
-    m = rg.ny_session_mask(ser)
-    mv = m.iloc[0] if hasattr(m, "iloc") else m[0]
-    if not bool(mv):
+    if not ny_ok:
         return state, False
-    cid = str(int(pd.Timestamp(m5.index[-1]).timestamp()))
     if state.get("last_confirm") == cid:
         return state, False           # 同じ確認足で二度撃たない
     state["last_confirm"] = cid; save_state(state)
