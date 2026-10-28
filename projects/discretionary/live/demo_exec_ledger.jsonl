@@ -20,3 +20,4 @@
 {"kind": "observe", "sid": "T2-1792721100", "side": "SELL", "wall_kind": "outer_sb", "mode": "touch2sb", "sl": 4048.89, "tp": 3916.73, "entry_ref": 4010.02, "why": "建玉中(非重複)", "logged_at": "2026-10-23 11:10:05"}
 {"kind": "observe", "sid": "T2-1792721400", "side": "SELL", "wall_kind": "outer_sb", "mode": "touch2sb", "sl": 4047.644, "tp": 3913.289, "entry_ref": 4013.03, "why": "建玉中(非重複)", "logged_at": "2026-10-23 11:15:07"}
 {"kind": "close", "sid": "T2-1792716000", "ticket": 50402957, "reason": "TIME", "bars": 355, "side": "SELL", "entry": 4020.92, "exit_ref": 4007.16, "profit_before": 13.76, "retcode": 10009, "exit": 4007.16, "ok": true, "logged_at": "2026-10-26 16:23:31"}
+{"kind": "live", "sid": "T2-1793146500", "side": "BUY", "lot": 0.01, "sl": 4040.606, "tp": 4131.123, "entry_ref": 4063.66, "retcode": 10009, "deal": 47600561, "order": 52616140, "fill_price": 4064.39, "ok": true, "logged_at": "2026-10-28 09:20:16"}
