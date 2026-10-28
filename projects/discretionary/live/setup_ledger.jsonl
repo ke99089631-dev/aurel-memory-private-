@@ -6306,3 +6306,8 @@
 {"kind": "update", "target": "S-0371", "logged_at": "2026-10-29 05:15:09", "chase": {"entry": 4075.21, "status": "open", "exit_reason": null, "R": null, "mfe_R": 0.54, "mae_R": 0.6}, "chase_frozen": true}
 {"kind": "update", "target": "S-0371", "logged_at": "2026-10-29 05:20:09", "waiting_resolved": true, "entry": 4069.0, "entry_time": 1793218500, "entry_jst": "2026-10-29 05:15", "status": "open", "mfe_R": 0.14, "mae_R": 0.45, "hold_bars": 0}
 {"kind": "update", "target": "S-0371", "logged_at": "2026-10-29 05:20:09", "chase": {"entry": 4075.21, "status": "open", "exit_reason": null, "R": null, "mfe_R": 0.54, "mae_R": 0.69}, "chase_frozen": true}
+{"kind": "update", "target": "S-0371", "logged_at": "2026-10-29 05:25:08", "frozen": true, "mfe_R": 0.14, "mae_R": 0.92, "hold_bars": 1}
+{"kind": "update", "target": "S-0371", "logged_at": "2026-10-29 05:25:08", "chase": {"entry": 4075.21, "status": "open", "exit_reason": null, "R": null, "mfe_R": 0.54, "mae_R": 0.96}, "chase_frozen": true}
+{"kind": "update", "target": "S-0371", "logged_at": "2026-10-29 05:30:08", "frozen": true, "status": "closed", "exit": 4061.249, "exit_reason": "SL", "R": -1.0, "mfe_R": 0.14, "mae_R": 1.56, "hold_bars": 2, "exit_time": 1793219100, "outcome": "ダマシ"}
+{"kind": "update", "target": "S-0371", "logged_at": "2026-10-29 05:30:08", "chase": {"entry": 4075.21, "status": "closed", "exit_reason": "SL", "R": -1.0, "mfe_R": 0.54, "mae_R": 1.31}, "chase_frozen": true}
+{"kind": "update", "target": "S-0371", "logged_at": "2026-10-29 05:30:08", "reaccel": {"retest_time": 1793217900, "retest_jst": "2026-10-29 05:05", "retest_tol": 1.91, "status": "invalid", "why": "リテスト中に終値が構造の外"}, "reaccel_frozen": true}
