@@ -66,6 +66,13 @@ MKT_CHASE_FRAC = 0.33            # トリガー超過が「リスク幅×この�
 STALE_SEC = 600                  # ★2026-10-28 会長GO: 鮮度ガード。ブローカーM5確定足が現在からこの秒数(=2本)以上古ければ、
                                  #   逆指値も成行も一切出さない。S-0359の「10分古いトリガーを現値が上回る→行き過ぎ小と誤読して成行暴発」を断つ。
                                  #   これはレシピ変更でなく計測の汚れ(足フィードの遅延)対策。通常 age<300s・2本遅延で~900s=検知。
+# ★2026-10-28 会長GO(目的=デモの本数・成績を紙に一致させる。やり方は紙と違ってよい):
+#   (A)窓延長: 紙のreaccelが waiting→open に変わっても、デモ未約定なら紙の約定値(entry)に逆指値を残し続ける
+#      (紙トレードが closed/invalid になるまで)。遅れて触れても建値=紙と同値=同R。取りこぼし回収の本丸。
+#   (B)紙の約定値を直接使う: open状態では自前の追従trigでなく紙が公表した entry/sl/tp をそのまま逆指値にする。
+#   (C)スプレッド許容: 紙が約定した本(paper_entry有り)で、確定足の極値が引き金の手前 SPREAD_TOL 以内まで来たのに
+#      逆指値が発動しなかった(フィード差の数セント=S-0363型)なら成行で拾う。対象は紙が約定した本のみ=本数は紙を超えない。
+SPREAD_TOL = 0.12                # スプレッド許容(ドル)。典型スプレッド~0.15より小さめ=届かず数セントのみ救う。0で無効。
 MKT_DEVIATION_PT = 50            # 成行の許容スリッページ(ポイント)。0.01刻みなら≈0.50ドル。これ超は約定拒否
 NOTIFY = False
 
@@ -312,10 +319,19 @@ def reaccel_armed():
         if FIRE_V1 == "keep" and not keep:
             continue
         blk = s.get("reaccel") or {}
-        if blk.get("status") == "waiting" and blk.get("retest_time"):
+        st = blk.get("status")
+        # ★2026-10-28 会長GO(A)窓延長: waiting に加え open(紙は約定済・デモ未約定の可能性)も armed に含める。
+        #   これで紙が約定した瞬間に section3 が逆指値を取消す(=窓切れ)のを防ぎ、紙の約定値で拾い続ける。
+        #   closed/invalid/no_* に進めば armed から外れ section3 が取消=紙が建玉を手放したらデモも降りる。
+        if st in ("waiting", "open") and blk.get("retest_time"):
+            paper_entry = float(blk["entry"]) if (st == "open" and blk.get("entry") is not None) else None
+            paper_sl = float(blk["sl"]) if blk.get("sl") is not None else None
+            paper_tp = float(blk["tp"]) if blk.get("tp") is not None else None
             out.append({"sid": sid, "side": s.get("side"), "wall": s.get("wall"),
                         "wall_kind": s.get("wall_kind"), "sl_base": float(s.get("sl")),
                         "tp": float(s.get("tp")), "retest_time": int(blk["retest_time"]),
+                        "paper_status": st, "paper_entry": paper_entry,
+                        "paper_sl": paper_sl, "paper_tp": paper_tp,
                         "v1_keep": keep, "v1_drop": list((s.get("v1") or {}).get("drop_reasons") or [])})
     return out
 
@@ -404,6 +420,18 @@ def compute_arm(sess, a):
     # 崩壊: 最新確定足の終値が既存SL(構造)の外
     if (sell and lc >= sl_base) or ((not sell) and lc <= sl_base):
         return {"collapse": True}
+    # ★2026-10-28 会長GO(B)紙の約定値を直接使う: 紙が約定済(open)なら自前の追従trigでなく
+    #   紙が公表した entry/sl/tp をそのまま逆指値にする=約定すれば建値が紙と同値=同R。
+    if a.get("paper_entry") is not None:
+        entry = float(a["paper_entry"]); tp_p = float(a.get("paper_tp") or tp)
+        sl_p = float(a.get("paper_sl") or sl_base)
+        ok = (sl_p > entry > tp_p) if sell else (tp_p > entry > sl_p)
+        if not ok:
+            return None
+        if abs(tp_p - entry) < getattr(se, "MIN_TP_W", 1.0):
+            return {"collapse": False, "thin": True}
+        return {"entry": round(entry, 3), "sl": round(sl_p, 3), "tp": round(tp_p, 3),
+                "ext": round(entry, 3), "collapse": False, "src": "paper"}
     ext = float(seg["high"].max()) if sell else float(seg["low"].min())
     trig = float(last["low"]) if sell else float(last["high"])
     pad = se.REACCEL_PAD; minw = getattr(se, "MIN_SL_W", 3.0)
@@ -554,6 +582,45 @@ def scan_once(sess, armed_flag, observe):
                           "sl": arm["sl"], "tp": arm["tp"], "retcode": getattr(r, "retcode", None)})
                     print("[逆指値追従] %s entry%.2f SL%.2f ret=%s" % (sid, arm["entry"], arm["sl"], getattr(r, "retcode", None)))
         else:
+            # ★2026-10-28 会長GO(C)スプレッド許容: 紙が約定した本(paper_entry有り)で、最新確定足の極値が引き金の
+            #   手前 SPREAD_TOL 以内まで来たのに逆指値が未発動(フィード差の数セント=S-0363型)なら成行で紙と同値付近を拾う。
+            #   対象は紙が約定した本のみ=本数は紙を超えない(count-match)。
+            if SPREAD_TOL > 0 and a.get("paper_entry") is not None and m5f is not None and len(m5f):
+                mlast = m5f.iloc[-1]
+                ext2 = float(mlast["low"]) if sell else float(mlast["high"])
+                near = (ext2 - arm["entry"]) if sell else (arm["entry"] - ext2)   # 手前に残った距離(+=届かず)
+                if 0 < near <= SPREAD_TOL:
+                    if MAX_CONCURRENT and len(posn) >= MAX_CONCURRENT:
+                        _log({"event": "skip-maxpos", "sid": sid}); continue
+                    if observe:
+                        _log({"event": "would-spread-fill", "sid": sid, "side": side,
+                              "entry_ref": arm["entry"], "near": round(near, 3), "tol": SPREAD_TOL})
+                        print("[観測・スプレッド許容で拾うはず] %s near%.3f" % (sid, near)); continue
+                    if sid in pend:
+                        sess.cancel(pend[sid].ticket)
+                    t2 = sess.tick()
+                    now2 = float((t2.bid if sell else t2.ask)) if t2 else arm["entry"]
+                    lot2 = sess.lot_for(arm["entry"], arm["sl"])
+                    r = sess.place_market(side, lot2, arm["sl"], arm["tp"], comment)
+                    ok = (r is not None and r.retcode == sess.mt5.TRADE_RETCODE_DONE)
+                    fp = float(getattr(r, "price", now2) or now2)
+                    pos_id = getattr(r, "order", None)
+                    if ok and not pos_id:
+                        pp = sess.positions_by_sid().get(sid)
+                        pos_id = getattr(pp, "ticket", None) if pp else None
+                    ger, greg = _gold_er(); keep2, drop2 = _v1_of(sid)
+                    _log({"event": "fill" if ok else "market-ng", "sid": sid, "side": side,
+                          "fill_price": round(fp, 3), "sl": arm["sl"], "tp": arm["tp"], "volume": lot2,
+                          "position": pos_id, "entry_mode": "spread_tol", "entry_ref": arm["entry"],
+                          "near": round(near, 3), "slip": round(abs(fp - arm["entry"]), 3),
+                          "gold_er": ger, "gold_regime": greg,
+                          "v1_keep": keep2 if keep2 is not None else a.get("v1_keep"), "v1_drop": drop2,
+                          "retcode": getattr(r, "retcode", None)})
+                    print("[スプレッド許容%s] %s %s 建値%.2f(紙%.2f near%.3f) ret=%s" % (
+                        "OK" if ok else "NG", sid, side, fp, arm["entry"], near, getattr(r, "retcode", None)))
+                    if ok:
+                        done.add(sid); save_done(done)
+                    continue
             if MAX_CONCURRENT and len(posn) >= MAX_CONCURRENT:
                 _log({"event": "skip-maxpos", "sid": sid}); continue
             if observe:

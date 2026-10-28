@@ -119,3 +119,7 @@
 [取消・窓切れ] S-0363 ret=10009
 [逆指値設置OK] S-0364 BUY entry4033.58 SL4028.82 TP4036.87 ret=10009 v1=keep
 [取消・窓切れ] S-0364 ret=10009
+[KILL_FERT] 停止
+[終了]
+[接続] 肥料reaccel(逆指値) 806809 / VantageTradingLtd-Demo / 残高991.12 / XAUUSD  armed=True risk2.0% runtime=C:\Users\user\MT5Fert\fert_reaccel_runtime
+[!!] LIVEデモ発注モード(逆指値を実際に置く/変える/消す)
