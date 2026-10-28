@@ -1,41 +1,61 @@
 {
  "summary": {
-  "n": 0,
+  "n": 1,
   "entry_slip_0.3": {
-   "n": 0,
-   "median": null,
+   "n": 1,
+   "median": 0.0,
    "mean": 0.0,
-   "p90": null,
+   "p90": 0.0,
    "adverse_share": 0.0
+  },
+  "chase_slip_0.3": {
+   "n": 1,
+   "median": 0.02,
+   "p90": 0.02
   },
   "entry_slip_1": {
-   "n": 0,
-   "median": null,
-   "mean": 0.0,
-   "p90": null,
+   "n": 1,
+   "median": -0.26,
+   "mean": -0.26,
+   "p90": -0.26,
    "adverse_share": 0.0
+  },
+  "chase_slip_1": {
+   "n": 1,
+   "median": -0.43,
+   "p90": -0.43
   },
   "entry_slip_3": {
-   "n": 0,
-   "median": null,
-   "mean": 0.0,
-   "p90": null,
-   "adverse_share": 0.0
+   "n": 1,
+   "median": 0.16,
+   "mean": 0.16,
+   "p90": 0.16,
+   "adverse_share": 100.0
+  },
+  "chase_slip_3": {
+   "n": 1,
+   "median": 1.05,
+   "p90": 1.05
   },
   "entry_slip_120": {
-   "n": 0,
-   "median": null,
-   "mean": 0.0,
-   "p90": null,
-   "adverse_share": 0.0
+   "n": 1,
+   "median": 0.16,
+   "mean": 0.16,
+   "p90": 0.16,
+   "adverse_share": 100.0
+  },
+  "chase_slip_120": {
+   "n": 1,
+   "median": 4.49,
+   "p90": 4.49
   },
   "sl": {
-   "n": 0,
-   "measured": 0,
+   "n": 1,
+   "measured": 1,
    "not_triggered_on_tick": 0,
-   "median": null,
-   "p90": null,
-   "max": null
+   "median": 0.019,
+   "p90": 0.019,
+   "max": 0.019
   },
   "tp": {
    "n": 0,
@@ -43,13 +63,33 @@
    "fill_miss": 0
   },
   "spread_at_entry": {
-   "median": null,
-   "p90": null,
-   "max": null
+   "median": 0.15,
+   "p90": 0.15,
+   "max": 0.15
   },
-  "open_vs_tick_abs_median": null,
+  "open_vs_tick_abs_median": 0.0,
   "adopt_latency_s": 1.0,
-  "generated": "2026-10-29 05:07:16"
+  "generated": "2026-10-29 05:37:31"
  },
- "rows": []
+ "rows": [
+  {
+   "id": "S-0371",
+   "side": "BUY",
+   "risk": 7.751000000000204,
+   "exit_reason": "SL",
+   "R": -1.0,
+   "bid0": 4069.0,
+   "spread_pt": 0.15,
+   "slip_0.3": 0.0,
+   "slip_1": -0.26,
+   "slip_3": 0.16,
+   "slip_120": 0.16,
+   "open_vs_tick": 0.0,
+   "chase_slip_0.3": 0.02,
+   "chase_slip_1": -0.43,
+   "chase_slip_3": 1.05,
+   "chase_slip_120": 4.49,
+   "sl_slip": 0.019
+  }
+ ]
 }
