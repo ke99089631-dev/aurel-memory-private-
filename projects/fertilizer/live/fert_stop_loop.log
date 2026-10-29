@@ -207,3 +207,5 @@
 [成行フォローOK] S-0384 SELL 建値4023.89(trig4024.41 over0.51) ret=10009
 [逆指値設置OK] S-0385 SELL entry4019.55 SL4025.50 TP4005.70 ret=10009 v1=drop
 [成行フォローOK] S-0385 SELL 建値4022.85(trig4023.01 over0.21) ret=10009
+[逆指値設置OK] S-0386 SELL entry4014.84 SL4025.50 TP4005.70 ret=10009 v1=drop
+[約定検知] S-0386 建値4014.84 lot0.01 pos52777828 v1=drop
