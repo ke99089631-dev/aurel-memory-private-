@@ -139,3 +139,4 @@
 {"event": "modify", "sid": "S-0375", "order": 52714807, "entry": 4024.96, "sl": 4033.003, "tp": 4005.585, "retcode": 10009, "ts": "2026-10-29T06:25:04"}
 {"event": "modify", "sid": "S-0375", "order": 52714807, "entry": 4025.47, "sl": 4033.003, "tp": 4005.585, "retcode": 10009, "ts": "2026-10-29T06:30:10"}
 {"event": "fill", "sid": "S-0375", "side": "SELL", "fill_price": 4025.47, "sl": 4033.0, "tp": 4005.59, "volume": 0.02, "position": 52714807, "gold_er": 0.016, "gold_regime": "chop", "v1_keep": true, "v1_drop": [], "ts": "2026-10-29T06:31:11"}
+{"event": "close", "sid": "S-0375", "side": "SELL", "position": 52714807, "fill_price": 4025.47, "exit_price": 4033.0, "exit_time": "2026-10-29T09:51:17", "sl": 4033.0, "tp": 4005.59, "volume": 0.02, "R": -1.0, "reason": "SL", "profit": -15.06, "v1_keep": true, "entry_mode": "stop", "paper_status": "open", "paper_invalid_fill": false, "gold_er": 0.016, "gold_regime": "chop", "ts": "2026-10-29T06:51:26"}

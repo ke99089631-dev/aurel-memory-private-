@@ -167,3 +167,8 @@
 [逆指値追従] S-0375 entry4024.96 SL4033.00 ret=10009
 [逆指値追従] S-0375 entry4025.47 SL4033.00 ret=10009
 [約定検知] S-0375 建値4025.47 lot0.02 pos52714807 v1=keep
+[KILL_FERT] 停止
+[終了]
+[接続] 肥料reaccel(逆指値) 806809 / VantageTradingLtd-Demo / 残高986.38 / XAUUSD  armed=True risk2.0% runtime=C:\Users\user\MT5Fert\fert_reaccel_runtime
+[!!] LIVEデモ発注モード(逆指値を実際に置く/変える/消す)
+[決着記録] S-0375 SELL 建値4025.47→出口4033.00 SL R-1.0 損益-15.06

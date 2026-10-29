@@ -126,6 +126,18 @@ def _log(rec):
         f.write(json.dumps(rec, ensure_ascii=False) + "\n")
 
 
+def _spread(sess):
+    """★2026-10-29 会長GO: 約定/設置の瞬間のデモ実スプレッド(ask-bid・価格pt)を台帳に貼る。記録のみ・発注判定には不使用。
+       目的=デモ(無印XAUUSD≈0.4の1点実測)と実弾(XAUUSD+ 中央0.16)のコスト差を分布で測る。失敗時は None。"""
+    try:
+        t = sess.tick()
+        if t is None:
+            return None
+        return round(float(t.ask) - float(t.bid), 3)
+    except Exception:
+        return None
+
+
 def _gold_er(win=288, th=0.12):
     """約定に貼る相場メーター(ER)。予想でなく記録ラベル(旬の炙り出し用)・発注判定には不使用。"""
     try:
@@ -467,7 +479,7 @@ def scan_once(sess, armed_flag, observe):
             _log({"event": "fill", "sid": sid, "side": ("SELL" if p.type == sess.mt5.POSITION_TYPE_SELL else "BUY"),
                   "fill_price": p.price_open, "sl": p.sl, "tp": p.tp, "volume": p.volume,
                   "position": p.ticket, "gold_er": ger, "gold_regime": greg,
-                  "v1_keep": keep, "v1_drop": drop})
+                  "v1_keep": keep, "v1_drop": drop, "spread": _spread(sess)})
             print("[約定検知] %s 建値%.2f lot%.2f pos%d v1=%s" % (sid, p.price_open, p.volume, p.ticket, "keep" if keep else "drop"))
             done.add(sid); save_done(done)
     # 1b) 決着の自記録(建玉から消えた約定済みsid→履歴から出口を引いて close を台帳へ)
@@ -560,6 +572,7 @@ def scan_once(sess, armed_flag, observe):
                   "fill_price": round(fp, 3), "sl": arm["sl"], "tp": arm["tp"], "volume": lot,
                   "position": pos_id, "entry_mode": "market", "entry_ref": arm["entry"],
                   "over": round(over, 3), "slip": round(abs(fp - arm["entry"]), 3),
+                  "spread": round(float(t.ask) - float(t.bid), 3) if t else None,
                   "gold_er": ger, "gold_regime": greg,
                   "v1_keep": keep if keep is not None else a.get("v1_keep"), "v1_drop": drop,
                   "retcode": getattr(r, "retcode", None)})
@@ -612,6 +625,7 @@ def scan_once(sess, armed_flag, observe):
                     _log({"event": "fill" if ok else "market-ng", "sid": sid, "side": side,
                           "fill_price": round(fp, 3), "sl": arm["sl"], "tp": arm["tp"], "volume": lot2,
                           "position": pos_id, "entry_mode": "spread_tol", "entry_ref": arm["entry"],
+                          "spread": round(float(t2.ask) - float(t2.bid), 3) if t2 else None,
                           "near": round(near, 3), "slip": round(abs(fp - arm["entry"]), 3),
                           "gold_er": ger, "gold_regime": greg,
                           "v1_keep": keep2 if keep2 is not None else a.get("v1_keep"), "v1_drop": drop2,
@@ -635,7 +649,7 @@ def scan_once(sess, armed_flag, observe):
                 _log({"event": "place" if ok else "place-ng", "sid": sid, "side": side, "wall_kind": a["wall_kind"],
                       "entry": arm["entry"], "sl": arm["sl"], "tp": arm["tp"], "lot": lot,
                       "order": getattr(r, "order", None), "retcode": getattr(r, "retcode", None),
-                      "v1_keep": a.get("v1_keep"), "v1_drop": a.get("v1_drop")})
+                      "v1_keep": a.get("v1_keep"), "v1_drop": a.get("v1_drop"), "spread": _spread(sess)})
                 print("[逆指値設置%s] %s %s entry%.2f SL%.2f TP%.2f ret=%s v1=%s" % (
                     "OK" if ok else "NG", sid, side, arm["entry"], arm["sl"], arm["tp"], getattr(r, "retcode", None),
                     "keep" if a.get("v1_keep") else "drop"))
