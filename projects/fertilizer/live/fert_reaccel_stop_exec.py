@@ -75,6 +75,12 @@ STALE_SEC = 600                  # ★2026-10-28 会長GO: 鮮度ガード。ブ
 #   (C)スプレッド許容: 紙が約定した本(paper_entry有り)で、確定足の極値が引き金の手前 SPREAD_TOL 以内まで来たのに
 #      逆指値が発動しなかった(フィード差の数セント=S-0363型)なら成行で拾う。対象は紙が約定した本のみ=本数は紙を超えない。
 SPREAD_TOL = 0.12                # スプレッド許容(ドル)。典型スプレッド~0.15より小さめ=届かず数セントのみ救う。0で無効。
+# ★2026-10-29 会長GO「すぐ採用」: 連敗中のサイズ縮小(避けるでなく削る)。入り方/SL/TPは不変。
+#   デモの確定が STREAK_CUT_AFTER 本連続で負けたら、次の本から「1勝するまで」ロットを STREAK_CUT_FRAC 倍。
+#   根拠(紙265本): 3連敗後×0.5 → 合計+43.6→+46.7R・DD-15.9→-15.2。順番ランダムなら中央-2.7R(観測以上は3.7%)=負けは固まる。
+#   出口(事前固定): 縮小が掛かった本が30本に達した時点で、縮小本の合計Rがプラス(=縮小が損)なら会長に報告し再判断。
+STREAK_CUT_AFTER = 3
+STREAK_CUT_FRAC = 0.5
 MKT_DEVIATION_PT = 50            # 成行の許容スリッページ(ポイント)。0.01刻みなら≈0.50ドル。これ超は約定拒否
 NOTIFY = False
 
@@ -209,6 +215,7 @@ class FertSession:
             if rp <= 0 or vpp <= 0:
                 return float(si.volume_min or 0.01)
             lot = (ai.balance * RISK_FRAC) / (rp * vpp)
+            lot *= lot_factor()                                   # ★連敗中のサイズ縮小(2026-10-29 会長GO)
             step = si.volume_step or 0.01
             lot = max(si.volume_min or 0.01, round(lot / step) * step)
             return float(min(lot, si.volume_max or lot))
@@ -319,15 +326,10 @@ def _v1_of(sid):
     return bool(v1.get("keep", False)), list(v1.get("drop_reasons") or [])
 
 
-def _context_labels(sid, side):
-    """★2026-10-29 会長GO(赤旗の材料): 建玉前に知り得る2ラベルを台帳に貼る。記録のみ・発注判定には不使用。
-       streak_demo = この瞬間までのデモ連敗数(close の exit_time 順・最後の勝ちで0)
-       streak_paper = 同・紙reaccel(確定本の exit_time 順)
-       mom20 = ブレイク足の20本モメンタム(%・setup.features) / trend_side = "with"(順張り: 方向=直前の動き) or "against"(逆張り)
-       根拠: 紙で3連敗直後の1本 avgR-0.21(n29) / 順 n226 +0.11 vs 逆 n39 +0.46(10-29時点・未証明)。"""
-    out = {"streak_demo": None, "streak_paper": None, "mom20": None, "trend_side": None}
+def demo_loss_streak(exclude_sid=None):
+    """この瞬間までのデモ連敗数(台帳 close を exit_time 順に見て、末尾から連続した負けの本数)。読取のみ。"""
     try:
-        cl = [r for r in _ledger_rows() if r.get("event") == "close" and r.get("R") is not None and r.get("sid") != sid]
+        cl = [r for r in _ledger_rows() if r.get("event") == "close" and r.get("R") is not None and r.get("sid") != exclude_sid]
         cl.sort(key=lambda r: r.get("exit_time") or r.get("ts") or "")
         k = 0
         for r in reversed(cl):
@@ -335,7 +337,27 @@ def _context_labels(sid, side):
                 k += 1
             else:
                 break
+        return k
+    except Exception:
+        return 0
+
+
+def lot_factor():
+    """連敗中のサイズ係数: 連敗 >= STREAK_CUT_AFTER なら STREAK_CUT_FRAC、それ以外 1.0。"""
+    return STREAK_CUT_FRAC if demo_loss_streak() >= STREAK_CUT_AFTER else 1.0
+
+
+def _context_labels(sid, side):
+    """★2026-10-29 会長GO(赤旗の材料): 建玉前に知り得る2ラベルを台帳に貼る。記録のみ・発注判定には不使用。
+       streak_demo = この瞬間までのデモ連敗数(close の exit_time 順・最後の勝ちで0)
+       streak_paper = 同・紙reaccel(確定本の exit_time 順)
+       mom20 = ブレイク足の20本モメンタム(%・setup.features) / trend_side = "with"(順張り: 方向=直前の動き) or "against"(逆張り)
+       根拠: 紙で3連敗直後の1本 avgR-0.21(n29) / 順 n226 +0.11 vs 逆 n39 +0.46(10-29時点・未証明)。"""
+    out = {"streak_demo": None, "streak_paper": None, "mom20": None, "trend_side": None, "lot_factor": None}
+    try:
+        k = demo_loss_streak(exclude_sid=sid)
         out["streak_demo"] = k
+        out["lot_factor"] = STREAK_CUT_FRAC if k >= STREAK_CUT_AFTER else 1.0
     except Exception:
         pass
     try:

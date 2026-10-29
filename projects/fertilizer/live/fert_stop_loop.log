@@ -196,3 +196,7 @@
 [終了]
 [接続] 肥料reaccel(逆指値) 806809 / VantageTradingLtd-Demo / 残高902.57 / XAUUSD  armed=True risk2.0% runtime=C:\Users\user\MT5Fert\fert_reaccel_runtime
 [!!] LIVEデモ発注モード(逆指値を実際に置く/変える/消す)
+[KILL_FERT] 停止
+[終了]
+[接続] 肥料reaccel(逆指値) 806809 / VantageTradingLtd-Demo / 残高902.57 / XAUUSD  armed=True risk2.0% runtime=C:\Users\user\MT5Fert\fert_reaccel_runtime
+[!!] LIVEデモ発注モード(逆指値を実際に置く/変える/消す)
