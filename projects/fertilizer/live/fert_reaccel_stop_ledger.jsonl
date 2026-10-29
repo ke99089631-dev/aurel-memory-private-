@@ -149,3 +149,4 @@
 {"event": "place", "sid": "S-0379", "side": "SELL", "wall_kind": "outer", "entry": 4015.79, "sl": 4026.89, "tp": 4008.35, "lot": 0.02, "order": 52722575, "retcode": 10009, "v1_keep": true, "v1_drop": [], "spread": 0.42, "ts": "2026-10-29T08:55:19"}
 {"event": "modify", "sid": "S-0379", "order": 52722575, "entry": 4018.95, "sl": 4030.59, "tp": 4008.35, "retcode": 10009, "ts": "2026-10-29T09:00:06"}
 {"event": "modify", "sid": "S-0379", "order": 52722575, "entry": 4022.57, "sl": 4030.59, "tp": 4008.35, "retcode": 10009, "ts": "2026-10-29T09:05:11"}
+{"event": "cancel", "sid": "S-0379", "why": "窓切れ/非armed", "order": 52722575, "retcode": 10009, "ts": "2026-10-29T09:10:16"}

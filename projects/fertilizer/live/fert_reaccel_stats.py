@@ -4,7 +4,9 @@
   入力: fert_reaccel_stop_ledger.jsonl の fill/close イベント(close は執行機が履歴から自記録)。
   出力: RESULTS_fert_reaccel_stats.md ＋ fert_reaccel_stats.json(コックピット/ブリーフ用)。
   見るもの:
-    ① 撃つ集合の出口判定(事前固定): デモ全部が確定30本でネット平均R<0 なら FIRE_V1="keep" に戻す。
+    ① 撃つ集合の出口判定(事前固定・旧): デモ全部が確定30本でネット平均R<0 なら FIRE_V1="keep" に戻す。
+       ★2026-10-29 会長決定で廃止: 「今は負けを減らす理由を浮かばせる段階。全部撃ちで勝ちも負けも材料にする。
+       晴れ/雨は相場次第で入れ替わり得るし、別の天気(曇り)もあり得る。まだ見えない」。keep/drop は観測ラベルとして集計継続。
     ② keep/drop 別・地合い(gold_regime: ER<0.12 chop / ≥0.12 trend)別のR。「トレンドでも保つか」の前向き答え合わせ。
   R は約定値基準(建値→出口 / 建値→SL)。profit は手数料込みの実額(ドル)。
 """
@@ -72,14 +74,10 @@ def main():
            "keep_trend": _st([c for c in keep if c.get("gold_regime") == "trend"]),
            "drop_trend": _st([c for c in drop if c.get("gold_regime") == "trend"]),
            "since_fire_all": _st(since_go),
-           "exit_rule": {"n_needed": EXIT_N, "rule": "全部撃ちが確定%d本でネット平均R<0 → FIRE_V1='keep' に戻す" % EXIT_N,
-                         "n_now": len(since_go), "verdict": None},
+           "exit_rule": {"n_needed": None, "rule": "廃止(2026-10-29 会長決定): 晴れ戻しはしない。全部撃ち継続・keep/dropは観測ラベル",
+                         "n_now": len(since_go), "verdict": "観測のみ(全部撃ち %d本)" % len(since_go)},
            "trend_milestone": {"n_needed": 30, "n_now": len(trend)}}
     sg = res["since_fire_all"]
-    if sg.get("n", 0) >= EXIT_N:
-        res["exit_rule"]["verdict"] = "戻す(keepのみ)" if sg.get("avg_R", 0) < 0 else "継続(全部)"
-    else:
-        res["exit_rule"]["verdict"] = "判定前(%d/%d本)" % (sg.get("n", 0), EXIT_N)
     json.dump(res, open(OUT_JS, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
     def line(lab, s):
@@ -94,7 +92,7 @@ def main():
     if unk:
         md += line("v1不明", res["v1_unknown"])
     md += line("GO後(全部撃ち)", sg)
-    md += "  出口判定(事前固定): %s → %s\n\n" % (res["exit_rule"]["rule"], res["exit_rule"]["verdict"])
+    md += "  出口判定: %s → %s\n\n" % (res["exit_rule"]["rule"], res["exit_rule"]["verdict"])
     md += "## ② 地合い別(約定時の24h効率比ER・閾値%.2f)\n" % TREND_TH
     md += line("トレンド", res["trend"]) + line("チョップ", res["chop"])
     md += line("keep×トレンド", res["keep_trend"]) + line("drop×トレンド", res["drop_trend"])

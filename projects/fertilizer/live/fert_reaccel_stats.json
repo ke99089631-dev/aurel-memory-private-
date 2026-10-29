@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-29 18:03",
+ "generated": "2026-10-29 18:20",
  "n_fill": 28,
  "n_open": 0,
  "all": {
@@ -70,10 +70,10 @@
   "profit_usd": -4.31
  },
  "exit_rule": {
-  "n_needed": 30,
-  "rule": "全部撃ちが確定30本でネット平均R<0 → FIRE_V1='keep' に戻す",
+  "n_needed": null,
+  "rule": "廃止(2026-10-29 会長決定): 晴れ戻しはしない。全部撃ち継続・keep/dropは観測ラベル",
   "n_now": 22,
-  "verdict": "判定前(22/30本)"
+  "verdict": "観測のみ(全部撃ち 22本)"
  },
  "trend_milestone": {
   "n_needed": 30,
