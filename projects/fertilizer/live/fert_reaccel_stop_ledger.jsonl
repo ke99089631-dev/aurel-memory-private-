@@ -142,3 +142,4 @@
 {"event": "close", "sid": "S-0375", "side": "SELL", "position": 52714807, "fill_price": 4025.47, "exit_price": 4033.0, "exit_time": "2026-10-29T09:51:17", "sl": 4033.0, "tp": 4005.59, "volume": 0.02, "R": -1.0, "reason": "SL", "profit": -15.06, "v1_keep": true, "entry_mode": "stop", "paper_status": "open", "paper_invalid_fill": false, "gold_er": 0.016, "gold_regime": "chop", "ts": "2026-10-29T06:51:26"}
 {"event": "place", "sid": "S-0376", "side": "BUY", "wall_kind": "mid", "entry": 4037.72, "sl": 4032.894, "tp": 4046.815, "lot": 0.04, "order": 52717157, "retcode": 10009, "v1_keep": false, "v1_drop": ["箱の締まり(0.167≧0.159)"], "spread": 0.42, "ts": "2026-10-29T07:15:15"}
 {"event": "modify", "sid": "S-0376", "order": 52717157, "entry": 4034.17, "sl": 4031.17, "tp": 4046.815, "retcode": 10009, "ts": "2026-10-29T07:20:20"}
+{"event": "cancel", "sid": "S-0376", "why": "床崩壊(終値が構造の外)", "retcode": 10009, "observe": false, "ts": "2026-10-29T07:25:05"}
