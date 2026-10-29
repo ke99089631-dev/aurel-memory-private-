@@ -184,3 +184,18 @@
 {"event": "fill", "sid": "S-0389", "side": "BUY", "fill_price": 4023.18, "sl": 4017.46, "tp": 4026.14, "volume": 0.03, "position": 52803713, "gold_er": 0.037, "gold_regime": "chop", "v1_keep": false, "v1_drop": ["雨(直前10本ダマシ100%)", "時間帯(本物率19.0<21.1)"], "spread": 0.43, "streak_demo": 1, "streak_paper": 1, "mom20": 0.266, "trend_side": "with", "lot_factor": 1.0, "ts": "2026-10-29T20:01:19"}
 {"event": "close", "sid": "S-0387", "side": "SELL", "position": 52779887, "fill_price": 4020.16, "exit_price": 4025.67, "exit_time": "2026-10-29T23:04:46", "sl": 4025.67, "tp": 4005.452, "volume": 0.02, "R": -1.0, "reason": "SL", "profit": -11.02, "v1_keep": false, "entry_mode": "market", "paper_status": "closed", "paper_invalid_fill": false, "gold_er": 0.0251, "gold_regime": "chop", "ts": "2026-10-29T20:05:01"}
 {"event": "close", "sid": "S-0389", "side": "BUY", "position": 52803713, "fill_price": 4023.18, "exit_price": 4026.14, "exit_time": "2026-10-29T23:05:05", "sl": 4017.46, "tp": 4026.14, "volume": 0.03, "R": 0.517, "reason": "TP", "profit": 8.88, "v1_keep": false, "entry_mode": "stop", "paper_status": "open", "paper_invalid_fill": false, "gold_er": 0.037, "gold_regime": "chop", "ts": "2026-10-29T20:05:21"}
+{"event": "skip-stale", "age_s": 3619.0, "last_bar": "2026-10-29T23:55:00", "now_ts": 1793322019, "ts": "2026-10-29T22:00:20"}
+{"event": "skip-stale", "age_s": 3640.0, "last_bar": "2026-10-29T23:55:00", "now_ts": 1793322040, "ts": "2026-10-29T22:00:40"}
+{"event": "skip-stale", "age_s": 3660.0, "last_bar": "2026-10-29T23:55:00", "now_ts": 1793322060, "ts": "2026-10-29T22:01:00"}
+{"event": "skip-stale", "age_s": 3680.0, "last_bar": "2026-10-29T23:55:00", "now_ts": 1793322080, "ts": "2026-10-29T22:01:20"}
+{"event": "skip-stale", "age_s": 3699.0, "last_bar": "2026-10-29T23:55:00", "now_ts": 1793322099, "ts": "2026-10-29T22:01:40"}
+{"event": "skip-stale", "age_s": 3720.0, "last_bar": "2026-10-29T23:55:00", "now_ts": 1793322120, "ts": "2026-10-29T22:02:00"}
+{"event": "skip-stale", "age_s": 3740.0, "last_bar": "2026-10-29T23:55:00", "now_ts": 1793322140, "ts": "2026-10-29T22:02:20"}
+{"event": "skip-stale", "age_s": 3760.0, "last_bar": "2026-10-29T23:55:00", "now_ts": 1793322160, "ts": "2026-10-29T22:02:41"}
+{"event": "skip-stale", "age_s": 3781.0, "last_bar": "2026-10-29T23:55:00", "now_ts": 1793322181, "ts": "2026-10-29T22:03:01"}
+{"event": "skip-stale", "age_s": 3800.0, "last_bar": "2026-10-29T23:55:00", "now_ts": 1793322200, "ts": "2026-10-29T22:03:21"}
+{"event": "skip-stale", "age_s": 3821.0, "last_bar": "2026-10-29T23:55:00", "now_ts": 1793322221, "ts": "2026-10-29T22:03:41"}
+{"event": "skip-stale", "age_s": 3841.0, "last_bar": "2026-10-29T23:55:00", "now_ts": 1793322241, "ts": "2026-10-29T22:04:01"}
+{"event": "skip-stale", "age_s": 3861.0, "last_bar": "2026-10-29T23:55:00", "now_ts": 1793322261, "ts": "2026-10-29T22:04:21"}
+{"event": "skip-stale", "age_s": 3880.0, "last_bar": "2026-10-29T23:55:00", "now_ts": 1793322280, "ts": "2026-10-29T22:04:41"}
+{"event": "fill", "sid": "S-0390", "side": "SELL", "fill_price": 4021.75, "sl": 4026.08, "tp": 4006.025, "volume": 0.05, "position": 52807742, "entry_mode": "market", "entry_ref": 4022.06, "over": 0.25, "slip": 0.31, "spread": 0.47, "streak_demo": 0, "streak_paper": 0, "mom20": 0.248, "trend_side": "against", "lot_factor": 1.0, "gold_er": 0.0756, "gold_regime": "chop", "v1_keep": false, "v1_drop": ["雨(直前10本ダマシ100%)", "時間帯(本物率12.9<21.1)", "箱の締まり(0.177≧0.159)"], "retcode": 10009, "ts": "2026-10-29T22:05:02"}
