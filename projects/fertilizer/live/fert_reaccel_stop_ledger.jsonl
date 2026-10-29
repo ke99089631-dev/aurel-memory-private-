@@ -150,3 +150,6 @@
 {"event": "modify", "sid": "S-0379", "order": 52722575, "entry": 4018.95, "sl": 4030.59, "tp": 4008.35, "retcode": 10009, "ts": "2026-10-29T09:00:06"}
 {"event": "modify", "sid": "S-0379", "order": 52722575, "entry": 4022.57, "sl": 4030.59, "tp": 4008.35, "retcode": 10009, "ts": "2026-10-29T09:05:11"}
 {"event": "cancel", "sid": "S-0379", "why": "窓切れ/非armed", "order": 52722575, "retcode": 10009, "ts": "2026-10-29T09:10:16"}
+{"event": "place", "sid": "S-0380", "side": "SELL", "wall_kind": "outer", "entry": 4023.13, "sl": 4028.824, "tp": 4012.26, "lot": 0.03, "order": 52743237, "retcode": 10009, "v1_keep": false, "v1_drop": ["雨(直前10本ダマシ80%)"], "spread": 0.42, "ts": "2026-10-29T09:40:09"}
+{"event": "modify", "sid": "S-0380", "order": 52743237, "entry": 4026.11, "sl": 4029.11, "tp": 4012.26, "retcode": 10009, "ts": "2026-10-29T09:45:14"}
+{"event": "fill", "sid": "S-0380", "side": "SELL", "fill_price": 4026.11, "sl": 4029.11, "tp": 4012.26, "volume": 0.03, "position": 52743237, "gold_er": 0.0473, "gold_regime": "chop", "v1_keep": false, "v1_drop": ["雨(直前10本ダマシ80%)"], "spread": 0.42, "ts": "2026-10-29T09:46:15"}
