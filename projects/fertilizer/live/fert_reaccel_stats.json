@@ -1,14 +1,14 @@
 {
- "generated": "2026-10-29 18:20",
- "n_fill": 28,
+ "generated": "2026-10-30 06:45",
+ "n_fill": 37,
  "n_open": 0,
  "all": {
-  "n": 28,
-  "sum_R": -2.64,
-  "avg_R": -0.094,
-  "win": 46.4,
-  "max_dd_R": -7.0,
-  "profit_usd": -48.24
+  "n": 37,
+  "sum_R": 2.4,
+  "avg_R": 0.065,
+  "win": 43.2,
+  "max_dd_R": -7.35,
+  "profit_usd": -12.23
  },
  "keep": {
   "n": 17,
@@ -19,12 +19,12 @@
   "profit_usd": -86.95
  },
  "drop": {
-  "n": 11,
-  "sum_R": 2.96,
-  "avg_R": 0.269,
-  "win": 63.6,
-  "max_dd_R": -2.0,
-  "profit_usd": 38.71
+  "n": 20,
+  "sum_R": 8.01,
+  "avg_R": 0.4,
+  "win": 50.0,
+  "max_dd_R": -4.66,
+  "profit_usd": 74.72
  },
  "v1_unknown": {
   "n": 0
@@ -38,12 +38,12 @@
   "profit_usd": -29.82
  },
  "chop": {
-  "n": 25,
-  "sum_R": -0.74,
-  "avg_R": -0.029,
-  "win": 48.0,
-  "max_dd_R": -7.0,
-  "profit_usd": -18.42
+  "n": 34,
+  "sum_R": 4.31,
+  "avg_R": 0.127,
+  "win": 44.1,
+  "max_dd_R": -7.07,
+  "profit_usd": 17.59
  },
  "keep_trend": {
   "n": 2,
@@ -62,18 +62,18 @@
   "profit_usd": -18.0
  },
  "since_fire_all": {
-  "n": 22,
-  "sum_R": -0.35,
-  "avg_R": -0.016,
-  "win": 50.0,
-  "max_dd_R": -4.0,
-  "profit_usd": -4.31
+  "n": 31,
+  "sum_R": 4.69,
+  "avg_R": 0.151,
+  "win": 45.2,
+  "max_dd_R": -7.07,
+  "profit_usd": 31.7
  },
  "exit_rule": {
   "n_needed": null,
   "rule": "廃止(2026-10-29 会長決定): 晴れ戻しはしない。全部撃ち継続・keep/dropは観測ラベル",
-  "n_now": 22,
-  "verdict": "観測のみ(全部撃ち 22本)"
+  "n_now": 31,
+  "verdict": "観測のみ(全部撃ち 31本)"
  },
  "trend_milestone": {
   "n_needed": 30,
