@@ -1,0 +1,49 @@
+{
+  "generated": "2026-10-30 08:50",
+  "cost_roundtrip_pct": 0.29,
+  "note": "読取のみ・発注なし。価格中立前提の受取キャリー。借入なし。",
+  "results": [
+    {
+      "symbol": "BTCUSDT",
+      "n": 1095,
+      "days": 364.7,
+      "mean8h_pct": 0.00315,
+      "gross_annual_pct": 3.45,
+      "net_annual_pct": 3.16,
+      "cum_realized_pct": 3.45,
+      "cum_annualized_pct": 3.46,
+      "pct_negative": 22.7,
+      "pct_positive": 77.3,
+      "worst8h_pct": -0.0152,
+      "best8h_pct": 0.01
+    },
+    {
+      "symbol": "ETHUSDT",
+      "n": 1095,
+      "days": 364.7,
+      "mean8h_pct": 0.00232,
+      "gross_annual_pct": 2.55,
+      "net_annual_pct": 2.26,
+      "cum_realized_pct": 2.55,
+      "cum_annualized_pct": 2.55,
+      "pct_negative": 26.2,
+      "pct_positive": 73.8,
+      "worst8h_pct": -0.0365,
+      "best8h_pct": 0.01
+    },
+    {
+      "symbol": "SOLUSDT",
+      "n": 1095,
+      "days": 364.7,
+      "mean8h_pct": -0.00034,
+      "gross_annual_pct": -0.38,
+      "net_annual_pct": -0.67,
+      "cum_realized_pct": -0.38,
+      "cum_annualized_pct": -0.38,
+      "pct_negative": 44.9,
+      "pct_positive": 55.1,
+      "worst8h_pct": -0.0692,
+      "best8h_pct": 0.01
+    }
+  ]
+}
