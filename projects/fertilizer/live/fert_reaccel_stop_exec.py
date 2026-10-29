@@ -319,6 +319,52 @@ def _v1_of(sid):
     return bool(v1.get("keep", False)), list(v1.get("drop_reasons") or [])
 
 
+def _context_labels(sid, side):
+    """★2026-10-29 会長GO(赤旗の材料): 建玉前に知り得る2ラベルを台帳に貼る。記録のみ・発注判定には不使用。
+       streak_demo = この瞬間までのデモ連敗数(close の exit_time 順・最後の勝ちで0)
+       streak_paper = 同・紙reaccel(確定本の exit_time 順)
+       mom20 = ブレイク足の20本モメンタム(%・setup.features) / trend_side = "with"(順張り: 方向=直前の動き) or "against"(逆張り)
+       根拠: 紙で3連敗直後の1本 avgR-0.21(n29) / 順 n226 +0.11 vs 逆 n39 +0.46(10-29時点・未証明)。"""
+    out = {"streak_demo": None, "streak_paper": None, "mom20": None, "trend_side": None}
+    try:
+        cl = [r for r in _ledger_rows() if r.get("event") == "close" and r.get("R") is not None and r.get("sid") != sid]
+        cl.sort(key=lambda r: r.get("exit_time") or r.get("ts") or "")
+        k = 0
+        for r in reversed(cl):
+            if float(r["R"]) < 0:
+                k += 1
+            else:
+                break
+        out["streak_demo"] = k
+    except Exception:
+        pass
+    try:
+        pc = []
+        for s2 in _SETUPS.values():
+            ra = s2.get("reaccel") or {}
+            if ra.get("status") == "closed" and ra.get("R") is not None and ra.get("exit_time") and s2.get("id") != sid:
+                pc.append((int(ra["exit_time"]), float(ra["R"])))
+        pc.sort()
+        k = 0
+        for _, r in reversed(pc):
+            if r < 0:
+                k += 1
+            else:
+                break
+        out["streak_paper"] = k
+    except Exception:
+        pass
+    try:
+        f = (_SETUPS.get(sid) or {}).get("features") or {}
+        mom = f.get("momentum20_pct")
+        if mom is not None:
+            out["mom20"] = float(mom)
+            out["trend_side"] = "with" if ((side == "BUY") == (float(mom) > 0)) else "against"
+    except Exception:
+        pass
+    return out
+
+
 def reaccel_armed():
     """リテスト確定・トリガー待ちの窓(reaccel.status=='waiting' かつ retest_time有り)。lane3(外壁+中壁)全部。
        FIRE_V1="all" なら v1 の keep/drop を問わず撃つ(ラベルだけ貼る)／"keep" なら採用側のみ(旧動作)。"""
@@ -481,7 +527,8 @@ def scan_once(sess, armed_flag, observe):
             _log({"event": "fill", "sid": sid, "side": ("SELL" if p.type == sess.mt5.POSITION_TYPE_SELL else "BUY"),
                   "fill_price": p.price_open, "sl": p.sl, "tp": p.tp, "volume": p.volume,
                   "position": p.ticket, "gold_er": ger, "gold_regime": greg,
-                  "v1_keep": keep, "v1_drop": drop, "spread": _spread(sess)})
+                  "v1_keep": keep, "v1_drop": drop, "spread": _spread(sess),
+                  **_context_labels(sid, "SELL" if p.type == sess.mt5.POSITION_TYPE_SELL else "BUY")})
             print("[約定検知] %s 建値%.2f lot%.2f pos%d v1=%s" % (sid, p.price_open, p.volume, p.ticket, "keep" if keep else "drop"))
             done.add(sid); save_done(done)
     # 1b) 決着の自記録(建玉から消えた約定済みsid→履歴から出口を引いて close を台帳へ)
@@ -575,6 +622,7 @@ def scan_once(sess, armed_flag, observe):
                   "position": pos_id, "entry_mode": "market", "entry_ref": arm["entry"],
                   "over": round(over, 3), "slip": round(abs(fp - arm["entry"]), 3),
                   "spread": round(float(t.ask) - float(t.bid), 3) if t else None,
+                  **_context_labels(sid, side),
                   "gold_er": ger, "gold_regime": greg,
                   "v1_keep": keep if keep is not None else a.get("v1_keep"), "v1_drop": drop,
                   "retcode": getattr(r, "retcode", None)})
@@ -628,6 +676,7 @@ def scan_once(sess, armed_flag, observe):
                           "fill_price": round(fp, 3), "sl": arm["sl"], "tp": arm["tp"], "volume": lot2,
                           "position": pos_id, "entry_mode": "spread_tol", "entry_ref": arm["entry"],
                           "spread": round(float(t2.ask) - float(t2.bid), 3) if t2 else None,
+                          **_context_labels(sid, side),
                           "near": round(near, 3), "slip": round(abs(fp - arm["entry"]), 3),
                           "gold_er": ger, "gold_regime": greg,
                           "v1_keep": keep2 if keep2 is not None else a.get("v1_keep"), "v1_drop": drop2,
@@ -651,7 +700,8 @@ def scan_once(sess, armed_flag, observe):
                 _log({"event": "place" if ok else "place-ng", "sid": sid, "side": side, "wall_kind": a["wall_kind"],
                       "entry": arm["entry"], "sl": arm["sl"], "tp": arm["tp"], "lot": lot,
                       "order": getattr(r, "order", None), "retcode": getattr(r, "retcode", None),
-                      "v1_keep": a.get("v1_keep"), "v1_drop": a.get("v1_drop"), "spread": _spread(sess)})
+                      "v1_keep": a.get("v1_keep"), "v1_drop": a.get("v1_drop"), "spread": _spread(sess),
+                      **_context_labels(sid, side)})
                 print("[逆指値設置%s] %s %s entry%.2f SL%.2f TP%.2f ret=%s v1=%s" % (
                     "OK" if ok else "NG", sid, side, arm["entry"], arm["sl"], arm["tp"], getattr(r, "retcode", None),
                     "keep" if a.get("v1_keep") else "drop"))
