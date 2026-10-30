@@ -230,3 +230,4 @@
 {"event": "modify", "sid": "S-0401", "order": 53459032, "entry": 3974.92, "sl": 3989.138, "tp": 3951.624, "retcode": 10009, "ts": "2026-10-30T08:10:11"}
 {"event": "modify", "sid": "S-0401", "order": 53459032, "entry": 3975.52, "sl": 3989.138, "tp": 3951.624, "retcode": 10009, "ts": "2026-10-30T08:15:17"}
 {"event": "cancel", "sid": "S-0401", "why": "床崩壊(終値が構造の外)", "retcode": 10009, "observe": false, "ts": "2026-10-30T08:20:03"}
+{"event": "fill", "sid": "S-0402", "side": "SELL", "fill_price": 3974.79, "sl": 3984.686, "tp": 3965.115, "volume": 0.02, "position": 53753496, "entry_mode": "market", "entry_ref": 3975.09, "over": 0.3, "slip": 0.3, "spread": 0.43, "streak_demo": 0, "streak_paper": 0, "mom20": -0.393, "trend_side": "with", "lot_factor": 1.0, "gold_er": 0.079, "gold_regime": "chop", "v1_keep": false, "v1_drop": ["雨(直前10本ダマシ80%)"], "retcode": 10009, "ts": "2026-10-30T10:50:18"}
