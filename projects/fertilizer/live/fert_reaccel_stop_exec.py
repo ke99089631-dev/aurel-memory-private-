@@ -81,6 +81,10 @@ SPREAD_TOL = 0.12                # スプレッド許容(ドル)。典型スプ�
 #   出口(事前固定): 縮小が掛かった本が30本に達した時点で、縮小本の合計Rがプラス(=縮小が損)なら会長に報告し再判断。
 STREAK_CUT_AFTER = 3
 STREAK_CUT_FRAC = 0.5
+# ★2026-10-30 会長決定: 縮小を停止(採用を急ぎすぎた)。回収が連敗直後に来て縮小が勝ちを削った。
+#   実額の反実仮想(デモ40本): 縮小あり-65.99$ / 全ロット+10.33$ = 縮小の影響-76.32$(勝ち2本を半分に削った)。
+#   以後は常に全ロット。ただし「もし縮小したら」の係数 lot_factor_shadow は記録継続=比較材料(覆った知見も保持)。
+STREAK_CUT_ENABLED = False
 MKT_DEVIATION_PT = 50            # 成行の許容スリッページ(ポイント)。0.01刻みなら≈0.50ドル。これ超は約定拒否
 NOTIFY = False
 
@@ -343,7 +347,10 @@ def demo_loss_streak(exclude_sid=None):
 
 
 def lot_factor():
-    """連敗中のサイズ係数: 連敗 >= STREAK_CUT_AFTER なら STREAK_CUT_FRAC、それ以外 1.0。"""
+    """実際に適用するサイズ係数。STREAK_CUT_ENABLED=False(2026-10-30 会長決定)の間は常に1.0=縮小しない。
+       「もし縮小したら」は _context_labels の lot_factor_shadow に記録して比較材料にする。"""
+    if not STREAK_CUT_ENABLED:
+        return 1.0
     return STREAK_CUT_FRAC if demo_loss_streak() >= STREAK_CUT_AFTER else 1.0
 
 
@@ -353,11 +360,14 @@ def _context_labels(sid, side):
        streak_paper = 同・紙reaccel(確定本の exit_time 順)
        mom20 = ブレイク足の20本モメンタム(%・setup.features) / trend_side = "with"(順張り: 方向=直前の動き) or "against"(逆張り)
        根拠: 紙で3連敗直後の1本 avgR-0.21(n29) / 順 n226 +0.11 vs 逆 n39 +0.46(10-29時点・未証明)。"""
-    out = {"streak_demo": None, "streak_paper": None, "mom20": None, "trend_side": None, "lot_factor": None}
+    out = {"streak_demo": None, "streak_paper": None, "mom20": None, "trend_side": None,
+           "lot_factor": None, "lot_factor_shadow": None}
     try:
         k = demo_loss_streak(exclude_sid=sid)
         out["streak_demo"] = k
-        out["lot_factor"] = STREAK_CUT_FRAC if k >= STREAK_CUT_AFTER else 1.0
+        shadow = STREAK_CUT_FRAC if k >= STREAK_CUT_AFTER else 1.0
+        out["lot_factor_shadow"] = shadow                              # もし縮小したら(停止中も記録=比較材料)
+        out["lot_factor"] = shadow if STREAK_CUT_ENABLED else 1.0       # 実際に適用した係数(停止中は常に1.0)
     except Exception:
         pass
     try:
