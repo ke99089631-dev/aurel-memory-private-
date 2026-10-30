@@ -7320,3 +7320,14 @@ RuntimeError: MT5Farm initialize失敗: (-6, 'Terminal: Authorization failed')
 [接続] 畑A 806782 / VantageTradingLtd-Demo / 残高1098.56 / NAS100.r  armed=True
 [!!] 二重ロック解錠=LIVEデモ発注モード。NAS100.rに実際に撃ちます。
 [終了]
+[接続] 畑A 806782 / VantageTradingLtd-Demo / 残高1098.56 / NAS100.r  armed=True
+[!!] 二重ロック解錠=LIVEデモ発注モード。NAS100.rに実際に撃ちます。
+[紙双子・新規] cid1793378700 SELL entry28632.16
+[発注OK] SELL lot0.10 SL28945.37 TP27827.20 ret=10009
+[終了]
+[接続] 畑A 806782 / VantageTradingLtd-Demo / 残高1098.56 / NAS100.r  armed=True
+[!!] 二重ロック解錠=LIVEデモ発注モード。NAS100.rに実際に撃ちます。
+[終了]
+[接続] 畑A 806782 / VantageTradingLtd-Demo / 残高1098.56 / NAS100.r  armed=True
+[!!] 二重ロック解錠=LIVEデモ発注モード。NAS100.rに実際に撃ちます。
+[終了]
