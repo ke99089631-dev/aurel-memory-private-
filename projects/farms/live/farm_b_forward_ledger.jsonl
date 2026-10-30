@@ -35,3 +35,4 @@
 {"farm": "B-SP500", "entry_time": "2026-10-27 15:35:00+00:00", "side": "BUY", "entry": 7754.75, "risk": 19.38, "R": 0.477, "netR": 0.445, "reason": "TIME", "wtouch": 1, "need_touches": 2, "mode": "observe", "logged_at": "2026-10-28 01:00:09"}
 {"farm": "B-SP500", "entry_time": "2026-10-29 13:45:00+00:00", "side": "SELL", "entry": 7747.0, "risk": 19.23, "R": 0.455, "netR": 0.422, "reason": "TIME", "wtouch": 4, "need_touches": 2, "mode": "observe", "logged_at": "2026-10-29 23:00:10"}
 {"farm": "B-SP500", "entry_time": "2026-10-29 18:10:00+00:00", "side": "SELL", "entry": 7734.25, "risk": 24.95, "R": 0.03, "netR": 0.005, "reason": "TIME", "wtouch": 2, "need_touches": 2, "mode": "observe", "logged_at": "2026-10-30 03:30:08"}
+{"farm": "B-SP500", "entry_time": "2026-10-30 14:45:00+00:00", "side": "SELL", "entry": 7655.0, "risk": 33.52, "R": -0.06, "netR": -0.078, "reason": "TIME", "wtouch": 1, "need_touches": 2, "mode": "observe", "logged_at": "2026-10-31 00:00:10"}
