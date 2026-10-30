@@ -44,8 +44,13 @@ import pandas as pd
 import demo_exec as dx           # fold_setups(setup_ledgerを畳む)を流用。シグナルは再実装しない。
 import setup_engine as se        # 定数(REACCEL_PAD/REACCEL_BARS/MIN_SL_W)と _fetch_bars(メーター用)
 
-REAL_FORBIDDEN = 27972608
-MAGIC = 909090                   # 肥料レーン専用マジック(運用と混ざらない)
+# 肥料が触ってよい口座(ホワイトリスト)。これ以外(プロップg4_/別口座/誤設定)は常に緊急停止。
+FERT_DEMO_LOGIN = 806809          # デモ(VantageTradingLtd-Demo)
+FERT_REAL_LOGIN = 27972608        # 実弾(VantageTradingLtd-Live Raw ECN)。会長GO 2026-10-30。
+ALLOWED_LOGINS = (FERT_DEMO_LOGIN, FERT_REAL_LOGIN)
+# ★二重ロックの第2鍵: 実弾(27972608)で動かすには fert.env に FERT_ALLOW_REAL=YES を会長が明示すること。
+#   フラグが無ければ FERT_REAL_LOGIN を指定しても起動拒否=デモのみ。AURELはこのフラグを立てない(鍵は回さない)。
+MAGIC = 909090                   # 肥料レーン専用マジック(運用/手トレと混ざらない=口座共有でも成績は分離)
 RISK_FRAC = 0.02                 # 肥料=攻め(2%/trade・会長)。実弾ハイレバは別途GO。
 MAX_CONCURRENT = 0               # 同時ポジ上限。0=無制限(会長2026-10-22 A)。将来ゼロカット率で絞るつまみ。
 # ★2026-10-24 会長GO(次の一手①): 撃つ集合を「v1.keep(雨フィルタ採用側)のみ」→「再加速 全部(keep+drop)」へ。
@@ -171,9 +176,12 @@ class FertSession:
         self.mt5 = mt5
         self.sym = env.get("FERT_SYMBOL", "XAUUSD")
         self.login = int(env.get("FERT_LOGIN", "0"))
+        self.allow_real = (env.get("FERT_ALLOW_REAL", "").strip().upper() == "YES")
         pw = env.get("FERT_PASSWORD", ""); srv = env.get("FERT_SERVER", "")
-        if self.login in (0, REAL_FORBIDDEN):
-            raise RuntimeError("FERT_LOGIN が不正/リアル→中止")
+        if self.login not in ALLOWED_LOGINS:
+            raise RuntimeError("FERT_LOGIN %d は許可口座%s外→中止" % (self.login, ALLOWED_LOGINS))
+        if self.login == FERT_REAL_LOGIN and not self.allow_real:
+            raise RuntimeError("実弾%d の起動には fert.env に FERT_ALLOW_REAL=YES が必要(会長の第2鍵)→中止" % FERT_REAL_LOGIN)
         ok = mt5.initialize(path=env.get("FERT_TERMINAL", ""), login=self.login,
                             password=pw, server=srv, portable=True)
         if not ok:
@@ -186,15 +194,21 @@ class FertSession:
         mt5.symbol_select(self.sym, True)
 
     def assert_demo(self, when):
+        """発注系の直前に毎回通す口座安全弁。許可=806809(デモ)/27972608(実弾・FERT_ALLOW_REAL=YES時のみ)。
+           許可外の口座(プロップg4_/別口座/誤設定)・フラグ無しの実弾は即シャットダウン。"""
         ai = self.mt5.account_info()
         if ai is None:
             raise RuntimeError("[%s] account_info取得不可→中止" % when)
-        if int(ai.login) == REAL_FORBIDDEN:
-            self.mt5.shutdown(); raise RuntimeError("[%s] リアル27972608→緊急停止" % when)
-        if int(ai.login) != self.login:
-            self.mt5.shutdown(); raise RuntimeError("[%s] 接続口座%s≠肥料%s→緊急停止(誤口座防止)" % (when, ai.login, self.login))
-        if int(getattr(ai, "trade_mode", -1)) != 0:
-            raise RuntimeError("[%s] trade_mode非DEMO→中止" % when)
+        lg = int(ai.login)
+        if lg not in ALLOWED_LOGINS:
+            self.mt5.shutdown(); raise RuntimeError("[%s] 接続口座%d は許可外→緊急停止(プロップ/別口座防止)" % (when, lg))
+        if lg != self.login:
+            self.mt5.shutdown(); raise RuntimeError("[%s] 接続口座%d≠設定%d→緊急停止(誤口座防止)" % (when, lg, self.login))
+        is_real = int(getattr(ai, "trade_mode", -1)) != 0
+        if is_real and (lg != FERT_REAL_LOGIN or not self.allow_real):
+            self.mt5.shutdown()
+            raise RuntimeError("[%s] 実弾は27972608+FERT_ALLOW_REAL=YESの時のみ(login=%d real=%s flag=%s)→緊急停止"
+                               % (when, lg, is_real, self.allow_real))
         return ai
 
     def bars(self, n=BARS):
