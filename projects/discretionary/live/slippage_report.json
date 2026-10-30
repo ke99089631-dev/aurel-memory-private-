@@ -3,43 +3,63 @@
   "n": 1,
   "entry_slip_0.3": {
    "n": 1,
-   "median": 0.02,
-   "mean": 0.02,
-   "p90": 0.02,
-   "adverse_share": 100.0
+   "median": -0.05,
+   "mean": -0.05,
+   "p90": -0.05,
+   "adverse_share": 0.0
+  },
+  "chase_slip_0.3": {
+   "n": 1,
+   "median": -0.08,
+   "p90": -0.08
   },
   "entry_slip_1": {
    "n": 1,
-   "median": -0.1,
-   "mean": -0.1,
-   "p90": -0.1,
+   "median": -0.12,
+   "mean": -0.12,
+   "p90": -0.12,
    "adverse_share": 0.0
+  },
+  "chase_slip_1": {
+   "n": 1,
+   "median": 0.0,
+   "p90": 0.0
   },
   "entry_slip_3": {
    "n": 1,
-   "median": 0.12,
-   "mean": 0.12,
-   "p90": 0.12,
-   "adverse_share": 100.0
+   "median": -0.35,
+   "mean": -0.35,
+   "p90": -0.35,
+   "adverse_share": 0.0
+  },
+  "chase_slip_3": {
+   "n": 1,
+   "median": -0.49,
+   "p90": -0.49
   },
   "entry_slip_120": {
    "n": 1,
-   "median": 2.48,
-   "mean": 2.48,
-   "p90": 2.48,
+   "median": 1.79,
+   "mean": 1.79,
+   "p90": 1.79,
    "adverse_share": 100.0
   },
+  "chase_slip_120": {
+   "n": 1,
+   "median": 1.9,
+   "p90": 1.9
+  },
   "sl": {
-   "n": 0,
-   "measured": 0,
+   "n": 1,
+   "measured": 1,
    "not_triggered_on_tick": 0,
-   "median": null,
-   "p90": null,
-   "max": null
+   "median": 0.022,
+   "p90": 0.022,
+   "max": 0.022
   },
   "tp": {
-   "n": 1,
-   "fill_ok": 1,
+   "n": 0,
+   "fill_ok": 0,
    "fill_miss": 0
   },
   "spread_at_entry": {
@@ -49,23 +69,27 @@
   },
   "open_vs_tick_abs_median": 0.0,
   "adopt_latency_s": 1.0,
-  "generated": "2026-10-30 17:16:00"
+  "generated": "2026-10-30 17:46:01"
  },
  "rows": [
   {
-   "id": "S-0400",
+   "id": "S-0401",
    "side": "SELL",
-   "risk": 7.751999999999953,
-   "exit_reason": "TP",
-   "R": 2.481,
-   "bid0": 3986.69,
+   "risk": 4.657999999999902,
+   "exit_reason": "SL",
+   "R": -1.0,
+   "bid0": 3984.48,
    "spread_pt": 0.15,
-   "slip_0.3": 0.02,
-   "slip_1": -0.1,
-   "slip_3": 0.12,
-   "slip_120": 2.48,
+   "slip_0.3": -0.05,
+   "slip_1": -0.12,
+   "slip_3": -0.35,
+   "slip_120": 1.79,
    "open_vs_tick": 0.0,
-   "tp_fill_ok": true
+   "chase_slip_0.3": -0.08,
+   "chase_slip_1": 0.0,
+   "chase_slip_3": -0.49,
+   "chase_slip_120": 1.9,
+   "sl_slip": 0.022
   }
  ]
 }
