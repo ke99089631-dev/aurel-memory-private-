@@ -1,53 +1,33 @@
 {
  "summary": {
-  "n": 1,
+  "n": 0,
   "entry_slip_0.3": {
-   "n": 1,
-   "median": 0.83,
-   "mean": 0.83,
-   "p90": 0.83,
-   "adverse_share": 100.0
-  },
-  "chase_slip_0.3": {
-   "n": 1,
-   "median": 0.01,
-   "p90": 0.01
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
+   "adverse_share": 0.0
   },
   "entry_slip_1": {
-   "n": 1,
-   "median": 0.86,
-   "mean": 0.86,
-   "p90": 0.86,
-   "adverse_share": 100.0
-  },
-  "chase_slip_1": {
-   "n": 1,
-   "median": 0.34,
-   "p90": 0.34
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
+   "adverse_share": 0.0
   },
   "entry_slip_3": {
-   "n": 1,
-   "median": 0.86,
-   "mean": 0.86,
-   "p90": 0.86,
-   "adverse_share": 100.0
-  },
-  "chase_slip_3": {
-   "n": 1,
-   "median": 0.48,
-   "p90": 0.48
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
+   "adverse_share": 0.0
   },
   "entry_slip_120": {
-   "n": 1,
-   "median": 4.84,
-   "mean": 4.84,
-   "p90": 4.84,
-   "adverse_share": 100.0
-  },
-  "chase_slip_120": {
-   "n": 1,
-   "median": 1.18,
-   "p90": 1.18
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
+   "adverse_share": 0.0
   },
   "sl": {
    "n": 0,
@@ -58,38 +38,18 @@
    "max": null
   },
   "tp": {
-   "n": 1,
-   "fill_ok": 1,
+   "n": 0,
+   "fill_ok": 0,
    "fill_miss": 0
   },
   "spread_at_entry": {
-   "median": 0.15,
-   "p90": 0.15,
-   "max": 0.15
+   "median": null,
+   "p90": null,
+   "max": null
   },
-  "open_vs_tick_abs_median": 0.0,
+  "open_vs_tick_abs_median": null,
   "adopt_latency_s": 1.0,
-  "generated": "2026-10-31 03:18:05"
+  "generated": "2026-10-31 03:48:18"
  },
- "rows": [
-  {
-   "id": "S-0404",
-   "side": "SELL",
-   "risk": 19.483000000000175,
-   "exit_reason": "TP",
-   "R": 2.966,
-   "bid0": 3936.85,
-   "spread_pt": 0.15,
-   "slip_0.3": 0.83,
-   "slip_1": 0.86,
-   "slip_3": 0.86,
-   "slip_120": 4.84,
-   "open_vs_tick": 0.0,
-   "chase_slip_0.3": 0.01,
-   "chase_slip_1": 0.34,
-   "chase_slip_3": 0.48,
-   "chase_slip_120": 1.18,
-   "tp_fill_ok": true
-  }
- ]
+ "rows": []
 }
