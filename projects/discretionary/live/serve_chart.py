@@ -1040,6 +1040,68 @@ def build_paper_v3():
             "trades": rows[-300:]}
 
 
+# ── ②足の時間軸 前向きレーン(tf_lane.py が書く台帳)の集計。5分 vs 15分・発注なし・関門各30本 ──
+TF_LEDGER = os.path.join(HERE, "tf_ledger.jsonl")
+TF_TARGET = 30
+
+
+def _load_tf():
+    recs, order = {}, []
+    if not os.path.exists(TF_LEDGER):
+        return []
+    for line in open(TF_LEDGER, encoding="utf-8"):
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            r = json.loads(line)
+        except Exception:
+            continue
+        if r.get("kind") == "tf":
+            recs[r["id"]] = r; order.append(r["id"])
+        elif r.get("kind") == "update":
+            t = recs.get(r.get("target"))
+            if t:
+                for k, v in r.items():
+                    if k not in ("kind", "target", "logged_at"):
+                        t[k] = v
+    return [recs[i] for i in order]
+
+
+def build_tf(tick=None):
+    import numpy as np
+    recs = _load_tf()
+    price = ((tick["bid"] + tick["ask"]) / 2.0) if tick else None
+
+    def grp(tf):
+        rs = [r for r in recs if r.get("tf") == tf]
+        cl = [r for r in rs if r.get("status") == "closed" and r.get("netR") is not None]
+        st = {}
+        for r in rs:
+            st[r.get("status") or "?"] = st.get(r.get("status") or "?", 0) + 1
+        out = {"status": st, "open": [], "closed_n": len(cl)}
+        if cl:
+            rr = [r["netR"] for r in cl]
+            cum = np.cumsum(rr); dd = float((np.maximum.accumulate(cum) - cum).max())
+            out.update({"win": round(100.0 * sum(1 for x in rr if x > 0) / len(cl), 1),
+                        "avg": round(sum(rr) / len(cl), 3), "sum": round(sum(rr), 2),
+                        "tp": sum(1 for r in cl if r.get("exit_reason") == "TP"), "dd": round(dd, 1)})
+        for r in rs:
+            if r.get("status") == "open":
+                lr = None
+                if price is not None and r.get("entry") is not None:
+                    risk = abs(r["entry"] - r["sl"]) or 1e-9
+                    lr = round(((price - r["entry"]) if r["side"] == "BUY" else (r["entry"] - price)) / risk, 2)
+                out["open"].append({"id": r["id"], "side": r["side"], "entry": r.get("entry"), "live_r": lr})
+        return out
+    return {"target": TF_TARGET,
+            "n5": sum(1 for r in recs if r.get("tf") == 5), "n15": sum(1 for r in recs if r.get("tf") == 15),
+            "m5": grp(5), "m15": grp(15),
+            "gate": "関門: 5分 確定%d/%d・15分 確定%d/%d" % (
+                len([r for r in recs if r.get("tf") == 5 and r.get("status") == "closed"]), TF_TARGET,
+                len([r for r in recs if r.get("tf") == 15 and r.get("status") == "closed"]), TF_TARGET)}
+
+
 # ── 会長が引いた水平線（AURELが読める共有ファイル。チャットで「白線見て」に応えるための正本）──
 USER_LINES = os.path.join(HERE, "user_lines.json")
 
@@ -1196,6 +1258,13 @@ class H(http.server.BaseHTTPRequestHandler):
                 except Exception:
                     tick = None
                 self._send(200, json.dumps(build_pinbar(tick), ensure_ascii=False), "application/json; charset=utf-8")
+            elif p == "/api/tf":
+                tick = None
+                try:
+                    tick = build_tick().get("tick")
+                except Exception:
+                    tick = None
+                self._send(200, json.dumps(build_tf(tick), ensure_ascii=False), "application/json; charset=utf-8")
             elif p == "/api/info":
                 self._send(200, json.dumps(build_info(), ensure_ascii=False), "application/json; charset=utf-8")
             else:

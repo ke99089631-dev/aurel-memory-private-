@@ -389,11 +389,12 @@ document.getElementById('statsBtn').onclick=(e)=>{ statsOn=!statsOn;
   e.currentTarget.classList.toggle('on',statsOn); updateStats(); };
 
 // ── 収束ループ: AURELのセットアップ記録（/api/setups）。チャートにMT5式で乗せ、集計は短く。──
-let setups=[], setupSummary=null, paperOn=false, pinLane=null;
+let setups=[], setupSummary=null, paperOn=false, pinLane=null, tfLane=null;
 async function fetchSetups(){
   try{ const r=await fetch('/api/setups',{cache:'no-store'}); const d=await r.json();
        setups=d.setups||[]; setupSummary=d.summary||null; drawSetups(); updateAiPnl(); if(paperOn) updatePaper(); }catch(e){}
   try{ const r=await fetch('/api/pinbar',{cache:'no-store'}); pinLane=await r.json(); if(paperOn) updatePaper(); }catch(e){ pinLane=null; }
+  try{ const r=await fetch('/api/tf',{cache:'no-store'}); tfLane=await r.json(); if(paperOn) updatePaper(); }catch(e){ tfLane=null; }
 }
 function fmtR(v){ return (v>=0?'+':'')+Number(v).toFixed(2)+'R'; }
 function updatePaper(){
@@ -429,6 +430,16 @@ function updatePaper(){
         if(parts.length) h+='　<span style="color:#8b949e">'+parts.join(' ／ ')+'</span><br>'; }
       else { h+='　<span style="color:#8b949e">決着まだなし（ピンバー'+(q.n_pins||0)+'本検出・待ち'+((q.status||{}).waiting||0)+'・建玉中'+((q.status||{}).open||0)+'）</span><br>'; }
       for(const r of (q.open||[])){ h+='　<span style="color:#ff7eb6">建玉中 '+r.id+' '+(r.side==='BUY'?'買':'売')+' '+Number(r.entry).toFixed(1)+' 票'+r.votes+(r.live_r!=null?' '+fmtR(r.live_r):'')+'</span><br>'; }
+    }
+    // ②足の時間軸 前向きレーン(2026-11-02 会長GO): 5分 vs 15分を同じ型でOOS比較(/api/tf)。発注なし・関門各30本
+    if(tfLane){ const q=tfLane;
+      const row=(lab,g)=>{ if(!g) return ''; const a=(g.closed_n?g:null);
+        if(!a) return '　'+lab+' <span style="color:#8b949e">決着0（待ち'+((g.status||{}).break||0)+'・リテスト'+((g.status||{}).retest||0)+'・建玉'+((g.status||{}).open||0)+'）</span><br>';
+        const rc=(a.avg>=0)?'#56d364':'#f85149';
+        return '　'+lab+' n'+a.closed_n+' 勝率'+a.win+'% 平均<b style="color:'+rc+'">'+fmtR(a.avg)+'</b> 合計'+fmtR(a.sum)+' DD-'+a.dd+'R<br>'; };
+      h+='<b style="color:#22d3ee">⏱ 5分 vs 15分（同じ型・前向き）</b> <span style="color:#8b949e">('+q.gate+')</span><br>';
+      h+=row('5分 ',q.m5)+row('15分',q.m15);
+      for(const r of ((q.m15&&q.m15.open)||[])) h+='　<span style="color:#22d3ee">15分 建玉 '+r.id+' '+(r.side==='BUY'?'買':'売')+' '+Number(r.entry).toFixed(1)+(r.live_r!=null?' '+fmtR(r.live_r):'')+'</span><br>';
     }
     const last=setups.filter(x=>x.status==='closed'||x.status==='open').slice(-5).reverse();
     if(last.length){ h+='<span style="color:#8b949e">直近:</span><br>';
