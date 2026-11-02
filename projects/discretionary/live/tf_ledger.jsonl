@@ -2,3 +2,5 @@
 {"id": "TF-0002", "kind": "tf", "tf": 15, "logged_at": "2026-11-02 23:55:28", "btime": 1793627100, "bjst": "2026-11-02 22:45", "dir": 1, "side": "BUY", "wall": 3965.15, "width": 94.98, "zone": "中立", "status": "break"}
 {"kind": "update", "target": "TF-0001", "logged_at": "2026-11-03 00:00:01", "status": "retest", "rtime": 1793627700, "rjst": "2026-11-02 22:55", "rlo": 3963.48, "rhi": 3966.22}
 {"kind": "update", "target": "TF-0002", "logged_at": "2026-11-03 00:05:05", "status": "retest", "rtime": 1793628000, "rjst": "2026-11-02 23:00", "rlo": 3956.34, "rhi": 3965.92}
+{"kind": "update", "target": "TF-0001", "logged_at": "2026-11-03 00:15:12", "status": "no_resume"}
+{"kind": "update", "target": "TF-0002", "logged_at": "2026-11-03 00:20:16", "status": "no_resume"}
