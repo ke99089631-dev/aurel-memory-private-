@@ -6914,3 +6914,4 @@
 {"kind": "update", "target": "S-0408", "logged_at": "2026-11-02 09:15:11", "waiting_resolved": true, "entry": 3900.55, "entry_time": 1793574600, "entry_jst": "2026-11-02 08:10", "status": "open", "mfe_R": 1.58, "mae_R": 0.9, "hold_bars": 0}
 {"kind": "update", "target": "S-0408", "logged_at": "2026-11-02 09:20:12", "frozen": true, "status": "closed", "exit": 3899.09, "exit_reason": "SL", "R": -1.0, "mfe_R": 1.58, "mae_R": 1.79, "hold_bars": 1, "exit_time": 1793574900, "outcome": "ダマシ"}
 {"kind": "update", "target": "S-0408", "logged_at": "2026-11-02 09:20:12", "reaccel": {"retest_time": 1793574300, "retest_jst": "2026-11-02 08:05", "retest_tol": 0.8, "status": "invalid", "why": "リテスト中に終値が構造の外"}, "reaccel_frozen": true}
+{"kind": "update", "target": "S-0408", "logged_at": "2026-11-02 09:26:59", "slip_src": "tick-sim L=1s", "spread_pt": 0.15, "slip_pt": 0.11, "sl_slip_pt": 0.06}
