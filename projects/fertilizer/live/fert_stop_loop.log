@@ -325,3 +325,7 @@
 [逆指値設置OK] S-0415 BUY entry3906.37 SL3902.05 TP3910.24 ret=10009 v1=drop
 [逆指値追従] S-0415 entry3905.53 SL3902.05 ret=10009
 [取消・崩壊] S-0415
+[KILL_FERT] 停止
+[終了]
+[接続] 肥料reaccel(逆指値) 27972608 / VantageTradingLtd-Live / 残高182.37 / XAUUSD+  armed=True risk2.0% runtime=C:\Users\user\.aurel\memory\projects\fertilizer\live
+[!!] LIVEデモ発注モード(逆指値を実際に置く/変える/消す)

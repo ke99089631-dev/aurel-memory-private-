@@ -1,1 +1,2 @@
 {"farm": "A-US100", "cid": "1793292000", "entry_time": "2026-10-30 01:45", "side": "SELL", "entry": 29425.76, "sl": 29580.534, "tp": 28771.432, "risk": 154.77, "R": 4.228, "netR": 4.212, "reason": "TP", "bars": 123, "mode": "paper", "logged_at": "2026-10-30T01:07:33"}
+{"farm": "A-US100", "cid": "1793372100", "entry_time": "2026-10-31 00:00", "side": "SELL", "entry": 28676.41, "sl": 28991.679, "tp": 27905.761, "risk": 315.27, "R": 0.146, "netR": 0.139, "reason": "TIME", "bars": 288, "mode": "paper", "logged_at": "2026-11-02T14:07:33"}
