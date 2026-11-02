@@ -110,6 +110,7 @@
   <button class="cbtn on" id="infoBtn" title="情報レイヤー: 厚い行使価格(紫)・指標時刻(縦線)・風向き/帯/バイアス(左下)">📡 材料</button>
   <button class="cbtn" id="decideBtn" title="判断パネル: 時間・天気・地図(壁の一覧)・型チェック・成績を1枚に">🧭 判断</button>
   <button class="cbtn on" id="pinBtn" title="ピンバー票: 壁が止めた足(ヒゲ≧実体2倍・全長2/3)。票が入った壁のブレイクは本物率19%→11%(10-31計測)＝見送り材料">📍 票</button>
+  <button class="cbtn" id="tf15Btn" title="15分足で壁を見る: ヒゲ抜けの騙しが減る(近年 本物率8→12%・勝率17→26%・最大DD3分の1)。壁の高さは同じ・判断は15分の終値で。2026-11-02計測">15分</button>
 </div>
 <div id="linebar">
   <span id="lbInfo">線</span>
@@ -216,9 +217,12 @@ async function pollData(){
     const d = await r.json();
     document.getElementById('err').textContent = '';
     const bars = d.bars || [];
-    if (firstLoad){ series.setData(bars); chart.timeScale().fitContent(); firstLoad=false; }
+    bars5 = bars;                                        // 生の5分足を常に保持（15分トグル用）
+    const shown = tf15 ? to15m(bars) : bars;             // 15分トグル中は束ねて表示（壁の高さは不変）
+    if (firstLoad){ series.setData(shown); chart.timeScale().fitContent(); firstLoad=false; }
+    else if (tf15){ series.setData(shown); }             // 15分は10秒ごとに再構築（ビューは維持）
     else { for (const b of bars){ if (b.time >= lastTime) series.update(b); } }
-    if (bars.length){ lastTime = bars[bars.length-1].time; allBars = bars; }
+    if (shown.length){ lastTime = shown[shown.length-1].time; allBars = shown; }
     pinData = (d.pin && !d.pin.error) ? d.pin : null;   // ①ピンバー票(2026-11-02)
     setWallLines(d.box, d.break, d.bigbox);
     lastBox = d.box; lastBreak = d.break; lastDamashi = d.damashi; lastBig = d.bigbox||null;   // B2/B3/C1 用に保持
@@ -243,8 +247,10 @@ async function pollTick(){
   try{
     const r = await fetch('/api/tick', {cache:'no-store'});
     const d = await r.json();
-    for (const b of (d.lastbars||[])){ if (b.time >= lastTime) series.update(b); }
-    if (d.lastbars && d.lastbars.length) lastTime = Math.max(lastTime, d.lastbars[d.lastbars.length-1].time);
+    if (!tf15){                                          // 15分表示中は5分の形成足を突っ込まない（10秒のpollDataが再構築）
+      for (const b of (d.lastbars||[])){ if (b.time >= lastTime) series.update(b); }
+      if (d.lastbars && d.lastbars.length) lastTime = Math.max(lastTime, d.lastbars[d.lastbars.length-1].time);
+    }
     const tick = d.tick, nowPx = tick ? (tick.bid+tick.ask)/2 : null;
     setCurrent(nowPx);
     curPx = nowPx; updateStats(); updateAiPnl();   // 毎秒: AI建玉の損益も追う
@@ -843,7 +849,7 @@ function setInfoLines(){
 }
 function futureX(t){   // 未来時刻→x座標（最終バーから5分=1本で外挿）
   if(!allBars.length) return null;
-  return chart.timeScale().logicalToCoordinate(allBars.length-1+(t-lastTime)/300);
+  return chart.timeScale().logicalToCoordinate(allBars.length-1+(t-lastTime)/(tf15?900:300));
 }
 function cdText(dt){ if(dt<=0) return '済'; return 'あと'+(dt>=3600?Math.floor(dt/3600)+'h':'')+String(Math.floor((dt%3600)/60)).padStart(2,'0')+'m'; }
 function drawInfo(){
@@ -1017,6 +1023,16 @@ function renderUserLines(){
 //    定義は 10-31 計測と同一(pinbar_live.py)。票が入った壁のブレイクは本物率19%→11%＝見送り材料。
 const pinsCanvas=document.getElementById('pins'), pctx=pinsCanvas.getContext('2d');
 let pinData=null, showPins=true;
+// ── 15分足トグル(2026-11-02 会長GO): 壁の高さ(24h高安)は同じ・ローソクだけ15分に束ねる＝15分の終値でブレイク判断。
+//    近年計測: ヒゲ抜けの騙しが減り 本物率8→12%・勝率17→26%・最大DD−145→−42R。発注なし・本線レシピ不変。
+let tf15=false, bars5=[];
+function to15m(bars){                                    // 5分足→15分足(epochの:00/:15/:30/:45に揃える=計測resampleと同じ境界)
+  const out=[]; let cur=null;
+  for(const b of bars){ const slot=b.time-(b.time%900);
+    if(!cur||cur.time!==slot){ if(cur) out.push(cur); cur={time:slot,open:b.open,high:b.high,low:b.low,close:b.close}; }
+    else { cur.high=Math.max(cur.high,b.high); cur.low=Math.min(cur.low,b.low); cur.close=b.close; } }
+  if(cur) out.push(cur); return out;
+}
 function drawPins(){
   const w=chartEl.clientWidth, h=chartEl.clientHeight;
   fitCanvas(pinsCanvas,w,h);
@@ -1041,6 +1057,13 @@ function drawPins(){
 }
 document.getElementById('pinBtn').onclick=(e)=>{ showPins=!showPins; e.currentTarget.classList.toggle('on',showPins);
   if(lastBig) setWallLines(lastBox,lastBreak,lastBig); renderUserLines(); drawPins(); };
+document.getElementById('tf15Btn').onclick=(e)=>{
+  tf15=!tf15; e.currentTarget.classList.toggle('on',tf15);
+  const shown = tf15 ? to15m(bars5) : bars5;             // 今持ってる5分足から即再構築（再フェッチ待ちしない）
+  if(shown.length){ series.setData(shown); allBars=shown; lastTime=shown[shown.length-1].time; }
+  const sym=document.getElementById('sym'); if(sym) sym.textContent = tf15 ? 'XAUUSD 金 M15' : 'XAUUSD 金 M5';
+  if(lastBox||lastBig) setWallLines(lastBox,lastBreak,lastBig);
+  renderUserLines(); redrawOverlays(); };
 async function loadLines(){ try{ const r=await fetch('/api/lines'); const d=await r.json();
   userLines=(d.lines||[]).map(L=>({id:L.id,price:L.price,color:L.color,width:L.width||2})); renderUserLines(); }catch(e){} }
 async function saveLines(){ try{ await fetch('/api/lines',{method:'POST',
