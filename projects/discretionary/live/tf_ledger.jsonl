@@ -9,3 +9,4 @@
 {"kind": "update", "target": "TF-0003", "logged_at": "2026-11-03 01:40:02", "status": "retest", "rtime": 1793633700, "rjst": "2026-11-03 00:35", "rlo": 3967.45, "rhi": 3969.95}
 {"kind": "update", "target": "TF-0003", "logged_at": "2026-11-03 01:50:09", "status": "skip_risk", "entry": 3969.08, "sl": 3967.25, "tp": 4062.27, "risk": 1.83, "entry_time": 1793634300, "entry_jst": "2026-11-03 00:45", "rr": 50.92}
 {"kind": "update", "target": "TF-0004", "logged_at": "2026-11-03 01:50:09", "status": "retest", "rtime": 1793634300, "rjst": "2026-11-03 00:45", "rlo": 3966.79, "rhi": 3969.55}
+{"kind": "update", "target": "TF-0004", "logged_at": "2026-11-03 02:20:25", "status": "skip_risk", "entry": 3967.5, "sl": 3966.59, "tp": 4062.27, "risk": 0.91, "entry_time": 1793636100, "entry_jst": "2026-11-03 01:15", "rr": 104.14}
