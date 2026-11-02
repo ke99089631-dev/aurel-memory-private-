@@ -296,6 +296,13 @@ def build_data(n=1500):
     except Exception:
         bigbox = None
 
+    # ★2026-11-02 会長GO(①): ピンバー票。大箱の上下壁の票＋会長の線の票＋直近ピンバーの位置(マーカー)。確定足のみ。
+    pin = None
+    try:
+        pin = build_pin(o[:-1], h[:-1], l[:-1], c[:-1], idx[:-1], bigbox)
+    except Exception as e:
+        pin = {"error": str(e)}
+
     # C1: いまの時間帯(JST)の本物率(機械統計)
     damashi = None
     if _DAMASHI:
@@ -322,8 +329,108 @@ def build_data(n=1500):
         "damashi": damashi,
         "ai_pos": ai_pos,
         "t2": t2,
+        "pin": pin,
         "range_w": chart_gen.RANGE_W,
     }
+
+
+def build_pin(o, h, l, c, idx, bigbox):
+    """①ピンバー票(2026-11-02 会長GO『1、2、3を実行』)。定義=pinbar_live(10-31計測 pinbar_wall.py と同一・事前固定)。
+       大箱(24h高安)=研究と同じ箱なので票の意味がそのまま通る。会長の線(user_lines)には同じ足の形を線=壁として当てる。
+       10-31計測: 票≥1の壁のブレイクは本物率19%→11%(票1)/10%(票2+)＝「票が入った壁のブレイクは見送り」材料。読取のみ。"""
+    import pandas as pd
+    import pinbar_live as pl
+    n = len(c)
+    if n < pl.BOX + 2 or not bigbox:
+        return None
+    pins, hist = pl.scan_pins(o, h, l, c)
+    band = float(bigbox["width"]) * pl.BAND
+    up_v = pl.votes_now(hist, n, +1, float(bigbox["up"]), band)
+    dn_v = pl.votes_now(hist, n, -1, float(bigbox["dn"]), band)
+    t_of = lambda i: int(pd.Timestamp(idx[i]).timestamp())
+    # マーカーは「票として数えた全ピンバー」(hist・dedup前)。紙レーンの入口候補(pins・6本dedup後)より多い＝票の実体を見せる
+    marks = []
+    for side in (+1, -1):
+        hs = hist[side]
+        for k, (j, wj) in enumerate(hs):
+            if n - 1 - j > 600:
+                continue
+            prior = sum(1 for (j2, w2) in hs[:k] if j - j2 <= pl.BOX and abs(w2 - wj) <= band)
+            marks.append({"time": t_of(j), "side": side, "price": round(float(h[j] if side == +1 else l[j]), 3),
+                          "wall": round(float(wj), 3), "votes": int(prior)})
+    lines = []
+    for L in load_lines().get("lines", []):
+        try:
+            price = float(L["price"])
+        except Exception:
+            continue
+        v, hits = pl.line_votes(o, h, l, c, price, band)
+        lines.append({"id": L.get("id"), "price": price, "votes": int(v),
+                      "marks": [{"time": t_of(i), "side": s,
+                                 "price": round(float(h[i] if s == +1 else l[i]), 3)} for i, s in hits]})
+    return {"band": round(band, 3),
+            "up": {"price": bigbox["up"], "votes": int(up_v)},
+            "dn": {"price": bigbox["dn"], "votes": int(dn_v)},
+            "lines": lines, "marks": marks,
+            "note": "票≥1の壁のブレイクは本物率19%→11%(10-31計測・近年)＝見送り材料"}
+
+
+# ── ②ピンバー反発型 紙レーン(pinbar_lane.py が書く台帳)の集計。発注なし。関門=確定30本 ──
+PINBAR_LEDGER = os.path.join(HERE, "pinbar_ledger.jsonl")
+PINBAR_TARGET = 30
+
+
+def _load_pinbar():
+    recs, order = {}, []
+    if not os.path.exists(PINBAR_LEDGER):
+        return []
+    for line in open(PINBAR_LEDGER, encoding="utf-8"):
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            r = json.loads(line)
+        except Exception:
+            continue
+        if r.get("kind") == "pin":
+            recs[r["id"]] = r; order.append(r["id"])
+        elif r.get("kind") == "update":
+            t = recs.get(r.get("target"))
+            if t:
+                for k, v in r.items():
+                    if k not in ("kind", "target", "logged_at"):
+                        t[k] = v
+    return [recs[i] for i in order]
+
+
+def build_pinbar(tick=None):
+    recs = _load_pinbar()
+    price = ((tick["bid"] + tick["ask"]) / 2.0) if tick else None
+    for r in recs:
+        if r.get("status") == "open" and price is not None and r.get("entry") is not None:
+            risk = abs(r["entry"] - r["sl"]) or 1e-9
+            r["live_r"] = round(((r["entry"] - price) if r["side"] == "SELL" else (price - r["entry"])) / risk, 2)
+    closed = [r for r in recs if r.get("status") == "closed" and r.get("netR") is not None]
+
+    def grp(rs):
+        if not rs:
+            return {"n": 0}
+        rr = [r["netR"] for r in rs]
+        return {"n": len(rs), "win": round(100.0 * sum(1 for x in rr if x > 0) / len(rs), 1),
+                "avg": round(sum(rr) / len(rs), 3), "sum": round(sum(rr), 2),
+                "tp": sum(1 for r in rs if r.get("exit_reason") == "TP")}
+    status = {}
+    for r in recs:
+        status[r.get("status") or "?"] = status.get(r.get("status") or "?", 0) + 1
+    return {"n_pins": len(recs), "status": status, "target": PINBAR_TARGET,
+            "all": grp(closed),
+            "by_votes": {"票0": grp([r for r in closed if r.get("votes") == 0]),
+                         "票1": grp([r for r in closed if r.get("votes") == 1]),
+                         "票2+": grp([r for r in closed if (r.get("votes") or 0) >= 2])},
+            "by_zone": {z: grp([r for r in closed if r.get("zone") == z]) for z in ("本物帯", "中立", "ダマシ巣")},
+            "open": [r for r in recs if r.get("status") == "open"],
+            "recent": [r for r in recs if r.get("status") in ("open", "closed")][-6:],
+            "gate": ("関門: 確定%d/%d本" % (len(closed), PINBAR_TARGET)) + ("＝報告の時期" if len(closed) >= PINBAR_TARGET else "・サンプル不足")}
 
 
 LEDGER = r"C:\Users\user\.aurel\memory\projects\discretionary\ledger.jsonl"
@@ -368,6 +475,7 @@ def build_trades():
                     "wall": r.get("wall") or "",
                     # 会長の眼（カード v1 の主観タグ）＝収束ループの入力
                     "feel": r.get("feel") or "", "env": r.get("env") or "",
+                    "pin": r.get("pin") or "",      # ③壁のピンバー票(票0/票1/票2+)・2026-11-02
                     "pre": bool(r.get("pre")), "tags": _card_tags(r.get("note") or ""),
                 }
                 order.append(tid)
@@ -383,6 +491,8 @@ def build_trades():
                     t["tp"] = r.get("tp")
                 if r.get("post"):
                     t["post"] = r.get("post")
+                if r.get("pin"):
+                    t["pin"] = r.get("pin")
                 more = _card_tags(r.get("note") or "")
                 if more:
                     t["tags"].update(more)
@@ -1079,6 +1189,13 @@ class H(http.server.BaseHTTPRequestHandler):
                 self._send(200, json.dumps(build_setups(tick), ensure_ascii=False), "application/json; charset=utf-8")
             elif p == "/api/lines":
                 self._send(200, json.dumps(load_lines(), ensure_ascii=False), "application/json; charset=utf-8")
+            elif p == "/api/pinbar":
+                tick = None
+                try:
+                    tick = build_tick().get("tick")
+                except Exception:
+                    tick = None
+                self._send(200, json.dumps(build_pinbar(tick), ensure_ascii=False), "application/json; charset=utf-8")
             elif p == "/api/info":
                 self._send(200, json.dumps(build_info(), ensure_ascii=False), "application/json; charset=utf-8")
             else:

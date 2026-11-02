@@ -7,7 +7,8 @@ $live = 'C:\Users\user\.aurel\memory\projects\discretionary\live'
 $lanes = @(
   @{ name = 'setup_engine'; match = 'setup_engine'; vbs = "$live\setup_only_launch.vbs" },
   @{ name = 'gold_demo';    match = 'demo_exec';    vbs = "$live\demo_exec_launch.vbs" },
-  @{ name = 'serve_chart';  match = 'serve_chart';  vbs = "$live\serve_chart_launch.vbs" }
+  @{ name = 'serve_chart';  match = 'serve_chart';  vbs = "$live\serve_chart_launch.vbs" },
+  @{ name = 'pinbar_lane';  match = 'pinbar_lane';  vbs = "$live\pinbar_lane_launch.vbs" }
 )
 $logDir = 'C:\Users\user\.aurel\logs'
 if (-not (Test-Path $logDir)) { New-Item -ItemType Directory -Path $logDir -Force | Out-Null }

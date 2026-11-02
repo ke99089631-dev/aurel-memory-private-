@@ -19,6 +19,8 @@
   #ai{position:fixed;top:82px;left:0;right:0;bottom:env(safe-area-inset-bottom,0px);pointer-events:none;z-index:4}
   /* 2026-10-10 情報レイヤー: 指標・構造の時刻の縦線(キャンバス) と 左下HUD(風向き/帯/次の予定/バイアス) */
   #info{position:fixed;top:82px;left:0;right:0;bottom:env(safe-area-inset-bottom,0px);pointer-events:none;z-index:4}
+  /* 2026-11-02 会長GO①: ピンバー票(壁が止めた1票)のマーカー。桃色=既存の色(黄/青/緑/赤/紫/橙)と被らない */
+  #pins{position:fixed;top:82px;left:0;right:0;bottom:env(safe-area-inset-bottom,0px);pointer-events:none;z-index:4}
   #infohud{position:fixed;bottom:26px;left:8px;right:8px;z-index:6;display:none;font-size:11px;color:#c9d1d9;
     background:rgba(13,17,23,.78);border:1px solid #30363d;border-radius:8px;padding:3px 8px;pointer-events:none;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -95,6 +97,7 @@
 <canvas id="trades"></canvas>
 <canvas id="ai"></canvas>
 <canvas id="info"></canvas>
+<canvas id="pins"></canvas>
 <div id="ctrl">
   <button class="cbtn" id="addLine" title="水平線を追加">＋線</button>
   <span class="lab">マス</span>
@@ -106,6 +109,7 @@
   <button class="cbtn" id="paperBtn" title="AIのセットアップ記録（集計・会長トレードとの紐付け）">🤖 AI</button>
   <button class="cbtn on" id="infoBtn" title="情報レイヤー: 厚い行使価格(紫)・指標時刻(縦線)・風向き/帯/バイアス(左下)">📡 材料</button>
   <button class="cbtn" id="decideBtn" title="判断パネル: 時間・天気・地図(壁の一覧)・型チェック・成績を1枚に">🧭 判断</button>
+  <button class="cbtn on" id="pinBtn" title="ピンバー票: 壁が止めた足(ヒゲ≧実体2倍・全長2/3)。票が入った壁のブレイクは本物率19%→11%(10-31計測)＝見送り材料">📍 票</button>
 </div>
 <div id="linebar">
   <span id="lbInfo">線</span>
@@ -178,8 +182,12 @@ function setWallLines(box, brk, big){
     wallLines.push(series.createPriceLine({ price, color, lineWidth:1,
       lineStyle:style, axisLabelVisible:true, title })); };
   if (big){                                              // 大箱(24h高安)=会長の黄壁と同じ定義。細い黄破線
-    add(big.up,'rgba(227,201,74,0.55)',LWC.LineStyle.Dashed,'大箱上');
-    add(big.dn,'rgba(227,201,74,0.55)',LWC.LineStyle.Dashed,'大箱下');
+    // 2026-11-02 ①: 票が入った壁は題に「票n⚠」。票≥1=その壁のブレイクは見送り材料(本物率19%→11%)。色も桃に寄せて一目で分かる
+    const pv=(k)=>(showPins&&pinData&&pinData[k]&&pinData[k].votes>0)?pinData[k].votes:0;
+    const tt=(base,k)=>base+(pv(k)?' 票'+pv(k)+'⚠':'');
+    const cc=(k)=>pv(k)?'rgba(255,126,182,0.85)':'rgba(227,201,74,0.55)';
+    add(big.up,cc('up'),LWC.LineStyle.Dashed,tt('大箱上','up'));
+    add(big.dn,cc('dn'),LWC.LineStyle.Dashed,tt('大箱下','dn'));
   }
   if (box){
     add(box.up,'#e3c94a',LWC.LineStyle.Solid,'上壁');    // 壁は実線
@@ -211,6 +219,7 @@ async function pollData(){
     if (firstLoad){ series.setData(bars); chart.timeScale().fitContent(); firstLoad=false; }
     else { for (const b of bars){ if (b.time >= lastTime) series.update(b); } }
     if (bars.length){ lastTime = bars[bars.length-1].time; allBars = bars; }
+    pinData = (d.pin && !d.pin.error) ? d.pin : null;   // ①ピンバー票(2026-11-02)
     setWallLines(d.box, d.break, d.bigbox);
     lastBox = d.box; lastBreak = d.break; lastDamashi = d.damashi; lastBig = d.bigbox||null;   // B2/B3/C1 用に保持
     setBadge(d.source==='live');
@@ -218,7 +227,10 @@ async function pollData(){
     if (d.box) wi += ' ｜ 箱幅'+d.box.width.toFixed(1);
     if (d.break) wi += ' ｜ 直近ブレイク'+(d.break.dir==='UP'?'上':'下')+' 壁'+d.break.wall.toFixed(1)
       +'→TP'+d.break.tp.toFixed(1)+'/SL'+d.break.sl.toFixed(1);
+    if (pinData) wi += ' ｜ 票 上'+pinData.up.votes+'/下'+pinData.dn.votes
+      +((pinData.up.votes||pinData.dn.votes)?' ⚠票ありの壁のブレイクは見送り':'');
     document.getElementById('wallinfo').textContent = wi;
+    renderUserLines(); drawPins();                        // 会長の線の票(題に「票n」)＋マーカー
     aiPos = d.ai_pos || null; t2Data = d.t2 || null; updateAiPnl();   // AURELの建玉（見出し）＋2タッチ型デモ(紫)
     fetchSetups();   // AURELのセットアップ記録（MT5式オーバーレイ）
     fetchTrades();   // 会長の過去トレード（既定オフ）
@@ -371,10 +383,11 @@ document.getElementById('statsBtn').onclick=(e)=>{ statsOn=!statsOn;
   e.currentTarget.classList.toggle('on',statsOn); updateStats(); };
 
 // ── 収束ループ: AURELのセットアップ記録（/api/setups）。チャートにMT5式で乗せ、集計は短く。──
-let setups=[], setupSummary=null, paperOn=false;
+let setups=[], setupSummary=null, paperOn=false, pinLane=null;
 async function fetchSetups(){
   try{ const r=await fetch('/api/setups',{cache:'no-store'}); const d=await r.json();
        setups=d.setups||[]; setupSummary=d.summary||null; drawSetups(); updateAiPnl(); if(paperOn) updatePaper(); }catch(e){}
+  try{ const r=await fetch('/api/pinbar',{cache:'no-store'}); pinLane=await r.json(); if(paperOn) updatePaper(); }catch(e){ pinLane=null; }
 }
 function fmtR(v){ return (v>=0?'+':'')+Number(v).toFixed(2)+'R'; }
 function updatePaper(){
@@ -402,6 +415,15 @@ function updatePaper(){
     }
     h+='会長の実トレードと紐付け <b>'+s.linked+'</b>本（評価一致 '+s.agree+'）<br>';
     h+='<span style="color:#f0a35e">信頼度 '+s.confidence+'</span><br>';
+    // ②ピンバー反発型 紙レーン(2026-11-02 会長GO・発注なし・関門=確定30本)。pinbar_lane.py の台帳を /api/pinbar で集計
+    if(pinLane){ const q=pinLane, a=q.all||{n:0}; const rc=(a.avg>=0)?'#56d364':'#f85149';
+      h+='<b style="color:#ff7eb6">📍 ピンバー反発 紙</b> <span style="color:#8b949e">('+q.gate+')</span><br>';
+      if(a.n){ h+='　決着'+a.n+'本 勝率'+a.win+'% 平均<b style="color:'+rc+'">'+fmtR(a.avg)+'</b> 合計'+fmtR(a.sum)+' <span style="color:#8b949e">net・コスト0.56</span><br>';
+        const bv=q.by_votes||{}; const parts=[]; for(const k of ['票0','票1','票2+']){ const v=bv[k]; if(v&&v.n) parts.push(k+' n'+v.n+' '+fmtR(v.avg)); }
+        if(parts.length) h+='　<span style="color:#8b949e">'+parts.join(' ／ ')+'</span><br>'; }
+      else { h+='　<span style="color:#8b949e">決着まだなし（ピンバー'+(q.n_pins||0)+'本検出・待ち'+((q.status||{}).waiting||0)+'・建玉中'+((q.status||{}).open||0)+'）</span><br>'; }
+      for(const r of (q.open||[])){ h+='　<span style="color:#ff7eb6">建玉中 '+r.id+' '+(r.side==='BUY'?'買':'売')+' '+Number(r.entry).toFixed(1)+' 票'+r.votes+(r.live_r!=null?' '+fmtR(r.live_r):'')+'</span><br>'; }
+    }
     const last=setups.filter(x=>x.status==='closed'||x.status==='open').slice(-5).reverse();
     if(last.length){ h+='<span style="color:#8b949e">直近:</span><br>';
       for(const t of last){ const c=t.exit_reason==='TP'?'#56d364':(t.exit_reason==='SL'?'#f85149':'#8b949e');
@@ -950,7 +972,7 @@ document.getElementById('decideBtn').onclick=(e)=>{ decideOn=!decideOn; e.curren
 setInterval(()=>{ if(decideOn) renderDecide(); }, 5000);
 
 // オーバーレイ(時間帯/トレード/AI建玉/情報)は「表示範囲が変わった時」だけ再描画＝パンを重くしない
-function redrawOverlays(){ try{ drawZones(); drawTrades(); drawSetups(); drawInfo(); }catch(e){} }
+function redrawOverlays(){ try{ drawZones(); drawTrades(); drawSetups(); drawInfo(); drawPins(); }catch(e){} }
 chart.timeScale().subscribeVisibleLogicalRangeChange(redrawOverlays);   // パン/ズームに追従
 window.addEventListener('resize', ()=>setTimeout(()=>{ drawFixedGrid(); redrawOverlays(); },60));
 setInterval(redrawOverlays, 300);   // 保険(ライブ更新・トグル反映)
@@ -981,12 +1003,44 @@ let userLines=[], uLineObjs={}, selLine=null, lineEdit=false;
 const COLORS=['#ffffff','#2f81f7','#e3c94a','#f85149','#56d364','#22d3ee','#c084fc','#f0a35e'];
 const _sScroll={ mouseWheel:true, pressedMouseMove:true, horzTouchDrag:true, vertTouchDrag:true };
 const _sScale={ mouseWheel:true, pinch:true, axisPressedMouseMove:{time:true, price:true} };
+function lineVotes(id){   // ①: 会長の線に入ったピンバー票(/api/data の pin.lines)。無ければ0
+  if(!showPins||!pinData||!pinData.lines) return 0;
+  const q=pinData.lines.find(x=>x.id===id); return q?(q.votes||0):0; }
 function renderUserLines(){
   for(const id in uLineObjs){ series.removePriceLine(uLineObjs[id]); } uLineObjs={};
-  for(const L of userLines){ uLineObjs[L.id]=series.createPriceLine({ price:L.price, color:L.color,
+  for(const L of userLines){ const v=lineVotes(L.id);
+    uLineObjs[L.id]=series.createPriceLine({ price:L.price, color:L.color,
     lineWidth:L.width, lineStyle:LWC.LineStyle.Solid, axisLabelVisible:true,
-    title:(L.id===selLine?'◆':'') }); }
+    title:(L.id===selLine?'◆':'')+(v?'票'+v+'⚠':'') }); }
 }
+// ── ①ピンバー票マーカー(2026-11-02 会長GO): 壁(大箱)や会長の線で「壁が止めた」足のヒゲ先に桃色の小さな印＋票数。
+//    定義は 10-31 計測と同一(pinbar_live.py)。票が入った壁のブレイクは本物率19%→11%＝見送り材料。
+const pinsCanvas=document.getElementById('pins'), pctx=pinsCanvas.getContext('2d');
+let pinData=null, showPins=true;
+function drawPins(){
+  const w=chartEl.clientWidth, h=chartEl.clientHeight;
+  fitCanvas(pinsCanvas,w,h);
+  pctx.setTransform(DPR,0,0,DPR,0,0); pctx.clearRect(0,0,w,h);
+  if(!showPins||!pinData||!allBars.length) return;
+  const tsc=chart.timeScale(); const PK='255,126,182';
+  const marks=[]; for(const m of (pinData.marks||[])) marks.push({t:m.time,side:m.side,price:m.price,votes:m.votes,line:false});
+  for(const L of (pinData.lines||[])) for(const m of (L.marks||[])) marks.push({t:m.time,side:m.side,price:m.price,votes:null,line:true});
+  for(const m of marks){
+    const bt=nearestBarTime(m.t); if(bt==null) continue;
+    const x=tsc.timeToCoordinate(bt), y=series.priceToCoordinate(m.price); if(x==null||y==null) continue;
+    if(x<-10||x>w+10) continue;
+    const up=(m.side===1||m.side==='1'||m.side===+1);        // 上壁に当たった上ヒゲ → ヒゲ先の上に▼
+    pctx.fillStyle='rgba('+PK+','+(m.line?0.75:0.95)+')'; pctx.beginPath();
+    if(up){ pctx.moveTo(x,y-3); pctx.lineTo(x-4,y-10); pctx.lineTo(x+4,y-10); }
+    else  { pctx.moveTo(x,y+3); pctx.lineTo(x-4,y+10); pctx.lineTo(x+4,y+10); }
+    pctx.closePath(); pctx.fill();
+    pctx.font='9px monospace'; pctx.textAlign='center'; pctx.textBaseline=up?'bottom':'top';
+    pctx.fillStyle='rgba('+PK+',0.9)';
+    pctx.fillText(m.line?'票':('票'+((m.votes||0)+1)), x, up?y-11:y+11);   // 票n＝この足を含めてその壁に何票目か
+  }
+}
+document.getElementById('pinBtn').onclick=(e)=>{ showPins=!showPins; e.currentTarget.classList.toggle('on',showPins);
+  if(lastBig) setWallLines(lastBox,lastBreak,lastBig); renderUserLines(); drawPins(); };
 async function loadLines(){ try{ const r=await fetch('/api/lines'); const d=await r.json();
   userLines=(d.lines||[]).map(L=>({id:L.id,price:L.price,color:L.color,width:L.width||2})); renderUserLines(); }catch(e){} }
 async function saveLines(){ try{ await fetch('/api/lines',{method:'POST',
