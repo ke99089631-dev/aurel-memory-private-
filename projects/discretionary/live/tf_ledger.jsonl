@@ -6,3 +6,6 @@
 {"kind": "update", "target": "TF-0002", "logged_at": "2026-11-03 00:20:16", "status": "no_resume"}
 {"id": "TF-0003", "kind": "tf", "tf": 5, "logged_at": "2026-11-03 01:35:29", "btime": 1793633400, "bjst": "2026-11-03 00:30", "dir": 1, "side": "BUY", "wall": 3966.22, "width": 96.05, "zone": "ダマシ巣", "status": "break"}
 {"id": "TF-0004", "kind": "tf", "tf": 15, "logged_at": "2026-11-03 01:35:29", "btime": 1793633400, "bjst": "2026-11-03 00:30", "dir": 1, "side": "BUY", "wall": 3966.22, "width": 96.05, "zone": "ダマシ巣", "status": "break"}
+{"kind": "update", "target": "TF-0003", "logged_at": "2026-11-03 01:40:02", "status": "retest", "rtime": 1793633700, "rjst": "2026-11-03 00:35", "rlo": 3967.45, "rhi": 3969.95}
+{"kind": "update", "target": "TF-0003", "logged_at": "2026-11-03 01:50:09", "status": "skip_risk", "entry": 3969.08, "sl": 3967.25, "tp": 4062.27, "risk": 1.83, "entry_time": 1793634300, "entry_jst": "2026-11-03 00:45", "rr": 50.92}
+{"kind": "update", "target": "TF-0004", "logged_at": "2026-11-03 01:50:09", "status": "retest", "rtime": 1793634300, "rjst": "2026-11-03 00:45", "rlo": 3966.79, "rhi": 3969.55}
