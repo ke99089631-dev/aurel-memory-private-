@@ -97,3 +97,4 @@
 {"kind": "update", "target": "P-0001", "logged_at": "2026-11-03 17:40:21", "mfe_R": 2.96, "mae_R": 0.87, "hold_bars": 95}
 {"kind": "update", "target": "P-0001", "logged_at": "2026-11-03 17:45:23", "status": "closed", "exit": 3903.072, "exit_reason": "TP", "exit_time": 1793691600, "exit_jst": "2026-11-03 16:40", "hold_bars": 96, "mfe_R": 3.16, "mae_R": 0.87, "R": 3.083, "netR": 3.046}
 {"id": "P-0002", "kind": "pin", "lane": "pinbar", "logged_at": "2026-11-03 22:35:07", "pin_time": 1793709000, "pin_jst": "2026-11-03 21:30", "side_num": 1, "side": "SELL", "wall": 3970.29, "width": 74.81, "votes": 5, "votes_lab": "票2+", "wick_ext": 3968.2, "body_edge": 3954.1, "beyond": false, "zone": "中立", "jst_hour": 21, "status": "waiting"}
+{"kind": "update", "target": "P-0002", "logged_at": "2026-11-03 22:50:17", "status": "no_confirm", "resolved_time": 1793709900}
