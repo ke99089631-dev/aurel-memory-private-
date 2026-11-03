@@ -336,3 +336,4 @@
 {"event": "modify", "sid": "S-0432", "order": 5268763535, "entry": 3969.9, "sl": 3956.094, "tp": 3980.45, "retcode": 10009, "ts": "2026-11-03T13:55:15"}
 {"event": "modify", "sid": "S-0432", "order": 5268763535, "entry": 3966.43, "sl": 3956.094, "tp": 3980.45, "retcode": 10009, "ts": "2026-11-03T14:00:01"}
 {"event": "cancel", "sid": "S-0432", "why": "窓切れ/非armed", "order": 5268763535, "retcode": 10009, "ts": "2026-11-03T14:05:08"}
+{"event": "close", "sid": "S-0431", "side": "BUY", "position": 5268754902, "fill_price": 3962.18, "exit_price": 3941.91, "exit_time": "2026-11-03T16:24:45", "sl": 3942.245, "tp": 3973.819, "volume": 0.01, "R": -1.017, "reason": "other", "profit": -20.71, "v1_keep": false, "entry_mode": "market", "paper_status": "open", "paper_invalid_fill": false, "gold_er": 0.0898, "gold_regime": "chop", "ts": "2026-11-03T14:24:57"}
