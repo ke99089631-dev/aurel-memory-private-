@@ -343,3 +343,18 @@
 {"event": "modify", "sid": "S-0434", "order": 5268834579, "entry": 3926.48, "sl": 3936.599, "tp": 3902.6, "retcode": 10009, "ts": "2026-11-03T17:05:19"}
 {"event": "modify", "sid": "S-0434", "order": 5268834579, "entry": 3927.93, "sl": 3936.599, "tp": 3902.6, "retcode": 10009, "ts": "2026-11-03T17:10:04"}
 {"event": "fill", "sid": "S-0434", "side": "SELL", "fill_price": 3927.93, "sl": 3936.6, "tp": 3902.6, "volume": 0.01, "position": 5268834579, "gold_er": 0.0511, "gold_regime": "chop", "v1_keep": false, "v1_drop": ["時間帯(本物率18.8<21.1)"], "spread": 0.16, "streak_demo": 1, "streak_paper": 1, "mom20": -0.19, "trend_side": "with", "lot_factor": 1.0, "lot_factor_shadow": 1.0, "ts": "2026-11-03T17:13:08"}
+{"event": "skip-stale", "age_s": 3615.0, "last_bar": "2026-11-03T23:55:00", "now_ts": 1793754015, "ts": "2026-11-03T23:00:15"}
+{"event": "skip-stale", "age_s": 3635.0, "last_bar": "2026-11-03T23:55:00", "now_ts": 1793754035, "ts": "2026-11-03T23:00:35"}
+{"event": "skip-stale", "age_s": 3655.0, "last_bar": "2026-11-03T23:55:00", "now_ts": 1793754055, "ts": "2026-11-03T23:00:56"}
+{"event": "skip-stale", "age_s": 3676.0, "last_bar": "2026-11-03T23:55:00", "now_ts": 1793754076, "ts": "2026-11-03T23:01:16"}
+{"event": "skip-stale", "age_s": 3696.0, "last_bar": "2026-11-03T23:55:00", "now_ts": 1793754096, "ts": "2026-11-03T23:01:36"}
+{"event": "skip-stale", "age_s": 3716.0, "last_bar": "2026-11-03T23:55:00", "now_ts": 1793754116, "ts": "2026-11-03T23:01:56"}
+{"event": "skip-stale", "age_s": 3736.0, "last_bar": "2026-11-03T23:55:00", "now_ts": 1793754136, "ts": "2026-11-03T23:02:16"}
+{"event": "skip-stale", "age_s": 3756.0, "last_bar": "2026-11-03T23:55:00", "now_ts": 1793754156, "ts": "2026-11-03T23:02:36"}
+{"event": "skip-stale", "age_s": 3776.0, "last_bar": "2026-11-03T23:55:00", "now_ts": 1793754176, "ts": "2026-11-03T23:02:56"}
+{"event": "skip-stale", "age_s": 3796.0, "last_bar": "2026-11-03T23:55:00", "now_ts": 1793754196, "ts": "2026-11-03T23:03:17"}
+{"event": "skip-stale", "age_s": 3817.0, "last_bar": "2026-11-03T23:55:00", "now_ts": 1793754217, "ts": "2026-11-03T23:03:37"}
+{"event": "skip-stale", "age_s": 3836.0, "last_bar": "2026-11-03T23:55:00", "now_ts": 1793754236, "ts": "2026-11-03T23:03:57"}
+{"event": "skip-stale", "age_s": 3855.0, "last_bar": "2026-11-03T23:55:00", "now_ts": 1793754255, "ts": "2026-11-03T23:04:17"}
+{"event": "skip-stale", "age_s": 3877.0, "last_bar": "2026-11-03T23:55:00", "now_ts": 1793754277, "ts": "2026-11-03T23:04:37"}
+{"event": "skip-stale", "age_s": 3897.0, "last_bar": "2026-11-03T23:55:00", "now_ts": 1793754297, "ts": "2026-11-03T23:04:57"}
