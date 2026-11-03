@@ -23,3 +23,6 @@ The excess over the null for the main claim is within ±3 points in every split 
 
 **Files written** (all under AUREL_RESEARCH): `scripts/refute_c0_path.py`, `scripts/refute_c0_entrybar.py`, `data/refute_c0_path_result.md`, `data/refute_c0_entrybar_result.md`, `data/refute_api_bars_probe.json`. No orders, no production edits, no process actions. One deviation from the global skill rule: I did not write to the task-observer log because it lives outside AUREL_RESEARCH and this lane's write boundary takes precedence.
 2026/11/04  2:30:00.06 done
+========== 2026/11/04  5:15:05.82 refute start ==========
+Status: the refutation script is running in the background (bar loading done, production scan in progress, roughly 12 more minutes). It will rebuild bar-level paths for every 2010–2026 re-accel trade and test whether wins dip to −0.5R after the entry bar more often than a random walk predicts. I'll append the verdict to the findings file as soon as it completes.
+2026/11/04  5:20:49.75 done
