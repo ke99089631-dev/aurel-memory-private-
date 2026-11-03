@@ -1094,9 +1094,13 @@ def build_tf(tick=None):
                     lr = round(((price - r["entry"]) if r["side"] == "BUY" else (r["entry"] - price)) / risk, 2)
                 out["open"].append({"id": r["id"], "side": r["side"], "entry": r.get("entry"), "live_r": lr})
         return out
+    # ★過去計測の参照値(2026-11-02 tf_compare.py・近年2024-01〜2026-07・事前固定・結果はRESULTS_tf_compare.md)。
+    #   前向きが溜まるまで会長が「15分の成績」を今すぐ見られるように。固定値=再計測しない限り不変。
+    bt = {"win5": 17, "avg5": -0.025, "dd5": 145.6, "win15": 26, "avg15": 0.145, "dd15": 42.5,
+          "real5": 8, "real15": 12, "n5": 789, "n15": 735, "src": "近年2024-26・tf_compare"}
     return {"target": TF_TARGET,
             "n5": sum(1 for r in recs if r.get("tf") == 5), "n15": sum(1 for r in recs if r.get("tf") == 15),
-            "m5": grp(5), "m15": grp(15),
+            "m5": grp(5), "m15": grp(15), "bt": bt,
             "gate": "関門: 5分 確定%d/%d・15分 確定%d/%d" % (
                 len([r for r in recs if r.get("tf") == 5 and r.get("status") == "closed"]), TF_TARGET,
                 len([r for r in recs if r.get("tf") == 15 and r.get("status") == "closed"]), TF_TARGET)}
