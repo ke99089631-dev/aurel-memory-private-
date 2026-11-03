@@ -1,0 +1,8 @@
+========== 2026/11/04  0:43:59.27 cycle start ==========
+Waiting on the scan. Status so far:
+
+- Pre-registration for cycle 1 (time-based early fold, K=6 bars, T=+0.5R, in-sample 2010–2020, out-of-sample 2021–2026/07, live ledger as bounded third check) is written to `AUREL_RESEARCH/findings/2026-11-04.md`.
+- The analysis script is at `AUREL_RESEARCH/scripts/c1_early_fold.py`. It loaded 1.73M gold M5 bars and is now running the production setup scan; results will land in `AUREL_RESEARCH/data/`.
+
+Once the run completes I will fill in the findings entry, update the backlog, and check promotion criteria.
+2026/11/04  0:51:15.21 done
