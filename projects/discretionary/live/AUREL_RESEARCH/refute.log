@@ -26,3 +26,4 @@ The excess over the null for the main claim is within ±3 points in every split 
 ========== 2026/11/04  5:15:05.82 refute start ==========
 Status: the refutation script is running in the background (bar loading done, production scan in progress, roughly 12 more minutes). It will rebuild bar-level paths for every 2010–2026 re-accel trade and test whether wins dip to −0.5R after the entry bar more often than a random walk predicts. I'll append the verdict to the findings file as soon as it completes.
 2026/11/04  5:20:49.75 done
+========== 2026/11/04  8:15:05.74 refute start ==========
