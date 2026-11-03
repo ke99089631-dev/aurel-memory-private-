@@ -1,1 +1,25 @@
 ========== 2026/11/04  2:15:04.87 refute start ==========
+Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-04.md` under a `[REFUTE]` header.
+
+**Target.** PROMOTED.md is empty and cycle1 has no results yet (its scan is still building the path cache), so the only candidate was cycle0's "weak signal": that the in-trade path (MFE/MAE) carries win/loss information.
+
+**Verdict: broken for 5 of 6 claims, inconclusive for the 6th.**
+
+The null I built is a gambler's-ruin random walk using each trade's own SL/TP geometry (TP distance varies, median 1.51R, 12% of trades have TP below 0.5R), with one drift parameter fitted to the overall win rate. That null says "the entry has an edge, the path has no information." It reproduces cycle0's numbers:
+
+| Claim | Observed | RW null | Discrete MC | Result |
+|---|---|---|---|---|
+| Reached +0.5R → win rate | 65.2% | 64.6% | 69.7% | z=0.16, p=0.87 |
+| Not reached → 18% still win | 20 wins | all 20 had TP < 0.5R | — | tautology |
+| Losses that saw +0.5R | 42.5% | 45.1% | 39.2% | p=0.52 |
+| Wins with MAE ≥ 1.0R = 0 | 0 | 0 by definition | 0 | tautology (SL is at −1R) |
+| Wins that dipped to −0.5R | 50.0% | 31.8% | 29.2% | z=4.76, survives at first |
+
+The excess over the null for the main claim is within ±3 points in every split and subset (ledger halves, wall kind, time zone, side), all |z| < 0.5. With real information, it should concentrate somewhere.
+
+**The surviving claim (wins dip deep) is half an artifact.** I reproduced bar-level paths from the chart server's read-only API for 167 ledger trades (matches ledger MFE/MAE to 0.005). Because re-accel entries are stop orders, 98% of entry bars open on the adverse side, and for 49% of wins the maximum MAE occurs inside the entry bar, i.e. before the fill. Excluding the entry bar, the dip rate falls to 40.7%, and the post-entry comparison against the null gives p=0.018 on n=74, which fails the Bonferroni threshold of 0.0083.
+
+**Implications noted for cycle1.** The refutation does not invalidate cycle1's pre-registration. Under the null with positive drift, early folding has negative expected diff, so a positive diff there would be genuine. But cycle1's diagnostic table (MFE at bar 6 → final R) will fall into the same geometry trap unless compared against the RW expectation rather than the unconditional mean. The p_hit function in the refutation script is reusable for that.
+
+**Files written** (all under AUREL_RESEARCH): `scripts/refute_c0_path.py`, `scripts/refute_c0_entrybar.py`, `data/refute_c0_path_result.md`, `data/refute_c0_entrybar_result.md`, `data/refute_api_bars_probe.json`. No orders, no production edits, no process actions. One deviation from the global skill rule: I did not write to the task-observer log because it lives outside AUREL_RESEARCH and this lane's write boundary takes precedence.
+2026/11/04  2:30:00.06 done
