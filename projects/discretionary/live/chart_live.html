@@ -431,24 +431,17 @@ function updatePaper(){
       else { h+='　<span style="color:#8b949e">決着まだなし（ピンバー'+(q.n_pins||0)+'本検出・待ち'+((q.status||{}).waiting||0)+'・建玉中'+((q.status||{}).open||0)+'）</span><br>'; }
       for(const r of (q.open||[])){ h+='　<span style="color:#ff7eb6">建玉中 '+r.id+' '+(r.side==='BUY'?'買':'売')+' '+Number(r.entry).toFixed(1)+' 票'+r.votes+(r.live_r!=null?' '+fmtR(r.live_r):'')+'</span><br>'; }
     }
-    // ②足の時間軸 5分 vs 15分（2026-11-02 会長GO）。過去計測（今すぐ見れる）＋前向きレーン（OOS・溜まり中）。発注なし
-    if(tfLane){ const q=tfLane;
-      h+='<b style="color:#22d3ee">⏱ 5分 vs 15分（壁の足）</b><br>';
-      // (1) 過去計測＝15分がどれだけ良いか、今すぐ分かる数字
-      if(q.bt){ const b=q.bt; const g=(v)=>(v>=0?'#56d364':'#f85149');
-        h+='<span style="color:#8b949e">過去計測 '+b.src+':</span><br>';
-        h+='　5分 　勝率'+b.win5+'% 平均<b style="color:'+g(b.avg5)+'">'+fmtR(b.avg5)+'</b> 最大DD-'+b.dd5+'R<br>';
-        h+='　15分 勝率<b>'+b.win15+'%</b> 平均<b style="color:'+g(b.avg15)+'">'+fmtR(b.avg15)+'</b> 最大DD<b>-'+b.dd15+'R</b><br>';
-        h+='　<span style="color:#8b949e">ブレイク本物率 '+b.real5+'% → <b style="color:#56d364">'+b.real15+'%</b>（騙しが減る）</span><br>';
-      }
-      // (2) 前向きレーン＝本当に続くか、今から溜める
-      const row=(lab,g)=>{ if(!g) return ''; const a=(g.closed_n?g:null);
-        if(!a) return '　'+lab+' <span style="color:#8b949e">決着0（待ち'+((g.status||{}).break||0)+'・建玉'+((g.status||{}).open||0)+'）</span><br>';
-        const rc=(a.avg>=0)?'#56d364':'#f85149';
-        return '　'+lab+' n'+a.closed_n+' 勝率'+a.win+'% 平均<b style="color:'+rc+'">'+fmtR(a.avg)+'</b> 合計'+fmtR(a.sum)+' DD-'+a.dd+'R<br>'; };
-      h+='<span style="color:#8b949e">前向き（今から・'+q.gate+'）:</span><br>';
-      h+=row('5分 ',q.m5)+row('15分',q.m15);
-      for(const r of ((q.m15&&q.m15.open)||[])) h+='　<span style="color:#22d3ee">15分 建玉 '+r.id+' '+(r.side==='BUY'?'買':'売')+' '+Number(r.entry).toFixed(1)+(r.live_r!=null?' '+fmtR(r.live_r):'')+'</span><br>';
+    // ②5分 vs 15分（同じ再加速レシピ・同じ記録・2026-11-03 会長GO）。同じ窓で並べて比較。発注なし
+    if(tfLane && tfLane.m5){ const q=tfLane;
+      h+='<b style="color:#22d3ee">⏱ 5分 vs 15分（同じ再加速レシピ・'+q.window+'）</b> <span style="color:#8b949e">('+q.gate+')</span><br>';
+      const cell=(g)=>{ if(!g||!g.n) return '<span style="color:#8b949e">—</span>';
+        const rc=(g.avg>=0)?'#56d364':'#f85149';
+        return 'n'+g.n+' 勝率'+(g.win!=null?g.win:'-')+'% 平均<b style="color:'+rc+'">'+fmtR(g.avg)+'</b> 合計'+fmtR(g.sum)+' DD-'+g.dd+'R'; };
+      const line=(lab,k)=>'　'+lab+'<br>　　5分 '+cell(q.m5[k])+'<br>　　<b style="color:#22d3ee">15分</b> '+cell(q.m15[k])+'<br>';
+      h+=line('<b style="color:#f0a35e">再加速</b>（会長の型）','reaccel');
+      h+=line('外壁(黄)','outer');
+      h+='<span style="color:#8b949e">※同じ壁→壁の再加速レシピを、足だけ5分/15分で。15分台帳は直近窓をバックフィル＋前向き継続。</span><br>';
+      if((q.m15.rea_open||0)||(q.m5.rea_open||0)) h+='　<span style="color:#8b949e">再加速 建玉中: 5分'+(q.m5.rea_open||0)+'・15分'+(q.m15.rea_open||0)+'</span><br>';
     }
     const last=setups.filter(x=>x.status==='closed'||x.status==='open').slice(-5).reverse();
     if(last.length){ h+='<span style="color:#8b949e">直近:</span><br>';

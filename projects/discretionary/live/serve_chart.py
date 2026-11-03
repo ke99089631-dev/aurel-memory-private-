@@ -1040,16 +1040,18 @@ def build_paper_v3():
             "trades": rows[-300:]}
 
 
-# ── ②足の時間軸 前向きレーン(tf_lane.py が書く台帳)の集計。5分 vs 15分・発注なし・関門各30本 ──
-TF_LEDGER = os.path.join(HERE, "tf_ledger.jsonl")
+# ── ②足の時間軸 5分 vs 15分（2026-11-03 会長GO）: 同じ再加速レシピ(setup_engine)を5分と15分で走らせ、同じ台帳形式で記録。
+#    5分=setup_ledger.jsonl(本体・実弾fertも読む) / 15分=setup_ledger_15m.jsonl(setup_engine_15m が書く・発注なし)。
+#    同じ窓(15分台帳のバックフィル期間)で揃えて比較＝「15分なら？」がフェアに見える。関門=各足 確定30本。
+TF15_LEDGER = os.path.join(HERE, "setup_ledger_15m.jsonl")
 TF_TARGET = 30
 
 
-def _load_tf():
+def _fold_setups(path):
     recs, order = {}, []
-    if not os.path.exists(TF_LEDGER):
+    if not os.path.exists(path):
         return []
-    for line in open(TF_LEDGER, encoding="utf-8"):
+    for line in open(path, encoding="utf-8"):
         line = line.strip()
         if not line:
             continue
@@ -1057,7 +1059,7 @@ def _load_tf():
             r = json.loads(line)
         except Exception:
             continue
-        if r.get("kind") == "tf":
+        if r.get("kind") == "setup":
             recs[r["id"]] = r; order.append(r["id"])
         elif r.get("kind") == "update":
             t = recs.get(r.get("target"))
@@ -1069,41 +1071,45 @@ def _load_tf():
 
 
 def build_tf(tick=None):
+    """5分 vs 15分（同じ再加速レシピ）。両台帳を同じ窓で揃えて、本線/再加速/外壁/中間を同じ指標で並べる。"""
     import numpy as np
-    recs = _load_tf()
-    price = ((tick["bid"] + tick["ask"]) / 2.0) if tick else None
 
-    def grp(tf):
-        rs = [r for r in recs if r.get("tf") == tf]
-        cl = [r for r in rs if r.get("status") == "closed" and r.get("netR") is not None]
-        st = {}
-        for r in rs:
-            st[r.get("status") or "?"] = st.get(r.get("status") or "?", 0) + 1
-        out = {"status": st, "open": [], "closed_n": len(cl)}
-        if cl:
-            rr = [r["netR"] for r in cl]
-            cum = np.cumsum(rr); dd = float((np.maximum.accumulate(cum) - cum).max())
-            out.update({"win": round(100.0 * sum(1 for x in rr if x > 0) / len(cl), 1),
-                        "avg": round(sum(rr) / len(cl), 3), "sum": round(sum(rr), 2),
-                        "tp": sum(1 for r in cl if r.get("exit_reason") == "TP"), "dd": round(dd, 1)})
-        for r in rs:
-            if r.get("status") == "open":
-                lr = None
-                if price is not None and r.get("entry") is not None:
-                    risk = abs(r["entry"] - r["sl"]) or 1e-9
-                    lr = round(((price - r["entry"]) if r["side"] == "BUY" else (r["entry"] - price)) / risk, 2)
-                out["open"].append({"id": r["id"], "side": r["side"], "entry": r.get("entry"), "live_r": lr})
-        return out
-    # ★過去計測の参照値(2026-11-02 tf_compare.py・近年2024-01〜2026-07・事前固定・結果はRESULTS_tf_compare.md)。
-    #   前向きが溜まるまで会長が「15分の成績」を今すぐ見られるように。固定値=再計測しない限り不変。
-    bt = {"win5": 17, "avg5": -0.025, "dd5": 145.6, "win15": 26, "avg15": 0.145, "dd15": 42.5,
-          "real5": 8, "real15": 12, "n5": 789, "n15": 735, "src": "近年2024-26・tf_compare"}
-    return {"target": TF_TARGET,
-            "n5": sum(1 for r in recs if r.get("tf") == 5), "n15": sum(1 for r in recs if r.get("tf") == 15),
-            "m5": grp(5), "m15": grp(15), "bt": bt,
-            "gate": "関門: 5分 確定%d/%d・15分 確定%d/%d" % (
-                len([r for r in recs if r.get("tf") == 5 and r.get("status") == "closed"]), TF_TARGET,
-                len([r for r in recs if r.get("tf") == 15 and r.get("status") == "closed"]), TF_TARGET)}
+    def gstat(rows):
+        if not rows:
+            return {"n": 0}
+        rr = [r["R"] for r in rows if r.get("R") is not None]
+        if not rr:
+            return {"n": len(rows)}
+        cum = np.cumsum(rr); dd = float((np.maximum.accumulate(cum) - cum).max())
+        tp = sum(1 for r in rows if r.get("exit_reason") == "TP")
+        return {"n": len(rr), "win": round(100.0 * sum(1 for x in rr if x > 0) / len(rr), 1),
+                "tp_rate": round(100.0 * tp / len(rr), 1), "avg": round(sum(rr) / len(rr), 3),
+                "sum": round(sum(rr), 2), "dd": round(dd, 1)}
+
+    def lanes(recs, since):
+        def within(r):
+            return (since is None) or (int(r.get("break_time") or 0) >= since)
+        main_cl = [r for r in recs if r.get("status") == "closed" and r.get("R") is not None and within(r)]
+        rea = [dict(r["reaccel"], break_time=r.get("break_time")) for r in recs
+               if (r.get("reaccel") or {}).get("status") == "closed" and r["reaccel"].get("R") is not None and within(r)]
+        return {"reaccel": gstat(rea),
+                "main": gstat(main_cl),
+                "outer": gstat([r for r in main_cl if r.get("wall_kind") == "outer"]),
+                "mid": gstat([r for r in main_cl if r.get("wall_kind") == "mid"]),
+                "open": sum(1 for r in recs if r.get("status") == "open" and within(r)),
+                "rea_open": sum(1 for r in recs if (r.get("reaccel") or {}).get("status") == "open" and within(r))}
+
+    r5 = _fold_setups(SETUP_LEDGER)
+    r15 = _fold_setups(TF15_LEDGER)
+    bts = [int(r.get("break_time") or 0) for r in r15 if r.get("break_time")]
+    since = min(bts) if bts else None                         # 比較の窓＝15分台帳が覆う期間に5分も揃える
+    rea5 = sum(1 for r in r5 if (r.get("reaccel") or {}).get("status") == "closed" and (since is None or int(r.get("break_time") or 0) >= since))
+    rea15 = sum(1 for r in r15 if (r.get("reaccel") or {}).get("status") == "closed")
+    import datetime as _dt
+    wtxt = (_dt.datetime.fromtimestamp(since, _dt.timezone(_dt.timedelta(hours=9))).strftime("%m-%d") + "〜") if since else "全期間"
+    return {"target": TF_TARGET, "window": wtxt,
+            "m5": lanes(r5, since), "m15": lanes(r15, None),
+            "gate": "関門(再加速): 5分 %d/%d・15分 %d/%d" % (rea5, TF_TARGET, rea15, TF_TARGET)}
 
 
 # ── 会長が引いた水平線（AURELが読める共有ファイル。チャットで「白線見て」に応えるための正本）──
