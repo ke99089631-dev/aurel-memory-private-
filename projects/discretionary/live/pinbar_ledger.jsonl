@@ -82,3 +82,6 @@
 {"kind": "update", "target": "P-0001", "logged_at": "2026-11-03 16:25:08", "mfe_R": 2.72, "mae_R": 0.87, "hold_bars": 80}
 {"kind": "update", "target": "P-0001", "logged_at": "2026-11-03 16:30:11", "mfe_R": 2.72, "mae_R": 0.87, "hold_bars": 81}
 {"kind": "update", "target": "P-0001", "logged_at": "2026-11-03 16:35:14", "mfe_R": 2.72, "mae_R": 0.87, "hold_bars": 82}
+{"kind": "update", "target": "P-0001", "logged_at": "2026-11-03 16:40:17", "mfe_R": 2.74, "mae_R": 0.87, "hold_bars": 83}
+{"kind": "update", "target": "P-0001", "logged_at": "2026-11-03 16:45:20", "mfe_R": 2.75, "mae_R": 0.87, "hold_bars": 84}
+{"kind": "update", "target": "P-0001", "logged_at": "2026-11-03 16:50:22", "mfe_R": 2.75, "mae_R": 0.87, "hold_bars": 85}
