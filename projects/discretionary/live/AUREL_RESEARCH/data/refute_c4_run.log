@@ -54,3 +54,21 @@ TP_R(b) 分位 10/50/90 = [0.39, 0.99, 2.46]  b≤0.5 の本 19%  保有中央�
 ## 5. 離散 MC（x0 出発・足高値安値・FEED_TOL・同足SL優先、κ は保有中央値校正）
   対象のうちサンプル 600 本 × 400 path
   κ=0.4: TP path 120929 のうち −0.5R 沈み 30399 = 25.1%  （観測 32.8%）
+  κ=0.6: TP path 125553 のうち −0.5R 沈み 33015 = 26.3%  （観測 32.8%）
+  κ=0.8: TP path 127354 のうち −0.5R 沈み 32841 = 25.8%  （観測 32.8%）
+  κ=1.0: TP path 126651 のうち −0.5R 沈み 32554 = 25.7%  （観測 32.8%）
+
+## 6. 実データ・プラセボ（同JST時・同側・同幾何、ランダム建玉=足の始値、50本/取引）
+C:\Users\user\.aurel\memory\projects\discretionary\live\AUREL_RESEARCH\scripts\refute_c4_scanpath.py:205: RuntimeWarning: divide by zero encountered in divide
+  A = sgn * (h[idx] - entry[:, None]) / risk_s[:, None]; B = sgn * (l[idx] - entry[:, None]) / risk_s[:, None]
+C:\Users\user\.aurel\memory\projects\discretionary\live\AUREL_RESEARCH\scripts\refute_c4_scanpath.py:205: RuntimeWarning: invalid value encountered in divide
+  A = sgn * (h[idx] - entry[:, None]) / risk_s[:, None]; B = sgn * (l[idx] - entry[:, None]) / risk_s[:, None]
+C:\Users\user\.aurel\memory\projects\discretionary\live\AUREL_RESEARCH\scripts\refute_c4_scanpath.py:206: RuntimeWarning: divide by zero encountered in divide
+  H = np.maximum(A, B); Lo = np.minimum(A, B); C = sgn * (c[idx] - entry[:, None]) / risk_s[:, None]
+C:\Users\user\.aurel\memory\projects\discretionary\live\AUREL_RESEARCH\scripts\refute_c4_scanpath.py:206: RuntimeWarning: invalid value encountered in divide
+  H = np.maximum(A, B); Lo = np.minimum(A, B); C = sgn * (c[idx] - entry[:, None]) / risk_s[:, None]
+  建玉足除外: TP path 29453 のうち −0.5R 沈み 6949 = 23.6%  ／ 建玉足込み: 31312 のうち 7323 = 23.4%  （観測 建玉足除外 32.8% ／ 込み 35.0%）
+
+(elapsed 1327s)
+→ C:\Users\user\.aurel\memory\projects\discretionary\live\AUREL_RESEARCH\data\refute_c4_scanpath_result.md
+EXIT=0

@@ -27,3 +27,29 @@ The excess over the null for the main claim is within ±3 points in every split 
 Status: the refutation script is running in the background (bar loading done, production scan in progress, roughly 12 more minutes). It will rebuild bar-level paths for every 2010–2026 re-accel trade and test whether wins dip to −0.5R after the entry bar more often than a random walk predicts. I'll append the verdict to the findings file as soon as it completes.
 2026/11/04  5:20:49.75 done
 ========== 2026/11/04  8:15:05.74 refute start ==========
+Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-04.md` under a `[REFUTE]` header. No scan processes left running.
+
+**Target.** PROMOTED.md is still empty and cycle1 has no results, so the only candidate was the one claim left inconclusive at 02:40: cycle0 C4, "winning trades dip to −0.5R more often than a random walk predicts". The 02:40 entry set its revival condition as the 2010-2026 scan path test, which the 05:15 run started but never finished because its session ended with the scan in the background. I ran it to completion this time (scan took 1138 s) and added an independent reverse-direction test.
+
+**Verdict: broken.**
+
+| Test | n | Observed | RW null | z | p |
+|---|---|---|---|---|---|
+| P(dip ≥0.5R after entry bar \| TP win), pre-registered | 8,367 | 32.8% | 31.9% | +1.85 | 0.064 (α=0.0083) |
+| Same, era 2010-20 / 2021-23 / 2024-26 | | +1.7 / −0.1 / −0.7 pt | | | 0.006 / 0.89 / 0.52 |
+| P(TP \| dipped to −0.5R), the actionable direction | 12,715 | 21.6% | 22.4% | −2.18 | 0.029 (wrong sign) |
+| Same, TIME exits excluded | 12,280 | 22.3% | 22.5% | −0.37 | 0.72 |
+| P(dip) overall | 18,775 | 67.7% | 67.9% | | |
+
+- **The entry-bar artifact reproduces over 16 years.** Measured from x=0 the excess looks like z=+5.7, which is what the ledger's z=4.76 was. Measured from the entry-bar close it collapses to z=+1.85.
+- **The small residual excess is not stable.** It exists only in 2010-20, vanishes in 2021 onward, and vanishes at a deeper threshold (d=0.7: +0.0 pt). Zero of six era-by-wall subsets pass Bonferroni.
+- **A dip carries no predictive content.** After reaching −0.5R, the win rate matches a memoryless random walk exactly. Neither "cut on dip" nor "hold on dip" has any material against the null.
+
+**Self-check on my own lane's script.** The Monte Carlo and placebo nulls in the 05:15 script (25% and 24%) disagree with the closed form (32%). Half of that gap is a weighting bug: pooling across trades weights each by its TP probability, so easy-TP trades dominate. Equal-weighting the closed form reproduces the shift (31.9 → 28.1). Time truncation is not the cause. Observed dip rates match the closed form within 2 points in every TP-distance quartile.
+
+**Most serious remaining counter-evidence, recorded.** The real-data placebo (random same-hour, same-geometry entries) still shows fewer dips before TP (24.5%) than actual wall trades, even equal-weighted. Wall trades may genuinely retest more than random entries. But since P(TP | dip) equals the random walk, that is a difference in path shape, not in win/loss information. Revival would need a hold-and-volatility-matched placebo showing P(TP | dip) above null after Bonferroni.
+
+**Side observations for the research lane**, noted in the entry: the full 2010-2026 scan universe has 19,404 closed re-accel trades with win rate 48.2% and gross mean R of −0.055, so the fitted drift is essentially zero (θ=−0.004 vs the live ledger's 0.22). cycle1's in/out samples use this same universe. The path cache is at `data/refute_c4_scan_paths_2010_2026.json` for reuse.
+
+Files written, all under AUREL_RESEARCH: five scripts in `scripts/` (refute_c4_bayes, refute_c4_mc_diag, refute_c4_weight_diag, refute_c4_placebo_eq, plus the existing refute_c4_scanpath run to completion) and their result `.md` files in `data/`. No orders, no production edits, no process actions. I did not write to the task-observer log since it sits outside the AUREL_RESEARCH write boundary, same as the previous run.
+2026/11/04  8:46:51.25 done
