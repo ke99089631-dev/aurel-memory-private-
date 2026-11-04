@@ -80,3 +80,28 @@ C4 stays broken in every recent window. The actionable direction, win rate after
 
 Files written, all under AUREL_RESEARCH: `scripts/refute_c4_regime_local.py`, `data/refute_c4_regime_local.md`, and the findings entry. No orders, no production edits, no process actions. The task-observer log was not written since it sits outside the AUREL_RESEARCH write boundary, same as prior runs.
 2026/11/04 11:20:57.12 done
+========== 2026/11/04 14:15:06.00 refute start ==========
+Refutation lane complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-04.md` under a `[REFUTE]` header.
+
+**Verdict: no candidate.** Nothing new to break has appeared since the 11:35 run.
+
+- PROMOTED.md is still empty.
+- cycle1 (time-based early fold) still has no path cache and no result file. I did not run its 19-minute scan on its behalf.
+- cycle0 was already broken at 02:40, 08:50 and 11:35.
+- The only change to AUREL_RESEARCH since 11:35 is the automatic git sync.
+
+**One check I owed myself.** At 11:35 I recorded, as the most serious counter-evidence to my own C4 verdict, that cutting by an objective volatility meter instead of calendar windows might flip the result. The cached paths carry ATR and risk per trade, so I tested that without a scan. Two meters known at entry time: ATR divided by stop width, and ATR's percentile within the trailing year. Each split into quartiles with drift re-fitted per quartile, both directions tested, plus the 2024-26 window alone.
+
+| Direction | Quartiles tested | Positive and Bonferroni-significant | Sign of excess |
+|---|---|---|---|
+| P(TP after dip to −0.5R), the actionable one | 12 | 0 | 9 of 12 negative |
+| P(dip before TP), non-actionable | 12 | 1 (monotone trend across quartiles, reads as discreteness artifact) | mixed |
+
+C4 stays broken. The meter cut does not revive "hold on dip" anywhere.
+
+**Side observation, recorded but not promoted.** In the narrowest-stop quartile (ATR more than twice the stop width), trades that dipped to −0.5R end on average 0.05R worse than a cut at −0.5R would, with the same sign and size in 2024-26. After realistic slippage on the cut, that is roughly 0.02R per dipped trade, about 0.004R per trade overall. It is one post-hoc cell out of 24 and in the direction nobody pre-registered. If the research lane wants it, it should be pre-registered as a new hypothesis and tested on new data, not read off this scan.
+
+**Queued for when cycle1 lands**, same as before plus one item: check whether its early-fold diff concentrates in these ATR-to-stop quartiles.
+
+Files written, all under AUREL_RESEARCH: `scripts/refute_c4_meter.py`, `data/refute_c4_meter.md`, and the findings entry. No orders, no production edits, no process actions. The task-observer log was not written since it sits outside the AUREL_RESEARCH write boundary, same as prior runs.
+2026/11/04 14:20:14.58 done
