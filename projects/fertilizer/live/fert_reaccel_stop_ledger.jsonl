@@ -376,3 +376,18 @@
 {"event": "place", "sid": "S-0442", "side": "BUY", "wall_kind": "outer", "entry": 4038.51, "sl": 3994.818, "tp": 4132.34, "lot": 0.01, "order": 5269203411, "retcode": 10009, "v1_keep": false, "v1_drop": ["雨(直前10本ダマシ80%)", "箱の締まり(0.311≧0.159)"], "spread": 0.16, "streak_demo": 0, "streak_paper": 0, "mom20": 0.404, "trend_side": "with", "lot_factor": 1.0, "lot_factor_shadow": 1.0, "ts": "2026-11-04T08:15:16"}
 {"event": "modify", "sid": "S-0442", "order": 5269203411, "entry": 4034.29, "sl": 3994.818, "tp": 4132.34, "retcode": 10009, "ts": "2026-11-04T08:20:02"}
 {"event": "fill", "sid": "S-0442", "side": "BUY", "fill_price": 4034.29, "sl": 3994.82, "tp": 4132.34, "volume": 0.01, "position": 5269203411, "gold_er": 0.1549, "gold_regime": "trend", "v1_keep": false, "v1_drop": ["雨(直前10本ダマシ80%)", "箱の締まり(0.311≧0.159)"], "spread": 0.15, "streak_demo": 0, "streak_paper": 0, "mom20": 0.404, "trend_side": "with", "lot_factor": 1.0, "lot_factor_shadow": 1.0, "ts": "2026-11-04T08:24:48"}
+{"event": "skip-stale", "age_s": 3615.0, "last_bar": "2026-11-04T23:55:00", "now_ts": 1793840415, "ts": "2026-11-04T23:00:15"}
+{"event": "skip-stale", "age_s": 3635.0, "last_bar": "2026-11-04T23:55:00", "now_ts": 1793840435, "ts": "2026-11-04T23:00:35"}
+{"event": "skip-stale", "age_s": 3654.0, "last_bar": "2026-11-04T23:55:00", "now_ts": 1793840454, "ts": "2026-11-04T23:00:55"}
+{"event": "skip-stale", "age_s": 3675.0, "last_bar": "2026-11-04T23:55:00", "now_ts": 1793840475, "ts": "2026-11-04T23:01:16"}
+{"event": "skip-stale", "age_s": 3695.0, "last_bar": "2026-11-04T23:55:00", "now_ts": 1793840495, "ts": "2026-11-04T23:01:36"}
+{"event": "skip-stale", "age_s": 3715.0, "last_bar": "2026-11-04T23:55:00", "now_ts": 1793840515, "ts": "2026-11-04T23:01:56"}
+{"event": "skip-stale", "age_s": 3736.0, "last_bar": "2026-11-04T23:55:00", "now_ts": 1793840536, "ts": "2026-11-04T23:02:16"}
+{"event": "skip-stale", "age_s": 3756.0, "last_bar": "2026-11-04T23:55:00", "now_ts": 1793840556, "ts": "2026-11-04T23:02:36"}
+{"event": "skip-stale", "age_s": 3776.0, "last_bar": "2026-11-04T23:55:00", "now_ts": 1793840576, "ts": "2026-11-04T23:02:56"}
+{"event": "skip-stale", "age_s": 3796.0, "last_bar": "2026-11-04T23:55:00", "now_ts": 1793840596, "ts": "2026-11-04T23:03:16"}
+{"event": "skip-stale", "age_s": 3816.0, "last_bar": "2026-11-04T23:55:00", "now_ts": 1793840616, "ts": "2026-11-04T23:03:37"}
+{"event": "skip-stale", "age_s": 3837.0, "last_bar": "2026-11-04T23:55:00", "now_ts": 1793840637, "ts": "2026-11-04T23:03:57"}
+{"event": "skip-stale", "age_s": 3857.0, "last_bar": "2026-11-04T23:55:00", "now_ts": 1793840657, "ts": "2026-11-04T23:04:17"}
+{"event": "skip-stale", "age_s": 3876.0, "last_bar": "2026-11-04T23:55:00", "now_ts": 1793840676, "ts": "2026-11-04T23:04:37"}
+{"event": "skip-stale", "age_s": 3897.0, "last_bar": "2026-11-04T23:55:00", "now_ts": 1793840697, "ts": "2026-11-04T23:04:57"}
