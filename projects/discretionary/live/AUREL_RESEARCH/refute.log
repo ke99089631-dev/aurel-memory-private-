@@ -133,3 +133,26 @@ The "non-starter" condition carries no information. Any trade still open at bar 
 Files written, all under AUREL_RESEARCH: `scripts/refute_c1_fold.py`, `data/refute_c1_fold.md`, and the findings entry. No orders, no production edits, no process actions. The task-observer log was not written since it sits outside the AUREL_RESEARCH write boundary, same as prior runs.
 2026/11/04 17:23:53.98 done
 ========== 2026/11/04 20:15:06.45 refute start ==========
+Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-04.md` under a `[REFUTE]` header (20:25 entry).
+
+**Candidate check.** PROMOTED is still empty and the research lane added nothing since my 17:30 run. The only change was a CHARTER preamble about the AURELIAN research/operations split. So the formal verdict is **no candidate**. I used the cycle to attack the counter-evidence I had left standing at 17:30: "closing every trade still open at bar 6 beats the random-walk expectation in all windows."
+
+**Verdict on that leftover: broken, mechanical.** The production simulator books an SL as hit 0.1 USD before the level and a TP as hit only 0.1 USD past the level, filling both at the level. Every paper SL/TP exit is therefore recorded about 0.026R worse than the price actually reached. A close-based exit pays no such shortfall, so under a pure martingale any "close at bar K" rule shows a free gain of exactly that size.
+
+| Test | Result |
+|---|---|
+| Fold-all gain vs mean shortfall, in-sample | +0.0268 vs 0.0281, corrected e = +0.0004 (t 0.04) |
+| Same, 2024-26 | +0.0212 vs 0.0200, e = +0.0019 (t 0.07) |
+| Corrected e, 15 window×subset cells, Bonferroni | 0 significant |
+| Fold-all as a strategy with 0.10 USD market-exit slippage | t −0.12 / +0.80 / +0.04 (IS / OOS / 2024-26) |
+| Top-10% tail retained after fold-all | 24 to 34 percent |
+| 17:30 RW excess for cycle1's folded set, payoff-corrected | t 3.11 drops to 0.58 |
+
+The same artifact accounts for cycle1's entire in-sample result: its folded trades gained +0.025R each, and the mean shortfall on those trades is +0.028R. The 17:30 "time-stop or pullback-exit" side hypothesis is withdrawn.
+
+**Most serious counter-evidence recorded.** Trades that touched +0.5R and pulled back still show a positive corrected gain in all five windows, but with t between 0.2 and 1.2, and with slippage the strategy nets at most +0.009R per trade while cutting the fat tail by 32 to 42 percent. Not promotion material.
+
+**Methodological implication for the research lane.** Any close-based exit tested in this simulator (time stop, early fold, trailing, breakeven, shorter MAX_HOLD) must charge at least 0.10 USD on the close, or the SL/TP side must be corrected by the feed tolerance, or it will show a phantom edge of about 0.026R per closed trade. The probability-based C4 tests from earlier runs are unaffected because they compare hit rates, not payoffs.
+
+Files written, all under AUREL_RESEARCH: `scripts/refute_c1_timestop.py`, `data/refute_c1_timestop.md`, and the findings entry. No orders, no production edits, no process actions. The production engine was only grepped for the exit rule. The task-observer log was not written since it sits outside the AUREL_RESEARCH write boundary, same as prior runs.
+2026/11/04 20:22:55.77 done
