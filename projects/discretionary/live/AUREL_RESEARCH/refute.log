@@ -106,3 +106,29 @@ C4 stays broken. The meter cut does not revive "hold on dip" anywhere.
 Files written, all under AUREL_RESEARCH: `scripts/refute_c4_meter.py`, `data/refute_c4_meter.md`, and the findings entry. No orders, no production edits, no process actions. The task-observer log was not written since it sits outside the AUREL_RESEARCH write boundary, same as prior runs.
 2026/11/04 14:20:14.58 done
 ========== 2026/11/04 17:15:05.95 refute start ==========
+Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-04.md` under a `[REFUTE]` header (17:30 entry).
+
+**Target.** cycle1 (time-based early fold, K=6 bars, T=+0.5R) landed its result file and path cache at 16:13. Its in-sample diff was +0.015 (t 2.25) with a positive out-of-sample diff (t 1.28). That was the weak signal to break. No scan was needed; I reused cycle1's own cache plus the C4 cache for TP geometry.
+
+**Verdict: broken.**
+
+| Test | Result |
+|---|---|
+| Own pre-registration (5 conditions) | 2 fail: OOS t 1.28 < 1.5, top-10% tail cut 43% / 31% vs ≤10% allowed |
+| Placebo: fold same count of random open trades | permutation p 0.63 (IS) / 0.89 (OOS) |
+| Fold the complement (trades that did reach +0.5R) | +0.033 / +0.065 per trade, larger than the rule's +0.025 / +0.023 |
+| Stratified by position at bar 6 | p 0.31 / 0.46 |
+| 2024-26 and 2025-26H1 windows | diff −0.001 and −0.009; folded trades lose −0.004 / −0.034 while the complement gains |
+| Alternate in/out splits | all positive, only 2010-15 reaches t 2; 2022-26 t 0.86 |
+| 8-cell K×T grid, OOS, Bonferroni | 0 of 8 |
+| Fold-exit slippage 0.10 USD (about 1 pip) | diff turns negative in both samples |
+| Look-ahead, entry bar, survivorship | clean; entry-bar upper bound moves t 2.25 to 2.11 |
+
+The "non-starter" condition carries no information. Any trade still open at bar 6 shows the same or larger gain from being closed, and the one Bonferroni-significant regime cell (JST 21-6) shows the same placebo result.
+
+**Most serious counter-evidence, recorded.** Closing every trade still open at bar 6 beats the random-walk expectation in all windows including 2024-26 (t 2.3), and more so for trades that touched +0.5R and pulled back. That is a different hypothesis (time-stop or pullback exit), post-hoc, roughly cancelled by 0.10 USD slippage, and it cuts the fat tail harder than cycle1 did. Left for the research lane to pre-register on new data if wanted. Not promotion material.
+
+**Implication for cycle1.** The research lane has not yet filled in its findings body. By its own criteria the entry should read null, and the "non-starter" backlog item can be closed.
+
+Files written, all under AUREL_RESEARCH: `scripts/refute_c1_fold.py`, `data/refute_c1_fold.md`, and the findings entry. No orders, no production edits, no process actions. The task-observer log was not written since it sits outside the AUREL_RESEARCH write boundary, same as prior runs.
+2026/11/04 17:23:53.98 done
