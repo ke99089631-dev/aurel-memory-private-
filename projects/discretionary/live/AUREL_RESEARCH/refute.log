@@ -53,3 +53,30 @@ Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-04.md`
 
 Files written, all under AUREL_RESEARCH: five scripts in `scripts/` (refute_c4_bayes, refute_c4_mc_diag, refute_c4_weight_diag, refute_c4_placebo_eq, plus the existing refute_c4_scanpath run to completion) and their result `.md` files in `data/`. No orders, no production edits, no process actions. I did not write to the task-observer log since it sits outside the AUREL_RESEARCH write boundary, same as the previous run.
 2026/11/04  8:46:51.25 done
+========== 2026/11/04 11:15:05.82 refute start ==========
+Refutation lane complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-04.md` under a `[REFUTE]` header.
+
+**Verdict: no candidate.** Nothing new to break has appeared since the 08:50 run.
+
+- PROMOTED.md is still empty.
+- cycle1 (time-based early fold) has produced no path cache and no result file. Its log stops at the M5 load from 00:50. I did not run the 19-minute scan on its behalf, since that would be doing the research lane's work rather than refuting it.
+- cycle0 was already broken at 02:40 and 08:50.
+- The only AUREL_RESEARCH change since 08:50 is the new CHARTER supplement D2, which forbids using the pooled 16-year drift as an edge conclusion.
+
+**One cheap check prompted by D2.** The 08:50 C4 test fitted a single pooled drift. I re-fitted the drift inside each regime window and re-ran both directions of the C4 claim on the cached paths. No scan was needed.
+
+| Window | θ local | P(dip before TP) excess over RW | P(TP after dip) excess over RW |
+|---|---|---|---|
+| 2010-20 | -0.009 | +1.7 pt (p=0.006) | -0.5 pt |
+| 2021-23 | -0.038 | -0.1 pt | -1.0 pt |
+| 2024-26 | +0.041 | -0.7 pt | -1.3 pt (p=0.09) |
+| 2025-26H1 | +0.040 | -1.2 pt | -1.5 pt |
+
+C4 stays broken in every recent window. The actionable direction, win rate after a dip to -0.5R, is below the random-walk expectation in all four windows. There is no material for either "hold on dip" or "cut on dip".
+
+**Context noted, not used as an edge claim.** Recent windows show a positive local drift with a lower win rate, meaning longer TP distances carrying a few large wins. This is the flat all-hours scan, not the production recipe, so I drew no edge conclusion from it, per D2.
+
+**Queued for when cycle1 lands.** Compare its paired diff against a locally-fitted random-walk expectation, recompute fold prices from the entry-bar close, Bonferroni the 8-cell K×T grid, and require replication in the 2024-26 window alone.
+
+Files written, all under AUREL_RESEARCH: `scripts/refute_c4_regime_local.py`, `data/refute_c4_regime_local.md`, and the findings entry. No orders, no production edits, no process actions. The task-observer log was not written since it sits outside the AUREL_RESEARCH write boundary, same as prior runs.
+2026/11/04 11:20:57.12 done
