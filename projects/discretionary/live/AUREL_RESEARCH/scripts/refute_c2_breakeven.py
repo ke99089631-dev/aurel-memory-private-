@@ -24,7 +24,8 @@ AUREL 反証レーン — cycle2「建値トレール（MFE が +X に到達後�
       併せて「研究ルールを 48 本以降まで延長」で (c) の寄与を単離。
   P4 窓: 在 2010-20 / 外 2021-26 / 2021-23 / 2024-26 / 2025-26H1 / 本番窓 JST7-12×outer / JST7-12×mid / BUY / SELL。
   P5 X 格子 {0.5,0.75,1.0,1.25,1.5} × 在/外 に Bonferroni α=0.05/10（P3A s=0 で採点）。
-  P6 プラセボ: 武装足を「同じ本・同じ保有内の一様ランダム足」に置換（200 回）し P3A を再計算。情報ゼロの武装でも同じ diff が出るか。
+  P6 プラセボ: 武装を「+X 初到達の足 k」でなく「k+d 本後」(d∈{1,3,6,12}・ランダム d 200 回) にずらして P3A を再計算。初到達の瞬間に情報があるか。
+      ※初版「保有内の一様ランダム足で武装」は対象集合を全 path の +X 到達で選ぶため将来情報が混入し無効（本文に記録）。
   P7 尻尾: 原型上位10% 合計R の残存率（P3A）。
   P8 look-ahead: 武装は足 k の高値、発動は k+1 以降の安値（A）。bar0 の約定前レンジは逆指値エントリでは entry の逆側なので武装できない（確認値を出す）。
 判定（事前固定）:
@@ -277,7 +278,7 @@ def main():
         res = np.asarray(res)
         cells = []
         for m in (IS, OOS):
-            d = RX[m] - R0[m]; t, p = tstat(d); cells.append((m & tgX).sum(), d.mean(), t, p)
+            d = RX[m] - R0[m]; t, p = tstat(d); cells.append(((m & tgX).sum(), d.mean(), t, p))
         d10i = RX10[IS] - R0[IS]; d10o = RX10[OOS] - R0[OOS]
         P5[X] = (cells[0][3], cells[0][1], cells[1][3], cells[1][1])
         say("| %.2f | %d / %+.4f / %+.2f / %.4f | %d / %+.4f / %+.2f / %.4f | %+.4f / %+.2f | %+.4f / %+.2f | %.0f%% / %.0f%% | %+.4f / %+.4f |" % (
@@ -286,27 +287,39 @@ def main():
     say()
 
     # ---------- P6 placebo ----------
-    say("## P6. プラセボ: 武装足を同じ本の保有内一様ランダム足に置換（200 回）、以後は P3A と同じ安値発動・0R 約定。X=%.2f の実武装本のみ対象" % X0)
-    rng = np.random.default_rng(20261104)
-    idx_armed = np.nonzero(kaA >= 0)[0]
-    obs = {lab: (R_A[m.to_numpy()] - R0[m.to_numpy()]).mean() for lab, m in masks}
-    plc = {lab: [] for lab, _ in masks}
+    say("## P6. プラセボ（look-ahead 無し版）: 「+X 初到達の足 k」でなく「k+d 本後」に武装（d∈{1,3,6,12}・到達前に決着した本は武装なし）＋ d を 0..12 一様ランダム（200 回）。以後は P3A と同じ安値発動・0R 約定。X=%.2f" % X0)
+    say("※初版（武装足を保有内の一様ランダム足に置換）は、対象集合を「全 path で +X に到達した本」で選んでいたため将来情報が混入（到達前に建値を置き既知の勝ち本を殺す→ diff −0.09）。無効として廃棄し本版に差し替え。")
+    def run_delay(d):
+        R1 = R0.copy(); tg = np.zeros(n, bool)
+        for i in np.nonzero(kaA >= 0)[0]:
+            adv = loR[off[i]:off[i + 1]]; k = int(kaA[i]) + d
+            if k + 1 < len(adv):
+                hit = np.nonzero(adv[k + 1:] <= ft[i])[0]
+                if len(hit): R1[i] = 0.0; tg[i] = True
+        return R1, tg
+    say("| 窓 | A(d=0) diff / t | d=1 | d=3 | d=6 | d=12 | A − d=3 paired t | A − d=12 paired t |"); say("|---|---|---|---|---|---|---|---|")
+    RD = {d: run_delay(d)[0] for d in (1, 3, 6, 12)}
+    P6 = {}
+    for lab, m in masks:
+        m = m.to_numpy(); dA = R_A[m] - R0[m]
+        cells = ["%+.4f / %+.2f" % ((RD[d][m] - R0[m]).mean(), tstat(RD[d][m] - R0[m])[0]) for d in (1, 3, 6, 12)]
+        t3, p3 = tstat(R_A[m] - RD[3][m]); t12, p12 = tstat(R_A[m] - RD[12][m])
+        P6[lab] = (dA.mean() - (RD[12][m] - R0[m]).mean(), min(p3, p12))
+        say("| %s | %+.4f / %+.2f | %s | %+.2f (p %.3f) | %+.2f (p %.3f) |" % (lab, dA.mean(), tstat(dA)[0], " | ".join(cells), t3, p3, t12, p12))
+    rng = np.random.default_rng(20261104); plc = {lab: [] for lab, _ in masks}
+    armed_idx = np.nonzero(kaA >= 0)[0]
     for rep in range(200):
-        R1 = R0.copy()
-        for i in idx_armed:
-            adv = loR[off[i]:off[i + 1]]; k = int(rng.integers(0, len(adv)))
+        R1 = R0.copy(); dd = rng.integers(0, 13, size=len(armed_idx))
+        for i, d in zip(armed_idx, dd):
+            adv = loR[off[i]:off[i + 1]]; k = int(kaA[i]) + int(d)
             if k + 1 < len(adv):
                 hit = np.nonzero(adv[k + 1:] <= ft[i])[0]
                 if len(hit): R1[i] = 0.0
         for lab, m in masks:
             m = m.to_numpy(); plc[lab].append((R1[m] - R0[m]).mean())
-    say("| 窓 | 観測 diff (P3A) | プラセボ diff 平均 | プラセボ 2.5–97.5% | 観測 ≥ の確率 | 観測 − プラセボ平均 |"); say("|---|---|---|---|---|---|")
-    P6 = {}
-    for lab, _ in masks:
-        a = np.asarray(plc[lab]); pge = (a >= obs[lab]).mean()
-        P6[lab] = (obs[lab] - a.mean(), pge)
-        say("| %s | %+.4f | %+.4f | [%+.4f, %+.4f] | %.3f | %+.4f |" % (lab, obs[lab], a.mean(), np.percentile(a, 2.5), np.percentile(a, 97.5), pge, obs[lab] - a.mean()))
-    say("（ランダム武装は実武装より早い足で武装することが多く、SL 前に 0 を踏む機会が増える。プラセボ diff が観測と同程度以上なら「+X 到達」という条件に情報は無い。）")
+    say("ランダム遅延 d~U{0..12}（200 回）: " + "；".join("%s 平均 %+.4f [%+.4f,%+.4f]・観測≥の確率 %.2f" % (
+        lab, np.mean(plc[lab]), np.percentile(plc[lab], 2.5), np.percentile(plc[lab], 97.5), np.mean(np.asarray(plc[lab]) >= (R_A[m.to_numpy()] - R0[m.to_numpy()]).mean())) for lab, m in masks[:5]))
+    say("（マルチンゲールなら武装の遅延に関係なく ≈0。「+X 初到達の瞬間」に情報があるなら d=0 が d>0 を有意に上回るはず。）")
     say()
 
     # ---------- P7 tail detail ----------

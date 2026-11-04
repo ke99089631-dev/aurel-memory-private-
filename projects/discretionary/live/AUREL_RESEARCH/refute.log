@@ -157,3 +157,21 @@ The same artifact accounts for cycle1's entire in-sample result: its folded trad
 Files written, all under AUREL_RESEARCH: `scripts/refute_c1_timestop.py`, `data/refute_c1_timestop.md`, and the findings entry. No orders, no production edits, no process actions. The production engine was only grepped for the exit rule. The task-observer log was not written since it sits outside the AUREL_RESEARCH write boundary, same as prior runs.
 2026/11/04 20:22:55.77 done
 ========== 2026/11/04 23:15:06.29 refute start ==========
+Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-04.md` under a `[REFUTE]` header (23:30 entry, line 168).
+
+**Target.** The newest promotion candidate was cycle2's breakeven trail: once a trade shows +1.0R, exit at 0R if a later close is at or below entry. The research lane reported in-sample +0.011 (t 4.5), out-of-sample +0.025 (t 6.0), 2024-26 +0.037 (t 5.6), and 90 percent of the fat tail retained. It flagged its own result as gross and unrefuted.
+
+**Verdict: broken, mechanical.** The gain is a booking artifact, not information.
+
+- **Fill-price gift.** The rule waits for a close at or below 0R and then books the exit at exactly 0R. The mean close at trigger was −0.242R, so every triggered trade received a free +0.24R. Filling at the actual close drops the result to t 0.7 in-sample and t 1.5 out-of-sample.
+- **Booking asymmetry.** The production simulator records SL and TP about 0.026R worse than the touched level, but the breakeven exit paid no such shortfall. Charging the same 0.10 USD leaves t 0.2 and t 1.0.
+- **Truncated paths.** The cache stops at 48 bars, and 4601 trades hold longer. I rebuilt full paths from M5 for all 19404 trades (reconstruction matched the cached closes to 0.001R and reproduced the original exits for 99.8 percent of trades).
+- **A real breakeven stop** (fires when the low touches entry plus feed tolerance, booked like any SL, no truncation) gives diff +0.0001 in-sample (t 0.03), +0.0007 out-of-sample (t 0.13), +0.0084 in 2024-26 (t 0.94). The production window (JST 7-12, both wall kinds) is negative. The X grid is 0 of 10 significant after Bonferroni. Tail retention is 80 and 74 percent, not 90, because the stop kills 502 trades that originally hit TP.
+- **Placebo.** Delaying the arming by 1 to 12 bars after the +1R touch gives the same or larger diff in every window, so the moment of first touch carries no information. My first placebo design was invalid (it selected trades on whole-path information) and is recorded as discarded in the entry.
+
+**Most serious counter-evidence recorded.** The fair-booked stop is positive but insignificant in 2024-26 and on the BUY side (t up to 1.8 with delayed arming). Revival would need new data after 2026-07 with a real stop rule plus slippage, Bonferroni-significant, with tail retention at or above 90 percent. Only X at or above 1.5 reaches that retention, and its diff is within ±0.001.
+
+**Implication for the research lane.** Any exit that is judged on the close but filled at a level hands itself the gap as a gift. Breakeven and trailing rules must be re-simulated on full paths with the simulator's own SL booking. The rebuilt path cache at `data/refute_c2_fullpaths.npz` lets that run in seconds without a scan. All remaining backlog items under the ★★ breakeven entry (production window, slippage, regime, optimal X) are covered by this run and come out near zero or negative.
+
+Files written, all under AUREL_RESEARCH: `scripts/refute_c2_breakeven.py`, `data/refute_c2_breakeven.md`, `data/refute_c2_fullpaths.npz`, and the findings entry. No orders, no production edits, no process actions. The production engine and M5 loader were only read. The task-observer log sits outside the AUREL_RESEARCH write boundary and was not written, same as prior runs.
+2026/11/04 23:27:07.62 done
