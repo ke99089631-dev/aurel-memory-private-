@@ -7614,3 +7614,4 @@
 {"kind": "update", "target": "S-0441", "logged_at": "2026-11-04 14:55:01", "reaccel": {"retest_time": 1793766900, "retest_jst": "2026-11-04 13:35", "retest_tol": 3.39, "entry": 3984.66, "entry_time": 1793767500, "entry_jst": "2026-11-04 13:45", "sl": 3959.95, "tp": 4005.009, "swing": 3971.86, "wait_bars": 2, "status": "closed", "mfe_R": 0.9, "mae_R": 0.12, "hold_bars": 1, "exit": 4005.009, "exit_reason": "TP", "R": 0.824, "exit_time": 1793767800}, "reaccel_frozen": true}
 {"kind": "update", "target": "S-0440", "logged_at": "2026-11-04 15:20:10", "waiting_resolved": true, "status": "no_retest"}
 {"kind": "update", "target": "S-0440", "logged_at": "2026-11-04 15:20:10", "reaccel": {"status": "no_retest"}, "reaccel_frozen": true}
+{"kind": "update", "target": "S-0441", "logged_at": "2026-11-04 15:35:15", "waiting_resolved": true, "status": "no_retest"}
