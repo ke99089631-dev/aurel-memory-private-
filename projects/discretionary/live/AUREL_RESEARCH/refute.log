@@ -175,3 +175,4 @@ Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-04.md`
 
 Files written, all under AUREL_RESEARCH: `scripts/refute_c2_breakeven.py`, `data/refute_c2_breakeven.md`, `data/refute_c2_fullpaths.npz`, and the findings entry. No orders, no production edits, no process actions. The production engine and M5 loader were only read. The task-observer log sits outside the AUREL_RESEARCH write boundary and was not written, same as prior runs.
 2026/11/04 23:27:07.62 done
+========== 2026/11/05  2:15:06.71 refute start ==========
