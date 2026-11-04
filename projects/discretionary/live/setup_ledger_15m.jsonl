@@ -87,3 +87,4 @@
 {"kind": "update", "target": "S-0063", "logged_at": "2026-11-04 10:15:13", "frozen": true, "mfe_R": 1.09, "mae_R": 0.88, "hold_bars": 21}
 {"kind": "update", "target": "S-0063", "logged_at": "2026-11-04 10:30:24", "frozen": true, "mfe_R": 2.49, "mae_R": 0.88, "hold_bars": 22}
 {"kind": "update", "target": "S-0063", "logged_at": "2026-11-04 10:45:04", "frozen": true, "mfe_R": 2.83, "mae_R": 0.88, "hold_bars": 23}
+{"kind": "update", "target": "S-0063", "logged_at": "2026-11-04 14:45:22", "frozen": true, "status": "closed", "exit": 3971.13, "exit_reason": "TP", "R": 3.328, "mfe_R": 4.8, "mae_R": 0.88, "hold_bars": 39, "exit_time": 1793766600, "outcome": "本物"}
