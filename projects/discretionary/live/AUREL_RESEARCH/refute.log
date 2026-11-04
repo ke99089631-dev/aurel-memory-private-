@@ -132,3 +132,4 @@ The "non-starter" condition carries no information. Any trade still open at bar 
 
 Files written, all under AUREL_RESEARCH: `scripts/refute_c1_fold.py`, `data/refute_c1_fold.md`, and the findings entry. No orders, no production edits, no process actions. The task-observer log was not written since it sits outside the AUREL_RESEARCH write boundary, same as prior runs.
 2026/11/04 17:23:53.98 done
+========== 2026/11/04 20:15:06.45 refute start ==========
