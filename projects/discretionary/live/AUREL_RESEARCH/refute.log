@@ -176,3 +176,28 @@ Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-04.md`
 Files written, all under AUREL_RESEARCH: `scripts/refute_c2_breakeven.py`, `data/refute_c2_breakeven.md`, `data/refute_c2_fullpaths.npz`, and the findings entry. No orders, no production edits, no process actions. The production engine and M5 loader were only read. The task-observer log sits outside the AUREL_RESEARCH write boundary and was not written, same as prior runs.
 2026/11/04 23:27:07.62 done
 ========== 2026/11/05  2:15:06.71 refute start ==========
+Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-05.md` under a `[REFUTE]` header (new file for today).
+
+**Verdict: no candidate.** Nothing new to break has appeared since the 23:30 run.
+
+- PROMOTED.md is still empty.
+- The only change under AUREL_RESEARCH was cycle1's result file being regenerated at 23:59. I diffed it against the 16:13 version: only the timestamp changed, every number is identical.
+- cycle0, cycle1 and cycle2 were all broken in earlier runs. The research lane has not filed a new entry.
+
+**I used the cycle to attack my own leftover from 23:30**, the fair-booked breakeven stop showing positive but insignificant signs in 2024-26 and on BUY. Three pre-registered tests on the cached full paths, no scan, 22 seconds.
+
+| Test | Result |
+|---|---|
+| Q1 month-block permutation, best of 9 windows | observed max t 1.01, p 0.63; delayed-arming version p 0.42 |
+| Q1 per-year sign of the stop's diff, 17 years | 8 positive, 9 negative; 2024-26 sits mid-pack |
+| Q2 placebo stop levels from −0.6R to +0.4R around entry | all levels give the same diff; 0R is not a bump in any window, 0 of 3 Bonferroni |
+| Q3' post-arming drift, trades still open after the +1R bar | 2024-26 e = −0.004 (t −0.08); 0 of 9 windows significant |
+
+The leftover is **broken** on all three fronts: the recent-window sign is a window-selection effect, the breakeven level carries no special meaning, and price after reaching +1R behaves as a martingale.
+
+**One self-correction recorded in the entry.** My first version of Q3 showed a strongly negative drift (t −4.6). That was an artifact: with a median TP distance of 0.99R, 37 percent of armed trades hit TP inside the arming bar, and comparing their fill to that bar's close is not a martingale test. Those trades alone showed e = −0.18R with t −16. I excluded them, documented the amendment in both script and findings, and used the corrected Q3' for the verdict. The lesson for the research lane is written down: never mix the exit bar with the evaluation bar.
+
+**Most serious counter-evidence recorded.** On the BUY side, trades still open after +1R end 0.058R below the arming close (t −1.86, not significant after Bonferroni), while SELL goes the other way. Even if real, the BUY stop-level placebo caps the usable size at well under 0.01R per trade. Not promotion material.
+
+Files written, all under AUREL_RESEARCH: `scripts/refute_c2_leftover.py`, `data/refute_c2_leftover.md`, and the new findings file. No orders, no production edits, no process actions, no scan, no M5 load. The task-observer log sits outside the AUREL_RESEARCH write boundary and was not written, same as prior runs.
+2026/11/05  2:22:36.99 done
