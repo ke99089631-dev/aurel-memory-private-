@@ -227,3 +227,27 @@ The leftover is **broken**: the 16-year side gap sits on the 5% boundary and dis
 
 Files written, all under AUREL_RESEARCH: `scripts/refute_c2_sidedrift.py`, `data/refute_c2_sidedrift.md`, and the findings entry. No orders, no production edits, no process actions, no scan, no M5 load. The task-observer log sits outside the AUREL_RESEARCH write boundary and was not written, same as prior runs.
 2026/11/05  5:22:09.35 done
+========== 2026/11/05  8:15:06.45 refute start ==========
+Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-05.md` under a new `[REFUTE]` header.
+
+**Verdict: no candidate.** Nothing new to break has appeared since the 05:20 run. PROMOTED.md is still empty, and the only changes under AUREL_RESEARCH since then are the refute wrapper's lock file and log. The research lane filed no new entry, cycle1 is still unwritten, and cycle2 has had no response since it was broken at 23:30.
+
+**I used the cycle to attack my own leftover from 05:20**, the claim that post-arming drift is negative for BUY in every era and threshold and positive for SELL, suggesting gold up-spikes revert while down-spikes continue. Six pre-registered tests on the cached full paths, no scan, 16 seconds.
+
+| Test | Result |
+|---|---|
+| Q1 full 4 era × 5 threshold × 2 side grid | BUY negative in 18 of 20 cells, not 20. The 2024-26 BUY cells are positive at the two lowest thresholds. |
+| Q2 side-label permutation, 2000 shuffles, whole grid at once | 18 negative cells has p 0.158. Family-wise max t has p 0.432. With side and sign choice freedom, p 0.330. |
+| Q3 six alternative splits | Side gap negative in 5 of 6 at X=1.0, binomial p 0.109. |
+| Q4 regime grid, 14 cells | 0 Bonferroni-significant BUY cells. Adjacent volatility quartiles flip sign. |
+| Q5 mechanical check | Exit mix and holding time are near-identical by side. The gap is not a time-exit artifact. |
+| Q6 doubled cost on the strategy form | Slip 0.20 USD gives t under 1 everywhere. Slip 0.44 USD is negative in every window. |
+
+The leftover is **broken**. Its premise was miscounted at 05:20, where I inferred "all negative" from pooled and single-window columns without computing the full grid. The remaining sign agreement is what random side labels produce about one time in six.
+
+**Most serious counter-evidence recorded.** Three nominal sub-5% readings survive: SELL positive in 15 of 20 cells at p 0.028, the X=1.25 side gap negative in all six splits at p 0.016, and an afternoon-session SELL cell at t 2.6. All come from the same grid after inspecting five statistics and fourteen cells, and all vanish under the family-wise correction. I recorded that the refute lane stops generating leftovers on this family. The breakeven-trail line is exhausted after four consecutive runs.
+
+**Methodology lesson written for the research lane.** Before using sign agreement as evidence, compute the whole grid rather than inferring from a partial view, use label permutation on the joint pattern instead of a binomial on correlated cells, and include any side or sign chosen after looking in the null.
+
+Files written, all under AUREL_RESEARCH: `scripts/refute_c2_sidesign.py`, `data/refute_c2_sidesign.md`, and the findings entry. No orders, no production edits, no process actions, no scan, no M5 load. The task-observer log sits outside the AUREL_RESEARCH write boundary and was not written, same as prior runs.
+2026/11/05  8:21:39.49 done
