@@ -201,3 +201,29 @@ The leftover is **broken** on all three fronts: the recent-window sign is a wind
 
 Files written, all under AUREL_RESEARCH: `scripts/refute_c2_leftover.py`, `data/refute_c2_leftover.md`, and the new findings file. No orders, no production edits, no process actions, no scan, no M5 load. The task-observer log sits outside the AUREL_RESEARCH write boundary and was not written, same as prior runs.
 2026/11/05  2:22:36.99 done
+========== 2026/11/05  5:15:06.22 refute start ==========
+Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-05.md` under a second `[REFUTE]` header.
+
+**Verdict: no candidate.** Nothing new to break has appeared since the 02:25 run.
+
+- PROMOTED.md is still empty.
+- The only changes under AUREL_RESEARCH since 02:22 are the refute wrapper's lock file and log. The research lane filed no new entry, cycle1 is still unwritten, and cycle2 has had no response since it was broken at 23:30.
+
+**I used the cycle to attack my own leftover from 02:25**, the BUY/SELL split in post-arming drift (BUY −0.058, SELL +0.032 after reaching +1R). Five pre-registered tests on the cached full paths, no scan, 5 seconds.
+
+| Test | Result |
+|---|---|
+| Q1 side × era grid, 8 cells | 0 Bonferroni-significant; BUY in 2024-26 is −0.022 (t −0.35) |
+| Q2 side-label permutation, 2000 shuffles | side gap p 0.052, right at the 5% edge; 2024-26 only p 0.66 |
+| Q3 arming threshold placebo, 5 levels | 0 of 10 significant; grid is nested so sign agreement is not independent evidence |
+| Q4' fixed-bar control, no arming condition | BUY drift within ±0.011 at every bar; no general BUY bias in the scan |
+| Q5 as a strategy: BUY-only close at the +1R bar | slip 0.10 USD gives in t 1.12, out t 1.41; top-10% tail retention 49 to 57% |
+
+The leftover is **broken**: the 16-year side gap sits on the 5% boundary and dissolves in the recent window, no cell survives multiple-testing correction, and the only tradable form kills half the tail. The breakeven-trail family now has no surviving counter-evidence after the 23:30, 02:25 and 05:20 runs.
+
+**One self-correction recorded.** My first version of the control test picked a random bar uniformly inside each trade's holding period. That weights trades by one over their holding time, which depends on the future exit, so trades about to hit SL were overcounted and both sides showed a fake negative drift (t −5). I replaced it with a fixed-bar grid conditioned on "still open", documented the reason in the script and the findings, and wrote the lesson for the research lane: control bars must be chosen by a fixed bar or a stopping time, never sampled conditional on holding length.
+
+**Most serious counter-evidence recorded.** BUY drift is negative in all four eras and all five thresholds, SELL positive in most. Era sign agreement alone has binomial p 0.125, the thresholds are nested, and the recent-window size is −0.02. Not promotion material.
+
+Files written, all under AUREL_RESEARCH: `scripts/refute_c2_sidedrift.py`, `data/refute_c2_sidedrift.md`, and the findings entry. No orders, no production edits, no process actions, no scan, no M5 load. The task-observer log sits outside the AUREL_RESEARCH write boundary and was not written, same as prior runs.
+2026/11/05  5:22:09.35 done
