@@ -413,3 +413,26 @@ Refutation complete. The verdict is appended to `AUREL_RESEARCH/findings/2026-11
 **Files written, all under AUREL_RESEARCH.** Two scripts and four result files named refute_c9_erscale, plus the findings entry. Auto-sync already committed the main script and result. No orders, no production edits, no process actions, no scan, no raw M5 load, no MT5 connection, no external requests. Backlog and DATA_MAP were left to the research lane. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/06  5:31:08.84 done
 ========== 2026/11/06  8:15:06.71 refute start ==========
+Refutation complete. The verdict is appended to `AUREL_RESEARCH/findings/2026-11-06.md` under a `[REFUTE]` header dated 08:30.
+
+**Target.** PROMOTED.md is still empty. The only research-lane work since the 05:30 refute is cycle10 at 06:50, a null on whether 20-business-day trends in US real rates and the broad dollar condition gold reacceleration. Its null reproduces and I do not dispute it. It left two leftovers and a two-cell revival condition for new data: (A) the 60-day real-rate tailwind, out-of-sample t 2.00 with in-sample opposite sign, and (B) a post-hoc cell, macro tailwind inside gold's own headwind, recent t 1.52. I attacked both on existing data instead of waiting.
+
+**Verdict: both broken**, by the rule pre-registered in the script docstring.
+
+| Check | (A) Δ60 real rate | (B) 2×2 dollar cell |
+|---|---|---|
+| Family-wise permutation, weekly circular shift, the 15 macro cells cycle10 described | out max t 2.00 is the Δ60 cell, p 0.581 | recent max t 1.57 is this cell, p 0.853 |
+| Single-cell permutation | p 0.151, null sd 1.44 for a 60-day feature | |
+| In-sample | t −0.52 overall, 2016-20 t −2.01 | t 0.45 |
+| Era | two years, 2022 and 2024, supply the whole out-of-sample diff | vanishes when the gold stratum uses 60d instead of 20d |
+| Publication lag 2 to 3 business days | t falls to 1.41 and 0.86 | |
+| Pattern "out and recent both t ≥ 1.5" | arises by chance in 70% of null draws | |
+
+Cycle10's revival condition is already dead on existing data, so there is little value in testing it forward.
+
+**Most serious counter-evidence to my verdict, recorded in full.** The horizon sweep I ran to test whether 60 days was a spike found a plateau cycle10 never named: a rates-trend tailwind at 75 to 120 business days, roughly 3.5 to 6 months. At 80 days the real-rate cell has out-of-sample t 4.14 and recent t 4.13, and nominal 10-year yields are stronger still at t 4.72 and 4.77. The 17-horizon family-wise p is 0.018. It is side-symmetric, survives stratification on side, gold's own trend and wall type at t 3.4, has monotone dose-response, holds under lags of 1 to 10 business days, and leave-one-year-out never drops below t 2.25. Gold's own 80-day trend explains none of it. It fails on the same ground as every prior leftover: in-sample 2010-20 is zero, 2016-20 is negative, and it is a post-hoc cell found by the refute lane, whose family-wise correction does not cover the whole daily-macro exploration since cycle5. I wrote a one-cell pre-registration proposal for the research lane, framed as a regime descriptor on data after 2026-07, and recorded that the refute lane will not develop it on its own.
+
+**Methodology notes written for the research lane.** For features slower than 60 days the Welch t has a null sd near 1.45, so t 2 means p about 0.15 and month clustering is not enough. Sweep the horizon before leaving a one-cell revival condition. Check that a "within stratum" cell survives one change of stratum definition. Put real and nominal rates side by side.
+
+Files written, all under AUREL_RESEARCH: two scripts and two result files named refute_c10_realrate60 and refute_c10_realrate60_b, plus the findings entry. No orders, no production edits, no process actions, no scan, no M5 load, no MT5 connection, no external requests. Backlog and DATA_MAP were left to the research lane. The task-observer log sits outside the write boundary and was not written, same as prior runs.
+2026/11/06  8:27:03.21 done
