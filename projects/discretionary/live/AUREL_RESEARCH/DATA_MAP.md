@@ -1,4 +1,4 @@
-# DATA_MAP — この環境で実際に触れるデータの地図（v1・2026-11-05 研究レーン cycle3）
+# DATA_MAP — この環境で実際に触れるデータの地図（v1.1・2026-11-05 研究レーン cycle3 棚卸し／cycle4 §3-4 執行コストを実測で更新）
 
 > 補遺B2の最重要成果物。研究レーンが育てる。各領域に【実験可 / 読むだけ / 要取得 / 未調査】を付す。
 > 「関連しそう」でなく「予測に使えるか実験できるか」で分類する。v1 はファイル棚卸し（scripts/c3_inventory.py・MT5 未接続）。
@@ -15,7 +15,7 @@
 - 注意（反証レーンの確定事項）: scan 全体 θ≈0・gross 平均R −0.055。SL/TP は FEED_TOL 分不利に記帳され終値クローズは記帳されない → SL/TP 以外の出口は s≥0.10 USD を課すか R*=R+ft で公正化（findings 11-04 20:25／23:30）。
 
 ## 3. 台帳（前向き紙・本番エンジンの出力）— live フォルダ直下・読むだけ
-- `setup_ledger.jsonl`: 【実験可】7852 行（setup 444＋update 7408）。**最終状態は update 行（target=id）を setup 行に上書きして復元する**（setup 行の nested dict は作成時スナップショット）。再加速 closed **305 本**（2026-09-15〜11-04、TP150/SL154/TIME1、全時間帯・jh7-12 は 90 本）。各本に mfe_R/mae_R/hold_bars/exit_reason/entry/sl/tp/entry_time。chase closed 86。setup 行に spread_pt/slip_pt/slip_src/sl_slip_pt/tp_fill_ok（**R が slip 込みか未確認**・要 setup_engine 読取り）。
+- `setup_ledger.jsonl`: 【実験可】7852 行（setup 444＋update 7408）。**最終状態は update 行（target=id）を setup 行に上書きして復元する**（setup 行の nested dict は作成時スナップショット）。再加速 closed **305 本**（2026-09-15〜11-04、TP150/SL154/TIME1、全時間帯・jh7-12 は 90 本）。各本に mfe_R/mae_R/hold_bars/exit_reason/entry/sl/tp/entry_time。chase closed 86。setup 行に spread_pt（建玉時 tick 実測）／update 行で slip_pt/slip_src/sl_slip_pt/tp_fill_ok（slippage_sim の注釈）。**R は gross**（setup_engine._simulate: R=pnl/risk・控除なし／cycle4 11-05 で確認）。
 - `setup_ledger_15m.jsonl`: 【実験可・小】178 行、closed 37。
 - `demo_exec_ledger.jsonl`: 【読むだけ・n 小】23 行（live 約定 11・observe 11・close 1）。実デモの fill_price/retcode あり＝将来の滑り実測の種。
 - `paper_ledger.jsonl` 23／`paper_ledger_v3.jsonl` 71（旧版・features 付き）: 【読むだけ】定義が現行と違う。
@@ -24,8 +24,8 @@
 - fert_reaccel_stop_ledger.jsonl: live 直下に**存在しない**（CHARTER 記載と不一致・所在未確認）。
 
 ## 4. 執行コスト
-- `spread_log.jsonl`: 【実験可・新規】**94496 行** ts/jst_hour/spread_pt/bid（M5 相当の連続記録）。`spread_log_15m.jsonl` 4993 行。→ スプレッドの時間帯・曜日・ボラ依存、net R の時間構造、「スプレッド÷平均R」が検証できる。期間・欠測は未集計（次サイクル）。
-- 滑り: 【要取得→demo_exec_ledger が種】実約定 11 本では統計不能。紙の仮定 0.56 USD/risk（≈0.08〜0.12R/本）を使う。
+- `spread_log.jsonl`: 【実験可・済 cycle4 11-05】**94621 行**、2026-09-25 08:47〜11-05 12:46 JST（42 日）、サンプル間隔 中央値 16 s（p90 120 s）、>10 分欠測 2 回。**実口座 27972608 の tick**（serve_chart /api 経由・setup_engine._log_spread）。値は USD。結果: 開場中は **固定 0.15/0.16 の 2 値（99.15%）**・時間帯/曜日/ボラ構造なし・max 0.23。0.21/0.22 は閉場（週末・JST5-7 の日次メンテ）中の配信値で stale 行は 100% 広い。→ 「スプレッドの時間構造」は**この口座では検証済み・無い**。他口座（デモ）は別物（10-23 実測 0.42）＝【要取得】。`spread_log_15m.jsonl` 5053 行（同源・未分析）。
+- 滑り: 【実験可・小】台帳 263 本に slippage_sim（MT5 tick 履歴・成行 L=1 s）の注釈 slip_pt／sl_slip_pt（158）／tp_fill_ok（103）。entry slip 中央値 +0.02 USD（p90 +0.33・両側対称）、SL slip 中央値 +0.026（max 0.65）、紙 TP の 3.9% が実約定不成立。spread＋slip の実コスト 中央値 0.21 USD＝0.03R/本。**台帳 R は gross（_simulate は pnl/risk のみ・控除なし）**。注釈の無い 42 本は高 R に偏る（欠落は無作為でない）。demo_exec_ledger の実約定 11 本は別途【読むだけ・n 小】。手数料（commission）の記録は**無い**＝【要取得】。
 
 ## 5. MT5 読取（27972608 Live／他端末デモ）
 - 【未調査】読める銘柄一覧・履歴可否・粒度。XAUUSD+ の現値/M5 は読めている実績。**接続は read-only・最小限**（symbols_get / copy_rates のみ、発注関数は呼ばない）。次サイクル以降に 1 回だけ probe し本節を埋める。

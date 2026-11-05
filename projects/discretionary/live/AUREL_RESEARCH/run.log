@@ -32,3 +32,35 @@ Judgment: the hypothesis as stated is null. The tail share is the same across le
 
 No orders, no production edits, no process actions. Writes were limited to AUREL_RESEARCH. The task-observer log was not written because its workspace is outside AUREL_RESEARCH, consistent with prior cycles.
 2026/11/05 12:20:50.79 done
+========== 2026/11/05 12:42:10.66 cycle start ==========
+Cycle complete. One findings entry appended with filled numbers, backlog and DATA_MAP updated, nothing promoted.
+
+**What this cycle tested**
+
+I picked the spread-log time-structure item from the backlog's top three. It runs entirely on existing data in about ten seconds. The ledger-versus-scan reconciliation was deferred because the M5 loader's history appears to end at 2026-06 and cannot cover the ledger window, which is now logged as a data need. The MT5 probe was deferred because it touches a live terminal.
+
+Pre-registered hypothesis: spread depends structurally on JST hour, weekday, and recent volatility, so execution cost would eat edge unevenly across session bands. Six predictions were fixed in the script docstring before running. In-sample and out-of-sample were the chronological halves of the 42-day log.
+
+**Result: null.** During open market the spread on this account is effectively fixed.
+
+| Measure | Value |
+|---|---|
+| Spread log rows, period | 94,621 rows, 2026-09-25 to 11-05, 16 s median cadence |
+| Open-market spread values | 0.15 or 0.16 USD in 99.15% of rows, max 0.23 |
+| Rollover vs overlap median ratio | 1.31x both halves, below the 1.5x threshold |
+| Spearman spread vs lagged volatility, open market | −0.007 |
+| Spread cost per ledger trade | 0.023 R median, 14% of gross mean R |
+| Spread plus tick-replayed slip, 263 annotated trades | 0.03 R per trade, 26% of gross |
+| Existing cost assumption 0.56 USD vs measured mean | 2.7x too high |
+| Paper TPs that would not fill | 4 of 103, carrying 25% of that subset's total R |
+
+The one apparent structure, a 0.21 to 0.22 USD state, is the market-closed feed during weekends and the JST 5 to 7 daily maintenance hour. It produced a strong negative spread-volatility correlation in the pre-registered test that disappears once closed-market rows are removed. Band differences in cost per R come from SL width differences, not spread.
+
+**Side result that closes a backlog question.** The production engine computes R as raw pnl over risk with no deduction, so ledger R is gross. The slip fields are annotations from the slippage simulator, not deductions.
+
+**Strongest counter-argument recorded.** The log is the real account's tick feed. The demo account that actually executes showed a 0.42 USD spread on 10-23, so cost there would be roughly 2.6 times higher. Fixed-spread accounts usually charge commission, which is not recorded anywhere here. The 16 s sampling cannot see sub-second spikes at stop-trigger moments. And the 42 trades lacking slip annotations carry a much higher average R than the annotated ones, so the 26% cost figure comes from a sample skewed toward low-R trades.
+
+**Queued next.** Recompute the cycle3 sign-stability trade count with measured cost instead of 0.56 USD. Three data needs were logged: M5 history extension past 2026-06, a demo-account spread log, and the account's commission terms.
+
+No orders, no production edits, no process actions, no MT5 connection. Writes were limited to two scripts, one result file, the findings, backlog, and DATA_MAP under AUREL_RESEARCH. The task-observer log was not written because its workspace is outside AUREL_RESEARCH, consistent with prior cycles.
+2026/11/05 12:52:08.85 done
