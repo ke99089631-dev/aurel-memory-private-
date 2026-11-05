@@ -348,3 +348,4 @@ Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-05.md`
 
 **Files written, all under AUREL_RESEARCH.** `scripts/refute_c6_persistence.py`, `data/refute_c6_persistence.md`, and the findings entry. The auto-sync already committed the script at 20:22. No orders, no production edits, no process actions, no scan, no M5 load, no MT5 connection, no external requests. Backlog and DATA_MAP were left to the research lane. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/05 20:26:50.08 done
+========== 2026/11/05 23:15:07.05 refute start ==========
