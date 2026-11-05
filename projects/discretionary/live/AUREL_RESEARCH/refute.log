@@ -370,3 +370,26 @@ Refutation complete. The verdict is appended to `AUREL_RESEARCH/findings/2026-11
 **Files written, all under AUREL_RESEARCH.** Two scripts and two result files named refute_c7_sellstall, plus the findings entry. The auto-sync already committed the main script and result. No orders, no production edits, no process actions, no scan, no M5 load, no MT5 connection, no external requests. Backlog and DATA_MAP were left to the research lane. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/05 23:26:16.57 done
 ========== 2026/11/06  2:15:06.86 refute start ==========
+Refutation complete. The verdict is appended to `AUREL_RESEARCH/findings/2026-11-06.md` under a `[REFUTE]` header dated 02:30.
+
+**Target.** PROMOTED.md is still empty. The only new research-lane work is cycle8 at 00:55, a null on whether US stock moves before entry condition gold reacceleration. Its null reproduces and I do not dispute it. The weak signal it left behind, now in the backlog, was that trades entered in the same direction as gold's own prior 24h move underperform out-of-sample with t −2.90, read as "recent gold is mean-reverting, the reversal side runs."
+
+**Verdict: the claim as stated is broken, the regularity underneath is inconclusive.**
+
+The claim is sign-inverted. Cycle8's code defines gold "alignment" with the stock-market risk-off rule, which for gold means the *counter-direction* group. The −0.078 says counter-direction trades do worse. Continuation trades, those going with gold's prior 24h move, do better by about 0.08R out-of-sample and 0.12R in 2024-26. The "mean reversion" hypothesis and the backlog line are backwards. I left the backlog edit to the research lane, as in prior runs.
+
+| Check on the continuation effect | Result |
+|---|---|
+| Family-wise permutation, weekly circular shift of all three series, 10 described out-of-sample cells | max abs t 2.90, p 0.043. Gold's 2 cells alone p 0.007. In-sample vs out-of-sample sign flip has p 0.007, so the era difference is real, not noise. |
+| Different splits | In-sample 2012-20 is negative, 2012-15 reaches t −2.1. 2021-22 is zero. Mass sits in 2023H2 to 2026H1. Half-years positive 7 of 11, only two individually above t 2. Leave-2026-out drops to t 1.84. |
+| Horizon placebo 1h to 120h | Not a 24h spike. Out-of-sample t is positive and smooth from 8h to 120h, peak at 12h. |
+| Trend leak | Not a bull-market artifact. BUY-within and SELL-within effects are symmetric, both t about 2, while the unconditional BUY minus SELL gap is near zero. |
+| Composition | Continuation trades are 78% outer walls with larger targets versus 55%. Stratifying on side, wall, target tercile and hour keeps t 2.3 out-of-sample and 3.2 recently. Mid walls show nothing. |
+| Usable form, skip counter-direction entries | In-sample negative, top-decile retention 71%, so it fails the lane's own criteria. Doubling cost changes nothing since both groups pay the same. It is also an entry filter, which charter supplement D forbids. |
+
+**Most serious counter-evidence to my verdict, recorded.** This is the hardest-to-break conditioning seen in cycles 0 through 8. In 2021-26 it is side-symmetric, smooth across horizons, survives stratification, has a month-block bootstrap interval excluding zero, and week-cluster t 2.6. Read as a regime description under charter D2, it says reacceleration breakouts since 2023H2 run only when aligned with gold's prior 12 to 48h direction, mainly at outer walls. The in-sample reversal and the 2021-22 zero are consistent with this being a product of gold's one-directional market since 2023. Revival needs a pre-registered one-cell test on data after 2026-07, framed as a regime identifier compatible with the +40R recipe rather than as a filter. The refute lane stops on this line.
+
+**Methodology notes written for the research lane.** Re-read the inequality when reusing an alignment function across assets, and print the group composition so the sign is checked by eye. Sweep horizons before naming one. Always place wall type, target size and risk of the conditioned and control groups side by side.
+
+**Files written, all under AUREL_RESEARCH.** Two scripts and two result files named refute_c8_goldmom and refute_c8_goldmom_b, plus the findings entry. No orders, no production edits, no process actions, no scan, no raw M1 or M5 load, no MT5 connection, no external requests. Backlog and DATA_MAP were left to the research lane. The task-observer log sits outside the write boundary and was not written, same as prior runs.
+2026/11/06  2:27:40.09 done
