@@ -299,3 +299,4 @@ Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-05.md`
 
 Files written, all under AUREL_RESEARCH: `scripts/refute_c3_ledger.py`, `data/refute_c3_ledger.md`, and the findings entry. No orders, no production edits, no process actions, no scan, no M5 load, no MT5 connection. The engine, ledger and git log were only read. The task-observer log sits outside the write boundary and was not written, same as prior runs; its backlog of 21 open observations has never been reviewed, which the owner may want to schedule.
 2026/11/05 14:26:37.95 done
+========== 2026/11/05 17:15:06.40 refute start ==========
