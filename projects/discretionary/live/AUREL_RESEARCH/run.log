@@ -82,3 +82,33 @@ Cycle 5 is complete. One findings entry was appended with real numbers, and the 
 
 No orders, no production edits, no process actions. External traffic was four GET requests to public FRED CSV endpoints with nothing sent. The task-observer log sits outside AUREL_RESEARCH and was not written, consistent with prior cycles.
 2026/11/05 15:49:12.54 done
+========== 2026/11/05 18:42:11.44 cycle start ==========
+Cycle 6 is complete. One analysis was run synchronously, results are filled in, and the findings entry is appended.
+
+**What I did**
+
+- Posed a new regime/meta question from the free slot: if the reaccel edge is regime-dependent as Charter D2 claims, then performance itself should persist in time (good weeks following good weeks). Pre-registered it in the docstring of `AUREL_RESEARCH/scripts/c6_persistence.py` before looking at numbers.
+- Ran it on the existing 19404-trade scan cache only. No scan, no M5 load, no MT5, no external calls. Runtime was 162 s.
+
+**Result: null, all three predictions failed**
+
+| Window | Weekly lag-1 autocorr of mean R | One-sided permutation p | Trailing 4-week split, Welch t |
+|---|---|---|---|
+| In 2010–20 | −0.059 | 0.91 | −1.07 |
+| Out 2021–26H1 | −0.032 | 0.69 | +0.03 |
+| Recent 2024–26H1 | −0.120 | 0.90 | −0.19 |
+
+The positive control worked: weekly setup counts autocorrelate strongly, with lag-1 r between +0.42 and +0.62 and permutation p below 0.002. So the method detects persistence where it exists, and mean R simply has none at the week or month scale. A variance decomposition showed the spread of weekly and monthly mean R is fully explained by trade-level sampling noise. Any regime-driven swing in the true weekly mean is bounded at roughly 0.02 to 0.03 R, the same size as execution cost.
+
+**Strongest counter-argument recorded**: the out-of-sample monthly trailing split came in at +0.05 R with t 1.9, and recent-window monthly TP-rate persists while mean R does not. In-sample has the opposite sign and this is one cell of six, so it is logged as low-priority for a single pre-registered check once 12+ months of post-2026-07 data exist.
+
+**Knowledge gained and recorded**
+
+- "Read the regime from recent performance" has no information. The R-based regime meter and equity-curve on/off ideas are closed in the backlog.
+- If the recent-years edge is real, it shows up only as a level difference between windows, not as a persistent state. A regime meter must therefore use external state, which raises the priority of the intraday dollar and rates data need already in DATA_MAP §6.
+- Added methodology item 7 to the backlog header: time-series nulls must carry a positive control and a variance decomposition.
+
+**Files written**, all under AUREL_RESEARCH: the new script, `data/c6_persistence_result.md`, the cycle6 entry at the end of `findings/2026-11-05.md`, backlog edits, and DATA_MAP bumped to v1.3 with period-density figures for designing future time-series tests. No orders, no production or executor changes. The task-observer log lives outside AUREL_RESEARCH, so it was not written, consistent with prior cycles.
+
+Backlog ★1 remains blocked on the M5 extension to 2026-11, and ★2 (MT5 probe) was again deferred under "when unsure, do nothing".
+2026/11/05 18:51:28.48 done
