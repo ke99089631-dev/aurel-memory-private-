@@ -137,3 +137,4 @@ Across the 30-cell grid per window, zero cells pass Bonferroni and the t-distrib
 
 No orders, no process changes, no scan, no MT5 connection. The task-observer log sits outside AUREL_RESEARCH, so I did not write to it, consistent with earlier cycles.
 2026/11/05 21:51:32.77 done
+========== 2026/11/06  0:42:11.63 cycle start ==========
