@@ -393,3 +393,4 @@ The claim is sign-inverted. Cycle8's code defines gold "alignment" with the stoc
 
 **Files written, all under AUREL_RESEARCH.** Two scripts and two result files named refute_c8_goldmom and refute_c8_goldmom_b, plus the findings entry. No orders, no production edits, no process actions, no scan, no raw M1 or M5 load, no MT5 connection, no external requests. Backlog and DATA_MAP were left to the research lane. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/06  2:27:40.09 done
+========== 2026/11/06  5:15:06.72 refute start ==========
