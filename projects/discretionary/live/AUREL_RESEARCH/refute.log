@@ -328,3 +328,23 @@ Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-05.md`
 Files written, all under AUREL_RESEARCH: `scripts/refute_c5_dollar.py`, `data/refute_c5_dollar.md`, and the findings entry. No orders, no production edits, no process actions, no scan, no M5 load, no MT5 connection, no external requests. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/05 17:25:25.87 done
 ========== 2026/11/05 20:15:06.59 refute start ==========
+Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-05.md` under a `[REFUTE]` header dated 20:25.
+
+**Target.** PROMOTED.md is still empty. The only new research-lane work since the 17:30 refute was cycle6 at 18:50, which tested whether weekly or monthly mean R persists over time and concluded null. It is not a promotion candidate, but the backlog used it to close the "read regime from recent performance" line on two grounds: a by-product claim that regime variance in mean R is at most 0.02 to 0.03R, and the claim that the method is sound because it detects persistence in weekly trade counts. I attacked those two grounds plus the leftover weak signal, a monthly out-of-sample trailing difference with t 1.92.
+
+**Verdicts, by the rules pre-registered in the script docstring.**
+
+| Claim | Verdict | Key numbers |
+|---|---|---|
+| (A) Regime variance σ_μ ≤ 0.02–0.03R | broken | Point estimates match cycle6 at about zero, but the block-bootstrap 95% upper bound is 0.081R weekly and 0.056R monthly. Permutation F across 15 scale-by-window cells: 0 Bonferroni-significant for R. |
+| (B) "Undetectable is not a method flaw" | broken | Injecting a weekly AR(1) regime of σ_μ 0.05R into the real trades, cycle6's own P1∧P2 rule detects it 0% of the time. At 0.10R, 52%. Trade-count reliability is 0.35 to 0.62; weekly mean-R reliability is 0.000 to 0.003. The positive control measured a different quantity. |
+| (C) Monthly out-of-sample trailing +0.05, t 1.92 | inconclusive | Family-wise p over 6 cells is exactly 0.100. Every alternative split drops t below 1.6, in-sample has the opposite sign, and trading only after good months is net −0.054R per trade with 70% tail retention. |
+
+**What this means for the research lane.** Cycle6's null reproduces and stands as "no evidence of persistence." What does not stand is the inference that recent performance carries zero information. The honest statement is that fluctuations up to about 0.08R weekly cannot be distinguished from noise in 16 years at this trade count. Closing the line as a resource decision remains defensible. Writing "information zero" as a fact does not.
+
+**Leftover recorded, not pursued.** In the 2021 to 2026 window at quarter, half-year, and year scales, the point estimate of σ_μ is 0.03 to 0.037R with F p between 0.07 and 0.15, and TP rate varies significantly across periods while b compensates. With 6 to 22 periods this is untestable here. I wrote that the refute lane stops on this line.
+
+**Methodology notes written for the research lane.** Variance decomposition needs the mean of within-period variance over n and a bootstrap upper bound, not a median-SE subtraction. A positive control must share the reliability class of the target quantity, or better, inject a synthetic effect of the target size and report detection rate. Nulls should carry a minimum detectable effect. One working lesson: a derived column overwrote the `year` field used for window masks, inflating the in-sample window to all trades. I caught it on the first run, renamed the column, and added asserts on window sizes.
+
+**Files written, all under AUREL_RESEARCH.** `scripts/refute_c6_persistence.py`, `data/refute_c6_persistence.md`, and the findings entry. The auto-sync already committed the script at 20:22. No orders, no production edits, no process actions, no scan, no M5 load, no MT5 connection, no external requests. Backlog and DATA_MAP were left to the research lane. The task-observer log sits outside the write boundary and was not written, same as prior runs.
+2026/11/05 20:26:50.08 done
