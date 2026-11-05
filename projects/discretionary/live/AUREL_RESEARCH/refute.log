@@ -349,3 +349,23 @@ Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-05.md`
 **Files written, all under AUREL_RESEARCH.** `scripts/refute_c6_persistence.py`, `data/refute_c6_persistence.md`, and the findings entry. The auto-sync already committed the script at 20:22. No orders, no production edits, no process actions, no scan, no M5 load, no MT5 connection, no external requests. Backlog and DATA_MAP were left to the research lane. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/05 20:26:50.08 done
 ========== 2026/11/05 23:15:07.05 refute start ==========
+Refutation complete. The verdict is appended to `AUREL_RESEARCH/findings/2026-11-05.md` under a `[REFUTE]` header dated 23:25.
+
+**Target.** PROMOTED.md is still empty. The only research-lane work since the 20:25 refute is cycle7 at 21:50, which tested whether elapsed time carries exit information and concluded null. Its null is not a candidate and I reproduced it without dispute. The weak signal it left behind was one post-hoc cell: SELL trades stalled near zero at bar 24 show negative drift out-of-sample and in recent years, with BUY the opposite. The research lane estimated a family-wise p near 0.1 but did not compute it.
+
+**Verdict: broken, by the rule pre-registered in the script docstring.**
+
+| Check | Result |
+|---|---|
+| Family-wise permutation, side labels shuffled within year strata, 60 cells per window | Out-of-sample max abs t 2.66 has p 0.257. The joint "same side cell strong in both out and recent" statistic has p 0.097, matching the research lane's estimate. The recent-window max cell is actually BUY at k=3, not SELL at k=24. |
+| In-sample replication | In-sample SELL is positive. In 2014-17 the side gap is the opposite sign with similar magnitude, t +2.55. The sign flips by era rather than persisting. |
+| Placebo along k | Not a k=24 spike. Out-of-sample SELL is negative at every k from 3 to 24 and vanishes at k 30 and beyond. Adjacent bin B4 is positive. |
+| Usable rule, close stalled SELL at market, slip 0.10 USD | In-sample t −1.48 with 84% tail retention. Fails the research lane's own criteria. The out-of-sample pass is on the same data used to select the cell. |
+| Clustering | Cluster-robust t equals plain t. Max two trades per day. Not a single-event artifact. |
+
+**Most serious counter-evidence to my verdict, recorded.** The side gap in the near-zero bin across k 3 to 24 out-of-sample has family-wise p 0.029 as one of six statistics, 7 of 8 years since 2019 are negative, and mid-wall trades reach t −3.22 on 80 trades. I ran a post-hoc follow-up testing whether this is gold's uptrend leaking into side-conditioned subsets. It did not explain it: the unconditional BUY-minus-SELL gap correlates with the stalled gap at only rho 0.35, and in 2024-26 the unconditional gap is near zero while the stalled gap is large. I wrote that the refute lane stops on this line. Revival needs new data after 2026-07 with a pre-registered three-cell test that also passes in usable form.
+
+**Methodology notes written for the research lane.** Compute side-permutation family-wise p on the spot instead of estimating it. Always place the unconditional side gap beside a side-conditioned drift. Sweep k continuously before naming a single grid point. A side gap whose sign flips between eras cannot become an exit rule without an external regime identifier, and charter D2's "recent regime" framing can pick up exactly the recent half of such a flip.
+
+**Files written, all under AUREL_RESEARCH.** Two scripts and two result files named refute_c7_sellstall, plus the findings entry. The auto-sync already committed the main script and result. No orders, no production edits, no process actions, no scan, no M5 load, no MT5 connection, no external requests. Backlog and DATA_MAP were left to the research lane. The task-observer log sits outside the write boundary and was not written, same as prior runs.
+2026/11/05 23:26:16.57 done
