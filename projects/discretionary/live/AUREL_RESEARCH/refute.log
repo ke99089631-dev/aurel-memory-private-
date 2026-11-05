@@ -300,3 +300,30 @@ Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-05.md`
 Files written, all under AUREL_RESEARCH: `scripts/refute_c3_ledger.py`, `data/refute_c3_ledger.md`, and the findings entry. No orders, no production edits, no process actions, no scan, no M5 load, no MT5 connection. The engine, ledger and git log were only read. The task-observer log sits outside the write boundary and was not written, same as prior runs; its backlog of 21 open observations has never been reviewed, which the owner may want to schedule.
 2026/11/05 14:26:37.95 done
 ========== 2026/11/05 17:15:06.40 refute start ==========
+Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-05.md` under a `[REFUTE]` header dated 17:30.
+
+**Target.** PROMOTED.md is still empty. Since the 14:25 run the research lane filed one entry, cycle5, which tested whether the previous day's move in four daily macro series conditions next-day re-accel results and concluded null (0 of 8 cells). Its only leftover weak signal was the broad-dollar alignment cell being negative in all three windows, read as a reverse hypothesis that gold reverses the prior day's dollar move. That was the only new material, so I attacked it.
+
+**Verdict: broken**, by the rule pre-registered in the script's docstring.
+
+| Test | Result |
+|---|---|
+| Q0 reproduce | In-sample t −2.41, out −0.86, recent −0.42. Matches cycle5. |
+| Q1 window overlap | The recent window is a subset of the out window, so three negatives are two. The non-overlapping outer windows have t under 0.9, and 2025-26H1 is positive. Per-year sign is negative 11 of 17, binomial p 0.33. |
+| Q2 permutation, in-sample, 8 cells × 3 windows | In-sample max t 2.41 has p 0.138. The joint pattern "three same-sign windows with in-sample t ≥ 2.41" has p 0.057. |
+| Q3 lag grid | At every lag that is actually observable for this weekly-published series, out-of-sample t stays above −1.5. Signs alternate lag by lag, and unrelated lags produce t +2.66 and −2.63. |
+| Q4 side decomposition | No side-composition leak in-sample, but in the recent window SELL flips positive. |
+| Q5 dose-response | Spearman near zero in all windows. Strongest-aligned minus strongest-opposed is positive in the recent window, t +1.23. |
+| Q6 regime, 7 cells | 0 Bonferroni-significant. Production band JST 7-12 has t −0.80. Two years, 2013 and 2019, supply 80% of the in-sample effect. Removing either drops t to about −1.5. |
+| Q7 cost | Doubling cost is inapplicable: both groups pay identical cost, so the diff is invariant. Skipping aligned trades would remove about 47% of the top-decile tail. |
+
+**Most serious counter-evidence recorded.** The joint-pattern permutation sits at p 0.057 and the non-overlapping windows do all share sign. If real, the effect lives in-sample only, concentrated in two years, and flips in the recent window, which is the opposite of the charter's regime expectation. Revival would need new data after 2026-07 showing the effect at an observable lag with a dose-response. I recorded that the refute lane stops generating leftovers on this line.
+
+**Two methodology notes written for the research lane.**
+- Cycle5's permutation shuffled by JST calendar day, but features are keyed to the availability date. Trades before 07:00 JST (29% of the sample) share a calendar day with trades on a different availability date. The null's shape barely changes, but reconstructing the observed statistic through that path gave a wrong value, which my assertion caught. Permutation scripts should assert that the reconstructed observed statistic equals the direct computation before running the null.
+- A look-ahead control using the same-day dollar change shows t +7, +6, +4 across windows. That is co-movement, not edge, but it supports raising the priority of cycle5's data request for intraday dollar-index history.
+
+**Self-correction.** The first run of my script had the same day-keying flaw and reported in-sample max t 1.23 instead of 2.41. I re-keyed on the availability date, added the assertion, fixed a loop-variable bug in the year-contribution line, and reran before writing the verdict.
+
+Files written, all under AUREL_RESEARCH: `scripts/refute_c5_dollar.py`, `data/refute_c5_dollar.md`, and the findings entry. No orders, no production edits, no process actions, no scan, no M5 load, no MT5 connection, no external requests. The task-observer log sits outside the write boundary and was not written, same as prior runs.
+2026/11/05 17:25:25.87 done
