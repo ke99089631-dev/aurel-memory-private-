@@ -209,3 +209,5 @@
 {"kind": "update", "target": "S-0074", "logged_at": "2026-11-06 02:30:23", "waiting_resolved": true, "entry": 4120.45, "entry_time": 1793895300, "entry_jst": "2026-11-06 01:15", "status": "invalid"}
 {"kind": "update", "target": "S-0073", "logged_at": "2026-11-06 02:30:23", "frozen": true, "mfe_R": 0.0, "mae_R": 0.88, "hold_bars": 1}
 {"kind": "update", "target": "S-0074", "logged_at": "2026-11-06 02:30:23", "reaccel": {"retest_time": 1793894400, "retest_jst": "2026-11-06 01:00", "retest_tol": 1.07, "status": "invalid", "why": "リテスト中に終値が構造の外"}, "reaccel_frozen": true}
+{"kind": "update", "target": "S-0073", "logged_at": "2026-11-06 02:45:04", "frozen": true, "status": "closed", "exit": 4109.004, "exit_reason": "SL", "R": -1.0, "mfe_R": 0.0, "mae_R": 1.31, "hold_bars": 2, "exit_time": 1793896200, "outcome": "ダマシ"}
+{"kind": "update", "target": "S-0073", "logged_at": "2026-11-06 02:45:04", "reaccel": {"retest_time": 1793893500, "retest_jst": "2026-11-06 00:45", "retest_tol": 2.15, "status": "invalid", "why": "リテスト中に終値が構造の外"}, "reaccel_frozen": true}
