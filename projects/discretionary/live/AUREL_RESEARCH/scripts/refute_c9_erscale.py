@@ -85,17 +85,22 @@ nb = X[X.okA].groupby(["side", "A"]).size()
 say("- A 内訳: " + ", ".join(f"{s}∧{'同向き' if a else '逆向き'} n={v}" for (s, a), v in nb.items()))
 
 # ---- grids ----
-def last_close_grid(ts, lc, step, offset):
+def last_close_grid(ts, lc, step, offset, strip_flat=False):
     gid = (ts - offset) // step
     df = pd.DataFrame({"g": gid, "ts": ts, "lc": lc}).groupby("g").agg(ts_last=("ts", "last"), lc=("lc", "last")).reset_index()
-    df["known"] = df["ts_last"] + 300; return df
+    df["known"] = df["ts_last"] + 300
+    if strip_flat:
+        # 事後の データ修正（判定規則は不変）: XAU_m5_close.npz は週末も前値で埋めた完全格子（土 99.9%・日 93% が flat）。
+        # 時間足 ER の分母 Σ|Δ| が週末で 0 になり（NaN）、週明けは分母が薄く ER が膨らむ → flat な時間足を落として「取引時間」だけで数える。
+        keep = df["lc"].diff().fillna(1.0) != 0.0; df = df[keep].reset_index(drop=True)
+    return df
 def er_series(lcv, n):
     s = pd.Series(lcv); num = (s - s.shift(n)).abs(); den = s.diff().abs().rolling(n).sum()
     return (num / den.replace(0, np.nan)).to_numpy()
 
 DAY = last_close_grid(ts, lc, 86400, 22 * 3600)        # 擬似日 22:00 UTC（c9 と同一）
-HR = last_close_grid(ts, lc, 3600, 0)                  # 時間足
-say(f"- 日足 {len(DAY)} 日・時間足 {len(HR)} 本（{time.time()-t0:.1f} s）")
+HR = last_close_grid(ts, lc, 3600, 0, strip_flat=True)  # 時間足（flat=週末/休場の時間足を除いた取引時間のみ・v1 修正）
+say(f"- 日足 {len(DAY)} 日（c9 と同一・週末行を含む＝ER_20d は約 14 取引日）・時間足 {len(HR)} 本（flat 時間足を除外済み・{time.time()-t0:.1f} s）")
 
 SCALES = [("1d", "H", 24), ("2d", "H", 48), ("3d", "H", 72), ("5d", "H", 120), ("10d", "H", 240),
           ("20d", "D", 20), ("60d", "D", 60), ("120d", "D", 120), ("250d", "D", 250)]
