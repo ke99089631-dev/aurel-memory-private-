@@ -276,3 +276,4 @@ The leftover is **broken**. The C4 line, which started with cycle0's path claims
 
 Files written, all under AUREL_RESEARCH: `scripts/refute_c4_q4cut.py`, `data/refute_c4_q4cut.md`, and the findings entry. No orders, no production edits, no process actions, no scan, no M5 load. The task-observer log sits outside the AUREL_RESEARCH write boundary and was not written, same as prior runs.
 2026/11/05 11:25:58.05 done
+========== 2026/11/05 14:15:06.18 refute start ==========
