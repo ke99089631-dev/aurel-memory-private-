@@ -1,4 +1,4 @@
-# DATA_MAP — この環境で実際に触れるデータの地図（v1.1・2026-11-05 研究レーン cycle3 棚卸し／cycle4 §3-4 執行コストを実測で更新）
+# DATA_MAP — この環境で実際に触れるデータの地図（v1.2・2026-11-05 研究レーン cycle3 棚卸し／cycle4 §3-4 執行コスト実測／cycle5 §6 公開マクロ日次を【実験可】へ）
 
 > 補遺B2の最重要成果物。研究レーンが育てる。各領域に【実験可 / 読むだけ / 要取得 / 未調査】を付す。
 > 「関連しそう」でなく「予測に使えるか実験できるか」で分類する。v1 はファイル棚卸し（scripts/c3_inventory.py・MT5 未接続）。
@@ -32,7 +32,11 @@
 - AssetEmpire `empire/strategies/trackA_us100_sleeve.py` に copy_rates 利用あり → US100 系の履歴は読める可能性（未確認）。
 
 ## 6. 公開マクロ／他資産（ドル指数・米金利・VIX・他商品）
-- 【要取得・未調査】Web で取れるか、粒度（日次か）・遅延・再現性。金 M5 と結合するには日次でも「前日値で条件づけ」なら look-ahead なしに使える。優先度: 中（DIRECTIVE タスク3）。取得元候補は次サイクルで調査し、取れたら CSV を AUREL_RESEARCH/data に保存して【実験可】へ。
+- 日次（FRED）: 【実験可・済 cycle5 11-05】`https://fred.stlouisfed.org/graph/fredgraph.csv?id=<ID>` は API キー不要・1 系列 0.1〜0.4 s。保存先 `data/macro/<ID>.csv`（date,value・欠損は "."）。取得済: **DFII10**（10y 実質・2003〜）／**DGS10**（10y 名目・1962〜）／**DTWEXBGS**（広義ドル・2006〜・**Fed H.10 の公表遅延 ≈4 営業日**＝当日観測不能・DXY の代理）／**VIXCLS**（1990〜）。最終行 2026-11-03（DTWEXBGS は 10-30）。
+  - 結合規則（5条・確定）: FRED 日付 D の値は NY 17:00 ET 確定 → **JST D+1 07:00 以降の建玉のみ**（avail_date=(entry_JST−7h).date()−1 日・merge_asof backward・staleness ≤7 日）。scan 19404 本に 100% 付与、staleness 中央値 0 日。コード: scripts/c5_macro_condition.py。
+  - 結果: 前日 |Δ| 上位20%／前日の向き×side の 8 セルは 在/外/近年 で条件づけなし（family-wise p 0.73）。日次粒度の限界。
+  - 未取得候補（必要時）: DCOILWTICO 原油／DEXJPUS／T10YIE 期待インフレ／DFF。
+- イントラデイ（DXY・US10Y/TNX・US 株指数の M5〜H1）: 【要取得】金の実質金利・ドル感応は同時刻の共変動なので、レジーム条件づけの本命はこちら。取得元候補 = MT5（§5 probe で copy_rates 可否を確認）。解く仮説: 「建玉時点の同日ドル/金利の動きが壁→壁の成績を条件づけるか」。優先度: 中〜高（§5 probe と同時に）。
 
 ## 7. 無いもの（読むだけ・検証不能と明記）
 - オプション建玉時系列・板・オーダーフロー・クロスアセット tick・COT の高頻度版。該当する仮説は文献調査で終え「データX が必要」と記録する。

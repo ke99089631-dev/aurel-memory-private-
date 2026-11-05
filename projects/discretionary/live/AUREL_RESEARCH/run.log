@@ -64,3 +64,21 @@ The one apparent structure, a 0.21 to 0.22 USD state, is the market-closed feed 
 
 No orders, no production edits, no process actions, no MT5 connection. Writes were limited to two scripts, one result file, the findings, backlog, and DATA_MAP under AUREL_RESEARCH. The task-observer log was not written because its workspace is outside AUREL_RESEARCH, consistent with prior cycles.
 2026/11/05 12:52:08.85 done
+========== 2026/11/05 15:42:10.68 cycle start ==========
+Cycle 5 is complete. One findings entry was appended with real numbers, and the backlog and DATA_MAP were updated.
+
+**What I ran.** DIRECTIVE task 3, exploration track: do public daily macro series condition the next-day result of gold wall-to-wall reaccel setups? I fetched four FRED series (10y real yield, 10y nominal, broad dollar, VIX) with no API key, joined them to the existing 19404-trade scan cache under a strict availability rule (FRED date D usable only for entries after JST D+1 07:00), and tested 8 pre-registered cells: "prior-day shock in top 20%" and "prior-day direction aligned with trade side" for each series. In-sample 2010-20, out-of-sample 2021-26, recent 2024-26 reported separately per the D2 rule. Runtime 18.6 s, no scan, no M5 load, no MT5 connection.
+
+**Result: null.** 0 of 8 cells pass. The out-of-sample family-wise permutation p is 0.73. The only in-sample cell below nominal 5% (dollar alignment, t −2.41) points the opposite way from the prediction and shrinks out-of-sample. Effect sizes are bounded at roughly ±0.05R everywhere.
+
+**Strongest counter-argument recorded.** The dollar-alignment cell is negative in all three windows, so a reversed hypothesis ("gold wall-to-wall runs worse the day after a same-direction dollar shock") keeps its sign. It was not tested here because the direction was seen after the fact. It is logged as a new backlog item to be tested on post-2026-07 data or other markets. The deeper issue is granularity: gold's rate and dollar sensitivity is intraday co-movement, so the real test needs DXY and US10Y M5-H1 history. That is logged as needs data, tied to the pending MT5 probe.
+
+**Files written (all under AUREL_RESEARCH):**
+- `scripts/c5_macro_condition.py` with pre-registration in the docstring
+- `data/macro/` with four FRED CSVs, and `data/c5_macro_condition_result.md`
+- `findings/2026-11-05.md` with one new cycle5 entry
+- `backlog.md` with the item closed and three follow-ups added
+- `DATA_MAP.md` bumped to v1.2, with §6 moved from 【要取得】to 【実験可】for daily series
+
+No orders, no production edits, no process actions. External traffic was four GET requests to public FRED CSV endpoints with nothing sent. The task-observer log sits outside AUREL_RESEARCH and was not written, consistent with prior cycles.
+2026/11/05 15:49:12.54 done
