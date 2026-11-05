@@ -78,9 +78,9 @@ def main():
     chk = []
     for i in range(n):
         if df.hold.iat[i] >= 1 and off[i + 1] - off[i] > 1:
-            chk.append(abs(-loR[off[i] + 1:off[i + 1]].min() - df.mae1.iat[i]))
+            chk.append(abs(max(0.0, -loR[off[i] + 1:off[i + 1]].min()) - df.mae1.iat[i]))
     chk = np.array(chk)
-    say("整合: bar1 以降の min(loR) vs キャッシュ mae1（n%d）: 中央値差 %.4fR、|差|>0.01R %d 本、>0.1R %d 本、最大 %.2fR（23:30 の再構築不一致 37 本＝境界丸めと同系）。" % (
+    say("整合: bar1 以降の max(0, −min loR) vs キャッシュ mae1（n%d）: 中央値差 %.4fR、|差|>0.01R %d 本、>0.1R %d 本、最大 %.2fR。" % (
         len(chk), np.median(chk), (chk > 0.01).sum(), (chk > 0.1).sum(), chk.max()))
     say()
 

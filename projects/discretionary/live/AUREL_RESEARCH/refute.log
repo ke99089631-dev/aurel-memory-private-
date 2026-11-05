@@ -252,3 +252,27 @@ The leftover is **broken**. Its premise was miscounted at 05:20, where I inferre
 Files written, all under AUREL_RESEARCH: `scripts/refute_c2_sidesign.py`, `data/refute_c2_sidesign.md`, and the findings entry. No orders, no production edits, no process actions, no scan, no M5 load. The task-observer log sits outside the AUREL_RESEARCH write boundary and was not written, same as prior runs.
 2026/11/05  8:21:39.49 done
 ========== 2026/11/05 11:15:06.17 refute start ==========
+Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-05.md` under a new `[REFUTE]` header dated 11:25.
+
+**Verdict: no candidate.** Nothing new to break has appeared since the 08:20 run. PROMOTED.md is still empty, and the only changes under AUREL_RESEARCH since then are the refute wrapper's lock file, its log, and the auto-sync commit. The research lane filed no new entry, cycle1 is still unwritten, and cycle2 has had no response since it was broken at 23:30. The breakeven-trail family was closed at 08:20, so I did not touch it.
+
+**I used the cycle on the one leftover nobody had attacked**, from the 14:25 run on 2026-11-04: trades in the top atr/risk quartile (narrow stop relative to volatility) looked better cut at −0.5R than held, by about +0.05R per sunk trade, with the same sign in 2024-26. Eight pre-registered tests on cached paths, no scan, 16 seconds.
+
+| Test | Result |
+|---|---|
+| Q0 reproduce the 14:25 number | Reproduced exactly: t −2.98 on hold minus cut, 2024-26 t −2.35. |
+| Q1 real stop rule, same booking as SL/TP | Advantage halves to +0.028R, t 1.58. The missing half came from defining "sunk" as an exact touch of −0.5R. |
+| Q2 label permutation over the 12-cell meter grid | Observed max t 1.69 has p 0.267. The single pre-chosen cell would have p 0.057. |
+| Q3 true in-to-out split, boundary fixed in-sample | Out-of-sample t 1.39; in-sample itself t 0.57; production windows mixed sign. |
+| Q4 deciles of atr/risk | Not monotone. Three sign flips. The most significant decile is negative. |
+| Q5 cut-level placebo | No peak at −0.5R. Shallower cuts look "better" and kill more tail. |
+| Q6 strategy with slippage | Fails the research-lane criteria even at zero slippage, tail retention 78/73%. Zero at 0.10 USD, negative everywhere at 0.20 USD. |
+
+The leftover is **broken**. The C4 line, which started with cycle0's path claims, has now been exhausted across five runs, and I recorded that the refute lane stops generating leftovers on it, same as the breakeven family.
+
+**Most serious counter-evidence recorded.** Two nominal sub-5% cells survive: top-quartile BUY trades at t 2.03 and the top decile in 2024-26 at t 2.21. Both were picked after seeing the grid, both vanish under the family-wise correction, and the only tradable form cuts a quarter of the tail.
+
+**Methodology lesson written for the research lane.** Define "sunk to −XR" with the simulator's stop rule, which fires at X minus the feed tolerance, never as an exact touch of the level. The exact-touch definition excludes the trades that reversed just short of the level and ran to TP, and that alone doubled the apparent advantage here. Also use layered label permutation over the whole grid for any cell found post-hoc, and check decile monotonicity before claiming a quartile effect.
+
+Files written, all under AUREL_RESEARCH: `scripts/refute_c4_q4cut.py`, `data/refute_c4_q4cut.md`, and the findings entry. No orders, no production edits, no process actions, no scan, no M5 load. The task-observer log sits outside the AUREL_RESEARCH write boundary and was not written, same as prior runs.
+2026/11/05 11:25:58.05 done
