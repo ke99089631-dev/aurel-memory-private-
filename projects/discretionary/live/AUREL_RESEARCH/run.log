@@ -6,3 +6,29 @@ Waiting on the scan. Status so far:
 
 Once the run completes I will fill in the findings entry, update the backlog, and check promotion criteria.
 2026/11/04  0:51:15.21 done
+========== 2026/11/05 12:10:33.43 cycle start ==========
+Cycle complete. One findings entry appended, DATA_MAP v1 written, backlog updated, nothing promoted.
+
+**What this cycle did**
+
+- **Closed cycle1 and cycle2 in the backlog.** Both the early-fold exit and the breakeven trail were reduced to bookkeeping artifacts by the refute lane. The research lane now formally records them as null and adopts the refute lane's five pre-registration rules.
+- **DATA_MAP v1** now exists from a file inventory, with no MT5 connection. The one new testable dataset is the spread log (94k rows of spread by time), which puts execution cost on the "testable" side. MT5 symbols and public macro series remain marked as not yet probed.
+- **Pre-registered test (meta track): tail concentration and the trade count needed for sign stability.** Run on the live ledger (305 closed reaccel trades, Sept 15 to Nov 4) and the existing 2024-26 scan cache. In-sample and out-of-sample were the chronological halves of each dataset.
+
+**Results**
+
+| Dataset | Mean R gross | Top 10% share of positive R | n* for 95% sign stability |
+|---|---|---|---|
+| Ledger gross (n=305) | +0.176 | 43.8% | 200 (already reached) |
+| Ledger net, 0.56 USD/risk | +0.089 | 45.1% | 750 (about 450 more trades) |
+| Scan 2024-26, JST 7-12 gross (n=931) | +0.035 | 44.4% | 5000 |
+| Scan 2024-26, JST 7-12 net | −0.081 | 47.4% | never |
+
+Judgment: the hypothesis as stated is null. The tail share is the same across ledger, recent scan, and 2010-20 scan, so it is geometry from the SL and TP structure, not a measure of edge fragility. The ledger's gross sign is already stable. The out-of-sample half of the ledger landed inside the in-sample predictive interval.
+
+**Strongest counter-argument recorded:** the ledger's mean R is about five times the scan's figure for the same hour window, and the ledger covers only seven weeks of one regime. Seen from the scan distribution, +53R over 305 trades is within chance. Until that gap is explained, the paper-trading horizon should use the scan's conservative n*, not the ledger's.
+
+**Next item queued at top of backlog:** reconcile ledger versus scan by running the scan only over the ledger's seven-week window (seconds, not a multi-year scan), to separate recent regime, engine definition differences, and whether ledger R already includes slippage. Also queued: the one-time read-only MT5 symbol probe and the spread-log time structure.
+
+No orders, no production edits, no process actions. Writes were limited to AUREL_RESEARCH. The task-observer log was not written because its workspace is outside AUREL_RESEARCH, consistent with prior cycles.
+2026/11/05 12:20:50.79 done
