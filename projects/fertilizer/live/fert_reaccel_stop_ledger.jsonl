@@ -426,3 +426,4 @@
 {"event": "place", "sid": "S-0454", "side": "SELL", "wall_kind": "outer", "entry": 4084.19, "sl": 4104.399, "tp": 4070.547, "lot": 0.01, "order": 5270358287, "retcode": 10009, "v1_keep": false, "v1_drop": ["雨(直前10本ダマシ90%)", "時間帯(本物率19.3<21.1)", "箱の締まり(0.235≧0.159)"], "spread": 0.15, "streak_demo": 7, "streak_paper": 6, "mom20": -1.049, "trend_side": "with", "lot_factor": 1.0, "lot_factor_shadow": 0.5, "ts": "2026-11-05T16:10:07"}
 {"event": "modify", "sid": "S-0454", "order": 5270358287, "entry": 4091.35, "sl": 4104.399, "tp": 4070.547, "retcode": 10009, "ts": "2026-11-05T16:15:14"}
 {"event": "modify", "sid": "S-0454", "order": 5270358287, "entry": 4094.97, "sl": 4104.399, "tp": 4070.547, "retcode": 10009, "ts": "2026-11-05T16:20:01"}
+{"event": "cancel", "sid": "S-0454", "why": "床崩壊(終値が構造の外)", "retcode": 10009, "observe": false, "ts": "2026-11-05T16:25:10"}
