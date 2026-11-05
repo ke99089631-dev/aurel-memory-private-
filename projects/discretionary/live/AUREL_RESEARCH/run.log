@@ -138,3 +138,26 @@ Across the 30-cell grid per window, zero cells pass Bonferroni and the t-distrib
 No orders, no process changes, no scan, no MT5 connection. The task-observer log sits outside AUREL_RESEARCH, so I did not write to it, consistent with earlier cycles.
 2026/11/05 21:51:32.77 done
 ========== 2026/11/06  0:42:11.63 cycle start ==========
+Cycle 8 is complete. Result: **null**, recorded with full numbers in `AUREL_RESEARCH/findings/2026-11-06.md`.
+
+**What was tested (exploration, cross-asset intraday).** Hypothesis: the US equity move in the 4h/24h before a gold reaccel entry (risk-off → gold hedge demand) conditions the trade's R. Pre-registered 4 primary cells on US500 (direction alignment and magnitude × 2 horizons), in-sample 2012–20, out-of-sample 2021–26H1, recent 2024–26H1. Family-wise null built by circular weekly shift of the feature lookup time, which preserves autocorrelation. Script: `scripts/c8_crossasset_intraday.py`, ran in 64 s, no scan, no MT5, no external calls.
+
+**Numbers.**
+
+| Cell (US500) | In 2012–20 t | Out 2021–26 t | Recent t |
+|---|---|---|---|
+| Alignment 4h | −0.07 | +1.71 | +1.14 |
+| Alignment 24h | +0.49 | −0.41 | −0.06 |
+| Magnitude 4h | −2.26 (opposite sign) | +0.45 | +1.02 |
+| Magnitude 24h | −0.33 | +0.73 | +1.19 |
+
+Out-of-sample max|t| 1.71, permutation p_max 0.297. PASS 0/4. MDE 0.05–0.09R, and an injected +0.05R shift is detectable (t 2.0–3.6), so the null is a real "no effect at this size", not weak power. Side fact: gold and equity pre-entry returns correlate ≈0 in 2012–20 but +0.14 to +0.15 in 2021–26, so the safe-haven premise itself does not hold at this timescale recently.
+
+**Strongest counter-argument (recorded).** The competitor cell, alignment with gold's own prior 24h move, is stronger than any primary cell: out −0.078 (t −2.90), recent −0.124 (t −3.10), but in-sample +0.027 (t 1.22). A sign-flipping, descriptive, entry-type conditioning. Logged in backlog as low priority, new-data-only.
+
+**Data map grew (the main byproduct).** New DATA_MAP §6b: Dukascopy M1 for US500 and US100 2012–2026-06 exist in AssetEmpire and are now 【実験可】, with M5 close caches saved under `data/macro/`. EURUSD chunks are 57 of 59 empty, so the dollar proxy is logged as 【要取得】 with a concrete fetch path. The two "2012–2026" combined files in `download/` are actually truncated at 2014 and 2017; my first run used them and had an empty OOS window, which I caught and reran on the quarterly chunks. Added methodology items ⑨ (weekly-shift permutation) and ⑩ (print min/max time after any file load) to backlog.
+
+**Two things to flag.**
+- The three new npz caches total about 76 MB and are not git-ignored, so the 15-minute auto-sync will commit them. They are reusable, but if repo size matters, add `data/macro/*.npz` to `.gitignore`.
+- Nothing was written outside AUREL_RESEARCH; no executor, server, production file, or prop file was touched. The task-observer log was skipped per the lane's standing convention and noted in findings.
+2026/11/06  0:55:43.81 done

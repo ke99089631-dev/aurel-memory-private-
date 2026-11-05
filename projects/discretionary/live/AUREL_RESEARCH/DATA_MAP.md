@@ -1,10 +1,11 @@
-# DATA_MAP — この環境で実際に触れるデータの地図（v1.4・2026-11-05 研究レーン cycle3 棚卸し／cycle4 §3-4 執行コスト実測／cycle5 §6 公開マクロ日次を【実験可】へ／cycle6 §2 期間集計の密度／cycle7 §2 npz の規約と足時刻）
+# DATA_MAP — この環境で実際に触れるデータの地図（v1.5・2026-11-05 研究レーン cycle3 棚卸し／cycle4 §3-4 執行コスト実測／cycle5 §6 公開マクロ日次を【実験可】へ／cycle6 §2 期間集計の密度／cycle7 §2 npz の規約と足時刻／11-06 cycle8 §6b イントラデイ他資産（Dukascopy M1）を新設・§1 M5 close キャッシュ）
 
 > 補遺B2の最重要成果物。研究レーンが育てる。各領域に【実験可 / 読むだけ / 要取得 / 未調査】を付す。
 > 「関連しそう」でなく「予測に使えるか実験できるか」で分類する。v1 はファイル棚卸し（scripts/c3_inventory.py・MT5 未接続）。
 
 ## 1. 金 XAUUSD 価格（1次データ）
 - 金 M5 OHLC 2010-01〜2026-06: 【実験可】AssetEmpire `empire/research/wall_to_wall/m5_loader.py`。tick 無し・板無し。全読込 ≈19 s。**多年 scan は 1138 s** → 1 サイクル内禁止（キャッシュを使う）。短期間（数週）の scan は推定 10〜20 s で可。
+- 金 M5 **close のみ**キャッシュ（cycle8 11-06）: 【実験可・即時】`data/macro/XAU_m5_close.npz`（ts int64 UTC 秒・close・1728576 本 2010-01〜2026-06）。M1 chunks から 15 s で生成済み・np.load は瞬時。直前リターン/他資産との同時刻結合に使う（OHLC が要るときは m5_loader）。
 - 直近 5000 本（2026-10-08〜11-03）: 【実験可】data/refute_api_bars_probe.json（serve_chart /api/data の読取り保存）。
 - 現値/板: 【読むだけ】MT5 tick は現値のみ。オーダーフロー・板・建玉: **無い**（読むだけ・検証不能）。
 
@@ -37,7 +38,16 @@
   - 結合規則（5条・確定）: FRED 日付 D の値は NY 17:00 ET 確定 → **JST D+1 07:00 以降の建玉のみ**（avail_date=(entry_JST−7h).date()−1 日・merge_asof backward・staleness ≤7 日）。scan 19404 本に 100% 付与、staleness 中央値 0 日。コード: scripts/c5_macro_condition.py。
   - 結果: 前日 |Δ| 上位20%／前日の向き×side の 8 セルは 在/外/近年 で条件づけなし（family-wise p 0.73）。日次粒度の限界。
   - 未取得候補（必要時）: DCOILWTICO 原油／DEXJPUS／T10YIE 期待インフレ／DFF。
-- イントラデイ（DXY・US10Y/TNX・US 株指数の M5〜H1）: 【要取得】金の実質金利・ドル感応は同時刻の共変動なので、レジーム条件づけの本命はこちら。取得元候補 = MT5（§5 probe で copy_rates 可否を確認）。解く仮説: 「建玉時点の同日ドル/金利の動きが壁→壁の成績を条件づけるか」。優先度: 中〜高（§5 probe と同時に）。
+- イントラデイ（DXY・US10Y/TNX）: 【要取得】金の実質金利・ドル感応は同時刻の共変動なので、レジーム条件づけの本命はこちら。取得元候補 = MT5（§5 probe で copy_rates 可否を確認）または Dukascopy EURUSD の再取得（§6b）。解く仮説: 「建玉時点の同日ドル/金利の動きが壁→壁の成績を条件づけるか」。優先度: 高（株は §6b で実験済み null）。
+
+## 6b. イントラデイ他資産 — Dukascopy M1（AssetEmpire `empire/research/dukas/`・読取のみ・cycle8 11-06 棚卸し）
+- 所在: `chunks/<sym>-m1-bid-YYYY-MM-DD-YYYY-MM-DD.csv`（四半期・timestamp(ms,UTC),open,high,low,close・volume 無し）。**`download/` の "2012-01-01-2026-07-01" 結合ファイル 2 本は名前と中身が違う**（US500 は 2014-12-15・US100 は 2017-05-13 で切れている）＝使わない。m5_loader の `_US100_FILE`（COMBINED）は実在しない。読込後に min/max 時刻を必ず印字すること。
+- **US500**（usa500idxusd）: 【実験可】59 チャンク（58 非空・345 MB）2012-01-01〜**2026-06-09**。M5 close キャッシュ `data/macro/US500_m5_close.npz`（1481760 本・生成 12 s）。
+- **US100**（usatechidxusd）: 【実験可】58 チャンク（全非空・366 MB）2012-01-01〜2026-06-30。キャッシュ `data/macro/US100_m5_close.npz`（1521504 本）。**ask** も 18 チャンク（2022-01〜2026-06・120 MB・dukas/derive_spread_us100.py の入力）→ US100 の bid/ask スプレッド時系列が導出可能＝【実験可・未着手】（執行コスト比較の種・§4 の金 spread_log と並べる）。
+- **EURUSD**: 【要取得】59 チャンクのうち **57 本が 0 バイト**（非空は 2012Q1・2016Q2 のみ、fetch_eurusd.log 10-21）。取得元 = 同じ `fetch_eurusd.sh` の再実行（AUREL main のオフライン作業・無料・推定 1 時間）。解く仮説: 「建玉直前のドル（EURUSD 代理）の 4h/24h の動きが再加速 R を条件づけるか」を cycle8 と同じ事前固定で。優先度: **高**（§6 本命のドル側）。
+- 結合済み特徴量（再利用キャッシュ）: `data/c8_crossasset_features.csv`（19404 本・ret4h/24h × {US500, US100, XAU}・|ret| の直近 250 日 80% 点・鮮度 age）。t_e = entry_time−300 の close まで（look-ahead なし）。株の鮮度 ≤2h で US500 96.2%／US100 99.7% の本に特徴量あり。
+- 結果（cycle8）: 建玉直前 4h/24h の米株の向き（F_A）・大きさ（F_M）は 在 2012-20／外 2021-26 で条件づけなし（主 4 セル PASS 0・p_max 0.297・MDE 0.05〜0.09R）。株と金の直前リターン相関は 在 ≈0・外 +0.14〜0.15（近年は同方向＝safe-haven の向きは M5 尺度で不成立）。
+- 市場横断の scan（同じ壁→壁を US500/US100 で回す）: 【needs cache】多年 scan は 1 サイクル内禁止 → AUREL main がオフラインで `refute_c4` 相当のキャッシュを US500/US100 で作れば研究レーンで【実験可】。
 
 ## 7. 無いもの（読むだけ・検証不能と明記）
 - オプション建玉時系列・板・オーダーフロー・クロスアセット tick・COT の高頻度版。該当する仮説は文献調査で終え「データX が必要」と記録する。
