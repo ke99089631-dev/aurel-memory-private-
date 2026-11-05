@@ -187,3 +187,27 @@ Family-wise permutation p was 0.60. ER60 and a realized-volatility meter gave th
 
 PROMOTED.md stays empty. No orders, no process or production-file changes, no MT5 or network access. The task-observer log was not written because it lives outside AUREL_RESEARCH; the methodological lesson (interaction cells need their power stated up front) is in the findings entry instead.
 2026/11/06  3:50:12.82 done
+========== 2026/11/06  6:42:10.90 cycle start ==========
+Cycle 10 is complete. The analysis ran synchronously, the numbers are filled, and the result is a null.
+
+**What was tested.** Exploration track, chosen because the last seven cycles ran exploration 4 to deepening 3. I took the backlog item on slow daily macro state: does the 20-business-day trend of the US 10-year real yield or the broad dollar act as a tailwind or headwind for reaccel wall-to-wall trades? The economic hypothesis was that allocator and ETF flows respond to real rates over weeks, so breakouts aligned with that flow should run more often. Pre-registration is in the script docstring, with two main cells, a weekly circular-shift permutation for family-wise control, and the usual pass rule from cycles 5, 8, and 9.
+
+**Result: null.** Both main cells fail in-sample and out-of-sample.
+
+| Cell | In-sample 2010-20 | Out-of-sample 2021-26 | Recent 2024-26 |
+|---|---|---|---|
+| Real yield Δ20 tailwind − headwind | +0.011R (t 0.55) | +0.023R (t 0.85) | −0.015R (t −0.39) |
+| Broad dollar Δ20 (7-day publication lag) | +0.023R (t 1.19) | +0.017R (t 0.64) | +0.020R (t 0.51) |
+
+Family-wise permutation p was 0.72, and the minimum detectable effect was about 0.04 to 0.05R. The competitor cell, gold's own 20-day direction times side, was also null. Composition of tailwind and headwind groups was identical on wall type, b, risk, and TP rate. Together with cycle 5, daily macro series now carry no information at either the 1-day or 20-day scale, so that line is closed in the backlog.
+
+**Strongest counter-argument recorded.** The real-yield 60-day trend, a replication cell, came out positive out-of-sample at t 2.00 and in the recent window at t 1.57. But it flips sign in-sample, the dollar 60-day cell goes the other way, and the permutation showed Welch t is overdispersed by 1.2 to 1.3 for slow features, so t 2.0 is roughly p 0.1. Left as a one-shot forward check on post-July-2026 data.
+
+**Side products.**
+- Confirmed the refutation lane's data hygiene finding on the two US index caches. All three M5 close caches are calendar-complete grids with forward-filled closes. US500 and US100 are 45 to 46 percent flat bars, including 22 to 26 percent on weekdays. DATA_MAP sections 1 and 6b now carry this.
+- Two methodology notes added to the backlog header: print flat-bar ratios by weekday on load, and read slow-feature t-statistics through month clusters or the permutation null.
+
+**Files written**, all under AUREL_RESEARCH: two new scripts and two result files under scripts and data, plus one entry appended to findings for today, and edits to backlog and DATA_MAP. No orders, no process changes, no MT5, no network, no multi-year scan. Total compute was about 37 seconds.
+
+**Suggested next cycle.** Move exploration away from daily macro. The live options on existing data are the US100 bid/ask spread time series for execution-cost comparison, or the deepening item on clock position of exit bars from the full-path npz.
+2026/11/06  6:50:51.01 done
