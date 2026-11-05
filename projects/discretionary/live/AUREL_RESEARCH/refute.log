@@ -251,3 +251,4 @@ The leftover is **broken**. Its premise was miscounted at 05:20, where I inferre
 
 Files written, all under AUREL_RESEARCH: `scripts/refute_c2_sidesign.py`, `data/refute_c2_sidesign.md`, and the findings entry. No orders, no production edits, no process actions, no scan, no M5 load. The task-observer log sits outside the AUREL_RESEARCH write boundary and was not written, same as prior runs.
 2026/11/05  8:21:39.49 done
+========== 2026/11/05 11:15:06.17 refute start ==========
