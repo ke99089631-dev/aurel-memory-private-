@@ -161,3 +161,29 @@ Out-of-sample max|t| 1.71, permutation p_max 0.297. PASS 0/4. MDE 0.05–0.09R, 
 - The three new npz caches total about 76 MB and are not git-ignored, so the 15-minute auto-sync will commit them. They are reusable, but if repo size matters, add `data/macro/*.npz` to `.gitignore`.
 - Nothing was written outside AUREL_RESEARCH; no executor, server, production file, or prop file was touched. The task-observer log was skipped per the lane's standing convention and noted in findings.
 2026/11/06  0:55:43.81 done
+========== 2026/11/06  3:42:11.53 cycle start ==========
+Cycle 9 is complete. The analysis ran synchronously (17.7 s), the findings entry carries the real numbers, and all writes stayed under AUREL_RESEARCH.
+
+**What I picked and why.** The refute lane at 02:30 today corrected cycle 8's sign error and left one surviving claim: since 2023H2, gold reaccel wall-breaks that ride the prior 12 to 48 hour direction run, and ones that fight it do not. Its structural explanation was "a product of the one-directional market." That is testable as an objective regime, so I took the backlog's deepening item "連続レジームメーター" and pre-registered a 20-day efficiency ratio (ER) computed from daily closes, referenced 24 hours before entry so it shares no data with the 24h return itself.
+
+**Result: null on both pre-registered cells.**
+
+| Cell (ER20) | 在 2010-20 | 外 2021-26 | 近年 2024-26 |
+|---|---|---|---|
+| P1 mean R, top vs bottom tercile | +0.025 (t 1.02) | +0.000 (t 0.00) | +0.030 (t 0.63) |
+| P2 continuation effect, top minus bottom | −0.0005 (t −0.01) | +0.061 (t 0.94) | +0.149 (t 1.55) |
+
+Family-wise permutation p was 0.60. ER60 and a realized-volatility meter gave the same picture.
+
+**What the null teaches.** Neither a trend meter nor a vol meter describes when wall-to-wall runs. More important, the in-sample ER-top group shows no continuation effect at all, and out-of-sample the effect is positive in every ER quintile. So the continuation is a property of the era, not of a detectable regime state, and ER cannot be used to anticipate when it switches. One side fact: about two thirds of reaccel entries already point with the prior 24h move, so the effect comes mostly from the minority of counter-direction entries failing.
+
+**Strongest counter-argument I recorded.** The ER horizon (20 to 60 days) is an order of magnitude longer than the continuation horizon (8 to 120 hours), and the interaction cell is underpowered (MDE 0.10 to 0.19R). A 5-day ER might still show it, but shrinking the scale makes the meter indistinguishable from the 24h return magnitude, which is the forbidden entry-filter territory. I left a one-shot revival condition in the backlog requiring the in-sample window to pass first.
+
+**Records updated.**
+- Findings entry appended to findings/2026-11-06.md with full numbers.
+- Backlog: cycle 8 residual line sign-corrected as the refute lane requested, regime-meter item closed with results.
+- DATA_MAP: new reusable cache data/macro/XAU_daily_er.csv registered in section 1.
+- Script saved as scripts/c9_er_regime.py, result in data/c9_er_regime_result.md.
+
+PROMOTED.md stays empty. No orders, no process or production-file changes, no MT5 or network access. The task-observer log was not written because it lives outside AUREL_RESEARCH; the methodological lesson (interaction cells need their power stated up front) is in the findings entry instead.
+2026/11/06  3:50:12.82 done

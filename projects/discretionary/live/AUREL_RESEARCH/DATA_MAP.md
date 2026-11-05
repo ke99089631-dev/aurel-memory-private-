@@ -1,4 +1,4 @@
-# DATA_MAP — この環境で実際に触れるデータの地図（v1.5・2026-11-05 研究レーン cycle3 棚卸し／cycle4 §3-4 執行コスト実測／cycle5 §6 公開マクロ日次を【実験可】へ／cycle6 §2 期間集計の密度／cycle7 §2 npz の規約と足時刻／11-06 cycle8 §6b イントラデイ他資産（Dukascopy M1）を新設・§1 M5 close キャッシュ）
+# DATA_MAP — この環境で実際に触れるデータの地図（v1.5・2026-11-05 研究レーン cycle3 棚卸し／cycle4 §3-4 執行コスト実測／cycle5 §6 公開マクロ日次を【実験可】へ／cycle6 §2 期間集計の密度／cycle7 §2 npz の規約と足時刻／11-06 cycle8 §6b イントラデイ他資産（Dukascopy M1）を新設・§1 M5 close キャッシュ／11-06 cycle9 §1 日足 ER/ボラ メーターキャッシュ）
 
 > 補遺B2の最重要成果物。研究レーンが育てる。各領域に【実験可 / 読むだけ / 要取得 / 未調査】を付す。
 > 「関連しそう」でなく「予測に使えるか実験できるか」で分類する。v1 はファイル棚卸し（scripts/c3_inventory.py・MT5 未接続）。
@@ -6,6 +6,7 @@
 ## 1. 金 XAUUSD 価格（1次データ）
 - 金 M5 OHLC 2010-01〜2026-06: 【実験可】AssetEmpire `empire/research/wall_to_wall/m5_loader.py`。tick 無し・板無し。全読込 ≈19 s。**多年 scan は 1138 s** → 1 サイクル内禁止（キャッシュを使う）。短期間（数週）の scan は推定 10〜20 s で可。
 - 金 M5 **close のみ**キャッシュ（cycle8 11-06）: 【実験可・即時】`data/macro/XAU_m5_close.npz`（ts int64 UTC 秒・close・1728576 本 2010-01〜2026-06）。M1 chunks から 15 s で生成済み・np.load は瞬時。直前リターン/他資産との同時刻結合に使う（OHLC が要るときは m5_loader）。
+- 金 **日足派生・レジームメーター**キャッシュ（cycle9 11-06）: 【実験可・即時】`data/macro/XAU_daily_er.csv`（6022 日・擬似日境界 22:00 UTC・列 day, ts_last, known=既知時刻, lc=log close, er20, er60, vol20 と各 500 日 rolling pct）。XAU_m5_close.npz から 1 s で再生成可（scripts/c9_er_regime.py）。結果: ER20/ER60/vol20 の三分位は再加速の平均R を条件づけない（c9_er_regime_result.md）。
 - 直近 5000 本（2026-10-08〜11-03）: 【実験可】data/refute_api_bars_probe.json（serve_chart /api/data の読取り保存）。
 - 現値/板: 【読むだけ】MT5 tick は現値のみ。オーダーフロー・板・建玉: **無い**（読むだけ・検証不能）。
 
