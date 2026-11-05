@@ -277,3 +277,25 @@ The leftover is **broken**. The C4 line, which started with cycle0's path claims
 Files written, all under AUREL_RESEARCH: `scripts/refute_c4_q4cut.py`, `data/refute_c4_q4cut.md`, and the findings entry. No orders, no production edits, no process actions, no scan, no M5 load. The task-observer log sits outside the AUREL_RESEARCH write boundary and was not written, same as prior runs.
 2026/11/05 11:25:58.05 done
 ========== 2026/11/05 14:15:06.18 refute start ==========
+Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-05.md` under a `[REFUTE]` header dated 14:25.
+
+**Target.** Two research-lane entries landed since the 11:25 run. cycle4 concluded null, so there was nothing to break there. cycle3 carried the newest weak signal: the paper ledger's 305 closed re-accel trades average +0.176R, the sign is "already stable" (n* of 200, P(sum>0) near 0.99), the first and second halves agree, and the figure is five times the recent scan. No promotion candidate exists, so this was the only material.
+
+**Verdict: inconclusive by the pre-registered rule, and it splits three ways.**
+
+| Claim | Test | Result |
+|---|---|---|
+| Sign already stable | Only trades entered after the last recipe change on 10-24, 70 trades | mean +0.146, t 0.71, P(sum>0) 0.75. Broken for the forward-only part. |
+| Same, pooled 305 with day-block bootstrap | n* rises from 200 to 300; P at n=305 is 0.97. Top three days supply 62% of the total. | Survives weakly. |
+| Five times the scan | Day-block resampling of 305 trades from three recent-window scan nulls | P(mean ≥ +0.176) is 0.006, 0.005, 0.026. Two of three pass Bonferroni. The gap is real. |
+| Same, forward-only 70 trades | p 0.15 | Indistinguishable from the scan null. |
+| In/out consistent | Split at the last recipe change instead of the time median | Out-of-sample inside a ±0.25R interval that admits almost anything. The forward set's own halves go +0.37 then −0.07. |
+
+**What the ledger actually is.** It is not a single pre-registered recipe run forward. Sixty-seven trades predate the re-accel code itself. The variant was designed on 09-29 from three trades of 09-28 and then backfilled to 09-15. The minimum stop width was fixed on 09-30 after re-simulating the same period, by the engine's own comment. The booking rule tightened on 10-24, and closed trades are frozen, so 235 trades carry the lenient booking and 70 the strict one. I confirmed this against the chart server's bars: 103 of 103 pre-10-24 trades reproduce under the old rule and 64 of 64 post-10-24 trades under the new one. Rebooking everything strictly would move the mean to roughly +0.144. No closed trade's R was ever rewritten, so the ledger is honest, just mixed.
+
+**Most serious counter-evidence recorded.** Seventy trades have little power. With a true mean of +0.15 the chance of reaching t 2 is about one in five, so "cannot show stability" is not "no edge." Excluding only the backfill leaves 238 trades at t 1.94, close to cycle3's claim. Revival condition: forward trades from 10-24 onward reaching 200 with day-cluster t at or above 2 and p below 0.05 against the 2026 scan null, about five more weeks at the current pace.
+
+**Lessons written for the research lane.** Stratify any ledger figure by the engine's git history before counting "forward n". Cut in/out at the last recipe change, not the time median. Test "is the ledger chance from the scan" as P(mean ≥ observed), not P(sum>0), which changes the answer here from 0.6 to 0.006. Use day blocks for the sign-stability bootstrap.
+
+Files written, all under AUREL_RESEARCH: `scripts/refute_c3_ledger.py`, `data/refute_c3_ledger.md`, and the findings entry. No orders, no production edits, no process actions, no scan, no M5 load, no MT5 connection. The engine, ledger and git log were only read. The task-observer log sits outside the write boundary and was not written, same as prior runs; its backlog of 21 open observations has never been reviewed, which the owner may want to schedule.
+2026/11/05 14:26:37.95 done
