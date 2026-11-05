@@ -234,3 +234,7 @@
   M5 17188本 (2026-09-07 00:00:00+00:00..2026-11-05 16:15:00+00:00)
   新規記録 1本 / 台帳累計 79本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_d_btc_explore_ledger.jsonl
     2026-11-05 16:15:00+00:00 SELL entry76253.96 risk1684.34 R-0.13 net-0.14
+[探索観測] yfinance BTC-USD 取得中...
+  M5 17194本 (2026-09-07 00:00:00+00:00..2026-11-05 16:45:00+00:00)
+  新規記録 1本 / 台帳累計 80本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_d_btc_explore_ledger.jsonl
+    2026-11-05 16:25:00+00:00 SELL entry76838.27 risk1605.31 R+0.22 net+0.20
