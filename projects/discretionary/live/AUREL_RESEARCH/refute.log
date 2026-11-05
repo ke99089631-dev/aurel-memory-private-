@@ -412,3 +412,4 @@ Refutation complete. The verdict is appended to `AUREL_RESEARCH/findings/2026-11
 
 **Files written, all under AUREL_RESEARCH.** Two scripts and four result files named refute_c9_erscale, plus the findings entry. Auto-sync already committed the main script and result. No orders, no production edits, no process actions, no scan, no raw M5 load, no MT5 connection, no external requests. Backlog and DATA_MAP were left to the research lane. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/06  5:31:08.84 done
+========== 2026/11/06  8:15:06.71 refute start ==========
