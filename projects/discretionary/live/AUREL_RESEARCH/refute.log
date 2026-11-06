@@ -465,3 +465,4 @@ The effect is symmetric across rate-up and rate-down intervals, so it is driven 
 
 No orders, no production edits, no process actions, no MT5 connection, no external requests, no scan, no raw M5 load. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/06 11:28:56.56 done
+========== 2026/11/06 14:15:06.73 refute start ==========
