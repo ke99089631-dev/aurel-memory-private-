@@ -557,3 +557,4 @@ It is not a bid-spread artifact (live-account spread differential 0.01 bp) and n
 
 No orders, no production edits, no process actions, no MT5 connection, no external requests, no scan. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/06 23:33:46.96 done
+========== 2026/11/07  2:15:07.11 refute start ==========
