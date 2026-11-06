@@ -333,3 +333,27 @@ The ordinary midday window behaves as a trend share, positive in up regimes and 
 **Housekeeping.** DATA_MAP §1 now holds the canonical description of the reopen structure (schedule by year, final-print artifact, 19 grid holes). The US500 cross-market item was closed using the refute lane's existing result. PROMOTED is unchanged. The task-observer log lives outside AUREL_RESEARCH, so I did not write to it, consistent with earlier cycles.
 2026/11/07  0:50:28.64 done
 ========== 2026/11/07  3:42:06.34 cycle start ==========
+Cycle 18 is complete. One findings entry with real numbers was appended, the analysis ran in 4.9 s on existing caches only, and nothing outside AUREL_RESEARCH was touched.
+
+**What I chose and why.** Deepening was due after cycle 17's exploration. The backlog item I first picked ("is the drift rate-specific?") had already been run by the refute lane on 2026-11-06 and survived, so I closed that stale line instead of duplicating it. The new question connects two independent results: the ET 17:00 reopen pop that cycles 16 and 17 established as market structure, and the per-bar exit paths in the fullpaths cache. Trades alive at the break are not a random side mix, so the strategy could be systematically paying the pop rather than receiving it.
+
+**Results (pre-registered, out-of-sample 2021-26H1, day-clustered SE):**
+
+| Statistic | 外 2021-26H1 | 在 2013-20 |
+|---|---|---|
+| Trades alive across the break | 811 of 7708 (10.5%) | 886 |
+| Receipt coefficient b (remaining path on pop in R) | +0.76 (t 5.3) PASS | +0.84 (t 5.7) |
+| Selection c (BUY-alive pop minus SELL-alive pop, halved) | −0.009R (t −0.65, MDE 0.029R) null | −0.022R (t −2.5) paying side |
+| Net pop received per crossing trade | −0.003R (t −0.2) | −0.024R (t −2.7) |
+| Share of window total R* | 1.6% | 18% |
+
+Path-to-grid alignment was verified first at 100% (1592 of 1592 within 0.02 USD), so the bar-index time mapping holds intraday. The placebo window at 11:50 ET gave the same receipt coefficient, confirming the method.
+
+**Conclusion.** The reopen pop is received mechanically by trades that cross the break, but only one in ten trades does, and the side-signed net is zero out of sample. The market-structure anomaly does not feed the strategy's R. In-sample it actually cost the book: SELL positions survived into days with large pops, paying about a fifth of the window's losses.
+
+**Strongest counter-argument recorded.** The out-of-sample null has a detection limit of 0.029R, and the in-sample effect of −0.022R sits inside it. Single years 2021 and 2024 show the paying-side selection at t −3.5, while 2025 and 2026H1 flip positive. The data cannot distinguish "selection vanished" from "selection persists at in-sample size and is masked by two bull years."
+
+**Files written.** Script `scripts/c18_break_crossing.py`, result `data/c18_break_crossing_result.md`, findings entry in `findings/2026-11-07.md`, backlog (stale item closed, cycle 18 result plus two residuals added), DATA_MAP sections 1 and 2 updated. PROMOTED.md unchanged. No orders, no process operations, no MT5 connection, no external calls. The task-observer log lives outside AUREL_RESEARCH, so it was not written, as in prior cycles.
+
+**Next for the backlog.** One low-priority forward cell on the selection sign after 2026-07 data arrives, and a small "paper versus real" check: 12 out-of-sample trades exit on the 16:55 ET vendor final-print bar, all BUY as stop-loss and all SELL as take-profit, which looks like the Dukascopy print artifact filling paper orders.
+2026/11/07  3:54:15.10 done
