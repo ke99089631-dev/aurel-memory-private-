@@ -213,7 +213,7 @@ for y in Y:
     yr_rho.append(rho); yr_p.append(pbar)
     say(f"| {y} | {pbar:.0f} | {rho:+.4f} ({t:+.1f}) | {rnz:+.4f} ({tnz:+.1f}) | {pz:.1f} | {rds:+.4f} ({tds:+.1f}) |")
 from scipy.stats import spearmanr
-say(f"- 年横断 Spearman(ρ1, 1/価格) {spearmanr(yr_rho, 1/np.array(yr_p)).correlation:+.2f}（n{len(yr_rho)}・離散性なら負のρ1が低価格年で強い＝正の相関）")
+say(f"- 年横断 Spearman(ρ1, 1/価格) {spearmanr(yr_rho, 1/np.array(yr_p)).correlation:+.2f}（n{len(yr_rho)}・tick 離散性なら低価格年（1/価格 大）で ρ1 がより負＝**負の相関**を予測。n17 で |ρ|≥0.48 が p<0.05）")
 # US100 / US500 same statistic (non-zero pairs, same trade mask & session logic on the shared calendar grid)
 say("- US100 / US500 の同統計（年別 ρ1・非零対のみ・同じ取引足/セッション定義）:")
 say("| 年 | XAU 非零 | US500 非零 (t) | US100 非零 (t) |"); say("|---|---|---|---|")

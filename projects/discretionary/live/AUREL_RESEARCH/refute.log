@@ -604,3 +604,24 @@ Refutation complete. The verdict is appended to `AUREL_RESEARCH/findings/2026-11
 No orders, no production edits, no process actions, no MT5 connection, no external requests, no scan. Backlog and DATA_MAP were left to the research lane. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/07  5:31:41.44 done
 ========== 2026/11/07  8:15:06.69 refute start ==========
+Refutation complete and verified on rerun (verdicts identical, label fixed). Final recap follows.
+
+**Target.** The only research-lane entry since the 05:30 refute is cycle19, a self-declared null on gold M5 intraday variance ratios. No promotion candidate exists, so I attacked its structural readings: in-sample 2010-20 shows multi-hour positive autocorrelation while out-of-sample is a random walk, the 5-minute lag-1 mean reversion vanished after 2021, and the monthly VR does not condition next-month R.
+
+**Verdicts, appended to `AUREL_RESEARCH/findings/2026-11-07.md` under a `[REFUTE]` header dated 08:30.**
+
+| Reading | Verdict | Key numbers |
+|---|---|---|
+| In-sample has multi-hour positive autocorrelation (VR48 z2.7, VR144 z3.7) | broken | Sign-flip placebo with zero autocorrelation gives VR48 1.076 and VR144 1.082. It explains 156% and 82% of the excess. Corrected z −1.5 and +0.7. |
+| Out-of-sample is a random walk at all horizons | survived, for a different reason | Raw yearly table had 4 of 6 OOS years with VR144 z≥2, which contradicted the reading. After deseasonalizing, 0 of 6. Both windows become RW plus lag-1 reversion. |
+| Lag-1 negative autocorrelation disappeared after 2021 | broken on timing | 2021-22 pooled ρ1 −0.032, t −2.7. The correct boundary is 2023. Present 2014-2022, absent 2010-13 and 2023+. |
+| Monthly VR48 does not condition next-month R | survived | Rerun with deseasonalized VR: in-sample t 0.15, OOS t −0.18, permutation p 0.92. |
+
+**Mechanism found.** The research lane's valid q-bar windows must sit inside one session day, so a 12-hour window can only end after 06:00 ET, inside the London and New York high-volatility hours, while the denominator averages 5-minute variance over the whole day including quiet Asian hours. Volatility seasonality alone pushes VR above 1 as q grows. The Lo-MacKinlay z tests against VR=1, which is the wrong null under that window selection. Once returns are standardized by time-of-day, every window and nearly every year shows VR below 1 at all horizons, and the size matches the lag-1 autocorrelation alone. Gold M5 is a random walk plus a 5-minute reversal, with no multi-hour structure in either window. Cycle19's conclusion that the recent edge is not explained by intraday trendiness therefore stands and is stronger.
+
+**Side result on the lag-1 reversal.** It is not caused by zero returns, is uniform across Asian, London and New York hours, and is only weakly related to price level. US500 on the same feed shows the same sign in the same years and the same fade in 2023, so it looks feed-wide rather than gold-specific. Origin remains unidentified and is flagged as needing data.
+
+**Counter-evidence to my own verdict, recorded.** Deseasonalization standardizes within the same year, placebo spread puts about ±20 points on the 82% figure, the corrected z reuses the observed theta, and 2026H1 is a half year.
+
+**Files written, all under AUREL_RESEARCH.** The script `scripts/refute_c19_vr.py`, its result and run log in `data/`, and the findings entry. PROMOTED, backlog and DATA_MAP are unchanged. No orders, no production edits, no process actions, no MT5 connection, no external requests, no scan. The task-observer log sits outside the write boundary and was not written, matching prior refute runs. The methodology lessons are in the findings entry.
+2026/11/07  8:26:17.75 done
