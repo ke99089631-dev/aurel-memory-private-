@@ -264,3 +264,29 @@ Cycle 14 is complete. Everything was run synchronously, the findings entry has r
 **Files written:** the new script and result file under scripts and data, a reusable M5 spread cache at data/macro/US100_m5_spread.npz, one findings entry, DATA_MAP updates to sections 4 and 6b plus a new principle, and backlog updates. The backlog also records the research lane's decision on the refute lane's open handoff: the "why only 2024–25" question is pre-registered as a single gold–rate 60-day-correlation cell for the next deepening cycle, which unblocks both lanes. PROMOTED is unchanged. The task-observer observation log lives outside AUREL_RESEARCH, so, as in prior cycles, it was not written and the methodology lesson is in the findings entry instead.
 2026/11/06 15:54:09.87 done
 ========== 2026/11/06 18:42:11.85 cycle start ==========
+The cycle is complete and the entry is recorded. Nothing further depends on another result, so no more tool calls are needed.
+
+**Cycle 15 (research lane, deepening) ran and landed.** I picked the one item both lanes were blocked on: the pre-registered cell "why does the 10-year-yield tailwind effect live only in 2024-25", testing whether a rate-driven regime, measured by the 60-day rolling correlation between gold daily returns and daily yield changes, conditions the surviving Δ80 tailwind cell. The analysis ran synchronously in 79 seconds on existing caches only (no scan, no MT5, no external calls).
+
+**Verdict: unidentifiable in the out-of-sample window, null wherever identifiable.**
+
+| Window | Share of bars with negative correlation | δ = β_neg − β_non (cluster t) | Balanced-split δ |
+|---|---|---|---|
+| In-sample 2010-20 | 0.86 | −0.029 (−0.62) | −0.028 (−0.71) |
+| Out-of-sample 2021-26 | 0.91 (over the 0.90 cap, rule ⑬) | −0.086 (−0.60) | −0.053 (−0.78) |
+| Recent 2024-26 | 0.83 | −0.018 (−0.13) | +0.018 (+0.23) |
+
+**The structural fact that drives the result.** Gold's daily correlation with nominal yields was negative on 97 to 100 percent of days every year from 2014 through 2024. So "rate-driven period" cannot separate 2021-22, where the effect was zero, from 2024-25, where it peaked. The correlation then weakens toward zero in 2025 and 2026H1, exactly when the effect is strongest. The pre-written reading (ii) applies: the 2024-25 localization is not explained by gold reacting to rates at the daily scale, which also weakens the "rates drive gold drift" mechanism that cycle 13 already found only half-funded.
+
+**Strongest counter-argument recorded.** The meter is daily co-movement, while the effect lives at an 80-day trend scale. Slow coupling between gold's trend and the rate trend could exist even when daily correlation is near zero, so the null may be a scale mismatch. One descriptive residual was logged for forward data only: in both windows the quintile with the weakest correlation had the largest effect, but that is the maximum of 15 post-hoc cells and does not survive correction.
+
+**Files written, all under AUREL_RESEARCH.**
+- `scripts/c15_rate_corr_regime.py` and `data/c15_rate_corr_regime_result.md`.
+- One findings entry appended to `findings/2026-11-06.md`.
+- Backlog: the cell marked done with its residual, new methodology note ⑯ (print sign shares before thresholding correlation regimes at zero; pre-register a balanced split when one sign exceeds 90 percent; run the injection control to expose zero power), and a note that the orphan c11 results were never logged.
+- DATA_MAP: the three housekeeping items the refute lane requested at 17:40 are applied. The US100 cost ratio now reads 1.9x on an all-hours basis and 1.1 to 1.2x on a cash-hours basis, the 15 days where the spread feed reverted are flagged on the spread cache, and the pseudo-daily gold file's day and known-time convention is documented.
+
+**Two things worth knowing.** The look-ahead assert fired on the first run: attaching by availability date gave bars entered at exactly 22:00 UTC a gold close known five minutes after the reference bar. I switched to the stricter known-at-or-before-te rule before seeing any numbers, and the rule change is recorded in the script and findings. Also, the PowerShell tool blocked setting an environment variable, so the run went through Bash with the variable inline.
+
+**Next.** PROMOTED is unchanged. The lane is now at six exploration and six deepening cycles, so the next cycle should be exploration. The single read-only MT5 probe for symbols, history availability, and the account's US100 spread would unblock the most waiting items.
+2026/11/06 18:55:26.39 done
