@@ -357,3 +357,34 @@ Path-to-grid alignment was verified first at 100% (1592 of 1592 within 0.02 USD)
 
 **Next for the backlog.** One low-priority forward cell on the selection sign after 2026-07 data arrives, and a small "paper versus real" check: 12 out-of-sample trades exit on the 16:55 ET vendor final-print bar, all BUY as stop-loss and all SELL as take-profit, which looks like the Dukascopy print artifact filling paper orders.
 2026/11/07  3:54:15.10 done
+========== 2026/11/07  6:42:06.12 cycle start ==========
+Cycle 19 is complete. One pre-registered exploration ran in the foreground, results are filled in, and all four research files are updated.
+
+**What was tested**
+Gold's own intraday autocorrelation structure, measured as Lo–MacKinlay variance ratios at 1h, 4h and 12h horizons on the existing M5 close cache, by year and by era. Secondary pre-registered cell: does the previous month's VR(48) condition the next month's mean wall-to-wall R*. Runtime 52 seconds, no scan, no MT5, no external calls.
+
+**Results (both null)**
+
+| Test | In-sample 2010-20 | Out-of-sample 2021-26H1 | Verdict |
+|---|---|---|---|
+| Yearly VR(48) mean | 1.050 | 1.042 | diff −0.008, t −0.19, MDE 0.082 |
+| Prev-month VR48 → next-month R*̄ (β per 1 sd) | −0.0065R, t −0.72 | −0.0016R, t −0.13, perm p 0.92 | null, MDE 0.018 / 0.025R |
+| Positive control (inject +0.05R) | t +3.22 | t +2.95 | method detects |
+
+**Structural knowledge gained**
+- Gold M5 is close to a random walk at 1h to 12h in 2021-26 (all VR z below 1). The weak multi-hour positive autocorrelation sits in 2010-20 instead (VR144 1.100, z 3.7). So the "edge lives in the recent regime" story cannot be explained by unconditional intraday trendiness.
+- The 5-minute lag-1 negative autocorrelation (ρ1 −0.019, t −6.2, significant every year 2014-20) disappeared after 2021. Descriptive, bid-only series, mechanism unidentified.
+- Monthly VR48 has lag-1 autocorrelation of only +0.05, so intraday trendiness is not a persistent monthly state.
+- Together with cycle 9, meters built from gold's own series statistics (daily ER, volatility, intraday VR) carry no information about wall-to-wall outcomes. The line is closed in the backlog.
+
+**Strongest counter-argument recorded**
+Unconditional VR does not test conditional momentum after a wall break. Local post-break autocorrelation could exist while being offset elsewhere, leaving VR near 1. The monthly VR proxy is also mostly estimation noise, so the conditioning null is attenuated by errors-in-variables. Revival condition is logged: conditional post-break autocorrelation positive out-of-sample at t ≥ 2.
+
+**Files written (all under AUREL_RESEARCH)**
+- `scripts/c19_variance_ratio_regime.py` and `data/c19_variance_ratio_regime_result.md`
+- `findings/2026-11-07.md`: one new cycle19 entry with all numbers filled
+- `backlog.md`: cycle19 closed with two low-priority residuals and a methodology candidate on short-window VR bias
+- `DATA_MAP.md`: section 1 gains the intraday autocorrelation structure as tested and done
+
+No orders, no process actions, no production edits, PROMOTED unchanged. The task-observer log lives outside AUREL_RESEARCH, so, as in prior cycles, it was not written; the methodology lessons are in the findings entry instead.
+2026/11/07  6:51:42.75 done
