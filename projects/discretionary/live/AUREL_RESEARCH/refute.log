@@ -579,3 +579,4 @@ What survived cleanly: the intercept after controlling four pre-close and intrad
 
 No orders, no production edits, no process actions, no MT5 connection, no external requests, no scan. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/07  2:27:57.98 done
+========== 2026/11/07  5:15:06.76 refute start ==========
