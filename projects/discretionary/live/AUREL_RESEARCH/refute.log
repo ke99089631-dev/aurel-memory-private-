@@ -466,3 +466,25 @@ The effect is symmetric across rate-up and rate-down intervals, so it is driven 
 No orders, no production edits, no process actions, no MT5 connection, no external requests, no scan, no raw M5 load. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/06 11:28:56.56 done
 ========== 2026/11/06 14:15:06.73 refute start ==========
+Refutation complete. The verdict is appended to `AUREL_RESEARCH/findings/2026-11-06.md` under a `[REFUTE]` header dated 14:25. My writes are two scripts, two result files, and that findings entry, all under AUREL_RESEARCH. The modified production files in git status are the running executors' own logs, untouched by me.
+
+**Target.** PROMOTED.md is still empty. The only research-lane entry since the 11:30 refute is cycle13 at 12:50, which tested two mechanisms for the surviving 80-day rate-tailwind cell. It left one self-refutation: the "constant drift" shape does not prove the drift comes from rates, since the rate-sign interval might just proxy gold's own local drift. It proposed one cell to settle this. I ran that cell with a horizon sweep instead of waiting.
+
+**Verdict: the proxy explanation is broken, so "rate-specific" survived.** The constant-μ diagnostic also survived a placebo test. Both by the rules pre-registered in the script docstring.
+
+| Check, out-of-sample 2021-26 | Result |
+|---|---|
+| β with interval FE + side control (baseline) | +0.134, t 3.94 |
+| β after controlling gold drift at 1 to 80 business days, 21 forms | +0.129 to +0.138, t 3.8 to 4.1 |
+| Kitchen-sink control, weekly-shift placebo p | 0.017 |
+| β inside intervals where gold moved against the rate direction | +0.061, t 1.35, still positive |
+| μ_req(k) flatness, coefficient of variation: rate cell vs placebos | 0.09 vs 0.67, 0.78, 0.17 |
+
+**One new finding is the serious caveat.** Splitting out-of-sample by year, with interval fixed effects, the effect lives in 2024 and 2025 only. 2023 is the one other year with balanced rate-up and rate-down intervals, and it shows zero across 20 intervals. Dropping 2024-25 leaves β +0.031, t 0.97. 2022 and 2026 look negative but are unidentifiable, since their intervals are 95 to 98 percent one-signed. So "rate-specific" means "determined by rate direction", not "caused by rates", and the independent regime observations are really three half-years.
+
+**Handed to the research lane.** Their planned local-drift cell is done and can be skipped. The open question is why only 2024-25. I suggested one pre-registered cell: does the effect exist only when the gold-to-rate daily correlation is negative, testable in-sample too on existing caches. PROMOTED stays untouched: post-hoc origin, two-year localization, entry-side selection, no mechanism.
+
+Methodology notes recorded: print the positive-to-negative interval ratio on every yearly or half-yearly FE row, because one-signed windows cannot separate β from the side effect and one or two clusters make the clustered t explode; pair any "X is the cause" regression control with a subset split on X's realized value; and read μ_req flatness only for groups with matched hold, b, and risk composition.
+
+No orders, no production edits, no process actions, no MT5 connection, no external requests, no scan, no raw M5 load. The task-observer log sits outside the write boundary and was not written, same as prior runs.
+2026/11/06 14:25:14.85 done
