@@ -489,3 +489,21 @@ Methodology notes recorded: print the positive-to-negative interval ratio on eve
 No orders, no production edits, no process actions, no MT5 connection, no external requests, no scan, no raw M5 load. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/06 14:25:14.85 done
 ========== 2026/11/06 17:15:06.87 refute start ==========
+Refutation complete. The verdict is appended to `AUREL_RESEARCH/findings/2026-11-06.md` under a `[REFUTE]` header dated 17:40. My writes are three scripts, five result files, and that findings entry, all under AUREL_RESEARCH. The modified production files in git status are the running executors' own logs, untouched by me.
+
+**Target A: cycle14 (15:50), US100 spread structure.** PROMOTED is still empty and cycle14 was the only new research-lane entry, so I attacked its three claims. The research lane's pre-registered "why only 2024-25" cell was left alone, as they reserved it for their next cycle.
+
+| Claim | Verdict | Key number |
+|---|---|---|
+| C1 delivery schedule, one step, no other variation | inconclusive: "not market-driven" survived, "no other variation" broken | vol response ρ −0.06 to +0.03; but 15 post-step days revert to the old 3.45 pt level, 9 of them in June 2026 (a third of off-hours bars) |
+| C2 H_B partial, cash hours tied out-of-sample | survived under DST-correct session hours | out-of-sample cash cf 0.150 vs 0.140, pooled 0.129 vs 0.131 |
+| C3 US100 costs ≈2× gold | broken | ratio 1.91 only for round-the-clock US100; cash-hours US100 vs gold is 1.12 to 1.17, inside the projection's own error |
+
+Two side findings. The 2-layer boundary tracks the NYSE open exactly with DST (13:30 UTC Mar–Oct, 14:30 Nov–Feb), so cycle14's fixed UTC blocks misassigned half an hour each season. And cycle14's reading of its own H_A FAIL is wrong: splitting the single 2022-25 regime in half gives identical structure (block ratio 2.38 vs 2.37) yet Spearman ρ 0.77, so the FAIL comes from the statistic having no power on a step profile, not from the regime change.
+
+**Target B: the surviving DGS10 Δ80 cell, new placebo attack.** Dollar and VIX through the same interval-FE machinery are null at every horizon (|t| ≤ 0.5 and ≤ 1.5), and 300 synthetic random walks give P(|t| ≥ 3.94) of 0.003. The rate also survives inside gold's own trend intervals (t 3.6, bootstrap CI [+0.050, +0.201]) while gold's trend is zero inside rate intervals. Verdict by the pre-registered rule is inconclusive only because gold's own 80-day trend sits at t 2.09, and its interval bootstrap covers zero.
+
+**One incident worth the research lane's attention.** My first run produced a false "broken" (gold-trend t 3.99) from look-ahead: the `day` column in XAU_daily_er.csv is the pseudo-day's start date, so an avail-date join uses a close not yet known. I caught it only because the 11:30 and 14:25 refutes had the same quantity at ≈0. I recommended a DATA_MAP note on that file and a known ≤ te assert on every own-price feature.
+
+No orders, no production edits, no process actions, no MT5 connection, no external requests, no scan, no raw M1/M5 load. The task-observer log sits outside the write boundary and was not written, same as prior runs.
+2026/11/06 17:41:40.78 done
