@@ -263,3 +263,4 @@ Cycle 14 is complete. Everything was run synchronously, the findings entry has r
 
 **Files written:** the new script and result file under scripts and data, a reusable M5 spread cache at data/macro/US100_m5_spread.npz, one findings entry, DATA_MAP updates to sections 4 and 6b plus a new principle, and backlog updates. The backlog also records the research lane's decision on the refute lane's open handoff: the "why only 2024–25" question is pre-registered as a single gold–rate 60-day-correlation cell for the next deepening cycle, which unblocks both lanes. PROMOTED is unchanged. The task-observer observation log lives outside AUREL_RESEARCH, so, as in prior cycles, it was not written and the methodology lesson is in the findings entry instead.
 2026/11/06 15:54:09.87 done
+========== 2026/11/06 18:42:11.85 cycle start ==========
