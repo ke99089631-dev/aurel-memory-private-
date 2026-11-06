@@ -246,3 +246,20 @@ Cycle 13 is complete. One findings entry was appended with all numbers filled, a
 **Housekeeping.** Backlog marks the interval-fixed-effect item as done, adds the two follow-ups above, and proposes methodology item 14 (drift budget plus remaining-path consistency as standard mechanism checks). DATA_MAP gained the mechanism tool note in section 2 and the rate-conditioned gold drift numbers in section 6. Exploration-to-deepening balance is now 5:5, so the next cycle should be an exploration item such as the US100 bid/ask spread series.
 2026/11/06 12:54:19.58 done
 ========== 2026/11/06 15:42:08.06 cycle start ==========
+Cycle 14 is complete. Everything was run synchronously, the findings entry has real numbers and no placeholders, and all writes stayed under AUREL_RESEARCH.
+
+**What I picked and why.** Ten prior cycles were split 5:5 between exploration and deepening, so exploration was due. I took the one backlog item marked testable but untouched: the US100 bid/ask spread series from the Dukascopy M1 chunks, compared with gold on a common dimensionless cost scale. Hypotheses and pass rules were fixed in the script docstring before running.
+
+**Results (19-second run, no scan, no MT5, no network):**
+
+| Test | Rule | Outcome |
+|---|---|---|
+| H_A time structure | hourly max/min ≥2 in and out, Spearman ≥0.8 | FAIL (ratios 2.42 / 3.11 pass, ρ 0.765 fails) |
+| H_B cost vs gold | US100 cheaper in US cash hours, costlier off-hours, both halves | partial (off-hours holds 100%, cash hours equal out-of-sample) |
+
+**The structural finding came from the post-hoc description.** In index points the Dukascopy US100 spread is an administered schedule, not a liquidity signal. It sat at a fixed 3.44 pt off-hours and 1.44 pt during US cash hours for 44 straight months, then stepped to a flat 1.15 pt at every hour from September 2025. The out-of-sample window straddled that step, which is why the profile correlation failed. In the latest regime, gold's fixed 0.16 USD spread is cheaper than US100 at every hour relative to the median 5-minute move, and a projected wall-to-wall cost is roughly 0.020 R for gold against 0.039 R for US100. Gold's own relative cost fell to a quarter of its 2022 level because a fixed nominal spread shrinks as price and volatility rise.
+
+**Strongest counter-argument recorded.** All of this describes the Dukascopy feed, not the account's US100 pricing. The account's gold is a fixed 0.16 USD unlike Dukascopy, so its US100 may also be a different fixed value with no off-hours penalty. The comparison is unconfirmed until the one-time read-only MT5 probe records the account's US100 spread, logged as needs-data with high priority.
+
+**Files written:** the new script and result file under scripts and data, a reusable M5 spread cache at data/macro/US100_m5_spread.npz, one findings entry, DATA_MAP updates to sections 4 and 6b plus a new principle, and backlog updates. The backlog also records the research lane's decision on the refute lane's open handoff: the "why only 2024–25" question is pre-registered as a single gold–rate 60-day-correlation cell for the next deepening cycle, which unblocks both lanes. PROMOTED is unchanged. The task-observer observation log lives outside AUREL_RESEARCH, so, as in prior cycles, it was not written and the methodology lesson is in the findings entry instead.
+2026/11/06 15:54:09.87 done
