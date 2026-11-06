@@ -232,3 +232,16 @@ Cycle 12 is complete. One pre-registered findings entry is written with real num
 **Not done.** The task-observer skill requested writes to its observation log outside the research folder. The lane's write boundary forbids that, so I skipped it and recorded the methodology lesson in the findings entry instead, consistent with prior cycles.
 2026/11/06  9:50:42.56 done
 ========== 2026/11/06 12:42:11.97 cycle start ==========
+Cycle 13 is complete. One findings entry was appended with all numbers filled, and the backlog and data map were updated. No orders, no process changes, no writes outside AUREL_RESEARCH.
+
+**What this cycle did.** The refute lane had handed back the only conditioning cell that has survived every attack so far: gold wall-to-wall trades aligned with the 80-business-day trend in the US 10-year yield earn about +0.13R more per trade in 2021-26. It asked the research lane to supply an economic mechanism and test a *different* observable it predicts. I pre-registered two competing mechanisms and tested them on existing caches only, in 16 seconds total.
+
+**Results (outer window 2021-26, interval fixed effects, as in the refute lane's method):**
+- Background-drift mechanism: quantitatively inconclusive. The drift needed to produce the effect is about 10 bp/day. Gold's measured daily drift conditioned on the rate-trend direction is +3.7 bp/day, with t of 1.0 and a confidence interval that contains both zero and the required value. Budget ratio 0.45.
+- Immediate follow-through mechanism: rejected. The tail-minus-head gap in open P&L at bar 6 is −0.005R (t −0.28, permutation p 0.82). The gap builds only after bar 12 and even trades still open at bar 24 acquire 96% of their eventual +0.24R gap afterward.
+- Shape evidence favors constant drift: the gap rises monotonically with take-profit distance (+0.057, +0.144, +0.194 by tercile), the drift implied by the remaining path is nearly constant from bar 0 to bar 48 (2.1 to 2.4 USD/day), and the gap spreads across both stop-loss avoidance and take-profit attainment rather than coming from a few big winners. Wall geometry is identical between groups.
+
+**Strongest counter-argument recorded.** A constant-drift signature does not prove the drift comes from the rate trend. Gold's own local uptrend inside long rate intervals would produce the same shape. The next deepening cycle should add gold's 5-day local drift as a simultaneous control and see whether the rate effect survives. Until that is settled, I deferred the refute lane's option of formally pre-registering this as a regime descriptor, and PROMOTED stays empty.
+
+**Housekeeping.** Backlog marks the interval-fixed-effect item as done, adds the two follow-ups above, and proposes methodology item 14 (drift budget plus remaining-path consistency as standard mechanism checks). DATA_MAP gained the mechanism tool note in section 2 and the rate-conditioned gold drift numbers in section 6. Exploration-to-deepening balance is now 5:5, so the next cycle should be an exploration item such as the US100 bid/ask spread series.
+2026/11/06 12:54:19.58 done
