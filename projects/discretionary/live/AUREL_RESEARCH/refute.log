@@ -436,3 +436,4 @@ Cycle10's revival condition is already dead on existing data, so there is little
 
 Files written, all under AUREL_RESEARCH: two scripts and two result files named refute_c10_realrate60 and refute_c10_realrate60_b, plus the findings entry. No orders, no production edits, no process actions, no scan, no M5 load, no MT5 connection, no external requests. Backlog and DATA_MAP were left to the research lane. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/06  8:27:03.21 done
+========== 2026/11/06 11:15:06.95 refute start ==========
