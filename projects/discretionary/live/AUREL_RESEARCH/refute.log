@@ -507,3 +507,4 @@ Two side findings. The 2-layer boundary tracks the NYSE open exactly with DST (1
 
 No orders, no production edits, no process actions, no MT5 connection, no external requests, no scan, no raw M1/M5 load. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/06 17:41:40.78 done
+========== 2026/11/06 20:15:06.90 refute start ==========
