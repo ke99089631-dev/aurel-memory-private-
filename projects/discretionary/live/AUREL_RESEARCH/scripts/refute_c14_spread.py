@@ -98,11 +98,23 @@ say(f"- 月別 pt 中央値: 2022-01〜2025-08 値域 [{mon[:'2025-08'].min():.3
 say("\n## Q2 段差の日付（時間外ブロック 22–13 UTC の日次中央値 pt が 2.0 を下回り以後超えない最初の日）")
 offd = op[op["hour"].isin(OFF_UTC)].groupby("date")["sp"].median()
 cashd = op[op["hour"].isin(CASH_UTC)].groupby("date")["sp"].median()
-above = (offd > 2.0).to_numpy(); idx_last_above = np.flatnonzero(above).max()
-step_date = offd.index[idx_last_above + 1] if idx_last_above + 1 < len(offd) else None
-say(f"- step（時間外）= **{step_date}**（直前に 2.0 超の最後の日 {offd.index[idx_last_above]}）・チャンク境界 2025-10-01 との差 {(pd.Timestamp(step_date)-pd.Timestamp('2025-10-01')).days} 日")
-# 現物ブロックの段差: 1.44 → 1.15 は小さいので「日次中央値が 1.30 を下回り以後超えない最初の日」
-abv_c = (cashd > 1.30).to_numpy(); il = np.flatnonzero(abv_c).max(); step_cash = cashd.index[il + 1] if il + 1 < len(cashd) else None
+# v0 の規則「以後一度も 2.0 を超えない」は末尾の 1 日（2026-06-30）が 2.0 超で R1 が空になった → 検出器を頑健化（判定規則ではない・v0 の結果は本文に記録）:
+# step = 「その日以降の日次中央値の 95% 以上が閾値未満 ∧ 直後 10 日の中央値が閾値未満」を満たす最初の日。閾値未満でない例外日は列挙する。
+# v1（95% 規則）も None: step 後 249 日のうち 15 日（6%）が旧水準 3.4 に戻る（2026-06 に 9 日集中）→ v2 = 局所対比: 直前 10 日中央値 > thr ∧ 直後 10 日中央値 < thr の最初の日。
+def find_step(ser, thr):
+    v = ser.to_numpy()
+    for i in range(10, len(v) - 10):
+        if np.median(v[i - 10:i]) > thr and np.median(v[i:i + 10]) < thr and v[i] < thr:
+            return ser.index[i]
+    return None
+step_date = find_step(offd, 2.0)
+exc = offd[(offd.index >= step_date) & (offd > 2.0)] if step_date else offd.iloc[0:0]
+DOW = ["月", "火", "水", "木", "金", "土", "日"]
+say(f"- step（時間外・v2 局所対比）= **{step_date}（{DOW[pd.Timestamp(step_date).dayofweek]}）**・チャンク境界 2025-10-01 との差 {(pd.Timestamp(step_date)-pd.Timestamp('2025-10-01')).days} 日・step 以降 {int((offd.index >= step_date).sum())} 日のうち 2.0 超（旧水準へ戻る）の日 **{len(exc)}**: " + " ".join(f"{d}({DOW[pd.Timestamp(d).dayofweek]}):{x:.2f}" for d, x in exc.items()))
+say(f"- 旧水準へ戻る日の月別: " + " ".join(f"{k}:{v}" for k, v in pd.Series([pd.Timestamp(d).strftime('%Y-%m') for d in exc.index]).value_counts().sort_index().items()) + f"・曜日別: " + " ".join(f"{DOW[k]}:{v}" for k, v in pd.Series([pd.Timestamp(d).dayofweek for d in exc.index]).value_counts().sort_index().items()))
+pre_exc = offd[(offd.index < step_date) & (offd < 2.0)]
+say(f"- step 以前で 2.0 未満の日 {len(pre_exc)}（全 {int((offd.index < step_date).sum())} 日中）: " + " ".join(f"{d}:{x:.2f}" for d, x in list(pre_exc.items())[:12]))
+step_cash = find_step(cashd, 1.30)
 say(f"- step（現物・1.30 閾）= **{step_cash}**（同日なら単一の配信変更）")
 sd = pd.Timestamp(step_date)
 win5 = [(d, offd.get(d, np.nan), cashd.get(d, np.nan)) for d in offd.index if abs((pd.Timestamp(d) - sd).days) <= 6]
