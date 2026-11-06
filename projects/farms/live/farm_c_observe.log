@@ -2410,3 +2410,6 @@ OpenBLAS error: Memory allocation still failed after 10 retries, giving up.
   M5 16962本 (2026-08-16 23:00:00+00:00..2026-11-06 15:05:00+00:00)
   新規記録 1本 / 台帳累計 92本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_c_eur_explore_ledger.jsonl
     2026-11-06 14:55:00+00:00 SELL entry1.11520 risk0.00300 R-0.22 net-0.24
+[探索観測] yfinance EURUSD=X 取得中...
+  M5 16968本 (2026-08-16 23:00:00+00:00..2026-11-06 15:35:00+00:00)
+  新規記録 0本 / 台帳累計 92本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_c_eur_explore_ledger.jsonl

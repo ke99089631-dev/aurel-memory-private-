@@ -313,3 +313,22 @@ The gap is probably not capturable. Receiving it requires holding across the 22:
 
 PROMOTED unchanged. The task-observer workspace sits outside AUREL_RESEARCH, so no observation log was written there, matching prior cycles.
 2026/11/06 21:56:09.11 done
+========== 2026/11/07  0:42:06.37 cycle start ==========
+Cycle 17 is complete. One entry was appended to `AUREL_RESEARCH/findings/2026-11-07.md` with filled numbers, and backlog and DATA_MAP were updated. No orders, no process changes, no writes outside AUREL_RESEARCH.
+
+**What I tested.** The refute lane had left one open question on the gold reopen gap after the daily 17:00–18:00 ET break: is the 2021-26 pop just the overnight share of gold's uptrend? I pre-registered a test on the existing M5 close cache, using G_5 (18:05 minus 16:55 ET, excluding the Dukascopy final-print bar), 2013 onward, clean break days only. Trend was defined by the sign of the trailing 20 trading-day return known at 16:55. A same-day 70-minute midday window served as the placebo.
+
+**Result: trend-independent.** The pre-registered verdict is S.
+
+| Cell | In-sample 2013-20 | Out-of-sample 2021-26H1 |
+|---|---|---|
+| G_5, down regime | +1.52 bp (t 4.8) | +2.02 bp (t 5.4) |
+| G_5, up regime | +0.56 bp (t 1.8) | +1.84 bp (t 3.9) |
+| Placebo midday window, down regime | −1.04 bp (t −1.3) | −2.72 bp (t −3.1) |
+
+The ordinary midday window behaves as a trend share, positive in up regimes and negative in down regimes. The reopen window does not. The pop is larger in down months and on days the intraday session fell, scales with volatility (G_5 divided by 20-day sd is about 0.016 to 0.020 in all three windows), and is uncorrelated with annual drift across 14 years. In down days alone, the 18:00 slot still ranks first of 288 slots in every window.
+
+**Strongest counter-argument recorded.** Trend-independent does not mean structural. Larger pops after down days and proportionality to volatility fit a partial reversal of the day's move plus a constant, not necessarily a holdable premium. Two years were negative (2013, 2022), 2026H1 lifts the recent level, and the gap remains unreceivable at retail cost per the refute lane's Q7. The forward pre-registration in the backlog was rewritten to ET 18:00, G_5, 2013+, with the down-regime cell and the placebo window as conditions. Needed data is unchanged: account swap terms and Dukascopy XAU ask.
+
+**Housekeeping.** DATA_MAP §1 now holds the canonical description of the reopen structure (schedule by year, final-print artifact, 19 grid holes). The US500 cross-market item was closed using the refute lane's existing result. PROMOTED is unchanged. The task-observer log lives outside AUREL_RESEARCH, so I did not write to it, consistent with earlier cycles.
+2026/11/07  0:50:28.64 done
