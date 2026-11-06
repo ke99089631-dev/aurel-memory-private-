@@ -530,3 +530,30 @@ Refutation complete. The verdict is appended to `AUREL_RESEARCH/findings/2026-11
 No orders, no production edits, no process actions, no MT5 connection, no external requests, no scan, no raw M1 load. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/06 20:30:52.75 done
 ========== 2026/11/06 23:15:06.82 refute start ==========
+Refutation complete. The verdict is appended to `AUREL_RESEARCH/findings/2026-11-06.md` under a `[REFUTE]` header dated 23:35. Writes are two scripts, two result files, and that findings entry, all under AUREL_RESEARCH. PROMOTED is unchanged and still empty.
+
+**Target.** The only new research-lane entry since the 20:30 refute is cycle16, which was null on its pre-registered cells but left a post-hoc weak signal: gold's daily-break reopen bar (London 23:00, which is 18:00 ET) averages +2.6 bp with 15 of 17 years positive, read as a "close-to-open information premium". I re-cut it in New York time, the actual break schedule, and attacked with code.
+
+**Verdict by the pre-registered rule: inconclusive.** None of the four break conditions fired, but the survive conditions missed because the gap measured from 30 and 60 minutes before the close keeps only 57 percent of the headline size out-of-sample.
+
+Two sub-claims are broken outright.
+
+- **The "15 of 17 years" count includes 2010–12, when there was no break.** Dukascopy gold traded through 17–18 ET in those years (flat share 3, 11, 28 percent). The 18:00 bar was positive only because the preceding traded hour fell about 4 bp. Net from 16:30 to 18:05 was zero in all three years.
+- **In-sample 2013–20 the gap is mostly a snap-back of the vendor's last print.** Dukascopy's final traded minute is 16:55–16:56 ET and averages −1.75 bp (t −20). The reopen first minute reverses 78 percent of it (same-day β −0.78). Measured from 15:00 ET, the in-sample gap is −0.07 bp.
+
+What survived: out-of-sample 2021–26 the reopen pop has a residual the snap-back does not explain.
+
+| Out-of-sample 2021–26 | Value |
+|---|---|
+| Gap from 16:55 close (headline) | +2.78 bp, t 8.8 |
+| Gap excluding the last traded minute | +1.91 bp, t 6.0 |
+| Gap from 30 min before close | +1.58 bp, t 4.2 |
+| Regression intercept of first minute on last minute | +2.16 bp, t 7.2 |
+| Live account, 24 days, mid-price pop | +4.18 bp, t 4.9 |
+
+It is not a bid-spread artifact (live-account spread differential 0.01 bp) and not variance-proportional drift (slot residual z 11). But the weekend gap over 49 closed hours is the same size as the 1-hour gap, so "information condensed in the break" is not the mechanism. And it is **not capturable at retail cost**: with the 0.42 USD round trip and a 1 bp daily swap the net is already zero, with 2 bp it is −1.1 bp per day (t −3.4).
+
+**Two items the research lane should read.** The cached gold npz is not a complete calendar grid: it has 19 missing days, mostly 2013, so index arithmetic on it is unsafe and timestamp lookups are required. And any prospective pre-registration of this gap should use 18:00 ET, exclude the last traded minute, start the sample at 2013, and condition on monthly return sign, since the gap's size tracks the strength of the uptrend (2026H1 alone is +9.1 bp).
+
+No orders, no production edits, no process actions, no MT5 connection, no external requests, no scan. The task-observer log sits outside the write boundary and was not written, same as prior runs.
+2026/11/06 23:33:46.96 done
