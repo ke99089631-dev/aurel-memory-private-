@@ -580,3 +580,26 @@ What survived cleanly: the intercept after controlling four pre-close and intrad
 No orders, no production edits, no process actions, no MT5 connection, no external requests, no scan. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/07  2:27:57.98 done
 ========== 2026/11/07  5:15:06.76 refute start ==========
+Refutation complete. The verdict is appended to `AUREL_RESEARCH/findings/2026-11-07.md` under a `[REFUTE]` header dated 05:30. Writes are one script, one result file, and that findings entry, all under AUREL_RESEARCH. PROMOTED is unchanged and still empty.
+
+**Target.** The only new research-lane entry since the 02:30 refute is cycle18, which connected the reopen-pop market structure to the production path. Its two pre-registered judgments reproduce exactly and I do not dispute them. I attacked the readings layered on top: "the pop contributes almost nothing to strategy R out of sample", "in-sample the strategy paid the pop and it made 18% of the window's loss", "the selection sign flips by year", "the last-print bar triggers paper SL/TP", and the side claim "no gap-through settlements".
+
+**Verdicts by the pre-registered rules.**
+
+| Claim | Verdict | Key numbers |
+|---|---|---|
+| Out-of-sample null means no selection, pop contributes nothing | inconclusive | 2021-24 alone: c −0.0375R, t −3.96, paid −0.033R per crossing trade. Leave-2025-out t −2.20. The null is a cancellation by 2025-26H1, whose positive sign has t 1.2 to 1.4. |
+| In-sample "pays", 18% of window loss | inconclusive | Day-shift permutation p 0.033 for c, so the association stands as a single cell, but it fails Bonferroni over the 21 described cells. Starting the accounting 30 minutes earlier, the same survivors banked +0.021R (t 2.8) before the anchor, and the combined 16:25 to 18:05 window is −0.0035R (t −0.3), 2.6% of the window. Extending to 19:00 the payment grows to −0.038R, so it is not a pure give-back either. |
+| Yearly sign flip, regime dependent | inconclusive | 14-year max |t| 3.65 has family-wise p 0.005, so negative selection in 2021 and 2024 is real. 10 of 14 years negative. The positive years never exceed t 1.4, so the "flip" is unverified. |
+| Last-print bar triggers paper SL/TP | survived, strengthened | Hazard in the 16:55 bar is 1.36% vs 0.82% in neighboring trading bars. On the 23 settlement days the last-print move of −4.8 bp is 92% reversed by 18:05 (β −1.05 vs −0.52 on all days). |
+| "k_b+2 is the reopen bar, 0 settlements, no gap-through" | broken | Bars k_b+2 to k_b+13 are the 17:00–17:55 break and are 100% flat on the path. The reopen bar is k_b+14 and settles 74 trades, 5× a normal bar. Level-booking optimism on SL (+4.7R) and pessimism on TP (+6.0R) roughly offset. |
+| D_e is side-independent night drift | supported (descriptive) | Night return on BUY-survivor days vs SELL-survivor days differs by t 0.1 to 0.35. D_e sits below 2× the unconditional night drift, as exits truncate it. |
+
+**Most serious counter-evidence to my own verdicts, recorded.** The 2021-24 sub-window was one of eleven post-hoc cuts, though its t clears Bonferroni and the yearly permutation corroborates it independently. The accounting-window argument cuts both ways: the pre-anchor gain was already banked, so a purist can still call the pop a payment; my claim is only that "18%" is not a causal attribution. The 92% reversal rests on 23 days and close-to-close prices.
+
+**Two self-corrections recorded.** My first hazard comparison included the flat break bars as neighbors and reported a ratio of 3.06; I amended the neighbor set to trading bars only (ratio 1.66) without changing the rule. A display sign on the 16:55 bar return was inverted on the first run and fixed.
+
+**Methodology notes for the research lane.** Assert the reopen bar's position by counting the flat run before labelling path bars by clock. When attributing a window's share of P&L, print the shares for shifted start points. When an out-of-sample MDE exceeds the in-sample effect, print 3-year sub-windows and leave-one-year-out next to the null. Exclude flat bars from any hazard comparison.
+
+No orders, no production edits, no process actions, no MT5 connection, no external requests, no scan. Backlog and DATA_MAP were left to the research lane. The task-observer log sits outside the write boundary and was not written, same as prior runs.
+2026/11/07  5:31:41.44 done
