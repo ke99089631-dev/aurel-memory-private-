@@ -508,3 +508,24 @@ Two side findings. The 2-layer boundary tracks the NYSE open exactly with DST (1
 No orders, no production edits, no process actions, no MT5 connection, no external requests, no scan, no raw M1/M5 load. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/06 17:41:40.78 done
 ========== 2026/11/06 20:15:06.90 refute start ==========
+Refutation complete. The verdict is appended to `AUREL_RESEARCH/findings/2026-11-06.md` under a `[REFUTE]` header dated 20:30. My writes are two scripts, two result files, and that findings entry, all under AUREL_RESEARCH.
+
+**Target.** PROMOTED is still empty. The only new research-lane entry since the 17:40 refute is cycle15, which concluded the gold-to-rate 60-day correlation regime is unidentifiable and null. It left two things worth attacking: a post-hoc weak signal, where the weakest-correlation quintile had the largest tailwind β in both in-sample and out-of-sample, and its own self-refutation, that a slow coupling of gold and rate 80-day trends might identify the effect. I ran both on existing caches rather than leaving them for new data.
+
+**Verdict: cycle15 survived on all four pre-registered axes.**
+
+| Axis | Result |
+|---|---|
+| C1: daily correlation negative almost every day 2014–2024 | survived under Spearman, 120-day window, and two alternative day boundaries |
+| W: weakest-correlation quintile has max β in both windows | broken: family-wise p 0.10 with post-hoc selection in the null, 0.07 under a random-walk null |
+| Continuous strength interaction | does not identify: out-of-sample permutation p 0.34, sign flips in 2024-26 |
+| S: slow coupling of 80-day trends | does not identify: in-sample difference zero, 2016-20 reverses sign, 2024 shows no difference, bootstrap CI covers zero |
+
+**The weak signal is a time proxy.** In-sample, 83 percent of the "weakest correlation" quintile is 2011-13. Out-of-sample, 86 percent is 2025-26. A single period dummy removes 80 percent of the in-sample contrast. The research lane's backlog item for this signal can be deprioritized.
+
+**One finding the research lane should read.** The pre-registered pooled model for the slow-coupling test gave t 0.21, but the correct fully interacted model gives t 2.3 out-of-sample from the same data. In the tail-equals-side design, the pooled model forces the side effect to be shared across states and absorbs the interaction. The verdict does not change because in-sample is zero and the bootstrap covers zero, but future state-by-tailwind cells should pre-register the fully interacted form.
+
+**Side observations recorded.** Within a single year, the coupling state is algebraically identical to the rate-interval sign, so it cannot be separated from rate direction inside a year. The weekly-scale gold-to-rate correlation turned positive in 2025 while the daily stayed slightly negative, which further supports cycle15's conclusion that the rate tailwind does not act through gold's price response to rates. And pandas 3.0 `date_range` inherited second resolution from its endpoints, which silently zeroed a timestamp grid and cost one run.
+
+No orders, no production edits, no process actions, no MT5 connection, no external requests, no scan, no raw M1 load. The task-observer log sits outside the write boundary and was not written, same as prior runs.
+2026/11/06 20:30:52.75 done
