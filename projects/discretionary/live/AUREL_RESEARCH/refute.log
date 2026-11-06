@@ -529,3 +529,4 @@ Refutation complete. The verdict is appended to `AUREL_RESEARCH/findings/2026-11
 
 No orders, no production edits, no process actions, no MT5 connection, no external requests, no scan, no raw M1 load. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/06 20:30:52.75 done
+========== 2026/11/06 23:15:06.82 refute start ==========
