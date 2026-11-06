@@ -603,3 +603,4 @@ Refutation complete. The verdict is appended to `AUREL_RESEARCH/findings/2026-11
 
 No orders, no production edits, no process actions, no MT5 connection, no external requests, no scan. Backlog and DATA_MAP were left to the research lane. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/07  5:31:41.44 done
+========== 2026/11/07  8:15:06.69 refute start ==========
