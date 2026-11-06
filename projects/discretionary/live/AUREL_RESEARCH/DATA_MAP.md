@@ -1,4 +1,4 @@
-# DATA_MAP — この環境で実際に触れるデータの地図（v1.5・2026-11-05 研究レーン cycle3 棚卸し／cycle4 §3-4 執行コスト実測／cycle5 §6 公開マクロ日次を【実験可】へ／cycle6 §2 期間集計の密度／cycle7 §2 npz の規約と足時刻／11-06 cycle8 §6b イントラデイ他資産（Dukascopy M1）を新設・§1 M5 close キャッシュ／11-06 cycle9 §1 日足 ER/ボラ メーターキャッシュ／11-06 cycle10 §1・§6b npz 衛生（完全格子・flat 比率）・§6 日次マクロの遅い状態 null）
+# DATA_MAP — この環境で実際に触れるデータの地図（v1.5・2026-11-05 研究レーン cycle3 棚卸し／cycle4 §3-4 執行コスト実測／cycle5 §6 公開マクロ日次を【実験可】へ／cycle6 §2 期間集計の密度／cycle7 §2 npz の規約と足時刻／11-06 cycle8 §6b イントラデイ他資産（Dukascopy M1）を新設・§1 M5 close キャッシュ／11-06 cycle9 §1 日足 ER/ボラ メーターキャッシュ／11-06 cycle10 §1・§6b npz 衛生（完全格子・flat 比率）・§6 日次マクロの遅い状態 null／11-06 cycle12 §1 直近 M5 ファイルの実期間・§3 台帳＝前向き検証の受け皿と識別不能の注意）
 
 > 補遺B2の最重要成果物。研究レーンが育てる。各領域に【実験可 / 読むだけ / 要取得 / 未調査】を付す。
 > 「関連しそう」でなく「予測に使えるか実験できるか」で分類する。v1 はファイル棚卸し（scripts/c3_inventory.py・MT5 未接続）。
@@ -8,6 +8,7 @@
 - 金 M5 **close のみ**キャッシュ（cycle8 11-06）: 【実験可・即時】`data/macro/XAU_m5_close.npz`（ts int64 UTC 秒・close・1728576 本 2010-01〜2026-06）。M1 chunks から 15 s で生成済み・np.load は瞬時。直前リターン/他資産との同時刻結合に使う（OHLC が要るときは m5_loader）。**衛生（反証 05:30・cycle10 11-06 確認・scripts/c10_npz_hygiene.py）**: 1728576 = 288×6002 日の**暦時刻の完全格子**（5 分格子連続率 100%）で、閉場中は前値埋め。flat 足 全体 32.6%（月〜木 5〜6.5%・金 14%・**土 99.9%・日 92.6%**）。含意: Σ|Δ|・本数・rolling N 本を分母にする統計（ER・実現ボラ・時間足 rolling）は flat 足を除かないと週末で 0/膨張。暦 1 日 = 取引 ≈0.7 日（日足 ER20 は ≈14 取引日）。読込後に min/max 時刻と flat 比率（曜日別）を印字する（方法論 ⑩⑪）。
 - 金 **日足派生・レジームメーター**キャッシュ（cycle9 11-06）: 【実験可・即時】`data/macro/XAU_daily_er.csv`（6022 日・擬似日境界 22:00 UTC・列 day, ts_last, known=既知時刻, lc=log close, er20, er60, vol20 と各 500 日 rolling pct）。XAU_m5_close.npz から 1 s で再生成可（scripts/c9_er_regime.py）。結果: ER20/ER60/vol20 の三分位は再加速の平均R を条件づけない（c9_er_regime_result.md）。
 - 直近 5000 本（2026-10-08〜11-03）: 【実験可】data/refute_api_bars_probe.json（serve_chart /api/data の読取り保存）。
+- 直近 M5（live /api・cycle12 11-06 で読込確認）: 【実験可・即時】`data/bars_m5_merged_1008_1105.json` 5626 本 **2026-10-08 13:50〜11-05 23:35 UTC**（取引足のみ・前値埋め無し・5 分格子連続率 99.6%・flat 0.2%）。`data/bars_m5_sep_nov_2026.json` は**名前と中身が違う**（5000 本・2026-10-12 20:00 UTC から・9 月は無い・⑩）。台帳 2026-09-15〜10-08 の本には M5 価格が無い → ret24h 等の価格特徴量は台帳の 56% にしか付かない。**2026-07〜10-08 の金 M5 は欠落**（m5_loader 2026-06 まで・backlog ★ の延長待ち）。
 - 現値/板: 【読むだけ】MT5 tick は現値のみ。オーダーフロー・板・建玉: **無い**（読むだけ・検証不能）。
 
 ## 2. 我々の実験の素（scan キャッシュ・AUREL_RESEARCH/data）
@@ -19,6 +20,7 @@
 
 ## 3. 台帳（前向き紙・本番エンジンの出力）— live フォルダ直下・読むだけ
 - `setup_ledger.jsonl`: 【実験可】7852 行（setup 444＋update 7408）。**最終状態は update 行（target=id）を setup 行に上書きして復元する**（setup 行の nested dict は作成時スナップショット）。再加速 closed **305 本**（2026-09-15〜11-04、TP150/SL154/TIME1、全時間帯・jh7-12 は 90 本）。各本に mfe_R/mae_R/hold_bars/exit_reason/entry/sl/tp/entry_time。chase closed 86。setup 行に spread_pt（建玉時 tick 実測）／update 行で slip_pt/slip_src/sl_slip_pt/tp_fill_ok（slippage_sim の注釈）。**R は gross**（setup_engine._simulate: R=pnl/risk・控除なし／cycle4 11-05 で確認）。
+  - 前向き検証の受け皿（cycle12 11-06）: `data/c12_forward_features.csv`（再加速 closed **313 本** 2026-09-15〜11-06・R/side/wall_kind/exit に DGS10・DFII10 Δ80（FRED avail 規則済）と ret24h（bars 期間内 175 本）を付与）。scripts/c12_forward_ledger.py を再実行すれば台帳の増分で自動更新。**台帳は scan キャッシュ（〜2026-06）の外＝条件づけ仮説の前向き検証に使える唯一の新データ**。ただし 7 週の窓では日次マクロの遅い状態（Δ80 の符号）が**一定**（2026-09-15〜11-03 は DGS10 Δ80 が全日 正）なので「追い風×side」型のセルは side と同一になり識別不能（c12_forward_ledger_result.md）。
 - `setup_ledger_15m.jsonl`: 【実験可・小】178 行、closed 37。
 - `demo_exec_ledger.jsonl`: 【読むだけ・n 小】23 行（live 約定 11・observe 11・close 1）。実デモの fill_price/retcode あり＝将来の滑り実測の種。
 - `paper_ledger.jsonl` 23／`paper_ledger_v3.jsonl` 71（旧版・features 付き）: 【読むだけ】定義が現行と違う。

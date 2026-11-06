@@ -211,3 +211,23 @@ Family-wise permutation p was 0.72, and the minimum detectable effect was about 
 
 **Suggested next cycle.** Move exploration away from daily macro. The live options on existing data are the US100 bid/ask spread time series for execution-cost comparison, or the deepening item on clock position of exit bars from the full-path npz.
 2026/11/06  6:50:51.01 done
+========== 2026/11/06  9:42:12.14 cycle start ==========
+Cycle 12 is complete. One pre-registered findings entry is written with real numbers, and DATA_MAP and backlog are updated.
+
+**What I tested.** The refute lane had handed the research lane two surviving conditioning claims to pre-register for forward testing: the US 10-year nominal rate 80-business-day trend as a tailwind by trade side, and 24-hour price continuation before entry. The live setup ledger (313 closed re-acceleration trades, 2026-09-15 to 11-06) lies entirely outside the scan cache that ends 2026-06, so it is the only genuinely new data available. Both hypotheses, pass rules, and the expected confound were fixed in the script docstring before running. Runtime was 4.5 seconds, no scan, no MT5, no external calls.
+
+**Result: both cells inconclusive.**
+
+| Cell | diff | t | MDE |
+|---|---|---|---|
+| Rate trend tailwind − headwind | +0.074 | 0.48 | 0.31R |
+| 24h continuation A − ¬A | −0.065 | −0.28 | 0.46R |
+
+**The structural finding matters more than the numbers.** The rate-trend cell is unidentifiable in this window. The 80-day rate change has been positive every business day since 2026-03-06, so every BUY was "headwind" and every SELL was "tailwind". The 2×2 table has zeros on the diagonal, and the cell is literally SELL minus BUY with the sign flipped. A longer ledger does not fix this. Only a sign flip in the rate trend does, and the current positive run of 168 business days is already the longest since 2024.
+
+**Strongest counter-argument, recorded in findings.** The same degeneracy may infect the refute lane's own result. In 2021 to 2026 the rate trend was positive 66 percent of the time, with roughly ten sign epochs carrying real mass. A per-trade t of 4.7 ignores that the effective sample is epochs, not trades, and "rate tailwind" cannot be separated from "SELL does well in rate-rising epochs" without epoch fixed effects. I logged a seconds-long test on the existing scan cache as the next deepening item: epoch-level fixed effects with block bootstrap. If it fails, the refute lane's proposed cell closes.
+
+**Data map changes.** The merged bars file covers 2026-10-08 to 11-05 UTC only, and the file named "sep_nov" actually starts 10-12, so price features attach to just 56 percent of ledger trades. The gold M5 extension for 2026-07 to 10-08 is now also needed for forward conditioning tests, and its backlog priority was raised. A reusable receptacle was saved so future cycles rerun both cells as the ledger grows.
+
+**Not done.** The task-observer skill requested writes to its observation log outside the research folder. The lane's write boundary forbids that, so I skipped it and recorded the methodology lesson in the findings entry instead, consistent with prior cycles.
+2026/11/06  9:50:42.56 done
