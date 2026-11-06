@@ -437,3 +437,31 @@ Cycle10's revival condition is already dead on existing data, so there is little
 Files written, all under AUREL_RESEARCH: two scripts and two result files named refute_c10_realrate60 and refute_c10_realrate60_b, plus the findings entry. No orders, no production edits, no process actions, no scan, no M5 load, no MT5 connection, no external requests. Backlog and DATA_MAP were left to the research lane. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/06  8:27:03.21 done
 ========== 2026/11/06 11:15:06.95 refute start ==========
+Refutation complete. The verdict is appended to `AUREL_RESEARCH/findings/2026-11-06.md` under a `[REFUTE]` header dated 11:30. The modified production-side files in git status (ledger, spread logs, watchdog) are the running executors' own writes, not mine; my writes are the two scripts, two result files, and the findings entry, all under AUREL_RESEARCH.
+
+**Target.** PROMOTED.md is still empty. The only research-lane entry since the 08:30 refute is cycle12 at 09:50, which tried to verify the 80-day nominal-rate tailwind on the live ledger and found it unidentifiable there, because the rate trend never changed sign in the 7-week window. cycle12 left one concrete attack on that cell: inside long rate-sign intervals, "tailwind" is literally the same as "SELL" or "BUY", so the trade-level t 4.72 could just be the side difference within those intervals. It proposed an interval fixed-effect test with a block-bootstrap lower bound above zero as the condition to keep the cell alive. I ran that kill test on the existing scan caches instead of waiting for new data.
+
+**Verdict: cycle12's attack is broken, and the DGS10 80-day cell survived it**, by the rule pre-registered in the script docstring.
+
+| Check, out-of-sample 2021-26 | Result |
+|---|---|
+| Within rate-up intervals, SELL minus BUY | +0.120 |
+| Within rate-down intervals, BUY minus SELL | +0.129 |
+| Implied side effect γ | −0.005, t −0.16 |
+| β with interval fixed effects plus SELL control | +0.134, t 3.94, 105% of the raw estimate |
+| Interval block bootstrap 95% CI | [+0.049, +0.199] |
+| Weekly circular-shift placebo p | 0.009 |
+| Long rate-sign intervals with positive within-interval effect | 14 of 16, binomial p 0.004 |
+| Adding gold's own 80d trend and 24h continuation as controls | β stays +0.130, t 3.89 |
+| Same model at the 20-day horizon cycle10 found null | −0.012, t −0.37 |
+
+The effect is symmetric across rate-up and rate-down intervals, so it is driven by the rate direction, not by side. The real-rate replication behaves the same way.
+
+**One finding changes the prior picture.** In-sample 2010-20 has a genuine SELL advantage of about +0.08R, t 4. Because tailwind equals side within an interval, that advantage mechanically pushed the raw in-sample pooled estimate toward zero. After controlling for side the in-sample effect is +0.039, t 1.80, same sign as out-of-sample but one third the size and still below the t 2 bar.
+
+**Why this is still not a promotion candidate, recorded in full.** The cell was found post hoc by the refute lane's horizon sweep, and the full daily-macro exploration family is uncorrected. The in-sample effect is weak. The effective sample is 16 long intervals out-of-sample and 9 recent, not thousands of trades. The one forward data point, the ledger inside the current rate-up interval, shows the same sign at one fifth the size with MDE 0.31R. Usable form is an entry-side selection, which the charter's supplement D forbids; it can only be a regime descriptor. No economic mechanism has been written. I did not touch PROMOTED.md.
+
+**Handed to the research lane.** cycle12's revival condition is met on existing data, so the decision is theirs: pre-register the cell formally as a one-cell regime descriptor and wait for the rate trend to flip so a second interval accumulates, or write a mechanism and test one further observation it predicts. Methodology notes added: control the side main effect before declaring an in-sample zero on any side-coupled cell, make the sign interval the unit of inference for slow-state × side cells, restrict interval-unit tests to long intervals, and verify fixed effects don't manufacture an effect by running a known-null horizon through the same model.
+
+No orders, no production edits, no process actions, no MT5 connection, no external requests, no scan, no raw M5 load. The task-observer log sits outside the write boundary and was not written, same as prior runs.
+2026/11/06 11:28:56.56 done
