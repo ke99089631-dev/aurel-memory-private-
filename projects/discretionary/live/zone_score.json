@@ -1,0 +1,54 @@
+{
+ "generated": "2026-11-06 09:59",
+ "horizon_h": 6,
+ "votes": 0,
+ "by_zone": {
+  "勝ち": {
+   "votes": 0,
+   "ai": {
+    "n": 0,
+    "win": 0,
+    "sumR": 0,
+    "avgR": null
+   },
+   "chair": {
+    "n": 0,
+    "win": 0,
+    "sumR": 0,
+    "avgR": null
+   }
+  },
+  "負け": {
+   "votes": 0,
+   "ai": {
+    "n": 0,
+    "win": 0,
+    "sumR": 0,
+    "avgR": null
+   },
+   "chair": {
+    "n": 0,
+    "win": 0,
+    "sumR": 0,
+    "avgR": null
+   }
+  },
+  "わからない": {
+   "votes": 0,
+   "ai": {
+    "n": 0,
+    "win": 0,
+    "sumR": 0,
+    "avgR": null
+   },
+   "chair": {
+    "n": 0,
+    "win": 0,
+    "sumR": 0,
+    "avgR": null
+   }
+  }
+ },
+ "spans": [],
+ "note": "票30件未満=サンプル不足。判定は票30件以上・勝ち票区間と負け票区間のAI平均Rの差で見る。フィルタには使わない(観測)。"
+}
