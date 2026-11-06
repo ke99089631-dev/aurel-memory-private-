@@ -92,7 +92,10 @@ ok = (i1650 >= 0) & (i1655 >= 0) & np.all(BRK >= 0, axis=1) & (i1150 >= 0) & (i1
 iG, i1650, i1655, BRK, i1150, i1300, iPrev = iG[ok], i1650[ok], i1655[ok], BRK[ok], i1150[ok], i1300[ok], iPrev[ok]
 clean = np.all(flat[BRK], axis=1)
 iG, i1650, i1655, i1150, i1300, iPrev = iG[clean], i1650[clean], i1655[clean], i1150[clean], i1300[clean], iPrev[clean]
-yG = yr[iG]; dG = day[iG]; mG = mon[iG]; wdG = wd[iG]; sumG = summer_all[iG]; n = len(iG)
+yG = yr[iG]; dG = day[iG]; mG = mon[iG]; wdG = wd[iG]; n = len(iG)
+# DST: pandas 3 は unit='s' の DatetimeIndex を秒解像度で持つため astype('int64')//1e9 は 0 になる（refute_c16_b (1) の夏/冬行はこのバグで全日が冬扱い）。gap 日だけ utcoffset で判定。
+sumG = np.array([x.utcoffset().total_seconds() == -4 * 3600 for x in t_ny[iG]])
+say(f"- DST 判定: 夏 {sumG.sum()}・冬 {(~sumG).sum()} 日（旧 off_s 法では夏 {summer_all[iG].sum()} 日＝バグ）")
 G5 = (lc[iG] - lc[i1650]) * 1e4; G0 = (lc[iG] - lc[i1655]) * 1e4; P5 = (lc[i1300] - lc[i1150]) * 1e4
 DIP = (lc[i1655] - lc[i1650]) * 1e4  # 16:55 足（最終印字）
 prev_ok = (iPrev >= 0) & (h[np.clip(iPrev, 0, len(h) - 1)] == 18)
@@ -100,8 +103,7 @@ p_prev = np.where(prev_ok, lc[np.clip(iPrev, 0, len(lc) - 1)], np.nan)
 p1655 = lc[i1650]; p1625 = price_at(iG, -95); p1555 = price_at(iG, -125); p0930 = price_at(iG, -510)
 p1830 = price_at(iG, 30); p1900 = price_at(iG, 60)
 # next day 16:55 (next calendar day; Mon-Thu gap → Tue-Fri)
-jN = idx_at(tG + 86400 - 70 * 60); pN = np.where(jN >= 0, lc[np.clip(jN, 0, len(lc) - 1)], np.nan)
-pN = np.where((jN >= 0) & (~flat[np.clip(jN, 0, len(lc) - 1)] | True), pN, np.nan)
+tG = ts[iG]; jN = idx_at(tG + 86400 - 70 * 60); pN = np.where(jN >= 0, lc[np.clip(jN, 0, len(lc) - 1)], np.nan)
 r_pre30 = (p1655 - p1625) * 1e4; r_pre60 = (p1625 - p1555) * 1e4; r_sess = (p1555 - p0930) * 1e4; r_on = (p0930 - p_prev) * 1e4
 r_day = (p1655 - p_prev) * 1e4
 F = (pN - lc[iG]) * 1e4; G5_30 = (p1830 - p1655) * 1e4; F30 = (pN - p1830) * 1e4; POST30 = (p1830 - lc[iG]) * 1e4
@@ -193,6 +195,17 @@ for wn in W:
     q = np.quantile(G5[w], [1/3, 2/3]); g = G5[w]; f = F[w]
     say(f"    G_5 三分位→F: 下 {fmt(f[g<=q[0]])} / 中 {fmt(f[(g>q[0])&(g<=q[1])])} / 上 {fmt(f[g>q[1]])}；F down 日 {fmt(f[down[w]])}・up 日 {fmt(f[up[w]])}")
     if wn in ("在2013-20", "外2021-26H1") and (b[1] <= -0.5) and (b[1]/se[1] <= -2) and (b3[1] <= -0.5) and (b3[1]/se3[1] <= -2): A3_hits += 1
+# A3b: 検出力と短い地平（与え返しが早いなら短い地平で見える）・2013-26 プール
+p2200 = price_at(iG, 240); pN0930 = price_at(iG, 24 * 60 - 510)
+allw = np.isfinite(F) & np.isfinite(p2200) & np.isfinite(pN0930)
+for lab, fut in (("18:05→18:30", POST30), ("18:05→19:00", (p1900 - lc[iG]) * 1e4), ("18:05→22:00", (p2200 - lc[iG]) * 1e4),
+                 ("18:05→翌09:30", (pN0930 - lc[iG]) * 1e4), ("18:05→翌16:55", F)):
+    w = allw & np.isfinite(fut); b, se, _ = ols_hc1(fut[w], G5[w][:, None])
+    say(f"- プール 2013-26 {lab} n{w.sum()}: 平均 {fmt(fut[w])} bp・β on G_5 **{b[1]:+.3f} (t{b[1]/se[1]:+.1f}, se {se[1]:.2f})**・切片 {b[0]:+.2f}")
+q = np.quantile(G5[allw], [1/3, 2/3]); g = G5[allw]; f = F[allw]
+dq, tq = diff_t(f[g > q[1]], f[g <= q[0]])
+say(f"- プール 翌16:55 F の G_5 上三分位−下三分位: {dq:+.2f} bp (t{tq:+.1f})；G_5 の上−下三分位平均差 {g[g>q[1]].mean()-g[g<=q[0]].mean():+.2f} bp → 含意 β {dq/(g[g>q[1]].mean()-g[g<=q[0]].mean()):+.2f}")
+say(f"- 検出力: β=−1（全部与え返し）を t=2 で退けるには se≤0.5 が要る。現 se から必要 n ≈ {int((se[1]/0.5)**2 * allw.sum())} 日（現 {allw.sum()}）")
 # does the pop persist to 18:30 / 19:00 by regime (transient first print?)
 for wn in W:
     w = win(wn)

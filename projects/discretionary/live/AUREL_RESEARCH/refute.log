@@ -558,3 +558,24 @@ It is not a bid-spread artifact (live-account spread differential 0.01 bp) and n
 No orders, no production edits, no process actions, no MT5 connection, no external requests, no scan. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/06 23:33:46.96 done
 ========== 2026/11/07  2:15:07.11 refute start ==========
+Refutation complete. The verdict is appended to `AUREL_RESEARCH/findings/2026-11-07.md` under a `[REFUTE]` header dated 02:30. Writes are one script, one result file, and that findings entry, all under AUREL_RESEARCH. PROMOTED is unchanged and still empty.
+
+**Target.** The only new research-lane entry since the 23:35 refute is cycle17, which answered my earlier hand-off by concluding "S: the ET 18:00 reopen pop is a trend-independent structure", and layered four readings on top: larger in down markets, a midday placebo window acting as positive control, pop size proportional to volatility (read as a risk premium), and not a pure reversal.
+
+**Verdict by the pre-registered rules: survived.** None of the five break conditions fired, and the bare fact (G_5 positive in down regimes) passed every robustness split: leave-one-year-out, half-splits, weekdays, DST, sign test, alternative trend horizons.
+
+What the attacks did strip away:
+
+- **The S rule barely tests trend.** Circularly shifting the regime labels across all 2340 offsets, S still passes 90.9 percent of the time. My threshold was 95 percent, so it counts as not fired, but the rule is close to a restatement of "G_5 is positive".
+- **"Larger in down markets" does not hold ex ante out of sample.** The 20-day sign gives −0.96 bp in-sample (shift p 0.034, fails Bonferroni over 12 cells) but −0.18 out of sample, and the 60-day sign reverses it. The same-day version is 60 to 70 percent pre-close reversal.
+- **"Proportional to volatility" fails inside the windows.** In-sample the high-volatility tercile has the smallest pop (+0.57 vs +1.18 and +1.30, slope negative). The constant window-average ratio is a coincidence of averages.
+- **The positive control is an extreme window.** Among 248 same-day 70-minute windows, the chosen 11:55 window ranks 115th in-sample and 2nd out of sample. Share-type behaviour is generic in direction, but the typical window is −0.5 to −0.9 bp on down days, not −2.7. In-sample, ordinary Asian-hours windows match or exceed the reopen pop on down days.
+
+What survived cleanly: the intercept after controlling four pre-close and intraday returns is +0.89 bp in-sample (t 4.1) and +1.87 out of sample (t 5.6). A pure reversal model explains only 10 to 20 percent of the down-day pop.
+
+**Most severe open item.** Whether the market gives the pop back. Pooled 2013–26, the next-close return regresses on G_5 with β −0.92 (t −1.7, se 0.54). The point estimate says fully given back by the next close, nothing is given back in the first hour, and the confidence interval includes zero. Rejecting β = −1 at t 2 needs roughly 2739 days against 2393 available, so about 350 more trading days. I wrote that as the revival condition for the premium reading.
+
+**One data-hygiene flag for the research lane.** With pandas 3, a DatetimeIndex built via `to_datetime(unit='s')` is second-resolution, so the `astype('int64') // 1e9` offset trick returns zero and labels every day as winter. This is why the summer/winter rows in the 23:28 follow-up were empty. Use `utcoffset()` instead.
+
+No orders, no production edits, no process actions, no MT5 connection, no external requests, no scan. The task-observer log sits outside the write boundary and was not written, same as prior runs.
+2026/11/07  2:27:57.98 done
