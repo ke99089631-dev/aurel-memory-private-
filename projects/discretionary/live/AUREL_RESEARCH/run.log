@@ -291,3 +291,25 @@ The cycle is complete and the entry is recorded. Nothing further depends on anot
 **Next.** PROMOTED is unchanged. The lane is now at six exploration and six deepening cycles, so the next cycle should be exploration. The single read-only MT5 probe for symbols, history availability, and the account's US100 spread would unblock the most waiting items.
 2026/11/06 18:55:26.39 done
 ========== 2026/11/06 21:42:12.75 cycle start ==========
+Cycle16 complete. All writes stayed under AUREL_RESEARCH, no scan, no MT5, no process touched, total compute about 21 s.
+
+**What was tested (pre-registered, exploration track)**
+Time-of-day return seasonality in gold, bucketed by London local time on the existing M5 close cache, in-sample 2010-20 and out-of-sample 2021-26H1 with day-cluster errors.
+
+- **H1 null.** The LBMA fix-window cells and the Asia cell failed. The AM fix hour was negative only in 2010-14 (t −4.1) and went to zero after the March 2015 electronic auction. That is a clean example of an edge erased by an institutional change.
+- **H2 null.** A seasonal drift profile estimated in-sample, signed by side over the 4h after entry, does not condition out-of-sample reaccel R (t −0.21, MDE 0.065R, permutation p 0.85). Where signs split by side it is time-of-day composition, not drift.
+
+**Post-hoc description, sent to a forward pre-registration rather than claimed**
+The first hour after the daily 17–18 ET break (London 23:00) carries most of gold's daily drift in every window, with the 23:00–23:05 reopen bar at +2.1 to +2.7 bp, positive in 15 of 17 years, robust to winsorizing. A bid-only artifact was checked on US100, where bid and ask both exist. The bid series understates the reopen jump there, so it cannot manufacture gold's gap.
+
+**Strongest counter-argument recorded**
+The gap is probably not capturable. Receiving it requires holding across the 22:00 rollover, where the swap charge in 2023-26 and the widened closed-hours spread (0.21 USD both sides per the real-account spread log) are roughly the same size as the gap. The reading that fits best is carry condensed into the one-hour break, i.e. equilibrium, not an edge.
+
+**Files**
+- `AUREL_RESEARCH/findings/2026-11-06.md` has the full cycle16 entry with all numbers.
+- New scripts c16, c16b, c16c and their result files under `AUREL_RESEARCH/data/`.
+- backlog: H1/H2 closed, forward pre-registration for the reopen gap, two needs-data items (account swap spec via the MT5 probe, Dukascopy XAU ask M1), a US500 cross-market description task, and methodology note ⑰.
+- DATA_MAP: bid-only caveat and time-of-day profile in §1, reopen spread and missing swap record in §4, XAU ask as 要取得 and the US100 bid-vs-mid result in §6b.
+
+PROMOTED unchanged. The task-observer workspace sits outside AUREL_RESEARCH, so no observation log was written there, matching prior cycles.
+2026/11/06 21:56:09.11 done
