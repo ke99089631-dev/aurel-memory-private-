@@ -411,3 +411,4 @@ Cycle 20 is complete. One exploration item was pre-registered, run synchronously
 
 **Files written** (all under AUREL_RESEARCH): the script `scripts/c20_crossasset_leadlag.py`, results in `data/c20_crossasset_leadlag_result.md` and `data/c20_run.log`, one entry appended to `findings/2026-11-07.md`, the backlog item closed with three follow-up branches, and DATA_MAP §6b plus its header extended. No orders, no process changes, no MT5 connection, no external calls, PROMOTED unchanged.
 2026/11/07  9:52:06.40 done
+========== 2026/11/07 12:42:05.92 cycle start ==========
