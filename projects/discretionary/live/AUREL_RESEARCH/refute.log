@@ -644,3 +644,6 @@ Refutation of cycle20 is complete and recorded. Nothing further is needed from t
 
 **Files written, all under AUREL_RESEARCH.** Two scripts, two result files, two run logs, and the findings entry. PROMOTED, backlog, and DATA_MAP are unchanged. No orders, no production edits, no process actions, no MT5 connection, no external requests, no scan. The task-observer log sits outside the write boundary and was not written, matching prior refute runs.
 2026/11/07 11:30:46.65 done
+========== 2026/11/07 14:15:06.76 refute start ==========
+You've reached your Fable limit. Switch to another model, or manage usage credits at claude.ai/settings/usage?from=cc_cli_limit_message, to continue.
+2026/11/07 14:15:42.31 done
