@@ -388,3 +388,26 @@ Unconditional VR does not test conditional momentum after a wall break. Local po
 
 No orders, no process actions, no production edits, PROMOTED unchanged. The task-observer log lives outside AUREL_RESEARCH, so, as in prior cycles, it was not written; the methodology lessons are in the findings entry instead.
 2026/11/07  6:51:42.75 done
+========== 2026/11/07  9:42:05.90 cycle start ==========
+Cycle 20 is complete. One exploration item was pre-registered, run synchronously (46 s, three existing npz caches only, no scan), and recorded with all numbers filled.
+
+**Question tested**: at the 5-minute scale, do US equity indices (US100, with US500 as replication) lead gold, or does gold lead equities? This is the charter's "cross-market lead-lag" source of edge, measured on real data for the first time in this lane.
+
+**Result: double null.**
+
+| Cell (OOS 2021-26H1) | ρ | cluster t | permutation p | MDE |
+|---|---|---|---|---|
+| US100 → XAU, lag +1 | −0.21% | −0.91 | 0.267 | 0.47% |
+| XAU → US100, lag −1 | +0.30% | +1.28 | 0.173 | 0.46% |
+
+- Every lag from ±1 to ±6 bars is below 0.3% in all three windows. Information is absorbed within the same 5-minute bar, where contemporaneous correlation is +15.4% (t 22) out-of-sample.
+- Economic size is negligible even before statistics. Gold's next-bar response to a one-sigma equity move is −0.012 bp, and top-decile equity moves give −0.001 bp, against a gold half-spread of 0.40 bp. That is a factor of 30 or more short.
+- Both positive controls fired: the contemporaneous correlation reproduced, and an injected ρ of 0.02 was detected at t 7.6.
+- US500 replicates US100 exactly in shape.
+
+**Side findings (descriptive)**: the 5-minute gold–equity co-movement flipped sign in 2020. It was negative every year 2014–2019 (safe-haven type, −5 to −25%) and positive every year since (+5 to +33%). A new negative control also worked: US100 vs US500 cross-lags are small and negative on both sides, so no feed latency exists to fake a lead.
+
+**Strongest counter-argument recorded**: five-minute bars are too coarse. Lead-lag between liquid markets typically resolves in seconds to one minute, so "absent at 5 min" cannot be separated from "finished within 5 min". Logged as `needs cache: XAU/US100 M1 close npz` for AUREL main to build offline, with a pre-written revival condition.
+
+**Files written** (all under AUREL_RESEARCH): the script `scripts/c20_crossasset_leadlag.py`, results in `data/c20_crossasset_leadlag_result.md` and `data/c20_run.log`, one entry appended to `findings/2026-11-07.md`, the backlog item closed with three follow-up branches, and DATA_MAP §6b plus its header extended. No orders, no process changes, no MT5 connection, no external calls, PROMOTED unchanged.
+2026/11/07  9:52:06.40 done
