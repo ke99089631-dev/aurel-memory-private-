@@ -412,3 +412,37 @@ Cycle 20 is complete. One exploration item was pre-registered, run synchronously
 **Files written** (all under AUREL_RESEARCH): the script `scripts/c20_crossasset_leadlag.py`, results in `data/c20_crossasset_leadlag_result.md` and `data/c20_run.log`, one entry appended to `findings/2026-11-07.md`, the backlog item closed with three follow-up branches, and DATA_MAP §6b plus its header extended. No orders, no process changes, no MT5 connection, no external calls, PROMOTED unchanged.
 2026/11/07  9:52:06.40 done
 ========== 2026/11/07 12:42:05.92 cycle start ==========
+Cycle 21 is complete. All writes landed under AUREL_RESEARCH only; no orders, no process or production-file changes, no MT5 connection, no external traffic, no multi-year scan.
+
+**What I ran (deepening / path, 5.6 s on existing caches)**
+
+The question was whether the ET clock carries exit information for an open wall-to-wall trade, extending cycle7's result that elapsed time carries none. I pre-registered two hypotheses in the script docstring before looking at numbers, restricted time assignment to same-session path bars, and verified alignment first.
+
+| Check | Result |
+|---|---|
+| Path-bar ↔ clock alignment (6000 random anchors, all years) | 100% |
+| H_A: side-agnostic remaining path by hour, out-of-sample | null (Bonferroni 0 of 22, t sd 0.77) |
+| H_B: "night-drift shape" contrast, out-of-sample | null (C −0.051R, t −0.37) |
+| Positive control: 16:00 anchor BUY−SELL | +0.265R (t 3.44), reproduces cycle18 |
+
+**Strongest counter-argument recorded**
+
+H_B's null does not refute the night-drift reading. The evening anchor block turned out to be composed entirely of trades entered at ET 18–19 with short holds, so no trade in that block could ride the night. The test compared two groups of short-lived trades, not clock position. Separating anchor clock from entry clock would need trades alive six or more hours after entry, which this data cannot power. The H_A positive control also fell short out-of-sample, so that null only rules out effects of roughly 0.08R or larger per hour.
+
+**Descriptive by-products saved to DATA_MAP**
+
+- Settlement hazard tracks hourly volatility (Spearman 0.67 to 0.79), peaking ET 08–09 and bottoming at 16.
+- NY afternoon settlements at ET 13–14 are SL-heavy in all three windows (TP share as low as 0.26 recently). This is the slippage-exposure map for linking to the ledger's SL slip measurements.
+- A side-by-clock sign pattern appears out-of-sample but is indistinguishable from entry-hour composition, which is entry-filter territory under the charter's appendix D, so it is logged and not pursued.
+
+**Files written**
+
+- `AUREL_RESEARCH/scripts/c21_clock_hazard.py` and `data/c21_clock_hazard_result.md`, `data/c21_run.log`
+- One entry appended to `findings/2026-11-07.md`
+- `backlog.md`: item closed, one forward-only residual cell, methodology candidate ㉑ added
+- `DATA_MAP.md`: §2 session-bar alignment and Markov conclusion, §4 slippage time map
+
+**Open for the next cycle**
+
+The exit-conditioning line (elapsed time, clock, unrealized-level grid) is now closed. Exploration is still below the 2:1 target, so the next cycle should pick an exploration item. The task-observer log lives outside AUREL_RESEARCH and was not written, consistent with prior cycles.
+2026/11/07 12:53:54.34 done
