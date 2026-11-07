@@ -625,3 +625,4 @@ Refutation complete and verified on rerun (verdicts identical, label fixed). Fin
 
 **Files written, all under AUREL_RESEARCH.** The script `scripts/refute_c19_vr.py`, its result and run log in `data/`, and the findings entry. PROMOTED, backlog and DATA_MAP are unchanged. No orders, no production edits, no process actions, no MT5 connection, no external requests, no scan. The task-observer log sits outside the write boundary and was not written, matching prior refute runs. The methodology lessons are in the findings entry.
 2026/11/07  8:26:17.75 done
+========== 2026/11/07 11:15:06.64 refute start ==========
