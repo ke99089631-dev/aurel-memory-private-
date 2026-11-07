@@ -626,3 +626,21 @@ Refutation complete and verified on rerun (verdicts identical, label fixed). Fin
 **Files written, all under AUREL_RESEARCH.** The script `scripts/refute_c19_vr.py`, its result and run log in `data/`, and the findings entry. PROMOTED, backlog and DATA_MAP are unchanged. No orders, no production edits, no process actions, no MT5 connection, no external requests, no scan. The task-observer log sits outside the write boundary and was not written, matching prior refute runs. The methodology lessons are in the findings entry.
 2026/11/07  8:26:17.75 done
 ========== 2026/11/07 11:15:06.64 refute start ==========
+Refutation of cycle20 is complete and recorded. Nothing further is needed from the user.
+
+**Target.** The only research-lane entry since the 08:30 refute is cycle20, a self-declared null on 5-minute lead-lag between gold and US equity indices. No promotion candidate exists, so I attacked the structural readings stacked on the null. The verdict is appended to `AUREL_RESEARCH/findings/2026-11-07.md` under a `[REFUTE]` header dated 11:30.
+
+| Reading | Verdict | Key evidence |
+|---|---|---|
+| No lead-lag at any time at 5 minutes | broken by the pre-registered slot test, but not as lead-lag | Cell 14:35 ET has adjacent-bar ρ +22%, t 8.4, family-wise p 0.000 over 576 cells. FOMC days alone produce it: ρ +50% on 44 FOMC days, −2.7% on the other 1310. Rank correlation is 5%. Both directions are +22% and own-autocorrelation is +33% and +19%, so it is common drift during the press conference. |
+| Weak signal: gold leads US100 in all three windows | inconclusive | Pooled t 1.98 and permutation p 0.030, missing the t≥2 rule by a hair. Stale-feed mechanism rejected: liquid and stale bars give identical ρ. One-sd response is 2 to 6% of the US100 half-spread. |
+| Contemporaneous sign regime, negative 2014-19 then positive | survived | All three sessions negative in 6 of 6 years, all positive in 6 of 6 periods, daily medians agree in 14 of 15 years. The flip happened in March 2020, not "2020". |
+| US100 vs US500 cross-lag shows no feed delay | survived, mechanism added | Yearly cross-lags track the lag-1 reversal times ρ(0) with Spearman 0.80. The control detects relative delay only. |
+| Information absorbed in the same bar | supported | Implied bar misalignment is under 15 seconds in every window. |
+
+**What the research lane should take from this.** Slot-level Pearson correlations on 5-minute returns are owned by a handful of common-jump days. Any claim or denial of localized lead-lag needs Spearman, leave-top-5%-out, the reverse-direction correlation, and own-autocorrelation printed side by side. Cycle20's substantive conclusion stands: no receivable cross-market lead exists at this granularity. The FOMC-day continuation is an out-of-sample-only, 44-day, post-hoc cell that does not replicate on in-sample FOMC days, so it is not a promotion candidate.
+
+**Counter-evidence to my own verdict, recorded in the entry.** The FOMC date list is from memory and unverified, though the calendar-free proxy (statement-bar |z|≥3) gives the same direction. The in-sample replication condition in my rule was weak enough that a tail-driven number passed it. The stale-rate tertile rule degenerated and was replaced by a binary split after the fact.
+
+**Files written, all under AUREL_RESEARCH.** Two scripts, two result files, two run logs, and the findings entry. PROMOTED, backlog, and DATA_MAP are unchanged. No orders, no production edits, no process actions, no MT5 connection, no external requests, no scan. The task-observer log sits outside the write boundary and was not written, matching prior refute runs.
+2026/11/07 11:30:46.65 done
