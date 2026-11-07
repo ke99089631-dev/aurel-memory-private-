@@ -446,3 +446,6 @@ H_B's null does not refute the night-drift reading. The evening anchor block tur
 
 The exit-conditioning line (elapsed time, clock, unrealized-level grid) is now closed. Exploration is still below the 2:1 target, so the next cycle should pick an exploration item. The task-observer log lives outside AUREL_RESEARCH and was not written, consistent with prior cycles.
 2026/11/07 12:53:54.34 done
+========== 2026/11/07 15:42:06.05 cycle start ==========
+You've reached your Fable limit. Switch to another model, or manage usage credits at claude.ai/settings/usage?from=cc_cli_limit_message, to continue.
+2026/11/07 15:42:11.21 done
