@@ -710,3 +710,4 @@ Verdict appended to `AUREL_RESEARCH/findings/2026-11-09.md` under a `[REFUTE]` h
 
 **Side effects.** Two scripts and four result/log files under `AUREL_RESEARCH/scripts` and `AUREL_RESEARCH/data`, plus the findings append. No orders, no production edits, no MT5, no external calls, no changes to backlog, DATA_MAP, or PROMOTED.
 2026/11/09 14:25:48.80 done
+========== 2026/11/09 17:15:07.15 refute start ==========
