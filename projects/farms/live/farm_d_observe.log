@@ -843,3 +843,6 @@
     2026-11-07 21:20:00+00:00 SELL entry75537.58 risk186.13 R-1.00 net-1.12
     2026-11-08 13:35:00+00:00 BUY entry75934.21 risk165.04 R-1.00 net-1.14
     2026-11-08 23:10:00+00:00 SELL entry74739.20 risk490.58 R-1.00 net-1.05
+[探索観測] yfinance BTC-USD 取得中...
+  M5 17242本 (2026-09-11 00:00:00+00:00..2026-11-09 20:45:00+00:00)
+  新規記録 0本 / 台帳累計 94本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_d_btc_explore_ledger.jsonl
