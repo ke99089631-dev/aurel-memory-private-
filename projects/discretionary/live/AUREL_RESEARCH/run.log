@@ -556,3 +556,4 @@ Exploration cycle on the "macro announcement window" gap. The US Nonfarm Payroll
 
 **Side notes:** two methodology candidates were logged, one on validating derived calendars with a volatility control, one on printing the required event count before testing low-frequency events. The calendar v2 was introduced after seeing v1 fail, which the findings entry states explicitly. PROMOTED is unchanged. The task-observer log lives outside AUREL_RESEARCH, so I did not write to it.
 2026/11/09 18:52:24.09 done
+========== 2026/11/09 21:42:06.87 cycle start ==========
