@@ -787,3 +787,4 @@ Verdict appended to `AUREL_RESEARCH/findings/2026-11-10.md` under a `[REFUTE]` h
 
 **Side effects.** Two scripts and four result/log files named refute_c26_roundnum under AUREL_RESEARCH, plus the findings append. The account spread log was read only. No orders, no production edits, no process actions, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED are unchanged. The task-observer log lies outside the write boundary and was not written, consistent with prior runs; the six methodology lessons are in the findings entry.
 2026/11/10  2:29:09.06 done
+========== 2026/11/10  5:15:07.55 refute start ==========
