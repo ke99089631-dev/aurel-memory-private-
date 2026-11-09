@@ -557,3 +557,16 @@ Exploration cycle on the "macro announcement window" gap. The US Nonfarm Payroll
 **Side notes:** two methodology candidates were logged, one on validating derived calendars with a volatility control, one on printing the required event count before testing low-frequency events. The calendar v2 was introduced after seeing v1 fail, which the findings entry states explicitly. PROMOTED is unchanged. The task-observer log lives outside AUREL_RESEARCH, so I did not write to it.
 2026/11/09 18:52:24.09 done
 ========== 2026/11/09 21:42:06.87 cycle start ==========
+Cycle 25 is complete. All results were computed and recorded this turn.
+
+**What I ran**: a deepening-track test of backlog item ★1 (ledger vs scan reconciliation), the part that needs no M5 extension. The live ledger's per-trade mfe_R, mae_R and hold_bars were compared as distributions against the scan cache's recent window (2024 to 2026H1), with a pre-registered 6-statistic family and a Welch test on mean R. Runtime 8.6 s plus a 1.5 s supplement, existing cache and ledger only, no scan, no MT5.
+
+**Findings** (appended to `findings/2026-11-09.md`):
+- Path geometry transfers. Hold, MFE of SL trades, MAE of TP trades, b, TP rate and TIME rate all pass Bonferroni(6). The same test separates adjacent regimes (2021-23 vs 2024-26H1) on 5 of 6 statistics, so the match is not trivial. Placebo false-FAIL rate at ledger size is 6.5%.
+- Mean R is borderline distinguishable. Ledger gross +0.165R vs scan recent −0.014R, difference +0.18R at t 2.18.
+- Strongest counter-argument: the difference sits entirely in trades closed before 2026-10-24, the date the conservative FEED_TOL rule went live. Pre-rule TP rate 51.5%, post-rule 39.5%, and the post-rule trades match scan 2026H1 on TP rate, all six geometry statistics and mean R. The rule difference itself is only about 0.015R per trade, so it cannot explain the gap. What remains is "a good 8 weeks" (weekly mean R swings are pure trade-level noise, consistent with cycle 6) versus a population difference: the ledger enters 45 trades per week against the scan's median of 33 and maximum of 47. Only the M5 extension can separate these.
+- Two anomalies logged for the ★1 reconciliation: ledger TIME exits 1 vs about 8 expected, and the trade density gap.
+- Backlog ★3 closed: n*(95%) at measured cost (0.21 USD per trade) is 400, versus 300 gross and 1000 under the old 0.56 USD assumption. The ledger at 320 trades is at the 95% sign-stability boundary.
+
+**Updates**: backlog ★1 partial answer with a pre-registered forward cell (post-rule trades, n ≥ 300, about 7 weeks out), ★3 marked done, methodology candidate ㉖ added. DATA_MAP §3 updated with the geometry match, the bookkeeping boundary, density and n*. PROMOTED unchanged. No production files touched beyond read-only; a temp file I used for the append was created and deleted inside AUREL_RESEARCH/data and shows as a deletion in git status because the auto-sync caught it mid-step.
+2026/11/09 21:53:37.26 done
