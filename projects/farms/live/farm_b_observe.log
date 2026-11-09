@@ -2857,3 +2857,6 @@ MemoryError
   M5 13535本 (2026-08-31 04:00:00+00:00..2026-11-09 16:20:00+00:00)
   新規記録 1本 / 台帳累計 44本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_b_forward_ledger.jsonl
     2026-11-09 16:10:00+00:00 BUY entry7551.8 risk57.4 R-0.08 net-0.09
+[live観測] yfinance ES=F 取得中...
+  M5 13541本 (2026-08-31 04:00:00+00:00..2026-11-09 16:50:00+00:00)
+  新規記録 0本 / 台帳累計 44本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_b_forward_ledger.jsonl
