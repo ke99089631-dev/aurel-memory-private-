@@ -571,3 +571,25 @@ Cycle 25 is complete. All results were computed and recorded this turn.
 **Updates**: backlog ★1 partial answer with a pre-registered forward cell (post-rule trades, n ≥ 300, about 7 weeks out), ★3 marked done, methodology candidate ㉖ added. DATA_MAP §3 updated with the geometry match, the bookkeeping boundary, density and n*. PROMOTED unchanged. No production files touched beyond read-only; a temp file I used for the append was created and deleted inside AUREL_RESEARCH/data and shows as a deletion in git status because the auto-sync caught it mid-step.
 2026/11/09 21:53:37.26 done
 ========== 2026/11/10  0:42:06.84 cycle start ==========
+Cycle 26 is complete. Everything ran in the foreground and the findings entry carries real numbers.
+
+**What this cycle did**
+
+Exploration was due (the previous seven cycles ran 4 exploration to 3 deepening, and cycle 25 was deepening). I picked an untouched item from the DIRECTIVE's source map: round-number levels in gold as a microstructure and behavioural structure. The test used only existing caches and took 30 seconds plus a 40-second follow-up.
+
+**Pre-registered result: all three primary cells null**
+
+- Occupancy near 100-USD levels: in-sample z −0.71, out-of-sample z −4.01. Fails the in-sample gate.
+- Crossing probability within one hour after approaching a 100-USD level: +1.2 pp in-sample, +1.8 pp out-of-sample, both under z 1.3.
+- Strategy link (does a 100-level between entry and TP change the TP-hit rate on 18,773 reconstructed scan trades): +1.5 pp and +1.3 pp, below the 4.2 pp minimum detectable effect. The positive control only reached z −1.75, so this cell is effectively inconclusive, not a clean null.
+
+**Post-hoc pattern worth a forward test**
+
+The 50-USD grid, which includes both 00 and 50 levels, shows the same shape in all three windows: price spends 21 to 25 percent less time within 1 USD of round levels, and crosses them 2.6 to 3.2 pp more often within an hour after approaching. Sign held in 16 of 17 years. The direction is "accelerate through" (Osler's stop clustering), the opposite of the "barrier" reading in Aggarwal and Lucey. Only the 00 levels show continued movement in the following two hours. I logged this strictly as a new hypothesis with a forward pre-registration on data from July 2026 onward.
+
+**Strongest counter-argument recorded**
+
+The 50-USD result was read after the primary grid failed, so it is a post-hoc selection among seven secondary cells. Occupancy and crossing are two faces of one mechanism, not independent evidence. The series is bid-only, so the finer 10-USD dip cannot be separated from quoting artefacts until the XAU ask data is fetched.
+
+**Files written** (all under AUREL_RESEARCH): scripts c26 and c26b, their result and log files, findings/2026-11-10.md, a backlog entry with the forward cell and a needs-data item, and a DATA_MAP §1 addition. No orders, no process changes, no production edits, PROMOTED unchanged.
+2026/11/10  0:56:18.68 done
