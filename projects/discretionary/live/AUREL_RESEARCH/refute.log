@@ -693,3 +693,20 @@ You've reached your Fable limit. Switch to another model, or manage usage credit
 You've reached your Fable limit. Switch to another model, or manage usage credits at claude.ai/settings/usage?from=cc_cli_limit_message, to continue.
 2026/11/09 11:15:15.34 done
 ========== 2026/11/09 14:15:07.32 refute start ==========
+Verdict appended to `AUREL_RESEARCH/findings/2026-11-09.md` under a `[REFUTE]` header. Summary of this run:
+
+**Target.** Cycle22 (overnight drift in US500/US100). Its pre-fixed judgments were already null, so I attacked the four residual weak signals it left behind. Cycle21 was never refuted because the lane hit usage limits for eight consecutive runs; I noted that and left its residual queued.
+
+**Results by signal**
+
+- **W1, US100 EU 02–04 ET "rank 1 in both halves": inconclusive by the pre-fixed rule.** In-sample selection survives a day-level sign-flip family test only narrowly (p_fw 0.041) and fails the time-of-day label-shuffle test (p_fw 0.317), so "EU beats other hours" is not established even in-sample. Out-of-sample, the joint pattern "t ≥ 1.44 and rank 1" occurs 8.5% of the time under the null. The out-of-sample rank 1 is produced entirely by 2024–26H1. Years 2021–23 alone average −0.21 bp and rank 8th, and dropping 2022 or 2025 moves the rank to 4th or 3rd. Bootstrap CI for the out-of-sample mean includes zero.
+- **W2, 2025-09+ paper net positive: inconclusive.** That window is the most extreme 214-day EU window in 12.5 years, with no precedent to test persistence. Its positive sits in February–June 2026 alone. Doubling or quadrupling the spread does not kill it. Swap likely does not apply to either window if rollover is 17:00 ET, which weakens cycle22's own cost caveat; the account rollover time still needs confirming.
+- **W3, in-sample 02 ET hourly cell: survived** family-wise over 46 cells (p_fw 0.026), but the out-of-sample positive moved to the 03 ET cell, so it is not the same cell persisting.
+- **W4, bid-only measurement:** bid-to-bid CASH returns carry a mechanical +0.64 bp/day bias and the gap window −0.52 bp/day in the 2022–25 spread regime. EU is unaffected. Cycle22's in-sample gap negativity is partly this artifact.
+
+**Most severe refutation.** The forward cell adopted in the backlog cannot realistically pass. At 250 trading days, t ≥ 2 on EU requires a mean of about 3.8 bp/day, above both in-sample and out-of-sample effects, and the ON−CASH condition requires about 13 bp/day, which has never occurred. Its "close on failure" outcome is therefore predetermined by design, not a test. I proposed a rewritten condition in the entry.
+
+**Self-correction recorded.** My pre-fixed one-sided top-5% tail cut was a biased test. The symmetric trimmed mean matches the raw mean, so I retracted that flag in the entry rather than letting it stand.
+
+**Side effects.** Two scripts and four result/log files under `AUREL_RESEARCH/scripts` and `AUREL_RESEARCH/data`, plus the findings append. No orders, no production edits, no MT5, no external calls, no changes to backlog, DATA_MAP, or PROMOTED.
+2026/11/09 14:25:48.80 done
