@@ -734,3 +734,20 @@ Verdict appended to `AUREL_RESEARCH/findings/2026-11-09.md` under a `[REFUTE]` h
 **Files written, all under AUREL_RESEARCH.** Two scripts and four result/log files named refute_c23_pathshape and refute_c23_pathshape_b, plus the findings entry. No orders, no production edits, no process actions, no scan, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED are unchanged. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/09 17:25:09.82 done
 ========== 2026/11/09 20:15:07.63 refute start ==========
+Verdict appended to `AUREL_RESEARCH/findings/2026-11-09.md` under a `[REFUTE]` header dated 20:30.
+
+**Target.** Cycle24 (18:50 today), the NFP announcement-window study. Its pre-fixed verdicts were null or inconclusive and reproduce exactly, so I attacked the four residual signals it left behind. Rules were fixed in the script docstring before any number was seen.
+
+**Verdicts**
+
+- **W1, "trades straddling NFP pay the jump" (in-sample e −0.41R, t−2.86, n36): inconclusive.** Label permutation gives p 0.080 for the difference versus other Fridays and family-wise p 0.093 over the six in-sample statistics. The loss is 75% the 08:30 bar itself and comes from SELL trades only (22 trades, 21 days). It is not side composition: equalising BUY and SELL weights leaves the receipt at −0.71R versus −0.78R. On days when SELL trades were alive the jump averaged +28.5 bp, on BUY-alive days −11.5 bp, so the jump went against the alive side either way. My placebo of generic 08:30 jump days Monday to Thursday shows no such loss, so NFP specificity did not break. With out-of-sample n5 and about one trade per year it cannot be tested forward.
+- **W2, "pre-announcement weak negative drift plus calm": broken.** Pooled permutation p for the drift is 0.117. The negative sits in different sub-windows in and out of sample. The NFP+7 Friday is just as negative in-sample. The out-of-sample piece is a two-bar bid dip right before 08:30 that the announcement bar reverses. Only the calm survives: realised variance 16% lower before NFP, p 0.002.
+- **W3, in-sample DAY +20 bp: broken.** Family-wise p 0.145, leave-one-year-out minimum |t| 1.01, all of it in 2010–14, and out-of-sample the sign flips.
+- **W4, the v2 calendar: survived with corrections.** v2 mislabels 12 of 198 dates (6.1%). Every mismatch is explained by three rules: a January release on the 1st to 3rd shifts +7 days, a July 3 Friday moves to Thursday, and government shutdowns. Data confirm this independently of my memory-based reference list: 10 of 12 v2-only dates show no jump, 8 of 9 reference-only dates do. The corrected v3 calendar matches the reference list 195/195, raises the jump rate to 63–73%, and leaves H1, H2 and H3 unchanged.
+
+**Most severe refutation of cycle24.** Its reading "SELL bias times upward jump" is wrong as a mechanism. The in-sample effect is within-side anti-selection, not composition, and it rests on 21 days that are indistinguishable from chance at the family level. The "pre-announcement drift" is not a drift at all; the only robust pre-NFP fact is lower variance.
+
+**Self-corrections recorded.** The Monday to Thursday placebo used smaller jumps than NFP days, so it is not magnitude-matched. The reference calendar comes from model memory and 2026 is least certain. The account spread log shows no widening at NFP, but that does not settle whether the Dukascopy bid dips before 08:30; that still needs ask data.
+
+**Side effects.** Two scripts and four result/log files named refute_c24_nfp and refute_c24_nfp_b under AUREL_RESEARCH, plus the findings append. The account spread log was read only. No orders, no production edits, no process actions, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED are unchanged. The task-observer log lies outside the write boundary and was not written, consistent with prior runs; the methodology lessons are in the findings entry.
+2026/11/09 20:32:26.02 done
