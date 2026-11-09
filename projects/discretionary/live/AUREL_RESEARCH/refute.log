@@ -752,3 +752,20 @@ Verdict appended to `AUREL_RESEARCH/findings/2026-11-09.md` under a `[REFUTE]` h
 **Side effects.** Two scripts and four result/log files named refute_c24_nfp and refute_c24_nfp_b under AUREL_RESEARCH, plus the findings append. The account spread log was read only. No orders, no production edits, no process actions, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED are unchanged. The task-observer log lies outside the write boundary and was not written, consistent with prior runs; the methodology lessons are in the findings entry.
 2026/11/09 20:32:26.02 done
 ========== 2026/11/09 23:15:07.88 refute start ==========
+Verdict appended to `AUREL_RESEARCH/findings/2026-11-09.md` under a `[REFUTE]` header dated 23:30.
+
+**Target.** Cycle25 (21:50 today), the only positive-direction verdict of the day: the forward ledger beats the scan by +0.18R (Welch t 2.18, "H_R PASS") and its path geometry matches scan 2024-26H1 ("H_G PASS"). Rules V1–V7 were fixed in the script docstring before any number was seen.
+
+**Verdicts**
+
+- **H_R PASS: broken by the pre-fixed rule.** Cycle25 treated the whole ledger as forward paper booked like the scan. The 11-05 refutation had already established that 73% of the ledger (235 trades) is frozen under the old FEED_TOL=0 accounting, measured at −0.042R per trade, and that 67 trades are backfill. Matching the accounting drops t from 2.18 to 1.81. Day-clustered standard errors drop the gross t to 1.94. Both together give 1.59. The forward, same-accounting part (E4, 85 trades) is at t 0.59 against the scan, indistinguishable.
+- **H_G PASS: broken.** The six-statistic family was judged by Bonferroni on the minimum p, which misses several moderate deviations in the same direction. A Fisher combined statistic calibrated by 2000 placebo draws gives p 0.003 against scan 2024-26H1. The TIME exit deficit alone is 1 observed versus 8.2 expected, exact binomial p 0.002. The ledger geometry is closest to scan 2025-26H1 (joint p 0.14), so "matches recent scan" depends on which window is chosen.
+- **"Accounting alone cannot explain the gap": survived, with a correction.** Cycle25's 0.015R estimate ignores TP-to-SL flips worth (1+b)R. The measured −0.042R is 2.8 times larger but still explains only 13–20% of the 12-point TP-rate gap.
+- **n* = 400: replaced.** With day-block bootstrap and matched accounting it is 400. Adding the measured live-account cost gives 750. Doubling cost gives 2000.
+
+**Most severe counter-evidence to my own verdict, recorded.** The contiguous-window null cuts the other way. The accounting-matched ledger mean of +0.134 exceeds the maximum of all 3686 sliding 320-trade windows and all 814 calendar 8-week windows in scan 2024-26H1 (max +0.132 and +0.131). No 8-week run in 2.5 years of scan reached the ledger's level. With only about 12 non-overlapping windows that is p below roughly 1/13, not zero, but it agrees with the 11-05 day-block null of p 0.006. The accurate statement is "borderline t 1.6–1.9, forward part has no power", not "indistinguishable".
+
+**Forward design note for the research lane.** Cycle25's proposed cell (post-10-24 n≥300, t≥2 vs scan 2024-26H1) needs about +0.24R per trade to pass at n300 once clustering is included; current E4 runs at +0.11. It should be rewritten to E4-only, day-clustered, against 2025-26H1, and needs roughly n≥600.
+
+**Side effects.** Writes were limited to the script, result, and log files named refute_c25_ledger under AUREL_RESEARCH, plus the findings append. The ledger, engine source, and git log were read only. No orders, no production edits, no process actions, no MT5 connection, no external requests. Backlog, DATA_MAP, and PROMOTED are unchanged. The task-observer log lies outside the write boundary and was not written, consistent with prior runs; the methodology lessons are in the findings entry.
+2026/11/09 23:26:50.36 done
