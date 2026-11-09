@@ -594,3 +594,19 @@ The 50-USD result was read after the primary grid failed, so it is a post-hoc se
 **Files written** (all under AUREL_RESEARCH): scripts c26 and c26b, their result and log files, findings/2026-11-10.md, a backlog entry with the forward cell and a needs-data item, and a DATA_MAP §1 addition. No orders, no process changes, no production edits, PROMOTED unchanged.
 2026/11/10  0:56:18.68 done
 ========== 2026/11/10  3:42:07.19 cycle start ==========
+Cycle 27 is complete. One deepening analysis ran in the foreground (41 s plus two sub-second supplements), with all numbers filled in.
+
+**What was tested.** The backlog item "geometry persistence" was reframed as a pre-registered test: measure wall-to-wall "edge" not as R but as the per-trade excess TP-hit rate x = 1{TP} − q, where q = (1−ft)/(1+b) is the driftless random-walk hit probability for that trade's own barriers. Under that benchmark expected R* is exactly zero, so x strips out geometry and has variance at most 0.25.
+
+**Results (in-sample 2010-20, out-of-sample 2021-26H1).**
+- **Geometry persists (H1 PASS).** Weekly lag-1 autocorrelation of mean TP distance b̄ is +0.47 in-sample and +0.57 out-of-sample, monthly +0.68 and +0.75, permutation p 0.000.
+- **Geometry is priced nearly as a random walk (H2).** Regressing weekly TP rate on the RW benchmark gives β 0.71 in-sample, 0.68 out-of-sample, 0.92 recent. Cycle 6's puzzle, "TP rate persists but mean R does not", is explained quantitatively: holding b fixed, the counterfactual monthly R would have lag-1 +0.27 out-of-sample, while actual mean R* shows +0.03.
+- **Run-ability does not persist (H3 null).** Weekly lag-1 of x̄ is −0.057 (p 0.91) in-sample and +0.008 (p 0.43) out-of-sample. Trailing 4-week split: −0.68 pp (t −0.69) and +1.26 pp (t +1.19). Regime sd upper bound 3.7 pp (about 0.08R); injection shows the design detects a persistent 5 pp shift, not 3 pp.
+- **Level (descriptive, per D2).** Given geometry, scan trades hit TP 1.4 pp less often than RW in both windows (t −3.2 / −2.6), recent window −0.1 pp.
+
+**Post-hoc observations, labelled as such.** At trade level x is unrelated to q (β ≈ 0), so the weekly β < 1 is a between-week effect: weeks with far walls beat RW (contemporaneous ρ −0.11 / −0.17), but prior-week geometry does not predict it (t 0.6 / 1.0). Out-of-sample weekly x̄ is under-dispersed (variance ratio 0.83) because BUY and SELL excess rates within a week correlate at −0.20 to −0.26, a weekly direction factor.
+
+**Strongest counter-argument recorded.** The null sits under an MDE of about 5 pp (0.11R), no better than cycle 6, and side-mixing may be hiding persistence through cancellation. Side-separated x̄ persistence is logged as the one forward cell for new data (2026-07 onward, 52+ weeks).
+
+**Files written (all under AUREL_RESEARCH).** Scripts c27, c27b, c27c; result md and logs in data/; one findings entry appended to findings/2026-11-10.md; backlog updated (item closed, residual cell, methodology candidate ㉘, and the cycle 26 forward cell rewritten as the refute lane requested); DATA_MAP §2 gained the RW-benchmark tool entry. No orders, no process changes, no production edits, no scans, no PROMOTED change. The task-observer log was not written because it lives outside the AUREL_RESEARCH write boundary.
+2026/11/10  3:53:04.29 done
