@@ -510,3 +510,31 @@ Cycle 22 is complete. One findings entry written with real numbers, backlog and 
 
 **Next for AUREL main.** The MT5 probe should add account swap_long/short for US100 and US500, which is the missing piece for both this item and the gold reopen-pop cost question. A forward one-cell test on 2026-07+ data is pre-registered in the backlog.
 2026/11/09 12:53:24.06 done
+========== 2026/11/09 15:42:08.31 cycle start ==========
+Cycle 23 is complete. The findings entry is filled with real numbers, no placeholders remain, and nothing outside AUREL_RESEARCH was touched.
+
+**What I tested (deepening track, pre-registered)**
+The research lane had concluded that the exit process of wall-to-wall reaccel trades is Markov in the current unrealized R alone. I tried to break that with two path-shape variables that had never been tested: the realized volatility of the path so far and the fraction of bars spent in profit. Both are measurable at bar k, so under a martingale neither should predict the remaining path. The analysis reused only the existing full-path npz cache and ran in 1.9 seconds.
+
+**Result: null on both hypotheses**
+
+| Cell (k=24, near-zero R) | In-sample 2010-20 | Out-of-sample 2021-26H1 |
+|---|---|---|
+| Path volatility top minus bottom tercile | +0.021R (t +0.37) | −0.262R (t −2.54) |
+| Time-in-profit top minus bottom tercile | −0.011R (t −0.19) | −0.131R (t −1.33) |
+| Pooled regression beta per 1 sd, volatility | +0.017R (t 1.19) | −0.020R (t −0.57) |
+
+Across 60 cells only one reached nominal significance, against 2.7 expected by chance, and the t-statistics have standard deviation 0.99. The trader lore that a trade which gave back its profit "rots" does not hold. Half of what looks like give-back is just the current R level, since time-in-profit correlates with current R at 0.44 to 0.52 even inside the narrow bin.
+
+**Strongest counter-argument recorded**
+The in-sample cell can only detect differences above about 0.11R, so the null says "no 0.1R-class information", not "none". The out-of-sample volatility cell is large at −0.26R and reads as "quiet stalled trades run, turbulent ones die". It is rejected only because the in-sample sign is opposite and the family-wise probability of one such cell among 60 is about 0.49. A forward one-cell check on post-2026-07 data is logged in the backlog.
+
+**Files written**
+- `scripts/c23_path_shape_markov.py`, `data/c23_path_shape_markov_result.md`, `data/c23_run.log`
+- `findings/2026-11-09.md`: one cycle23 entry appended
+- `backlog.md`: item closed, forward cell and methodology note 23 added, exit-path conditioning family declared closed
+- `DATA_MAP.md`: section 2 updated with the closure
+
+**Next for the lane**
+The exit-path conditioning family is now exhausted on elapsed time, clock, R level, running maximum, and path shape. The next deepening axis should be geometry persistence or MAE/MFE arrival-time versus random walk. The task-observer log lives outside AUREL_RESEARCH, so no observation file was written, consistent with prior cycles.
+2026/11/09 15:48:12.87 done
