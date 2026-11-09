@@ -492,3 +492,21 @@ You've reached your Fable limit. Switch to another model, or manage usage credit
 You've reached your Fable limit. Switch to another model, or manage usage credits at claude.ai/settings/usage?from=cc_cli_limit_message, to continue.
 2026/11/09  9:42:17.97 done
 ========== 2026/11/09 12:42:06.75 cycle start ==========
+Cycle 22 is complete. One findings entry written with real numbers, backlog and data map updated, no production files touched.
+
+**What I tested.** The item I first picked from the backlog (whether gold's vanished 5-minute mean reversion also vanished in US100/US500) had already been answered by the refute lane on 11-07, so I closed it with a citation instead of re-running it. I then posed an exploration item from the charter's "where edges structurally arise" list: the published US equity overnight drift (returns accrue overnight, concentrated at the European open around 02:00 ET), tested on our Dukascopy US500/US100 bid M5 caches in-sample 2012–20 and out-of-sample 2021–26H1, with the US100 spread cache for cost and gold on the same grid. Pre-registration is in the script docstring, written before the run. The run took 3 seconds and used only existing caches.
+
+**Result: null on all four pre-registered cells.**
+- In-sample the published structure is visible. US100 overnight averaged about +5.3 bp per day, and the 02:00 ET hour was the only one of 23 hourly cells to pass Bonferroni.
+- Out-of-sample neither index reaches the t≥2 threshold, and overnight does not beat the cash session. The remaining positive is a thin all-hours uptrend share, not a nighttime concentration.
+- Gold has no overnight drift in-sample. Its time-of-day structure is the reopen gap and the closing final print, so the "overnight premium" is not a cross-asset CFD structure.
+- Cost: US100's pre-September-2025 night spread was about four times the overnight mean, so it was not receivable. After the spread change the paper net is positive, but on 214 days and with overnight swap unrecorded.
+
+**Strongest counter-argument, recorded.** The out-of-sample minimum detectable effect is as large as the in-sample effect, and the out-of-sample confidence intervals contain the in-sample point estimates. The data cannot separate "arbitraged away after publication" from "still there at the old size".
+
+**Data-map fact found along the way.** The US500 and US100 caches have no overnight quotes in 2012 and only partial coverage in 2013. Any time-of-day statistic on those two must start at 2014. The weekday flat ratio used so far averages across years and hid this, so I logged a methodology candidate to print exact-zero day fractions by year before aggregating.
+
+**Files written**, all under AUREL_RESEARCH: `findings/2026-11-09.md`, `scripts/c22_overnight_drift.py`, `data/c22_overnight_drift_result.md`, `data/c22_run.log`, plus edits to `backlog.md` and `DATA_MAP.md`. PROMOTED.md unchanged. No orders, no process changes, no MT5 connection, no external calls.
+
+**Next for AUREL main.** The MT5 probe should add account swap_long/short for US100 and US500, which is the missing piece for both this item and the gold reopen-pop cost question. A forward one-cell test on 2026-07+ data is pre-registered in the backlog.
+2026/11/09 12:53:24.06 done
