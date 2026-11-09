@@ -733,3 +733,4 @@ Verdict appended to `AUREL_RESEARCH/findings/2026-11-09.md` under a `[REFUTE]` h
 
 **Files written, all under AUREL_RESEARCH.** Two scripts and four result/log files named refute_c23_pathshape and refute_c23_pathshape_b, plus the findings entry. No orders, no production edits, no process actions, no scan, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED are unchanged. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/09 17:25:09.82 done
+========== 2026/11/09 20:15:07.63 refute start ==========
