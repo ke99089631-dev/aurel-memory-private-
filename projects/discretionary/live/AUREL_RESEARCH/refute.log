@@ -711,3 +711,25 @@ Verdict appended to `AUREL_RESEARCH/findings/2026-11-09.md` under a `[REFUTE]` h
 **Side effects.** Two scripts and four result/log files under `AUREL_RESEARCH/scripts` and `AUREL_RESEARCH/data`, plus the findings append. No orders, no production edits, no MT5, no external calls, no changes to backlog, DATA_MAP, or PROMOTED.
 2026/11/09 14:25:48.80 done
 ========== 2026/11/09 17:15:07.15 refute start ==========
+Verdict appended to `AUREL_RESEARCH/findings/2026-11-09.md` under a `[REFUTE]` header dated 17:25.
+
+**Target.** Cycle23 (15:50 today) concluded null on whether path shape carries exit information. Its null reproduces and I did not dispute it. The one weak signal it left behind was the sole nominal cell in its 60-cell grid: out-of-sample 2021-26, trades stalled near zero at bar 24, high-volatility paths versus quiet paths, gap −0.262R at Welch t −2.54, read as "quiet stalled trades run, noisy stalled trades rot."
+
+**Verdict: W1 broken, by the rule fixed in the script docstring before any numbers were seen.**
+
+| Test | Result |
+|---|---|
+| Within-cell permutation of the shape variable, 60 cells, 2000 shuffles | max abs t of 2.54 has family-wise p 0.495. Single pre-chosen cell p 0.011. Joint "out-of-sample strong and recent same sign" p 0.051. |
+| Non-overlapping sub-windows | 2021-23 t −2.80, 2024-26H1 t −0.60, 2026H1 flips positive. Leave-2021-out drops to t −1.58. |
+| Day, week, and bar-date clustering | Unchanged at t −2.53. Clustering is not the issue. |
+| Usable form, close noisy stalled trades at bar 24 with 0.10 USD slip | In-sample negative, t −1.26. Fails the lane's criteria. |
+| Mechanism | Pre-entry atr/risk correlates with path volatility at 0.64 and reproduces the gap alone at −0.241 (t −2.36). Path volatility normalized by pre-entry ATR gives −0.034 (t −0.33). The effect is entry geometry, not path shape. |
+
+**The "quiet trades run" reading (W2)** passes my pre-fixed descriptive rule (day-cluster t 2.20, block bootstrap CI excludes zero) but is BUY-only (+0.237 vs SELL +0.029) and tail-driven, so it reads as gold's 2021-26 uptrend on long-remaining BUY positions, the same drift cycle18 already described.
+
+**Most severe refutation of cycle23's reading.** The residual is the interaction "high atr/risk and still near zero after 24 bars", present only in 2021-23, absent in all trades at entry and outside the stalled bin. The same atr/risk variable surfaced post-hoc in a different path cell on 11-04 and 11-05 and was broken then. This is its second out-of-sample-only appearance.
+
+**Counter-evidence to my own verdict, recorded.** The linear day-clustered effect reaches t −3.40, the narrower stall bin gives t −2.99, and the k-sweep is negative across nearly every k out-of-sample while flat in-sample. Those are correlated views of one cell and do not survive the family-wise test, but they are not nothing. A forward pre-registration would need about four years of new data for the observed effect size, so a 250-day design cannot pass.
+
+**Files written, all under AUREL_RESEARCH.** Two scripts and four result/log files named refute_c23_pathshape and refute_c23_pathshape_b, plus the findings entry. No orders, no production edits, no process actions, no scan, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED are unchanged. The task-observer log sits outside the write boundary and was not written, same as prior runs.
+2026/11/09 17:25:09.82 done
