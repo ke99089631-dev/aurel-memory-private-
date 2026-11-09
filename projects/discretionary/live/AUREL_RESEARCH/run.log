@@ -538,3 +538,4 @@ The in-sample cell can only detect differences above about 0.11R, so the null sa
 **Next for the lane**
 The exit-path conditioning family is now exhausted on elapsed time, clock, R level, running maximum, and path shape. The next deepening axis should be geometry persistence or MAE/MFE arrival-time versus random walk. The task-observer log lives outside AUREL_RESEARCH, so no observation file was written, consistent with prior cycles.
 2026/11/09 15:48:12.87 done
+========== 2026/11/09 18:42:07.23 cycle start ==========
