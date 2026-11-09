@@ -803,3 +803,4 @@ Verdict appended to `AUREL_RESEARCH/findings/2026-11-10.md` under a `[REFUTE]` h
 
 **Side effects.** New under AUREL_RESEARCH only: the refutation script, a cache-build script, an M5 OHLC cache (13 MB, reusable for high/low settlement in future refutations), four result and log files, and the findings append. Engine source, loader, and Dukascopy chunks were read only. No orders, no production edits, no process actions, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED are unchanged. The task-observer log lies outside the write boundary and was not written, consistent with prior runs.
 2026/11/10  5:32:36.82 done
+========== 2026/11/10  8:15:07.76 refute start ==========
