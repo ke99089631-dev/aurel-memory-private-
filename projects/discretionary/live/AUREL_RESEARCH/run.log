@@ -539,3 +539,20 @@ The in-sample cell can only detect differences above about 0.11R, so the null sa
 The exit-path conditioning family is now exhausted on elapsed time, clock, R level, running maximum, and path shape. The next deepening axis should be geometry persistence or MAE/MFE arrival-time versus random walk. The task-observer log lives outside AUREL_RESEARCH, so no observation file was written, consistent with prior cycles.
 2026/11/09 15:48:12.87 done
 ========== 2026/11/09 18:42:07.23 cycle start ==========
+Cycle 24 is complete. One findings entry was appended with real numbers, and the backlog and DATA_MAP were updated.
+
+**What I did**
+
+Exploration cycle on the "macro announcement window" gap. The US Nonfarm Payrolls release time is set by an institutional rule, so I derived the calendar without external data and tested three pre-registered hypotheses on the existing XAU M5 close cache and the trade path cache. Both runs took 2.4 seconds, no scan, no MT5, no external calls.
+
+**Results**
+
+- **Calendar check:** the naive first-Friday rule failed its own positive control. The jump-present rate came out below the 50% floor out-of-sample because the Bureau of Labor Statistics schedules releases three weeks after the reference week, which lands on the second Friday in 20 of 198 months. Redone with that rule, the check passed. The release-bar jump is 3.4x to 5.9x the size of other Fridays' same bar.
+- **H1, post-jump continuation or reversal:** null. Regression slopes were near zero in both eras, and the minimum detectable effect was a quarter to a third of the jump.
+- **H2, pre-announcement drift:** null. Returns before the release were weakly negative in all three windows, below detectability. The pre-release hours are 10 to 20 percent calmer.
+- **H3, trades alive across the release:** inconclusive. In-sample, the 36 trades alive at 08:30 ET were mostly short, hit stop 78% of the time, and paid the jump. Out-of-sample only 5 trades qualified, since recent entries cluster in the US afternoon.
+
+**Strongest counter-argument recorded:** the nulls are power nulls. A single monthly series would need roughly 70 years to detect a 10% continuation, so the question is only answerable by pooling several scheduled releases. That is now a concrete data request in the backlog, naming CPI, FOMC, PCE and retail sales release times.
+
+**Side notes:** two methodology candidates were logged, one on validating derived calendars with a volatility control, one on printing the required event count before testing low-frequency events. The calendar v2 was introduced after seeing v1 fail, which the findings entry states explicitly. PROMOTED is unchanged. The task-observer log lives outside AUREL_RESEARCH, so I did not write to it.
+2026/11/09 18:52:24.09 done
