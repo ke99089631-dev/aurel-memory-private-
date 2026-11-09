@@ -610,3 +610,4 @@ Cycle 27 is complete. One deepening analysis ran in the foreground (41 s plus tw
 
 **Files written (all under AUREL_RESEARCH).** Scripts c27, c27b, c27c; result md and logs in data/; one findings entry appended to findings/2026-11-10.md; backlog updated (item closed, residual cell, methodology candidate ㉘, and the cycle 26 forward cell rewritten as the refute lane requested); DATA_MAP §2 gained the RW-benchmark tool entry. No orders, no process changes, no production edits, no scans, no PROMOTED change. The task-observer log was not written because it lives outside the AUREL_RESEARCH write boundary.
 2026/11/10  3:53:04.29 done
+========== 2026/11/10  6:42:13.65 cycle start ==========
