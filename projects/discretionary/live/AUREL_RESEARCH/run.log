@@ -570,3 +570,4 @@ Cycle 25 is complete. All results were computed and recorded this turn.
 
 **Updates**: backlog ★1 partial answer with a pre-registered forward cell (post-rule trades, n ≥ 300, about 7 weeks out), ★3 marked done, methodology candidate ㉖ added. DATA_MAP §3 updated with the geometry match, the bookkeeping boundary, density and n*. PROMOTED unchanged. No production files touched beyond read-only; a temp file I used for the append was created and deleted inside AUREL_RESEARCH/data and shows as a deletion in git status because the auto-sync caught it mid-step.
 2026/11/09 21:53:37.26 done
+========== 2026/11/10  0:42:06.84 cycle start ==========
