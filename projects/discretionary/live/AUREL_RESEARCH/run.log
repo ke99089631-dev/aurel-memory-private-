@@ -611,3 +611,28 @@ Cycle 27 is complete. One deepening analysis ran in the foreground (41 s plus tw
 **Files written (all under AUREL_RESEARCH).** Scripts c27, c27b, c27c; result md and logs in data/; one findings entry appended to findings/2026-11-10.md; backlog updated (item closed, residual cell, methodology candidate ㉘, and the cycle 26 forward cell rewritten as the refute lane requested); DATA_MAP §2 gained the RW-benchmark tool entry. No orders, no process changes, no production edits, no scans, no PROMOTED change. The task-observer log was not written because it lives outside the AUREL_RESEARCH write boundary.
 2026/11/10  3:53:04.29 done
 ========== 2026/11/10  6:42:13.65 cycle start ==========
+Cycle 28 is complete. Everything ran in the foreground and all numbers are filled in.
+
+**What this cycle tested**
+
+Exploration was due (last nine cycles ran 5 exploration / 4 deepening). I used the new full OHLC cache that the refute lane built this morning, which was not yet in DATA_MAP, to test the trading folklore "gaps get filled" on gold. Two event classes: weekend gaps (Friday 16:55 to Sunday 18:05 ET) and weekday daily-break gaps (2013 onward). The test was pre-registered as a symmetric first-passage race: does price reach the pre-gap level first, or a mirror level at the same log distance on the other side?
+
+**Result: null on both pre-registered cells**
+
+| Cell (N=72 bars, 6h) | In-sample 2010-20 | Out-of-sample 2021-26H1 |
+|---|---|---|
+| Weekend, D̄ = P(fill first) − P(cont first) | +0.000 (t 0.00) | +0.025 (t 0.42) |
+| Daily break | +0.013 (t 0.38) | +0.066 (t 1.84, below the 2.24 threshold) |
+
+The folklore number itself reproduces: 68 to 85 percent of gaps touch the pre-gap level within six hours. But the mirror level on the opposite side is touched at the same rate. The "fill rate" is pure volatility geometry, not market structure. A 49-hour weekend gap and a 1-hour weekday gap behave identically, so post-reopen price carries no memory of the gap. Placebo anchors at noon gave D̄ near zero, so the detector is calibrated.
+
+**Strongest counter-argument recorded**
+
+The detector is weak against slow reversion. First passage is decided in a median of 3 to 8 bars, so an injected drift returning half the gap over six hours only reached t 1.9. Slow fills of 2 to 4 percentage points over 23 hours are not excluded, though even there the out-of-sample edge equals round-trip cost.
+
+**One post-hoc cell killed by code**
+
+Small daily gaps out-of-sample showed t 2.09 for filling. Shifting the anchor from the 18:05 close to the 18:10 close dropped it to t 0.05. That is a first-ten-minutes bid or spread-normalization artifact, which adds a concrete reason to the existing "XAU ask M1 needed" item.
+
+**Files written** (all under AUREL_RESEARCH): the two scripts and result files for c28 and c28b, one findings entry appended to today's file, the backlog item closed with methodology candidate 29, and DATA_MAP updated with the OHLC cache entry and the gap result. No orders, no process changes, no MT5 connection, no external calls, no scan. Task-observer log was not written since it lives outside AUREL_RESEARCH, consistent with prior cycles.
+2026/11/10  6:52:52.17 done
