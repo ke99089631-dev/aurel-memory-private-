@@ -804,3 +804,23 @@ Verdict appended to `AUREL_RESEARCH/findings/2026-11-10.md` under a `[REFUTE]` h
 **Side effects.** New under AUREL_RESEARCH only: the refutation script, a cache-build script, an M5 OHLC cache (13 MB, reusable for high/low settlement in future refutations), four result and log files, and the findings append. Engine source, loader, and Dukascopy chunks were read only. No orders, no production edits, no process actions, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED are unchanged. The task-observer log lies outside the write boundary and was not written, consistent with prior runs.
 2026/11/10  5:32:36.82 done
 ========== 2026/11/10  8:15:07.76 refute start ==========
+Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-10.md` under a `[REFUTE]` header dated 08:30.
+
+**Target.** PROMOTED.md is still empty. The only research-lane entry since the 05:35 refute is cycle28 at 06:55, which tested whether gold's reopen gaps fill or continue and concluded null on both pre-registered cells. I reproduced those nulls exactly and did not dispute them. The weak signals it left standing were the ones I attacked: a "slow fill" at 23 hours out-of-sample (first-passage t 1.95, touch-rate difference +2.2 pp, fade profit +1.6 bp against 1.6 bp cost), the up/down asymmetry read as background drift, and the claim that the first-passage test has no power for slow fills.
+
+**Verdicts, by rules pre-registered in the script docstring.**
+
+| Claim | Verdict | Key numbers |
+|---|---|---|
+| W1 slow fill, 6–23h | broken | Moving the anchor from the 18:00 close to 18:10 takes the out-of-sample 23h first-passage from +0.070 (t 1.95) to +0.007 (t 0.21), touch from +2.2 to +1.0 pp (t 0.78), fade from +1.64 to +0.08 bp. Even at 18:00 the sign-permutation family-wise p is 0.12 to 0.41. Only 2020 and 2021 are positive by year; 2021-25 gives t 0.37. Fade net of cost is negative in every window, at ×1 and ×2. |
+| W2 asymmetry equals drift | research lane's reading survives | The drift-free statistic, comparing the sign-free outcome after actual up-gaps versus down-gaps, gives p 0.12 in-sample and 0.36 out-of-sample at 18:10. The whole 90-cell post-hoc grid's max |t| of 3.53 sits at the permutation null median of 3.55. |
+| W4 no power for slow fills | survives, more strongly | Injecting a 50% fill over 23h moves the first-passage statistic to only t 1.1. The cycle28 null was uninformative about slow fills. A drift-free direction test does have power: it detects a 25% fill within 6h at t 2.1, and the observed value is t 0.6, so fills within 6h are bounded at roughly a quarter of the gap. |
+
+**Self-correction recorded.** My first asymmetry statistic was degenerate: under sign permutation it collapses to a near-constant, so its p of 0.000 was an artifact of the test, not information. I saved the v1 output, replaced it with a size-preserving label permutation, and wrote the lesson: check that a permuted statistic is not a deterministic function of the pool, and print the permuted t's standard deviation before trusting it.
+
+**Leftovers recorded, not pursued.** Two post-hoc items remain. The 23h mean-return difference by gap direction out-of-sample (−19 bp, t −2.4) is made by 2026H1 alone and is not proportional to gap size, so it is a high-volatility tail, not a fill mechanism. The first hour after 18:10 leans against the gap direction in all windows (−12.6 pp in-sample t −3.7, −7.2 pp out t −2.0), but the size is 1–2 bp, at or below round-trip cost, and it could be the tail of bid normalization. Both wait on the XAU ask M1 data already on the request list. The research lane said it is closing this family, and the refute lane will not add tests to it.
+
+**Methodology notes written for the research lane.** Shift the reopen anchor by two bars at every horizon, not just the main one. Use the gap-sign permutation as the null for "does direction condition what follows," since it absorbs drift, bid artifacts, and volatility. Use a drift-free conditional sign test for slow reversion rather than first passage. Print the window without the latest half-year before claiming anything beats cost, which is now the fourth time that has mattered.
+
+**Files written, all under AUREL_RESEARCH.** Scripts `refute_c28_gapfill.py` and `refute_c28_gapfill_b.py`, their result and log files including the preserved v1 pair, and the findings entry. No orders, no production edits, no process actions, no scan, no M5 load, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED were left to the research lane. The task-observer log sits outside the write boundary and was not written, same as prior runs.
+2026/11/10  8:26:53.73 done

@@ -238,32 +238,44 @@ else: v1 = "inconclusive"
 say(f"- **R1 判定 W1: {v1}**（18:10 D̄ t {o2['D'][2]:+.2f}・p_fw(D) {fw['D']:.3f}・2021-25 D̄ t {oex['D'][2]:+.2f}・fade net ×2 {net2:+.2f} bp）")
 
 # ---------------- R2 asymmetry ----------------
-say("\n## R2 (W2/W3) 上下非対称 A = D̄(下) − D̄(上)・DAILY N=72・符号置換の帰無（= ドリフト＋bid 正常化が作る非対称）")
-def asym(ev, s, m):
-    _, D = ev.stats(s, m)
-    up = m & (s > 0); dn = m & (s < 0)
-    return D[dn].mean() - D[up].mean(), D[up].mean(), D[dn].mean()
-A_obs = {}
+say("\n## R2 (W2/W3) ギャップの向きは再開後の先着を条件づけるか: Δ = mean(D_up|上) − mean(D_up|下)（ドリフトは両群同じ→Δ=0・Δ>0=反転情報）・DAILY N=72")
+def welch(x, y):
+    nx, ny = len(x), len(y); d = x.mean() - y.mean()
+    se = math.sqrt(x.var(ddof=1) / nx + y.var(ddof=1) / ny); return d, se, d / se
+def delta_test(ev, m, nperm=NPERM):
+    Dup = np.where(ev.kL < ev.kU, 1.0, np.where(ev.kU < ev.kL, -1.0, 0.0))
+    up = m & (ev.s > 0); dn = m & (ev.s < 0)
+    d, se, t = welch(Dup[up], Dup[dn])
+    pool = Dup[m]; nu = up.sum(); perm = np.empty(nperm)
+    for p in range(nperm):
+        idx = rng.permutation(len(pool)); perm[p] = pool[idx[:nu]].mean() - pool[idx[nu:]].mean()
+    p2 = (np.abs(perm) >= abs(d)).mean()
+    return d, se, t, p2, Dup[up].mean(), Dup[dn].mean(), nu, dn.sum()
+R2 = {}
 for sh in SHIFTS:
     ev = EV[(sh, 72)]; parts = []
     for wn in ["在 2013-20", "外 2021-26H1", "近年 2024-26H1"]:
-        m = wmask(ev, wn)
-        A, du, dd = asym(ev, ev.s, m)
-        S = rng.choice([-1.0, 1.0], size=(NPERM, ev.n))
-        Ap = np.array([asym(ev, S[p], m)[0] for p in range(NPERM)])
-        p1 = (Ap >= A).mean()
-        A_obs[(sh, wn)] = (A, Ap.mean(), Ap.std(), p1)
-        parts.append(f"{wn.split()[0]} 上 {du:+.3f}／下 {dd:+.3f}・A {A:+.3f} vs 帰無 {Ap.mean():+.3f}±{Ap.std():.3f}・片側 p **{p1:.3f}**")
+        m = wmask(ev, wn); d, se, t, p2, mu, md, nu, nd = delta_test(ev, m)
+        R2[(sh, wn)] = (d, t, p2)
+        parts.append(f"{wn.split()[0]} D_up|上 {mu:+.3f} (n{nu})／|下 {md:+.3f} (n{nd})・Δ **{d:+.3f}** (se {se:.3f}・t {t:+.2f}・置換 両側 p {p2:.3f})")
     say(f"- アンカー +{sh}: " + "／".join(parts))
-pi = A_obs[(2, "在 2013-20")][3]; po = A_obs[(2, "外 2021-26H1")][3]
-if pi < 0.05 and po < 0.05: v2 = "ギャップ情報あり（W3 broken・研究レーンの『ドリフトの別名』は不十分）"
+pi = R2[(2, "在 2013-20")][2]; po = R2[(2, "外 2021-26H1")][2]; same = np.sign(R2[(2, "在 2013-20")][0]) == np.sign(R2[(2, "外 2021-26H1")][0])
+if pi < 0.05 and po < 0.05 and same: v2 = "ギャップ情報あり（W3 broken・『ドリフトの別名』は不十分）"
 elif pi >= 0.10 and po >= 0.10: v2 = "ドリフトの別名（研究レーンの読み survived・W3 survived）"
 else: v2 = "inconclusive"
-say(f"- **R2 判定: {v2}**（アンカー +2 片側 p 在 {pi:.3f}／外 {po:.3f}）")
-# decomposition: how much of A at anchor 0 is removed by anchor +2 (bid normalisation)
-for wn in ["在 2013-20", "外 2021-26H1"]:
-    a0 = A_obs[(0, wn)]; a2 = A_obs[(2, wn)]
-    say(f"  - {wn}: A(18:00) {a0[0]:+.3f}（帰無 {a0[1]:+.3f}）→ A(18:10) {a2[0]:+.3f}（帰無 {a2[1]:+.3f}）＝ 帰無を超える分 {a0[0]-a0[1]:+.3f} → {a2[0]-a2[1]:+.3f}")
+say(f"- **R2 判定: {v2}**（アンカー +2 両側 p 在 {pi:.3f}／外 {po:.3f}・Δ 在 {R2[(2,'在 2013-20')][0]:+.3f}／外 {R2[(2,'外 2021-26H1')][0]:+.3f}）")
+# R2b: drift-free conditional expectations of the terminal return, with injected power
+say("- R2b 条件付き期待値（ドリフト除去）: Δ_r = mean(r_N|上) − mean(r_N|下) bp（反転なら <0）・Δ_dir = P(r_N>0|上) − P(r_N>0|下)・注入 f で検出力")
+for N in [72, 276]:
+    ev = EV[(2, N)]
+    for wn in ["在 2013-20", "外 2021-26H1", "近年 2024-26H1"]:
+        m = wmask(ev, wn); up = m & (ev.s > 0); dn = m & (ev.s < 0); parts = []
+        for f in [0.0, 0.25, 0.5]:
+            rN = ev.rN - ev.s * f * ev.ag * 1e4  # inject reversion of f·|G| by bar N
+            dr, ser, tr = welch(rN[up], rN[dn]); dd, sed, td = welch((rN[up] > 0).astype(float), (rN[dn] > 0).astype(float))
+            parts.append(f"f={f:.2f}: Δ_r {dr:+.2f} bp (t {tr:+.2f})・Δ_dir {dd*100:+.1f} pp (t {td:+.2f})")
+        sdr = ev.rN[m].std(ddof=1)
+        say(f"  - N={N} {wn.split()[0]} (sd r_N {sdr:.0f} bp・|G| 平均 {ev.ag[m].mean()*1e4:.1f} bp): " + "／".join(parts))
 # the unconditional drift after reopen (bp over 72 bars) for context
 for sh in [0, 2]:
     ev = EV[(sh, 72)]; parts = []
