@@ -22,7 +22,8 @@ for y in range(2010, 2027):
     except FileNotFoundError as e:
         print("skip", y, e, flush=True)
 m5 = pd.concat(fr); m5 = m5[~m5.index.duplicated(keep="first")].sort_index()
-ts = (m5.index.view("int64") // 10**9).astype(np.int64)
+# pandas 3 は index が datetime64[ms]/[s] になり得る → 単位に依存しない epoch 秒変換（v1 は //1e9 で 1262 になっていた・close npz の ts で差し替え済み）
+ts = ((m5.index.tz_convert(None) - pd.Timestamp(0)) // pd.Timedelta(seconds=1)).to_numpy().astype(np.int64)
 np.savez_compressed(OUT, ts=ts, open=m5["open"].to_numpy(float), high=m5["high"].to_numpy(float),
                     low=m5["low"].to_numpy(float), close=m5["close"].to_numpy(float))
 zc = np.load(os.path.join(ROOT, "data", "macro", "XAU_m5_close.npz"))
