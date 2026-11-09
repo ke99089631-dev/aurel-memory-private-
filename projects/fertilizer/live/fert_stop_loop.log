@@ -3625,3 +3625,4 @@
 [接続] 肥料reaccel(逆指値) 27972608 / VantageTradingLtd-Live / 残高73.36 / XAUUSD+  armed=True risk2.0% runtime=C:\Users\user\.aurel\memory\projects\fertilizer\live
 [!!] LIVEデモ発注モード(逆指値を実際に置く/変える/消す)
 [逆指値設置OK] S-0469 SELL entry4119.09 SL4124.60 TP4115.06 ret=10009 v1=keep
+[取消・窓切れ] S-0469 ret=10009
