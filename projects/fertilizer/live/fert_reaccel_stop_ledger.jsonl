@@ -476,3 +476,17 @@
 {"event": "close", "sid": "S-0474", "side": "BUY", "position": 5272301262, "fill_price": 4134.32, "exit_price": 4141.7, "exit_time": "2026-11-09T22:14:47", "sl": 4125.12, "tp": 4141.7, "volume": 0.01, "R": 0.802, "reason": "TP", "profit": 7.35, "v1_keep": false, "entry_mode": "stop", "paper_status": "closed", "paper_invalid_fill": false, "gold_er": 0.0762, "gold_regime": "chop", "ts": "2026-11-09T20:15:03"}
 {"event": "place", "sid": "S-0475", "side": "BUY", "wall_kind": "outer", "entry": 4147.84, "sl": 4131.902, "tp": 4161.679, "lot": 0.01, "order": 5272307860, "retcode": 10009, "v1_keep": false, "v1_drop": ["時間帯(本物率19.0<21.1)", "箱の締まり(0.289≧0.159)"], "spread": 0.16, "streak_demo": 0, "streak_paper": 0, "mom20": 0.826, "trend_side": "with", "lot_factor": 1.0, "lot_factor_shadow": 1.0, "ts": "2026-11-09T20:20:27"}
 {"event": "fill", "sid": "S-0475", "side": "BUY", "fill_price": 4147.84, "sl": 4131.9, "tp": 4161.68, "volume": 0.01, "position": 5272307860, "gold_er": 0.1107, "gold_regime": "chop", "v1_keep": false, "v1_drop": ["時間帯(本物率19.0<21.1)", "箱の締まり(0.289≧0.159)"], "spread": 0.15, "streak_demo": 0, "streak_paper": 0, "mom20": 0.826, "trend_side": "with", "lot_factor": 1.0, "lot_factor_shadow": 1.0, "ts": "2026-11-09T20:22:52"}
+{"event": "skip-stale", "age_s": 3618.0, "last_bar": "2026-11-09T23:55:00", "now_ts": 1794272418, "ts": "2026-11-09T23:00:19"}
+{"event": "skip-stale", "age_s": 3639.0, "last_bar": "2026-11-09T23:55:00", "now_ts": 1794272439, "ts": "2026-11-09T23:00:39"}
+{"event": "skip-stale", "age_s": 3659.0, "last_bar": "2026-11-09T23:55:00", "now_ts": 1794272459, "ts": "2026-11-09T23:00:59"}
+{"event": "skip-stale", "age_s": 3679.0, "last_bar": "2026-11-09T23:55:00", "now_ts": 1794272479, "ts": "2026-11-09T23:01:19"}
+{"event": "skip-stale", "age_s": 3699.0, "last_bar": "2026-11-09T23:55:00", "now_ts": 1794272499, "ts": "2026-11-09T23:01:39"}
+{"event": "skip-stale", "age_s": 3720.0, "last_bar": "2026-11-09T23:55:00", "now_ts": 1794272520, "ts": "2026-11-09T23:02:00"}
+{"event": "skip-stale", "age_s": 3740.0, "last_bar": "2026-11-09T23:55:00", "now_ts": 1794272540, "ts": "2026-11-09T23:02:20"}
+{"event": "skip-stale", "age_s": 3760.0, "last_bar": "2026-11-09T23:55:00", "now_ts": 1794272560, "ts": "2026-11-09T23:02:40"}
+{"event": "skip-stale", "age_s": 3780.0, "last_bar": "2026-11-09T23:55:00", "now_ts": 1794272580, "ts": "2026-11-09T23:03:00"}
+{"event": "skip-stale", "age_s": 3800.0, "last_bar": "2026-11-09T23:55:00", "now_ts": 1794272600, "ts": "2026-11-09T23:03:20"}
+{"event": "skip-stale", "age_s": 3821.0, "last_bar": "2026-11-09T23:55:00", "now_ts": 1794272621, "ts": "2026-11-09T23:03:41"}
+{"event": "skip-stale", "age_s": 3841.0, "last_bar": "2026-11-09T23:55:00", "now_ts": 1794272641, "ts": "2026-11-09T23:04:01"}
+{"event": "skip-stale", "age_s": 3861.0, "last_bar": "2026-11-09T23:55:00", "now_ts": 1794272661, "ts": "2026-11-09T23:04:21"}
+{"event": "skip-stale", "age_s": 3881.0, "last_bar": "2026-11-09T23:55:00", "now_ts": 1794272681, "ts": "2026-11-09T23:04:41"}
