@@ -769,3 +769,4 @@ Verdict appended to `AUREL_RESEARCH/findings/2026-11-09.md` under a `[REFUTE]` h
 
 **Side effects.** Writes were limited to the script, result, and log files named refute_c25_ledger under AUREL_RESEARCH, plus the findings append. The ledger, engine source, and git log were read only. No orders, no production edits, no process actions, no MT5 connection, no external requests. Backlog, DATA_MAP, and PROMOTED are unchanged. The task-observer log lies outside the write boundary and was not written, consistent with prior runs; the methodology lessons are in the findings entry.
 2026/11/09 23:26:50.36 done
+========== 2026/11/10  2:15:07.63 refute start ==========
