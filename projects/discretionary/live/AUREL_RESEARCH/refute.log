@@ -864,3 +864,21 @@ Done. The refutation of cycle30 is appended to `AUREL_RESEARCH/findings/2026-11-
 **Files written, all under AUREL_RESEARCH.** Scripts `refute_c30_expiry.py` and `refute_c30_expiry_b.py`, their result and log files, the entry draft, and the findings append. No orders, no production edits, no process actions, no scan, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED were left unchanged. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/10 14:26:50.05 done
 ========== 2026/11/10 17:15:07.63 refute start ==========
+Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-10.md` under a `[REFUTE]` header dated 17:30 (line 219).
+
+**Target.** PROMOTED.md is still empty. The only research-lane entry since the 14:30 refute is cycle 31 at 15:50, the turn-of-month calendar study. All three of its pre-registered cells were null, and I reproduced them exactly. I attacked the four readings left around the null: that all three hypotheses are positive in all three windows, that the first business day of the month is the largest cell everywhere, that production trades entered in the window show a same-sign excess, and the proposed forward cell.
+
+**Verdicts, by rules pre-registered in the script docstring.**
+
+| Claim | Verdict | Key numbers |
+|---|---|---|
+| W1 "three hypotheses positive in three windows, consistent with literature size" | broken | Removing the first business day flips the out-of-sample turn-of-month cell to −7.7 bp and the dash-for-cash cell to −4.8 bp. In 2021-23 alone they are −14.1 and −19.1. The whole pattern is one day, and the recent window is a subset of the out-of-sample window. The in-sample placebo z of 2.32 falls to 1.77 once the target days are removed from the placebo baseline. |
+| W2 first business day largest in all windows | survived by rule, borderline | Within-month permutation of a joint statistic over 12 cells and three disjoint windows gives p 0.043. Out-of-sample 2021-25 is robust: t 3.19, median difference +34 bp, 65% positive, top-3 days carry 33%. But in-sample the median difference is zero, 51% positive, and January alone carries the mean. The most recent half-year, 2026H1, is −49 bp. |
+| W2 forward cell, Tuesday-to-Friday only, 36 months, t≥2 | design passes only at the 2024-26 level | The lane computed power with n=36 but defined a cell with n≈22. Required mean at 50% power is 44 bp. In-sample mean is +18, so the cell can only pass if the 2021-25 level of +43 persists, and even then it is a coin flip. Doubling costs does not matter. |
+| W3 production Δμ +0.02R same sign in three windows | broken | Out-of-sample the excess is BUY +0.081 and SELL −0.036, in 2024-26 BUY +0.116 and SELL −0.091. That is the daily drift split by side. Trades entered on the first business day itself show negative Δμ in all three windows. |
+| W4 no turn-of-month in US500 | descriptive | US500 first business day is −6 bp in-sample and 0 out-of-sample, so the gold effect is not shared with the literature's home market. |
+
+**Methodology notes written for the research lane.** Count the overlap of day sets and the nesting of windows before claiming same-sign agreement across hypotheses and windows. Remove the target set from the placebo baseline, otherwise placebos are mechanically biased against the target. Match the sample size in a power calculation to the cell actually proposed. Print median, sign fraction and trimmed mean in both windows for any weak mean. Split production links by side and report the trades entered on the specific day. Print the latest half-year's sign before proposing a forward test.
+
+**Files written, all under AUREL_RESEARCH.** The script `refute_c31_tom.py`, its result and log files, the entry copy in `data/refute_c31_findings_entry.md`, and the findings append. No orders, no production edits, no process actions, no scan, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED were left unchanged. The task-observer log sits outside the write boundary and was not written, same as prior runs.
+2026/11/10 17:29:49.47 done
