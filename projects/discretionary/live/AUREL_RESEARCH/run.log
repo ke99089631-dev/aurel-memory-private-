@@ -677,3 +677,25 @@ The positive control (50% synthetic pull toward levels) gives z +5.5, so the met
 
 **Files written.** Script, two result files, two run logs, DFF.csv from FRED (one 0.2 s fetch), the cycle-30 findings entry, backlog (new closed item, needs-data list, methodology candidate 32, and the t-correction the refutation lane requested for cycle 29), and DATA_MAP (expiry calendar in §6, expiry stats in §1, and a new §8 edge-source map covering DIRECTIVE task 2). PROMOTED unchanged. No orders, no process actions, no MT5.
 2026/11/10 13:00:37.62 done
+========== 2026/11/10 15:42:07.08 cycle start ==========
+Cycle 31 is complete. All analysis ran synchronously in this turn and every number is filled in.
+
+**What I tested (exploration, calendar/fund-flow source):** whether gold's daily return carries the institutional month-end structures documented for equities: turn-of-month (last business day through +3), "dash for cash" (post-month-start minus pre-month-end), and the pre-holiday effect. Built ET session-day returns from the existing M5 cache with the c30 CME holiday calendar and c24 NFP calendar. Pre-registered in the script docstring, in-sample 2010-20, out-of-sample 2021-26H1, shifted-window placebos, NFP-excluded and year/weekday fixed-effect variants, and a +10 bp injection as positive control.
+
+**Result: all three cells null, every point estimate below its MDE.**
+
+| Cell | In-sample Δ (bp/day), t | Out-of-sample Δ, t | MDE in / out |
+|---|---|---|---|
+| Turn-of-month | +8.5, 1.69 | +3.9, 0.45 | 10.0 / 17.1 |
+| Dash for cash | +10.4, 1.67 | +8.7, 0.88 | 12.4 / 19.8 |
+| Pre-holiday | +15.9, 1.84 | +8.2, 0.70 | 17.3 / 23.3 |
+
+- All three are positive in all three windows, so "small effect" and "no effect" cannot be separated with 16 years. The c29 law applies to calendar effects too.
+- Replicating the same test on US500, the literature's home market, gives turn-of-month −2.8 bp/day in-sample and +0.1 out. The textbook effect is absent there as well.
+- Production link: trades entered in the turn-of-month window show Δμ +0.02R in all windows, under the gate-㉛ threshold, so logged as undecidable.
+- Post-hoc only: the first business day of the month is the largest cell in all three windows (+15/+34/+29 bp), but label-permutation family-wise p is 0.28–0.99. Recorded as a new low-priority forward cell, not a claim.
+
+**Strongest counter-argument recorded:** this null means "not larger than ~10 bp/day", which is exactly the literature's size, so the result is consistent with the effect existing. NFP days make up 8% of the window but 25% of the in-sample effect, so the residual may still be announcement-day composition. CPI/FOMC calendar remains the needed data.
+
+**Files written (all under AUREL_RESEARCH):** scripts c31, c31b; data c31 result, c31b follow-up, c31c US500 result, three run logs; one entry appended to findings/2026-11-10.md; backlog updated with the closed item, forward cell, needs-data, and methodology candidate ㉝ (print expected t from literature size before testing; test the home market first); DATA_MAP §1 tool line and §8 source-map row added. No orders, no process changes, no production edits, no external calls. The task-observer log lives outside AUREL_RESEARCH so it was not written, same as prior cycles.
+2026/11/10 15:50:39.12 done
