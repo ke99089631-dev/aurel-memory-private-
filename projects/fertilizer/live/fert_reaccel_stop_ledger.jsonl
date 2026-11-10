@@ -490,3 +490,4 @@
 {"event": "skip-stale", "age_s": 3841.0, "last_bar": "2026-11-09T23:55:00", "now_ts": 1794272641, "ts": "2026-11-09T23:04:01"}
 {"event": "skip-stale", "age_s": 3861.0, "last_bar": "2026-11-09T23:55:00", "now_ts": 1794272661, "ts": "2026-11-09T23:04:21"}
 {"event": "skip-stale", "age_s": 3881.0, "last_bar": "2026-11-09T23:55:00", "now_ts": 1794272681, "ts": "2026-11-09T23:04:41"}
+{"event": "close", "sid": "S-0475", "side": "BUY", "position": 5272307860, "fill_price": 4147.84, "exit_price": 4131.9, "exit_time": "2026-11-10T02:16:49", "sl": 4131.9, "tp": 4161.68, "volume": 0.01, "R": -1.0, "reason": "SL", "profit": -16.66, "v1_keep": false, "entry_mode": "stop", "paper_status": "open", "paper_invalid_fill": false, "gold_er": 0.1107, "gold_regime": "chop", "ts": "2026-11-10T00:17:02"}
