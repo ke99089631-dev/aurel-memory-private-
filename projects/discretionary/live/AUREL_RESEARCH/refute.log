@@ -925,3 +925,21 @@ Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-10.md`
 **Files written, all under AUREL_RESEARCH.** Scripts `refute_c33_bandtwin.py` and `refute_c33_bandtwin_b.py`, their result and log files under data, the entry copy in `data/refute_c33_findings_entry.md`, and the findings append. No orders, no production edits, no process actions, no scan, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED were left unchanged. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/10 23:27:12.80 done
 ========== 2026/11/11  2:15:07.60 refute start ==========
+Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-11.md` under a `[REFUTE]` header dated 02:30 (line 21).
+
+**Target.** PROMOTED.md is still empty. The only unrefuted research-lane entry is cycle 34 at 00:55, the gold volatility risk premium (H_VRP PASS, H_PRED null, gate 31 not passed). I did not contest the H_PRED null or the gate. Recomputing the session-day RV, alignment and Newey-West statistics reproduced all nine cells of table 1 exactly. I attacked the four readings left around the PASS.
+
+**Verdicts, by rules pre-registered in the script docstring.**
+
+| Claim | Verdict | Key numbers |
+|---|---|---|
+| W1 gold VRP +2.5 / +2.1 vol pt, same size as equities | sign survived, size inconclusive, "same as equities" broken | Jensen term is 5% of the in-sample vol-point figure, 32% out-of-sample and 82% in the recent window. In variance units gold is 3.4 times the US500 in-sample (equity control t 0.40, not significant) and 0.46 times out-of-sample. Year-cluster t out-of-sample is 0.52 with 2026 and 6.9 without. Sign holds in all four independent windows, odd and even years, and every GVZ tercile. |
+| H_VRP rule as a test | calibration only | Shuffled GVZ passes the rule 100% of 200 draws. The PASS says only that implied vol sits above realized vol. Alignment evidence rests on positive control 2, which the shuffle does break. |
+| W3 GVZ fully subsumes trailing RV | survived | Log HAR components all below t 2 in both windows, with borderline t 1.91 in-sample and 1.76 out-of-sample. |
+| W2 scan is vol-neutral, premium explains at most 20% | budget survived, "neutral" broken as a description | Budget stays at 12 to 19% in-sample and under 7% out-of-sample at both 21-day and 1-day horizons. But the scan is long same-day variance surprise in all three windows at t 2.4 to 2.8, unchanged after removing the holding bars. That exposure sits entirely in the hours after exit (t 4.2 to 5.6), not before entry (t about 1). |
+| W4 2026H1 was a half year where sellers paid | broken | The −2.18 variance units come from one 21-day window containing the Jan 29 to Feb 2 2026 crash, the three largest daily RV readings in 16 years. From Feb 10 2026 onward the premium is +1.19 variance units, a normal level. |
+
+**What this means for the lane.** The premium's sign is robust. Its size should be stated in variance units, where the out-of-sample t swings between 0.5 and 6.9 depending on whether one right-tail event is in the window. The forward cell should be rewritten in variance units, and the "is 2026H1 transient" question is already answered by the post-February data. The "vol-neutral" label should become "long same-day follow-through volatility, neutral to 21-day volatility", which is the intraday face of the known c27 and c32 effects and remains look-ahead, not an entry rule.
+
+**Files written, all under AUREL_RESEARCH.** Scripts `refute_c34_vrp.py` and `refute_c34_vrp_b.py`, their result and log files under data, the entry copy in `data/refute_c34_findings_entry.md`, and the findings append. No orders, no production edits, no process actions, no scan, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED were left unchanged. The task-observer log sits outside the write boundary and was not written, same as prior runs.
+2026/11/11  2:26:05.21 done

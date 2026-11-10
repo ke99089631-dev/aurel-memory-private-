@@ -17025,3 +17025,12 @@ RuntimeError: MT5Farm initialize失敗: (-6, 'Terminal: Authorization failed')
 [決着記録] BUY 56050466 建値27718.75→出口27731.46 TIME R0.029 損益0.69
 [紙双子・決着] cid1794247500 BUY TIME R-0.564
 [終了]
+[接続] 畑A 806782 / VantageTradingLtd-Demo / 残高990.8 / NAS100.r  armed=True
+[!!] 二重ロック解錠=LIVEデモ発注モード。NAS100.rに実際に撃ちます。
+[終了]
+[接続] 畑A 806782 / VantageTradingLtd-Demo / 残高990.8 / NAS100.r  armed=True
+[!!] 二重ロック解錠=LIVEデモ発注モード。NAS100.rに実際に撃ちます。
+[終了]
+[接続] 畑A 806782 / VantageTradingLtd-Demo / 残高990.8 / NAS100.r  armed=True
+[!!] 二重ロック解錠=LIVEデモ発注モード。NAS100.rに実際に撃ちます。
+[終了]
