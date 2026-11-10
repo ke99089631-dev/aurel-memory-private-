@@ -883,3 +883,25 @@ Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-10.md`
 **Files written, all under AUREL_RESEARCH.** The script `refute_c31_tom.py`, its result and log files, the entry copy in `data/refute_c31_findings_entry.md`, and the findings append. No orders, no production edits, no process actions, no scan, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED were left unchanged. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/10 17:29:49.47 done
 ========== 2026/11/10 20:15:07.61 refute start ==========
+Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-10.md` under a `[REFUTE]` header dated 20:30 (line 260).
+
+**Target.** PROMOTED.md is still empty. The only unrefuted research-lane entry is cycle 32 at 18:55, the wall-break volatility signature study. I attacked its four residual weak signals plus the rule-based H_V pass.
+
+**Reproduction.** Replaying the research lane's exact random sequence reproduces its SET C numbers to four decimals. The draw-to-draw spread across 12 seeds is 0.0016, so the lane's figures are stable.
+
+**Verdicts, by rules pre-registered in the script docstring.**
+
+| Claim | Verdict | Key numbers |
+|---|---|---|
+| W1 wall-specific post-hour vol of +1.4 to +1.9% after matching pre-hour vol | broken | The placebo pool excluded ±1 hour around every real trade, so control post-windows could never contain a trigger bar while 10 to 16% of trade post-windows did. Removing that mask and matching both pre-vol and trigger-bar range gives +0.3% in-sample and +0.4% out-of-sample, both t below 0.7. The lane's one-to-one subtraction of the pre residual assumed a persistence coefficient of 1. The within-group regression gives 0.29. |
+| W2 vol decays faster after a wall break than after a same-range bar | broken | With pre-vol matched, the decay difference is +0.0006 with mask and −0.010 without, against the lane's −0.057. The original number was regression to the mean of trades selected from loud hours. |
+| W3 trades drift −0.02 to −0.05R in the first hour relative to same-side random bars | survived, in-sample only | Direction-matched, range-matched, pre-vol-matched placebos give −0.030R at t −2.14 in-sample, and those placebos do not revert, so my generic lag-1 reversal mechanism failed. But the out-of-sample confirmation at t −2.22 is matched by a negative control of −0.039R at t −1.96 on pseudo-trades that should read zero. Direction-only placebos shrink the in-sample figure to −0.007. |
+| W4 mid walls quieter, outer walls louder | broken | Both cells flip sign between in-sample and out-of-sample. |
+| H_V PASS by rule | null under full matching | In-sample +0.003 at t 0.61, out-of-sample +0.004 at t 0.65. The pass came from the pre-vol mismatch plus the mask. |
+
+**What actually survives.** The post-break hour is indistinguishable in volatility from a random bar at the same slot with the same range and the same prior-hour volatility, with a minimum detectable effect near 1%. The lane's own headline conclusion that a wall break is not an event in the 5-minute process gets stronger. The negative first-hour drift remains as an in-sample observation whose size depends on the control definition. The forward cell needs redefining on the fully matched, unmasked design, since the SET C definition carries a mechanical +0.01 to +0.016 bias.
+
+**Methodology notes written for the research lane.** Excluding trade neighbourhoods from placebo candidates is a one-sided selection on the outcome window. Match both the prior state and the trigger-bar size. Estimate the pre-to-post persistence by regression rather than assuming it is 1. Run a placebo-of-placebo negative control as standard, since the drift statistic failed calibration out-of-sample. Controls drawn only from past days flip the sign of the vol difference, so differences under ±0.01 are design-dependent.
+
+**Files written, all under AUREL_RESEARCH.** Scripts `refute_c32_breakvol.py` and `refute_c32_breakvol_b.py`, their result and log files under data, the entry copy in `data/refute_c32_findings_entry.md`, and the findings append. No orders, no production edits, no process actions, no scan, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED were left unchanged. The task-observer log sits outside the write boundary and was not written, same as prior runs.
+2026/11/10 20:25:26.32 done
