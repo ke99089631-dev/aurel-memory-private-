@@ -124,6 +124,12 @@ P = P_ALL[keep]; ordd = ord_all[keep]; tod = tod_all[keep]; year = year_all[keep
 logP = np.log(P)
 say(f"- 取引足 {len(P)} 本（flat {flat.mean()*100:.1f}%・⑪）")
 trade_day = (wd < 5) & ~is_hol
+EXCL_FRI = os.environ.get("EXCL_FRI", "0") == "1"  # 補足 b: 金曜（NFP/CPI 等 08:30 発表日が多い）を E/C/プラセボから除く
+if EXCL_FRI:
+    OUT = os.path.join(DATA, "c30b_option_expiry_exfri_result.md"); trade_day &= (wd < 4)
+    say("- **補足 b（事後）: 金曜を E・C・プラセボ集合から除外**（満期日は規則上 金曜に落ちない → 対照/プラセボの金曜分散が差を作る疑いの検査）")
+ew = np.array([dt.date.fromordinal(int(o)).weekday() for o in EXP_ORD])
+say("- 満期日の曜日構成: " + " ".join(f"{n}:{(ew==i).sum()}" for i, n in enumerate("月火水木金")))
 WIN = {"在 2010-20": (2010, 2020), "外 2021-26H1": (2021, 2026), "近年 2024-26H1": (2024, 2026)}
 PRE = (tod >= 480) & (tod < 810); LATE = (tod >= 690) & (tod < 810); POST = (tod >= 810) & (tod <= 1015)
 # DFF（basis 用）
@@ -166,7 +172,7 @@ def stats(S, wmask, adj_map=None, Pov=None):
     Pm = P if Pov is None else Pov
     i = np.array([BIDX.get(o, -1) for o in S]); i = i[i >= 0]
     Spm = np.unique(np.concatenate([BORD[np.clip(i + k, 0, len(BORD) - 1)] for k in (-1, 0, 1)]))
-    inE = np.isin(ordd, S) & wmask; inC = trade_day & ~np.isin(ordd, Spm) & wmask
+    inE = np.isin(ordd, S) & wmask & trade_day; inC = trade_day & ~np.isin(ordd, Spm) & wmask
     out = {}
     out["nE"] = len(np.unique(ordd[inE & PRE])); out["nC"] = len(np.unique(ordd[inC & PRE]))
     for nm, W in (("PRE", PRE), ("LATE", LATE)):
@@ -231,6 +237,9 @@ for wn, (lo, hi) in WIN.items():
         v = r0[f"dir_{nm}"]
         zline(f"dir_{nm}", lambda x: x[0] - x[1], f"  H_DIR {nm} 平均リターン差", unit=" bp", extra=f"；E {v[0]:+.2f} vs C {v[1]:+.2f} bp・Welch t {v[2]:+.2f}（E {v[3]} 日）")
     RES[wn] = (r0, pl, bm0, D_pin, z_pin, sd_pin)
+    # 曜日構成を保つプラセボ（s=±5・±10）を読むために全 s の D を印字
+    for key, pick, lab, sc in (("rho50_PRE", lambda x: x[2], "D_ρ50PRE", 1), ("rv_LATE", lambda x: math.log(x[0]), "logRV_LATE", 1), ("rv_PRE", lambda x: math.log(x[0]), "logRV_PRE", 1)):
+        say(f"  全 s の {lab}: " + " ".join(f"{s:+d}:{pick(p[key])*sc:+.3f}" for s, p in pl) + f"；**曜日一致 s=±5,±10 の平均 {np.mean([pick(p[key]) for s, p in pl if abs(s) in (5, 10)]):+.3f}（実測 {pick(r0[key]):+.3f}）**")
 
 # ---------------- 陽性対照（注入・在） ----------------
 wn = "在 2010-20"; lo, hi = WIN[wn]; wmask = (year >= lo) & (year <= hi)

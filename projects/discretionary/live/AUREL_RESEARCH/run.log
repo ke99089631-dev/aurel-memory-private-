@@ -656,3 +656,24 @@ Cycle 29 is complete and recorded. It was the charter's meta cycle, since none h
 **What's next.** The two methodology candidates are a measurement rule (use mean differences and the entry-bar look-ahead control, never rank correlation) and a pre-run gate (skip cells whose equivalent correlation is below 0.06 or whose required sample exceeds three years). Both are proposals for the next meta cycle to compare before and after, not changes applied now. For AUREL main, the single highest-value offline job remains the gold M5 extension.
 2026/11/10  9:54:45.74 done
 ========== 2026/11/10 12:42:07.15 cycle start ==========
+Cycle 30 is complete. Everything ran in the foreground, the findings entry carries real numbers, and all writes stayed under AUREL_RESEARCH (the other modified files in git status are live-executor ledgers, untouched by me).
+
+**What I tested.** COMEX gold option monthly expiry days (12:30 CT termination) as a dealer-gamma hedging-demand source: does spot gold's 5-minute price "pin" to 50/100 USD strike levels on expiry days, reversing the fast-transit structure found in cycle 26? The expiry calendar was derived from the exchange rule (4th-last business day, Friday/pre-holiday shift, CME holidays), validated by holiday flat-ratios in the feed and a 10/10 match against remembered dates. The placebo null was the same rule shifted by s business days (22 sets).
+
+**Result: null across the board.**
+
+| Cell | In-sample 2010-20 | Out-of-sample 2021-26H1 |
+|---|---|---|
+| H_PIN occupancy diff D_ρ (G=50, pre-expiry window) | +0.115, z +0.51 | −0.126, z −0.53 |
+| H_ADJ basis-adjusted strike levels, z | +0.65 | +0.28 |
+| Pre-expiry realized variance ratio (Friday-excluded) | 0.87 | 0.77 |
+| Production entries on expiry days, Δμ | +0.083R (t 0.99, n 158) | +0.004R (n 111) |
+
+The positive control (50% synthetic pull toward levels) gives z +5.5, so the method sees strong pinning. The detection floor is coarse: occupancy would have to rise about 40% to register.
+
+**Strongest counter-argument recorded.** Pinning happens in the front-month futures price, and the spot-to-futures basis is 10 to 18 USD out-of-sample (serial months, rates 4 to 5%), ten times the 1 USD band. The DFF-only basis correction ignores lease rates, so the out-of-sample adjusted cell may simply be mislocated. Futures GC M5 data is logged as the needs-data item that would settle it.
+
+**Side observations kept as descriptive only.** Expiry-day variance compression in-sample is a weekday-composition artifact (expiry days are never Fridays, 42% Tuesdays). Out-of-sample it remains at a 0.68 ratio on 66 days but is within family-wise null. Month-end last-business-day midday variance is 2.5 to 3.4x out-of-sample and 1.0x in-sample, so it was logged and not run, per gate 31.
+
+**Files written.** Script, two result files, two run logs, DFF.csv from FRED (one 0.2 s fetch), the cycle-30 findings entry, backlog (new closed item, needs-data list, methodology candidate 32, and the t-correction the refutation lane requested for cycle 29), and DATA_MAP (expiry calendar in §6, expiry stats in §1, and a new §8 edge-source map covering DIRECTIVE task 2). PROMOTED unchanged. No orders, no process actions, no MT5.
+2026/11/10 13:00:37.62 done
