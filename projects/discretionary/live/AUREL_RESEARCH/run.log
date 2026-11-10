@@ -655,3 +655,4 @@ Cycle 29 is complete and recorded. It was the charter's meta cycle, since none h
 
 **What's next.** The two methodology candidates are a measurement rule (use mean differences and the entry-bar look-ahead control, never rank correlation) and a pre-run gate (skip cells whose equivalent correlation is below 0.06 or whose required sample exceeds three years). Both are proposals for the next meta cycle to compare before and after, not changes applied now. For AUREL main, the single highest-value offline job remains the gold M5 extension.
 2026/11/10  9:54:45.74 done
+========== 2026/11/10 12:42:07.15 cycle start ==========
