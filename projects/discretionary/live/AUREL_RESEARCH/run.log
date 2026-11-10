@@ -777,3 +777,21 @@ Picked the queued deepening item from cycle33: is the out-of-band deficit (jh∉
 **Files touched (all under AUREL_RESEARCH):** findings/2026-11-11.md (one new entry), backlog.md (item closed, two residuals, methodology candidate ㊲), DATA_MAP.md (§2 new tool line), scripts/c35_band_deficit_timing.py, data/c35_band_deficit_timing_result.md, data/c35_run.log. PROMOTED.md unchanged. No orders, no production edits, no process actions.
 2026/11/11  3:51:33.67 done
 ========== 2026/11/11  6:42:06.89 cycle start ==========
+Cycle 36 is complete. All outputs are written under AUREL_RESEARCH, the findings entry carries real numbers, and no placeholder text remains.
+
+**What I did**
+
+- Picked exploration (the 2:1 balance after c35's deepening): a new source-of-edge row, "weekend closure risk and hedging demand", tested as a day-of-week hypothesis on gold's ET session returns. The signed weekend gap was already measured by the refute lane, so I cited it instead of re-testing.
+- Pre-registered two cells (Friday positive, Monday negative), Bonferroni-corrected, with a within-week label-permutation family-wise p, NFP-excluded and year-fixed-effect variants, a US500 home-market control, and the ㉛ gate for the production scan. Three scripts ran synchronously in 13 s, 12 s and 1 s on existing caches only.
+
+**What the data said**
+
+- Friday was real in-sample 2010-20: +13.8 bp per day, t 2.83, family-wise p 0.026, unchanged when NFP Fridays are removed. It sits in the NY afternoon window (12:00–16:55 ET, t 4.23), not in the weekend gap.
+- It is gone out-of-sample: +1.4 bp, t 0.17. In independent sub-windows the afternoon premium decays +11 → +5 → +5 → −7 bp, and the in-versus-out difference in that window is t ≈ 2.6, so "disappeared" is actually distinguishable here, unlike the c22 overnight case.
+- Monday is null in every window. US500 shows no weekday structure at all. Friday entries in the scan have Δμ −0.023R in-sample, under the gate, so no out-of-sample run.
+- The mechanism's predictions scored 2 of 4 in-sample and 0 to 1 out-of-sample, so "weekend insurance demand" is not adopted as the explanation. Verdict: null, logged as the second documented example of an in-sample-only edge that died (after the AM fix band).
+
+**Strongest counter-argument recorded**: the pre-registered session-level cell has an out-of-sample MDE (16 bp) larger than the in-sample effect, so the clean "disappeared" claim rests on the afternoon sub-window, which was located after seeing the data.
+
+**Files touched**: new scripts c36_day_of_week.py and c36b_friday_subwindows.py, six result and log files under data/, one findings entry appended to findings/2026-11-11.md, backlog.md (closed item, one forward cell, one new hypothesis on NY-afternoon-to-next-morning reversal across all five weekday pairs, methodology candidate ㊳), and DATA_MAP.md (header, §1 tool line, new §8 row). No orders, no process changes, no external calls, PROMOTED unchanged. The task-observer log lives outside AUREL_RESEARCH, so, as in prior cycles, it was not written and the lesson is recorded in findings and backlog instead.
+2026/11/11  6:52:45.99 done
