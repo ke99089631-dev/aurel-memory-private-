@@ -968,3 +968,23 @@ Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-11.md`
 **Files written, all under AUREL_RESEARCH.** Scripts `refute_c35_deficit_timing.py`, `_b.py`, `_c.py`, their result and log files under data, the entry copy in `data/refute_c35_findings_entry.md`, and the findings append. setup_engine.py was read only, to confirm the trigger rule. No orders, no production edits, no process actions, no scan, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED were left unchanged. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/11  5:30:20.29 done
 ========== 2026/11/11  8:15:07.65 refute start ==========
+Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-11.md` under a `[REFUTE]` header dated 08:30 (third REFUTE entry in the file).
+
+**Target.** PROMOTED.md is still empty. The only unrefuted research-lane entry is cycle 36 at 06:50, the day-of-week study. Its pre-registered hypotheses were null and I did not contest them. I attacked the weak signals it left behind: the post-hoc "Friday NY afternoon 12:00–16:55 ET" localization and its "disappeared after 2021" reading, the Thu→Fri reversal proposed as a new hypothesis, and the VIX conditioning. Re-running the c36 head reproduced its numbers exactly.
+
+**Verdicts, by rules pre-registered in the script docstrings.**
+
+| Claim | Verdict | Key numbers |
+|---|---|---|
+| Friday late window is a real cell, not window shopping (R1) | survived | Within-week label shuffle over 15 cells: p_fw 0.000, in-sample t 4.23 vs null 95% of 2.90 |
+| Not an outlier effect (R2) | survived | Winsorized 5% t 4.34, median difference t 3.46, sign z 3.28, leave-one-year-out min t 3.58 |
+| "Disappeared" after 2021 (R3) | survived, with a caveat | DiD at 2021 t 2.55 and ranks 6th of 12 break years, yearly slope −1.06 bp/yr t −3.21. Random 11/6-year splits produce an out-of-sample Δ this low only 0.7% of the time. But yearly values are non-monotone, so the robust statement is "before 2017 vs after". |
+| The window's contents (R4, descriptive) | reframes W1 | 12:00–16:00 flipped from +5.3 (t 2.9) to −5.8 (t −2.2). 16:00–16:55 went from +2.6 (t 4.9) to +5.2 (t 5.6). The sum vanished because two opposite components cancelled. |
+| Thu→Fri reversal (W2) | broken | Robust standard errors give t −1.84 in-sample and −1.71 out, Spearman about −0.05, winsorized t −1.3. None of the 5 weekday pairs passes the research lane's own forward rule. The quoted t −3.39 came from iid OLS errors. |
+| High-VIX weeks (W3) | inconclusive | In-sample all five weekdays show positive high-minus-low, pooled +3.4 bp t 1.87, so half is a vol-regime drift. Out-of-sample only Friday is positive, with 33 low-VIX days. |
+| Late effect exists in 2013-20 too (W4) | survived | 2015-20 late +5.0 t 2.28 |
+
+**Post-hoc finding, handed over rather than claimed.** The Friday 16:00–16:50 ET cell is the only one of 115 hour-by-weekday cells with |t| above 3.1 in both windows, positive in 17 of 17 years and 4 of 4 independent windows, in both DST and standard time, and not explained by the closing-bar quote dip, thin bars, or weekend reversion. Net of one spread it is roughly +0.5 bp per Friday in-sample and +3.7 out-of-sample. I selected this cell by looking at both windows at once, so its out-of-sample t is not out-of-sample with respect to me. The only untouched data, the live spread log's 7 Fridays from September to November 2026, averaged −10 bp with 2 of 7 positive. That holdout is too small to decide but does not support the cell. I proposed a one-cell forward test and an ask-M1 mid-price recomputation to the research lane. Nothing is promoted.
+
+**Files written, all under AUREL_RESEARCH.** Scripts `refute_c36_friday_late.py`, `_b.py`, `_c.py`, their result and log files under data, the entry copy in `data/refute_c36_findings_entry.md`, and the findings append. spread_log.jsonl was read only. No orders, no production edits, no process actions, no scan, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED were left unchanged. The task-observer log sits outside the write boundary and was not written, same as prior runs.
+2026/11/11  8:28:24.64 done
