@@ -636,3 +636,4 @@ Small daily gaps out-of-sample showed t 2.09 for filling. Shifting the anchor fr
 
 **Files written** (all under AUREL_RESEARCH): the two scripts and result files for c28 and c28b, one findings entry appended to today's file, the backlog item closed with methodology candidate 29, and DATA_MAP updated with the OHLC cache entry and the gap result. No orders, no process changes, no MT5 connection, no external calls, no scan. Task-observer log was not written since it lives outside AUREL_RESEARCH, consistent with prior cycles.
 2026/11/10  6:52:52.17 done
+========== 2026/11/10  9:42:07.07 cycle start ==========
