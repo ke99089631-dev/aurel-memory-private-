@@ -944,3 +944,26 @@ Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-11.md`
 **Files written, all under AUREL_RESEARCH.** Scripts `refute_c34_vrp.py` and `refute_c34_vrp_b.py`, their result and log files under data, the entry copy in `data/refute_c34_findings_entry.md`, and the findings append. No orders, no production edits, no process actions, no scan, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED were left unchanged. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/11  2:26:05.21 done
 ========== 2026/11/11  5:15:07.71 refute start ==========
+Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-11.md` under a `[REFUTE]` header dated 05:30 (line 58).
+
+**Target.** PROMOTED.md is still empty. The only unrefuted research-lane entry is cycle 35 at 03:50: out-of-band trades lose about 0.03R versus same-hour twins, and H_M1 passed with the claim that the whole deficit is born within 12 bars and is a market drift in the hour after the break. I did not contest H_M2. Re-generating the twins with the same seed reproduced the cycle 35 table exactly, and re-deciding every trade from the OHLC grid with its true entry price matched the recorded exits 100%.
+
+**Verdicts, by rules pre-registered in the script docstrings.**
+
+| Claim | Verdict | Key numbers |
+|---|---|---|
+| Deficit is a post-break market drift (knowledge 2) | in-sample survived, out-of-sample broken, rule says inconclusive | Entering the real trade at its own bar close with the twins' bookkeeping (RC) keeps 80% of the in-sample 12-bar deficit (t −3.9) and it persists to bar 288 (t −2.5). Out-of-sample RC leaves −0.016 at 12 bars (t −1.4) and −0.002 at 288 (t −0.1). |
+| What the out-of-sample deficit actually is | descriptive | Half is the trigger-bar remainder x0 (−0.016R on hold≥1 trades), half is anchoring SL and TP at the trigger price rather than the close. The anchoring part comes entirely from the 7.5% of trades whose exit flips, net 1.7 points more SL-to-TP than the reverse. |
+| Nothing after 12 bars (Markov) | survived | Conditional remaining P&L for survivors, real minus twins: in-sample +0.010 (t 0.6), out-of-sample −0.010 (t −0.4). MDE is 0.03 to 0.05R. |
+| Twin lottery | survived | Four seeds plus a 64-twin draw span 0.004R in-sample, all t at or below −3.9. |
+| Sign across independent windows | survived | Negative in all four windows. |
+| K=1 is half the deficit and is the trigger bar (knowledge 4) | survived | In-sample K=1 −0.014 falls to −0.006 under RC. |
+| Band "recovers by bar 288" (knowledge 3) | inconclusive | Under RC the in-sample band sits at −0.010 at bar 288 with se 0.02, so neither recovery nor deficit is resolved. |
+| My own counter-hypothesis: BUY TRIG_SPREAD booking convention | broken | Only 26% of BUYs are booked above the bid high, mean 0.027 USD. Twins paying the identical amount keep 88 to 92% of the deficit. |
+
+**Two post-hoc findings worth the research lane's attention.** The in-sample deficit is BUY-only under the original comparison (BUY −0.069 at t −6.3, SELL −0.003), and RC equalizes the sides at 12 bars, so the asymmetry lives in the trigger bar: BUY bars retrace about 0.04R to the close in every window, SELL bars continue. The booking convention explains only 0.008R of that. Separately, twins paying a full 0.22 USD ask spread on every BUY erase the deficit, so the twin shortfall is the size of one spread. That is calibration, not refutation, since a live BUY pays that spread too.
+
+**Recommended rewrite.** Knowledge (2) should be split by window: in-sample, a two-sided post-close drift that halves within 15 to 30 minutes; out-of-sample, a BUY-side trigger-bar retrace plus barrier placement, with nothing after the close. Two forward cells are proposed: RC deficit at 12 bars at or below −0.02 with t at or below −2, and BUY minus SELL x0 at or below −0.03.
+
+**Files written, all under AUREL_RESEARCH.** Scripts `refute_c35_deficit_timing.py`, `_b.py`, `_c.py`, their result and log files under data, the entry copy in `data/refute_c35_findings_entry.md`, and the findings append. setup_engine.py was read only, to confirm the trigger rule. No orders, no production edits, no process actions, no scan, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED were left unchanged. The task-observer log sits outside the write boundary and was not written, same as prior runs.
+2026/11/11  5:30:20.29 done
