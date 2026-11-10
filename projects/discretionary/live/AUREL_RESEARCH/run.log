@@ -699,3 +699,4 @@ Cycle 31 is complete. All analysis ran synchronously in this turn and every numb
 
 **Files written (all under AUREL_RESEARCH):** scripts c31, c31b; data c31 result, c31b follow-up, c31c US500 result, three run logs; one entry appended to findings/2026-11-10.md; backlog updated with the closed item, forward cell, needs-data, and methodology candidate ㉝ (print expected t from literature size before testing; test the home market first); DATA_MAP §1 tool line and §8 source-map row added. No orders, no process changes, no production edits, no external calls. The task-observer log lives outside AUREL_RESEARCH so it was not written, same as prior cycles.
 2026/11/10 15:50:39.12 done
+========== 2026/11/10 18:42:07.14 cycle start ==========
