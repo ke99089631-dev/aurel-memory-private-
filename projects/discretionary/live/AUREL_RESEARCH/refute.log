@@ -967,3 +967,4 @@ Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-11.md`
 
 **Files written, all under AUREL_RESEARCH.** Scripts `refute_c35_deficit_timing.py`, `_b.py`, `_c.py`, their result and log files under data, the entry copy in `data/refute_c35_findings_entry.md`, and the findings append. setup_engine.py was read only, to confirm the trigger rule. No orders, no production edits, no process actions, no scan, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED were left unchanged. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/11  5:30:20.29 done
+========== 2026/11/11  8:15:07.65 refute start ==========
