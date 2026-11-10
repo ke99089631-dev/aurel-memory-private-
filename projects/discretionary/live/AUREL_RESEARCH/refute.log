@@ -844,3 +844,22 @@ Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-10.md`
 **Files written, all under AUREL_RESEARCH.** The script `refute_c29_entrylaw.py`, its result and log files, the entry draft, and the findings append. No orders, no production edits, no process actions, no scan, no M5 load, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED were left unchanged. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/10 11:28:12.05 done
 ========== 2026/11/10 14:15:07.71 refute start ==========
+Done. The refutation of cycle30 is appended to `AUREL_RESEARCH/findings/2026-11-10.md` under a `[REFUTE] 2026-11-10 14:30` header.
+
+**Target.** Cycle30 (COMEX gold option expiry pinning, 12:55) left two weak signals after its null main cells: W1, expiry-day LATE variance compression in out-of-sample only, and W2, month-end LATE variance 2.5 to 3.4 times normal out-of-sample.
+
+**Verdicts, by rules pre-registered in the script docstring.**
+
+| Claim | Verdict | Key numbers |
+|---|---|---|
+| W1 expiry-day LATE compression | survived by rule, reading broken | Weekday-matched nearby-week placebo gives p 0.030 out-of-sample, p 0.002 excluding 2026H1, no compression after 13:30. But 9-cell family-wise p is 0.13 to 0.18, the adjacent business day is equally compressed, and removing announcement-proxy days halves the mean-based effect to p 0.20. |
+| W1 "out-of-sample only" | broken | Rank statistics show the same compression in-sample. Median ratio is 0.76 in both windows. AUC p is 0.002 in-sample and 0.001 out-of-sample. The lane's log-mean-ratio picked up big-day composition, not a regime difference. |
+| W1 "LATE window, pinning-type" | broken | The largest cell is PRE, not LATE. The trough spans the 5th and 4th last business days in every window. Pinning was already rejected by the lane's own occupancy test. |
+| W2 month-end variance spike | broken | In-sample ratio 1.07, p 0.69. Out-of-sample excluding 2026H1 ratio 1.01, p 0.80. Top 3 days carry 70% of the sum, led by 2026-01-30 at 42 times the group mean. As the max over 22 placebo shifts, p_fw is 0.58, exactly the null's median. |
+
+**What actually survives.** The 5th and 4th last business days of the month are about 24% quieter in median terms during US hours, consistently in-sample and out-of-sample. Roughly half of the mean-based effect is the absence of announcement days on those dates. The 13:00 ET bar never ranks in the top 5% on any of the 66 out-of-sample expiry days, against an expected 3.7. An auction and CPI/FOMC calendar is needed to separate the two mechanisms.
+
+**Methodology notes for the research lane.** Print mean-of-log and AUC beside log-mean variance ratios, since the two gave opposite in-sample conclusions here. Always print D at s=±1 before excluding those days from control and placebo. Print the business-days-to-month-end curve before testing any calendar day set. Take the max-over-shifts null before reading a post-hoc maximum from a placebo column.
+
+**Files written, all under AUREL_RESEARCH.** Scripts `refute_c30_expiry.py` and `refute_c30_expiry_b.py`, their result and log files, the entry draft, and the findings append. No orders, no production edits, no process actions, no scan, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED were left unchanged. The task-observer log sits outside the write boundary and was not written, same as prior runs.
+2026/11/10 14:26:50.05 done
