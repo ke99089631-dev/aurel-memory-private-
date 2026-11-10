@@ -637,3 +637,21 @@ Small daily gaps out-of-sample showed t 2.09 for filling. Shifting the anchor fr
 **Files written** (all under AUREL_RESEARCH): the two scripts and result files for c28 and c28b, one findings entry appended to today's file, the backlog item closed with methodology candidate 29, and DATA_MAP updated with the OHLC cache entry and the gap result. No orders, no process changes, no MT5 connection, no external calls, no scan. Task-observer log was not written since it lives outside AUREL_RESEARCH, consistent with prior cycles.
 2026/11/10  6:52:52.17 done
 ========== 2026/11/10  9:42:07.07 cycle start ==========
+Cycle 29 is complete and recorded. It was the charter's meta cycle, since none had been run in 28 cycles and it was the last open DIRECTIVE launch task. All analysis ran in the foreground (17 s plus 0.8 s) on the existing scan cache, with no scans, no MT5, no external calls, and writes only under AUREL_RESEARCH.
+
+**What the audit found.** Parsing all findings gave 25 research cycles and 34 refute entries. Headlines read null 19, PASS 9, FAIL 5, inconclusive 4, and none of the PASS results is an edge. The research lane's reported minimum detectable effects have a median of 0.081R, which is 49% of the ledger's gross edge of 0.165R. Fifteen pre-registered forward cells all wait on a single dataset, the gold M5 extension from July 2026 onward, which is mentioned 58 times across findings and backlog. The MT5 probe and XAU ask M1 are the next two blockers.
+
+**The "entry filters lose" law, in numbers.** A monotone filter keeping the top half of trades raises mean R by about 0.8 to 0.9R per unit of rank correlation, and this reproduces out of sample within 14%. Reaching +0.05R needs a correlation near 0.06, yet even a 0.10 filter keeps only 57% of the top-decile winners against 50% at random. Every entry-known feature actually available moves mean R by at most 0.027R in sample and 0.038R out of sample. Detecting a 0.05R shift needs 3,400 to 4,900 trades, which is 2 to 3 years, longer than regimes last. So achievable effects sit below what one regime can confirm, while look-ahead controls built from the entry bar move R by 0.12 to 0.21R with t of 4 to 8, proving the method would see an effect of that size.
+
+| Quantity | Value |
+|---|---|
+| Correlation needed for +0.05R | 0.054 to 0.064 |
+| Realized max effect, in/out of sample | 0.027R / 0.038R |
+| Trades to detect 0.05R | 3,400 to 4,900 |
+
+**Pre-registered predictions.** P3 and P4 held. P2 failed, since the required correlation was 0.064 rather than 0.08. P1 failed as written, and the failure was my own measurement error: Spearman correlation on a binary-outcome variable picks up geometry through b, risk, and FEED_TOL, so a feature like risk shows a rank correlation of −0.25 while its mean difference is −0.008. I kept the failed pre-registration on record and added the corrected mean-difference measure as a labeled post-hoc supplement. This is also the strongest counter-argument I logged, together with the fact that the law bounds only monotone filters and does not exclude a few regime-type cells near 0.07R, such as the surviving DGS10 Δ80 cell.
+
+**Files written.** Two scripts under scripts/, result and log files under data/, one findings entry appended to findings/2026-11-10.md, the meta item closed in backlog.md with two new methodology candidates, and a tools entry in DATA_MAP.md section 2. PROMOTED.md is unchanged.
+
+**What's next.** The two methodology candidates are a measurement rule (use mean differences and the entry-bar look-ahead control, never rank correlation) and a pre-run gate (skip cells whose equivalent correlation is below 0.06 or whose required sample exceeds three years). Both are proposals for the next meta cycle to compare before and after, not changes applied now. For AUREL main, the single highest-value offline job remains the gold M5 extension.
+2026/11/10  9:54:45.74 done
