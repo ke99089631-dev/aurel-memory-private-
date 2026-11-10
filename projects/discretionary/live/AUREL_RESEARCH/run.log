@@ -700,3 +700,16 @@ Cycle 31 is complete. All analysis ran synchronously in this turn and every numb
 **Files written (all under AUREL_RESEARCH):** scripts c31, c31b; data c31 result, c31b follow-up, c31c US500 result, three run logs; one entry appended to findings/2026-11-10.md; backlog updated with the closed item, forward cell, needs-data, and methodology candidate ㉝ (print expected t from literature size before testing; test the home market first); DATA_MAP §1 tool line and §8 source-map row added. No orders, no process changes, no production edits, no external calls. The task-observer log lives outside AUREL_RESEARCH so it was not written, same as prior cycles.
 2026/11/10 15:50:39.12 done
 ========== 2026/11/10 18:42:07.14 cycle start ==========
+Cycle 32 is complete. One deepening entry was pre-registered, run, and recorded with real numbers.
+
+**What I tested.** Whether a wall-break trigger is an "event" in the 5-minute price process. For each of the 19,404 scan trades I drew four placebo anchors at the same Eastern-time slot within ±28 days, matched on entry-bar range (SET B, the pre-registered main set), and compared the hour after entry on volatility, lag-1 autocorrelation, and directional drift. Both scripts ran in the foreground in about 15 seconds total using only the existing OHLC cache and scan json.
+
+**Results.**
+- **H_V (volatility) passes the pre-registered rule but the pre-stated counter-argument holds.** Post-entry volatility is 5% higher than same-range placebo bars in-sample and 2% out-of-sample. The hour *before* the trigger is elevated even more, so volatility after the break decays faster than after a comparable big bar. A post-hoc set matched on pre-hour volatility leaves a break-specific excess of only 1.5 to 2% in all three windows. Statistically present, economically nothing.
+- **H_A (autocorrelation) is null.** Post-break lag-1 autocorrelation equals the placebo's to within 0.001 with a detection floor near 0.007. The backlog item on post-break local momentum is closed.
+- **Descriptive.** The first hour after entry drifts against the trade by roughly 0.02 to 0.04R versus same-side placebos, the same size as the scan population's slight negative expectancy. This is consistent with generic lag-1 mean reversion of the trigger bar and shrinks in recent years as that autocorrelation vanished.
+
+**Strongest counter-argument recorded.** The null is at 5-minute bid-close resolution. Stop cascades shorter than five minutes would be invisible, so I logged a request for the minute-level cache that the main lane builds offline.
+
+**Files written, all under AUREL_RESEARCH.** Two scripts (`c32_break_vol_signature.py`, `c32b_prevol_matched.py`), two result files and two logs under data, one findings entry appended to today's file, the backlog (item closed, new deepening entry, methodology candidate 34, next deepening candidate: a twin test restricted to the production band), and DATA_MAP section 2. PROMOTED is unchanged. No orders, no process or production-file changes, no external calls. The task-observer log lives outside AUREL_RESEARCH, so as in prior cycles I did not write to it.
+2026/11/10 18:55:30.89 done
