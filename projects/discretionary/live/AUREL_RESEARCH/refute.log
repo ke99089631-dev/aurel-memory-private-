@@ -824,3 +824,4 @@ Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-10.md`
 
 **Files written, all under AUREL_RESEARCH.** Scripts `refute_c28_gapfill.py` and `refute_c28_gapfill_b.py`, their result and log files including the preserved v1 pair, and the findings entry. No orders, no production edits, no process actions, no scan, no M5 load, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED were left to the research lane. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/10  8:26:53.73 done
+========== 2026/11/10 11:15:07.57 refute start ==========
