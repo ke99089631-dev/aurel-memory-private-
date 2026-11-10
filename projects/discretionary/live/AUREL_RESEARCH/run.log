@@ -738,3 +738,24 @@ Cycle 33 is complete. One findings entry was appended, the analysis ran synchron
 **Next cycle candidates.** The mechanism check logged in backlog: whether the off-band shortfall equals the first-hour negative drift found in cycle 32, split by band. It runs on existing caches in about ten seconds.
 2026/11/10 21:50:56.14 done
 ========== 2026/11/11  0:42:15.64 cycle start ==========
+Cycle 34 is complete. All writes stayed under AUREL_RESEARCH, no scan was built, and both analyses ran in the foreground (5.8 s and 2.3 s).
+
+**What I picked and why.** The last three entries were deepening and the 23:30 refute had already consumed the band-vs-out-of-band mechanism candidate, so this cycle went to exploration. The source-of-edge map in DATA_MAP §8 had no row for risk premia. Gold's implied volatility is free on FRED (CBOE GVZ), and realized vol comes from our existing M5 close cache, so the row was testable today rather than read-only.
+
+**Pre-registered cells and results** (scripts/c34_gold_vrp.py, data/c34_gold_vrp_result.md):
+
+| Cell | In-sample 2010-20 | Out-of-sample 2021-26H1 | Recent 2024-26H1 | Verdict |
+|---|---|---|---|---|
+| H_VRP: GVZ minus next-21-day realized vol | +2.51 vol pt (NW t 8.9, MDE 0.56) | +2.12 (t 4.7, MDE 0.89) | +1.23 (t 1.4, MDE 1.8); 2026H1 −2.2 | PASS |
+| Positive control: US500 with VIX | +2.32 (t 3.3) | +3.90 (t 7.3) | +3.32 | OK |
+| H_PRED: known VRP predicts 21-day gold return | +5.8 bp/pt (t 0.6, MDE 19) | +15.0 (t 1.3, MDE 24) | +25.3 (t 1.9) | null |
+| Production gate ㉛ (tercile Δμ, in-sample) | 0.003R | not run | not run | undecidable, not run |
+
+**Knowledge gained.** Gold carries a positive volatility risk premium of the same size as equities in-sample, present 16 of 17 years, but it shrank in the recent window and turned negative in 2026H1 when realized vol overshot implied. GVZ is an efficient forecast that fully subsumes trailing realized vol out-of-sample. The premium does not predict returns at a 21-day horizon, and the literature effect is absent in our US500 series too.
+
+**Strongest counter-argument recorded.** The PASS is not a harvestable edge: we hold no options instrument or chain data, the premium is compensation for vol spikes, and one bad half-year erases roughly a year of premium. In variance units the recent window is zero.
+
+**Post-hoc supplement** (c34b, labelled look-ahead): the wall-to-wall scan is nearly vol-neutral. Its exposure to realized-vol surprise explains at most 0.012R of the −0.058R unconditional expectation, so "breakouts pay the insurance premium" is not the mechanism.
+
+**Files updated.** New findings/2026-11-11.md entry with full numbers. Backlog: item closed, one needs-data (strike-level IV, priority medium), one forward cell for 2026H2, methodology candidate ㊱. DATA_MAP: GVZCLS registered in §6 with alignment rules and RV hygiene, new §8 row, §7 options line. No PROMOTED change, no orders, no process or production file touched.
+2026/11/11  0:53:31.52 done
