@@ -943,3 +943,4 @@ Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-11.md`
 
 **Files written, all under AUREL_RESEARCH.** Scripts `refute_c34_vrp.py` and `refute_c34_vrp_b.py`, their result and log files under data, the entry copy in `data/refute_c34_findings_entry.md`, and the findings append. No orders, no production edits, no process actions, no scan, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED were left unchanged. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/11  2:26:05.21 done
+========== 2026/11/11  5:15:07.71 refute start ==========
