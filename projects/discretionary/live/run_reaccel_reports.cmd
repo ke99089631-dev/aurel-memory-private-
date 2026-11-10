@@ -5,3 +5,7 @@ cd /d C:\Users\user\.aurel\memory\projects\discretionary\live
 "C:\Users\user\ImperialFlow\venv\Scripts\python.exe" reaccel_regime_forward.py >> reaccel_reports.log 2>&1
 cd /d C:\Users\user\.aurel\memory\projects\fertilizer\live
 "C:\Users\user\ImperialFlow\venv\Scripts\python.exe" fert_reaccel_stats.py >> C:\Users\user\.aurel\memory\projects\discretionary\live\reaccel_reports.log 2>&1
+
+cd /d C:\Users\user\.aurel\memory\projects\discretionary\live
+rem deadrange_label v1 (2026-11-10 chairman GO, observation label only, read-only)
+"C:\Users\user\ImperialFlow\venv\Scripts\python.exe" deadrange_label.py >> reaccel_reports.log 2>&1

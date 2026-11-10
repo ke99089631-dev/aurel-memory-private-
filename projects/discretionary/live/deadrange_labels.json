@@ -1,0 +1,2940 @@
+{
+ "version": "deadrange_v1",
+ "frozen_at": "2026-11-10",
+ "fake_th": 0.6,
+ "streak_th": 3,
+ "n_needed": 30,
+ "generated": "2026-11-10 10:21",
+ "summary": {
+  "all": {
+   "n": 323,
+   "avg_R": 0.173,
+   "sum_R": 55.74,
+   "win": 48.6,
+   "max_dd_R": -15.94
+  },
+  "dead": {
+   "n": 50,
+   "avg_R": 0.103,
+   "sum_R": 5.14,
+   "win": 40.0,
+   "max_dd_R": -9.84
+  },
+  "not_dead": {
+   "n": 273,
+   "avg_R": 0.185,
+   "sum_R": 50.59,
+   "win": 50.2,
+   "max_dd_R": -11.72
+  }
+ },
+ "labels": {
+  "S-0001": {
+   "version": "deadrange_v1",
+   "fake10": null,
+   "fake_n": 0,
+   "streak": 0,
+   "dead": false,
+   "R": 0.58,
+   "entry_jst": "2026-09-15 22:15"
+  },
+  "S-0002": {
+   "version": "deadrange_v1",
+   "fake10": null,
+   "fake_n": 1,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-15 23:35"
+  },
+  "S-0076": {
+   "version": "deadrange_v1",
+   "fake10": null,
+   "fake_n": 1,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-16 00:35"
+  },
+  "S-0004": {
+   "version": "deadrange_v1",
+   "fake10": null,
+   "fake_n": 2,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-16 04:00"
+  },
+  "S-0005": {
+   "version": "deadrange_v1",
+   "fake10": null,
+   "fake_n": 3,
+   "streak": 2,
+   "dead": false,
+   "R": 2.227,
+   "entry_jst": "2026-09-16 04:50"
+  },
+  "S-0006": {
+   "version": "deadrange_v1",
+   "fake10": null,
+   "fake_n": 4,
+   "streak": 0,
+   "dead": false,
+   "R": 2.229,
+   "entry_jst": "2026-09-16 08:55"
+  },
+  "S-0007": {
+   "version": "deadrange_v1",
+   "fake10": null,
+   "fake_n": 6,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-16 10:20"
+  },
+  "S-0008": {
+   "version": "deadrange_v1",
+   "fake10": null,
+   "fake_n": 7,
+   "streak": 1,
+   "dead": false,
+   "R": 0.101,
+   "entry_jst": "2026-09-16 11:35"
+  },
+  "S-0009": {
+   "version": "deadrange_v1",
+   "fake10": null,
+   "fake_n": 7,
+   "streak": 0,
+   "dead": false,
+   "R": 2.271,
+   "entry_jst": "2026-09-16 14:40"
+  },
+  "S-0011": {
+   "version": "deadrange_v1",
+   "fake10": 0.556,
+   "fake_n": 9,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-16 23:00"
+  },
+  "S-0012": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-17 00:05"
+  },
+  "S-0013": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-17 02:20"
+  },
+  "S-0014": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 3,
+   "dead": true,
+   "R": 0.172,
+   "entry_jst": "2026-09-17 03:25"
+  },
+  "S-0019": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-17 12:45"
+  },
+  "S-0021": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 0.697,
+   "entry_jst": "2026-09-17 19:35"
+  },
+  "S-0023": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-17 23:25"
+  },
+  "S-0029": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 0.917,
+   "entry_jst": "2026-09-18 11:35"
+  },
+  "S-0030": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-18 12:25"
+  },
+  "S-0031": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 1.395,
+   "entry_jst": "2026-09-18 12:55"
+  },
+  "S-0033": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-18 17:00"
+  },
+  "S-0034": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 1.273,
+   "entry_jst": "2026-09-18 21:20"
+  },
+  "S-0036": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.343,
+   "entry_jst": "2026-09-19 01:20"
+  },
+  "S-0037": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 2.401,
+   "entry_jst": "2026-09-19 03:55"
+  },
+  "S-0042": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.251,
+   "entry_jst": "2026-09-21 19:50"
+  },
+  "S-0044": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-21 21:35"
+  },
+  "S-0047": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-22 00:45"
+  },
+  "S-0048": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": 0.427,
+   "entry_jst": "2026-09-22 08:45"
+  },
+  "S-0051": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-22 12:20"
+  },
+  "S-0052": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-22 13:10"
+  },
+  "S-0054": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": 1.414,
+   "entry_jst": "2026-09-22 16:40"
+  },
+  "S-0055": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-22 18:35"
+  },
+  "S-0056": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-22 20:30"
+  },
+  "S-0057": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-22 21:30"
+  },
+  "S-0058": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 3,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-09-23 00:15"
+  },
+  "S-0059": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 4,
+   "dead": true,
+   "R": 1.153,
+   "entry_jst": "2026-09-23 02:05"
+  },
+  "S-0060": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.266,
+   "entry_jst": "2026-09-23 03:00"
+  },
+  "S-0061": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-23 08:30"
+  },
+  "S-0064": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-23 13:05"
+  },
+  "S-0065": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 1.953,
+   "entry_jst": "2026-09-23 14:30"
+  },
+  "S-0066": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 2.131,
+   "entry_jst": "2026-09-23 16:25"
+  },
+  "S-0067": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 2.107,
+   "entry_jst": "2026-09-23 19:20"
+  },
+  "S-0070": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-24 01:00"
+  },
+  "S-0071": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-24 03:40"
+  },
+  "S-0073": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": 1.367,
+   "entry_jst": "2026-09-24 09:50"
+  },
+  "S-0075": {
+   "version": "deadrange_v1",
+   "fake10": 0.4,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-24 11:55"
+  },
+  "S-0077": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-24 14:20"
+  },
+  "S-0078": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-24 14:55"
+  },
+  "S-0079": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 3,
+   "dead": true,
+   "R": 0.213,
+   "entry_jst": "2026-09-24 15:45"
+  },
+  "S-0080": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-24 16:15"
+  },
+  "S-0082": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 2.102,
+   "entry_jst": "2026-09-24 18:00"
+  },
+  "S-0083": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-25 00:10"
+  },
+  "S-0084": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-25 09:10"
+  },
+  "S-0085": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": 0.263,
+   "entry_jst": "2026-09-25 09:50"
+  },
+  "S-0086": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-25 10:55"
+  },
+  "S-0088": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 1.133,
+   "entry_jst": "2026-09-25 14:40"
+  },
+  "S-0089": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-25 18:20"
+  },
+  "S-0090": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-25 23:30"
+  },
+  "S-0091": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": 1.275,
+   "entry_jst": "2026-09-26 05:30"
+  },
+  "S-0092": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 2.436,
+   "entry_jst": "2026-09-28 07:10"
+  },
+  "S-0093": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.992,
+   "entry_jst": "2026-09-28 09:30"
+  },
+  "S-0094": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.752,
+   "entry_jst": "2026-09-28 10:10"
+  },
+  "S-0095": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 2.283,
+   "entry_jst": "2026-09-28 10:45"
+  },
+  "S-0096": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 0.431,
+   "entry_jst": "2026-09-28 23:10"
+  },
+  "S-0097": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-29 05:40"
+  },
+  "S-0100": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 0.117,
+   "entry_jst": "2026-09-29 11:10"
+  },
+  "S-0101": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-29 13:55"
+  },
+  "S-0103": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 2.027,
+   "entry_jst": "2026-09-29 15:05"
+  },
+  "S-0104": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 0.997,
+   "entry_jst": "2026-09-29 19:45"
+  },
+  "S-0105": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.707,
+   "entry_jst": "2026-09-29 23:00"
+  },
+  "S-0107": {
+   "version": "deadrange_v1",
+   "fake10": 0.4,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-09-30 01:55"
+  },
+  "S-0108": {
+   "version": "deadrange_v1",
+   "fake10": 0.4,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 0.24,
+   "entry_jst": "2026-09-30 03:35"
+  },
+  "S-0109": {
+   "version": "deadrange_v1",
+   "fake10": 0.4,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 2.746,
+   "entry_jst": "2026-09-30 05:20"
+  },
+  "S-0110": {
+   "version": "deadrange_v1",
+   "fake10": 0.4,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 2.219,
+   "entry_jst": "2026-09-30 15:35"
+  },
+  "S-0113": {
+   "version": "deadrange_v1",
+   "fake10": 0.4,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 0.023,
+   "entry_jst": "2026-09-30 22:50"
+  },
+  "S-0115": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 0.85,
+   "entry_jst": "2026-10-01 00:05"
+  },
+  "S-0116": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-01 02:15"
+  },
+  "S-0117": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-01 10:15"
+  },
+  "S-0118": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-01 10:50"
+  },
+  "S-0119": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 3,
+   "dead": true,
+   "R": 0.17,
+   "entry_jst": "2026-10-01 11:55"
+  },
+  "S-0122": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 2.081,
+   "entry_jst": "2026-10-01 13:55"
+  },
+  "S-0123": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-01 16:50"
+  },
+  "S-0124": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-01 17:20"
+  },
+  "S-0127": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-01 20:50"
+  },
+  "S-0128": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 3,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-10-01 22:55"
+  },
+  "S-0131": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 4,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-10-02 00:35"
+  },
+  "S-0132": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 4,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-10-02 01:25"
+  },
+  "S-0133": {
+   "version": "deadrange_v1",
+   "fake10": 1.0,
+   "fake_n": 10,
+   "streak": 5,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-10-02 01:50"
+  },
+  "S-0134": {
+   "version": "deadrange_v1",
+   "fake10": 1.0,
+   "fake_n": 10,
+   "streak": 6,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-10-02 03:30"
+  },
+  "S-0136": {
+   "version": "deadrange_v1",
+   "fake10": 1.0,
+   "fake_n": 10,
+   "streak": 8,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-10-02 10:10"
+  },
+  "S-0137": {
+   "version": "deadrange_v1",
+   "fake10": 1.0,
+   "fake_n": 10,
+   "streak": 9,
+   "dead": true,
+   "R": 2.047,
+   "entry_jst": "2026-10-02 12:50"
+  },
+  "S-0138": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-02 13:10"
+  },
+  "S-0143": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-02 19:20"
+  },
+  "S-0142": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-02 19:50"
+  },
+  "S-0145": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 3,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-10-02 22:50"
+  },
+  "S-0146": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 4,
+   "dead": true,
+   "R": 1.555,
+   "entry_jst": "2026-10-02 23:45"
+  },
+  "S-0147": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-03 01:25"
+  },
+  "S-0148": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-03 04:30"
+  },
+  "S-0150": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-05 07:10"
+  },
+  "S-0151": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": 2.808,
+   "entry_jst": "2026-10-05 07:25"
+  },
+  "S-0152": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 3,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-10-05 08:10"
+  },
+  "S-0154": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-05 10:15"
+  },
+  "S-0155": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 0.906,
+   "entry_jst": "2026-10-05 12:05"
+  },
+  "S-0156": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-05 13:50"
+  },
+  "S-0157": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 0.615,
+   "entry_jst": "2026-10-05 15:15"
+  },
+  "S-0158": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-05 17:00"
+  },
+  "S-0159": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-05 21:35"
+  },
+  "S-0160": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": 0.559,
+   "entry_jst": "2026-10-05 22:20"
+  },
+  "S-0161": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-06 07:15"
+  },
+  "S-0162": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-06 09:05"
+  },
+  "S-0163": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": 0.379,
+   "entry_jst": "2026-10-06 09:25"
+  },
+  "S-0165": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.258,
+   "entry_jst": "2026-10-06 10:25"
+  },
+  "S-0168": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-06 13:10"
+  },
+  "S-0169": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-06 13:45"
+  },
+  "S-0170": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": 0.679,
+   "entry_jst": "2026-10-06 16:30"
+  },
+  "S-0172": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-06 17:55"
+  },
+  "S-0173": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 1.457,
+   "entry_jst": "2026-10-06 19:50"
+  },
+  "S-0174": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 1.258,
+   "entry_jst": "2026-10-06 20:30"
+  },
+  "S-0175": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.191,
+   "entry_jst": "2026-10-07 00:15"
+  },
+  "S-0176": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-07 01:55"
+  },
+  "S-0177": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 0.996,
+   "entry_jst": "2026-10-07 02:30"
+  },
+  "S-0178": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-07 03:55"
+  },
+  "S-0179": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 0.452,
+   "entry_jst": "2026-10-07 09:45"
+  },
+  "S-0180": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 0.543,
+   "entry_jst": "2026-10-07 10:20"
+  },
+  "S-0181": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 4.581,
+   "entry_jst": "2026-10-07 11:35"
+  },
+  "S-0182": {
+   "version": "deadrange_v1",
+   "fake10": 0.4,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-07 20:15"
+  },
+  "S-0185": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-08 02:45"
+  },
+  "S-0187": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": 0.435,
+   "entry_jst": "2026-10-08 10:20"
+  },
+  "S-0188": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.344,
+   "entry_jst": "2026-10-08 10:25"
+  },
+  "S-0189": {
+   "version": "deadrange_v1",
+   "fake10": 0.4,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-08 11:00"
+  },
+  "S-0190": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 0.267,
+   "entry_jst": "2026-10-08 13:30"
+  },
+  "S-0191": {
+   "version": "deadrange_v1",
+   "fake10": 0.4,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 0.994,
+   "entry_jst": "2026-10-08 14:40"
+  },
+  "S-0193": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-08 19:35"
+  },
+  "S-0195": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 0.617,
+   "entry_jst": "2026-10-09 02:15"
+  },
+  "S-0197": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 3.348,
+   "entry_jst": "2026-10-09 04:50"
+  },
+  "S-0198": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.71,
+   "entry_jst": "2026-10-09 08:15"
+  },
+  "S-0199": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.157,
+   "entry_jst": "2026-10-09 09:20"
+  },
+  "S-0200": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 0.984,
+   "entry_jst": "2026-10-09 10:15"
+  },
+  "S-0201": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.565,
+   "entry_jst": "2026-10-09 12:10"
+  },
+  "S-0202": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 0.129,
+   "entry_jst": "2026-10-12 14:00"
+  },
+  "S-0203": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-12 15:15"
+  },
+  "S-0204": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 1.236,
+   "entry_jst": "2026-10-12 17:45"
+  },
+  "S-0205": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 3.899,
+   "entry_jst": "2026-10-12 18:10"
+  },
+  "S-0207": {
+   "version": "deadrange_v1",
+   "fake10": 0.4,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 0.525,
+   "entry_jst": "2026-10-13 11:15"
+  },
+  "S-0208": {
+   "version": "deadrange_v1",
+   "fake10": 0.3,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.25,
+   "entry_jst": "2026-10-13 11:50"
+  },
+  "S-0209": {
+   "version": "deadrange_v1",
+   "fake10": 0.2,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.097,
+   "entry_jst": "2026-10-13 12:30"
+  },
+  "S-0211": {
+   "version": "deadrange_v1",
+   "fake10": 0.2,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 0.43,
+   "entry_jst": "2026-10-13 17:00"
+  },
+  "S-0212": {
+   "version": "deadrange_v1",
+   "fake10": 0.2,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 0.554,
+   "entry_jst": "2026-10-13 18:25"
+  },
+  "S-0213": {
+   "version": "deadrange_v1",
+   "fake10": 0.2,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 0.72,
+   "entry_jst": "2026-10-13 19:10"
+  },
+  "S-0214": {
+   "version": "deadrange_v1",
+   "fake10": 0.2,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-13 20:15"
+  },
+  "S-0217": {
+   "version": "deadrange_v1",
+   "fake10": 0.3,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 1.128,
+   "entry_jst": "2026-10-13 23:15"
+  },
+  "S-0218": {
+   "version": "deadrange_v1",
+   "fake10": 0.2,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-14 02:20"
+  },
+  "S-0219": {
+   "version": "deadrange_v1",
+   "fake10": 0.3,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 1.708,
+   "entry_jst": "2026-10-14 05:20"
+  },
+  "S-0220": {
+   "version": "deadrange_v1",
+   "fake10": 0.3,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 1.236,
+   "entry_jst": "2026-10-14 07:10"
+  },
+  "S-0221": {
+   "version": "deadrange_v1",
+   "fake10": 0.2,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-14 10:45"
+  },
+  "S-0223": {
+   "version": "deadrange_v1",
+   "fake10": 0.3,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 0.335,
+   "entry_jst": "2026-10-14 12:10"
+  },
+  "S-0226": {
+   "version": "deadrange_v1",
+   "fake10": 0.4,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.964,
+   "entry_jst": "2026-10-14 14:40"
+  },
+  "S-0228": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-14 16:30"
+  },
+  "S-0229": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-14 17:45"
+  },
+  "S-0232": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-14 22:40"
+  },
+  "S-0233": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-15 01:00"
+  },
+  "S-0234": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 4,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-10-15 07:30"
+  },
+  "S-0235": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 5,
+   "dead": true,
+   "R": 1.9,
+   "entry_jst": "2026-10-15 08:55"
+  },
+  "S-0236": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.66,
+   "entry_jst": "2026-10-15 09:40"
+  },
+  "S-0237": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-15 12:15"
+  },
+  "S-0238": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 2.714,
+   "entry_jst": "2026-10-15 14:00"
+  },
+  "S-0239": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-15 15:30"
+  },
+  "S-0241": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 0.376,
+   "entry_jst": "2026-10-15 17:20"
+  },
+  "S-0242": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.446,
+   "entry_jst": "2026-10-15 18:00"
+  },
+  "S-0244": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-15 21:45"
+  },
+  "S-0247": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-16 00:55"
+  },
+  "S-0248": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": 1.941,
+   "entry_jst": "2026-10-16 04:10"
+  },
+  "S-0249": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 0.425,
+   "entry_jst": "2026-10-16 04:50"
+  },
+  "S-0250": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.079,
+   "entry_jst": "2026-10-16 08:55"
+  },
+  "S-0251": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-16 09:20"
+  },
+  "S-0252": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-16 10:35"
+  },
+  "S-0253": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 0.551,
+   "entry_jst": "2026-10-16 11:45"
+  },
+  "S-0254": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-16 13:00"
+  },
+  "S-0255": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-16 15:50"
+  },
+  "S-0258": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": 0.687,
+   "entry_jst": "2026-10-16 22:50"
+  },
+  "S-0259": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 0.758,
+   "entry_jst": "2026-10-16 23:00"
+  },
+  "S-0260": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.957,
+   "entry_jst": "2026-10-17 00:20"
+  },
+  "S-0261": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-17 00:55"
+  },
+  "S-0262": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-17 03:45"
+  },
+  "S-0263": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 0.192,
+   "entry_jst": "2026-10-19 07:20"
+  },
+  "S-0264": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-19 09:55"
+  },
+  "S-0266": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-19 13:50"
+  },
+  "S-0268": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 3,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-10-19 15:25"
+  },
+  "S-0269": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 4,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-10-19 16:15"
+  },
+  "S-0270": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 5,
+   "dead": true,
+   "R": 0.786,
+   "entry_jst": "2026-10-19 18:00"
+  },
+  "S-0271": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-19 20:10"
+  },
+  "S-0272": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.881,
+   "entry_jst": "2026-10-19 20:40"
+  },
+  "S-0274": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 2.237,
+   "entry_jst": "2026-10-20 00:55"
+  },
+  "S-0275": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.857,
+   "entry_jst": "2026-10-20 10:00"
+  },
+  "S-0276": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-20 12:20"
+  },
+  "S-0277": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 1.513,
+   "entry_jst": "2026-10-20 14:45"
+  },
+  "S-0278": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 3.815,
+   "entry_jst": "2026-10-20 16:05"
+  },
+  "S-0279": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.238,
+   "entry_jst": "2026-10-20 16:15"
+  },
+  "S-0282": {
+   "version": "deadrange_v1",
+   "fake10": 0.4,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 2.127,
+   "entry_jst": "2026-10-20 19:35"
+  },
+  "S-0283": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-20 20:50"
+  },
+  "S-0287": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 0.039,
+   "entry_jst": "2026-10-20 22:45"
+  },
+  "S-0288": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-20 23:55"
+  },
+  "S-0289": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-21 01:45"
+  },
+  "S-0290": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": 0.624,
+   "entry_jst": "2026-10-21 07:45"
+  },
+  "S-0291": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-21 08:30"
+  },
+  "S-0292": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 0.463,
+   "entry_jst": "2026-10-21 10:05"
+  },
+  "S-0293": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-21 10:35"
+  },
+  "S-0294": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 1.22,
+   "entry_jst": "2026-10-21 16:25"
+  },
+  "S-0295": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 0.054,
+   "entry_jst": "2026-10-21 16:30"
+  },
+  "S-0296": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-21 17:40"
+  },
+  "S-0298": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 0.535,
+   "entry_jst": "2026-10-21 20:00"
+  },
+  "S-0299": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 1.306,
+   "entry_jst": "2026-10-21 20:00"
+  },
+  "S-0301": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-22 03:15"
+  },
+  "S-0304": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 1.194,
+   "entry_jst": "2026-10-22 04:50"
+  },
+  "S-0305": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-22 07:00"
+  },
+  "S-0306": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 2.132,
+   "entry_jst": "2026-10-22 08:20"
+  },
+  "S-0307": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-22 10:35"
+  },
+  "S-0308": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 0.713,
+   "entry_jst": "2026-10-22 12:20"
+  },
+  "S-0309": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 0.48,
+   "entry_jst": "2026-10-22 12:25"
+  },
+  "S-0310": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-22 14:20"
+  },
+  "S-0311": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 1.711,
+   "entry_jst": "2026-10-22 16:55"
+  },
+  "S-0312": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-22 20:30"
+  },
+  "S-0314": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 1.881,
+   "entry_jst": "2026-10-22 23:00"
+  },
+  "S-0315": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 1.23,
+   "entry_jst": "2026-10-23 03:45"
+  },
+  "S-0316": {
+   "version": "deadrange_v1",
+   "fake10": 0.4,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-23 04:45"
+  },
+  "S-0317": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-23 05:15"
+  },
+  "S-0318": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-23 07:40"
+  },
+  "S-0323": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 3,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-10-23 10:15"
+  },
+  "S-0324": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 4,
+   "dead": true,
+   "R": 0.6,
+   "entry_jst": "2026-10-23 10:35"
+  },
+  "S-0325": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-23 11:25"
+  },
+  "S-0327": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-23 13:10"
+  },
+  "S-0328": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 1.602,
+   "entry_jst": "2026-10-23 14:20"
+  },
+  "S-0329": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.262,
+   "entry_jst": "2026-10-23 20:40"
+  },
+  "S-0330": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-23 21:00"
+  },
+  "S-0332": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 0.034,
+   "entry_jst": "2026-10-23 21:35"
+  },
+  "S-0336": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 2.613,
+   "entry_jst": "2026-10-23 23:55"
+  },
+  "S-0340": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-26 11:15"
+  },
+  "S-0342": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-26 16:45"
+  },
+  "S-0344": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-26 18:25"
+  },
+  "S-0345": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-26 18:40"
+  },
+  "S-0346": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 4,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-10-26 21:15"
+  },
+  "S-0347": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 4,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-10-26 21:30"
+  },
+  "S-0348": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 6,
+   "dead": true,
+   "R": 0.451,
+   "entry_jst": "2026-10-26 22:40"
+  },
+  "S-0350": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.905,
+   "entry_jst": "2026-10-26 23:30"
+  },
+  "S-0351": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-27 00:35"
+  },
+  "S-0352": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 1.407,
+   "entry_jst": "2026-10-27 01:10"
+  },
+  "S-0353": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-27 02:20"
+  },
+  "S-0354": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 3.325,
+   "entry_jst": "2026-10-27 03:00"
+  },
+  "S-0355": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-27 17:40"
+  },
+  "S-0356": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 0.367,
+   "entry_jst": "2026-10-27 20:10"
+  },
+  "S-0359": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 3.499,
+   "entry_jst": "2026-10-27 22:55"
+  },
+  "S-0360": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 0.382,
+   "entry_jst": "2026-10-27 23:05"
+  },
+  "S-0361": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 0.396,
+   "entry_jst": "2026-10-27 23:10"
+  },
+  "S-0362": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-28 00:50"
+  },
+  "S-0363": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 1.867,
+   "entry_jst": "2026-10-28 12:40"
+  },
+  "S-0365": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 0.767,
+   "entry_jst": "2026-10-28 17:15"
+  },
+  "S-0366": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-28 18:05"
+  },
+  "S-0367": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 1.272,
+   "entry_jst": "2026-10-28 23:30"
+  },
+  "S-0370": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 0.14,
+   "entry_jst": "2026-10-29 04:20"
+  },
+  "S-0372": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-29 09:15"
+  },
+  "S-0373": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-29 10:45"
+  },
+  "S-0374": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": 1.341,
+   "entry_jst": "2026-10-29 11:45"
+  },
+  "S-0375": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-29 15:30"
+  },
+  "S-0378": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-29 16:55"
+  },
+  "S-0380": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-29 18:45"
+  },
+  "S-0382": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 3,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-10-29 21:00"
+  },
+  "S-0384": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 4,
+   "dead": true,
+   "R": 6.176,
+   "entry_jst": "2026-10-30 00:40"
+  },
+  "S-0385": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 4,
+   "dead": true,
+   "R": 5.788,
+   "entry_jst": "2026-10-30 01:00"
+  },
+  "S-0386": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 4,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-10-30 01:10"
+  },
+  "S-0387": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 5,
+   "dead": true,
+   "R": 2.699,
+   "entry_jst": "2026-10-30 02:25"
+  },
+  "S-0388": {
+   "version": "deadrange_v1",
+   "fake10": 1.0,
+   "fake_n": 10,
+   "streak": 5,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-10-30 03:00"
+  },
+  "S-0389": {
+   "version": "deadrange_v1",
+   "fake10": 1.0,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 0.504,
+   "entry_jst": "2026-10-30 05:00"
+  },
+  "S-0390": {
+   "version": "deadrange_v1",
+   "fake10": 1.0,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-30 07:05"
+  },
+  "S-0392": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-30 09:20"
+  },
+  "S-0393": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-30 10:05"
+  },
+  "S-0394": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 3,
+   "dead": true,
+   "R": 0.391,
+   "entry_jst": "2026-10-30 10:40"
+  },
+  "S-0396": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-30 12:40"
+  },
+  "S-0397": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-30 12:55"
+  },
+  "S-0399": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-30 15:30"
+  },
+  "S-0400": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 3,
+   "dead": true,
+   "R": 1.892,
+   "entry_jst": "2026-10-30 15:45"
+  },
+  "S-0402": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.05,
+   "entry_jst": "2026-10-30 19:50"
+  },
+  "S-0403": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 2.178,
+   "entry_jst": "2026-10-30 21:10"
+  },
+  "S-0404": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.544,
+   "entry_jst": "2026-10-30 22:45"
+  },
+  "S-0406": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-31 04:40"
+  },
+  "S-0407": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-10-31 05:40"
+  },
+  "S-0410": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-02 11:15"
+  },
+  "S-0411": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 3,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-11-02 14:00"
+  },
+  "S-0412": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 4,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-11-02 15:40"
+  },
+  "S-0413": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 5,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-11-02 16:25"
+  },
+  "S-0414": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 6,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-11-02 19:30"
+  },
+  "S-0418": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 7,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-11-02 22:45"
+  },
+  "S-0419": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 7,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-11-03 00:40"
+  },
+  "S-0420": {
+   "version": "deadrange_v1",
+   "fake10": 1.0,
+   "fake_n": 10,
+   "streak": 8,
+   "dead": true,
+   "R": 0.767,
+   "entry_jst": "2026-11-03 07:55"
+  },
+  "S-0422": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 4.332,
+   "entry_jst": "2026-11-03 09:55"
+  },
+  "S-0425": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 3.081,
+   "entry_jst": "2026-11-03 13:45"
+  },
+  "S-0426": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-03 17:15"
+  },
+  "S-0427": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-03 18:35"
+  },
+  "S-0428": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-03 19:30"
+  },
+  "S-0430": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 3,
+   "dead": true,
+   "R": 0.13,
+   "entry_jst": "2026-11-03 21:05"
+  },
+  "S-0431": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-03 21:40"
+  },
+  "S-0433": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-03 23:10"
+  },
+  "S-0434": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-04 01:10"
+  },
+  "S-0437": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 3,
+   "dead": true,
+   "R": 0.267,
+   "entry_jst": "2026-11-04 09:25"
+  },
+  "S-0438": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-04 12:15"
+  },
+  "S-0441": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 0.824,
+   "entry_jst": "2026-11-04 13:45"
+  },
+  "S-0442": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 2.484,
+   "entry_jst": "2026-11-04 16:20"
+  },
+  "S-0444": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-05 11:20"
+  },
+  "S-0445": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-05 14:00"
+  },
+  "S-0447": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-05 15:30"
+  },
+  "S-0448": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 3,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-11-05 17:25"
+  },
+  "S-0449": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 4,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-11-05 19:55"
+  },
+  "S-0450": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 5,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-11-05 20:45"
+  },
+  "S-0455": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 6,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-11-06 00:55"
+  },
+  "S-0458": {
+   "version": "deadrange_v1",
+   "fake10": 1.0,
+   "fake_n": 10,
+   "streak": 7,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-11-06 07:50"
+  },
+  "S-0460": {
+   "version": "deadrange_v1",
+   "fake10": 1.0,
+   "fake_n": 10,
+   "streak": 8,
+   "dead": true,
+   "R": 2.644,
+   "entry_jst": "2026-11-06 09:40"
+  },
+  "S-0461": {
+   "version": "deadrange_v1",
+   "fake10": 1.0,
+   "fake_n": 10,
+   "streak": 8,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-11-06 11:20"
+  },
+  "S-0462": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-06 12:10"
+  },
+  "S-0466": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-06 22:15"
+  },
+  "S-0467": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 3,
+   "dead": true,
+   "R": 5.341,
+   "entry_jst": "2026-11-06 23:40"
+  },
+  "S-0470": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 0.612,
+   "entry_jst": "2026-11-09 14:15"
+  },
+  "S-0472": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.595,
+   "entry_jst": "2026-11-09 15:20"
+  },
+  "S-0473": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 2.943,
+   "entry_jst": "2026-11-09 18:20"
+  },
+  "S-0474": {
+   "version": "deadrange_v1",
+   "fake10": 0.4,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 0.894,
+   "entry_jst": "2026-11-10 03:55"
+  },
+  "S-0475": {
+   "version": "deadrange_v1",
+   "fake10": 0.3,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-10 04:20"
+  }
+ }
+}
