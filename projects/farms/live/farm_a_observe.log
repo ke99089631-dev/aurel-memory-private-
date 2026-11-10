@@ -2986,3 +2986,6 @@ OpenBLAS error: Memory allocation still failed after 10 retries, giving up.
 [live観測] yfinance NQ=F 取得中...
   M5 13428本 (2026-09-01 04:05:00+00:00..2026-11-10 07:35:00+00:00)
   新規記録 0本 / 台帳累計 35本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_a_forward_ledger.jsonl
+[live観測] yfinance NQ=F 取得中...
+  M5 13434本 (2026-09-01 04:05:00+00:00..2026-11-10 08:05:00+00:00)
+  新規記録 0本 / 台帳累計 35本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_a_forward_ledger.jsonl

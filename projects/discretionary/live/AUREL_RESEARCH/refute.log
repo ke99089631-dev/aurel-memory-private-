@@ -863,3 +863,4 @@ Done. The refutation of cycle30 is appended to `AUREL_RESEARCH/findings/2026-11-
 
 **Files written, all under AUREL_RESEARCH.** Scripts `refute_c30_expiry.py` and `refute_c30_expiry_b.py`, their result and log files, the entry draft, and the findings append. No orders, no production edits, no process actions, no scan, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED were left unchanged. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/10 14:26:50.05 done
+========== 2026/11/10 17:15:07.63 refute start ==========
