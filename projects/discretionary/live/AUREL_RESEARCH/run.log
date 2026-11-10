@@ -713,3 +713,27 @@ Cycle 32 is complete. One deepening entry was pre-registered, run, and recorded 
 
 **Files written, all under AUREL_RESEARCH.** Two scripts (`c32_break_vol_signature.py`, `c32b_prevol_matched.py`), two result files and two logs under data, one findings entry appended to today's file, the backlog (item closed, new deepening entry, methodology candidate 34, next deepening candidate: a twin test restricted to the production band), and DATA_MAP section 2. PROMOTED is unchanged. No orders, no process or production-file changes, no external calls. The task-observer log lives outside AUREL_RESEARCH, so as in prior cycles I did not write to it.
 2026/11/10 18:55:30.89 done
+========== 2026/11/10 21:42:09.11 cycle start ==========
+Cycle 33 is complete. One findings entry was appended, the analysis ran synchronously with real numbers, and all writes stayed under AUREL_RESEARCH.
+
+**What I tested.** The queued deepening item from cycle 32: are production-band entries (JST 7 to 12) distinguishable from "twin" placebo entries built at the same JST hour within ±28 days, with the same side and the same stop and target geometry, judged by the same engine rules. The pre-registered cell was the recent window only, following the charter's rule that gold's edge is measured in recent regimes rather than 16 years pooled.
+
+**Verdict: null, below the minimum detectable effect.** The pre-registration itself predicted this, since the expected size roughly equalled the detection limit.
+
+| Window | Band excess TP rate vs twins | t | MDE |
+|---|---|---|---|
+| Recent 2024-26H1 | +2.88 pp | 1.75 | 3.3 pp |
+| Out-of-sample 2021-26H1 | +1.21 pp | 0.97 | 2.5 pp |
+| In-sample 2010-20 | +0.50 pp | 0.45 | 2.2 pp |
+
+**What did stand up, as structure rather than edge.**
+- **The off-band hours pay the whole random-walk shortfall.** The refute lane's earlier finding that the scan reaches TP 1.5 pp less often than a random walk lives entirely in entries outside JST 7 to 12. The complement is negative under all three placebo sets and after dropping entry-bar decisions, with t of −3.3 in-sample and −2.5 out-of-sample. Band entries are neither better nor worse than their twins.
+- **Time-of-day background explains a quarter to a half of the band's advantage.** Twins placed in the band hours also reach TP more often than twins elsewhere, by 1.2 to 3.1 pp. The remaining difference of 2.2 to 3.4 pp has the same sign in all three windows but never reaches t of 2.
+- **Band entries fire on quiet bars.** Entry-bar ATR is 0.96 USD against 1.19 for same-hour twins. Matching twins on ATR shrinks the recent band figure from +2.9 pp to +1.2 pp.
+
+**Strongest counter-argument recorded.** The "off-band pays" result is a post-hoc complement cell, and the band's positive point estimate halves once local volatility is matched. The in-sample negative control also came out at +1.5 pp, so band t-statistics should be read at roughly 0.7 to 0.8 of face value.
+
+**Files written.** New script `scripts/c33_production_band_twin.py`, result and log under data, the findings entry in today's file, backlog updated (item closed, one forward cell, one mechanism follow-up, method candidate 35, plus the refute lane's requested rewrite of the cycle-32 forward cell and method 34), and DATA_MAP section 2 gained the twin-test tool. PROMOTED unchanged. No orders, no process changes, no MT5 connection, no external calls, no multi-year scan.
+
+**Next cycle candidates.** The mechanism check logged in backlog: whether the off-band shortfall equals the first-hour negative drift found in cycle 32, split by band. It runs on existing caches in about ten seconds.
+2026/11/10 21:50:56.14 done
