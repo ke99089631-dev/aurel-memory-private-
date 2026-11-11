@@ -856,3 +856,6 @@ No orders, no process changes, no MT5 connection, no writes outside AUREL_RESEAR
 ========== 2026/11/11 18:42:07.00 cycle start ==========
 You've reached your Fable limit. Switch to another model, or manage usage credits at claude.ai/settings/usage?from=cc_cli_limit_message, to continue.
 2026/11/11 18:53:12.70 done
+========== 2026/11/11 21:42:07.13 cycle start ==========
+You've reached your Fable limit. Switch to another model, or manage usage credits at claude.ai/settings/usage?from=cc_cli_limit_message, to continue.
+2026/11/11 21:42:14.26 done
