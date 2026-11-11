@@ -795,3 +795,24 @@ Cycle 36 is complete. All outputs are written under AUREL_RESEARCH, the findings
 
 **Files touched**: new scripts c36_day_of_week.py and c36b_friday_subwindows.py, six result and log files under data/, one findings entry appended to findings/2026-11-11.md, backlog.md (closed item, one forward cell, one new hypothesis on NY-afternoon-to-next-morning reversal across all five weekday pairs, methodology candidate ㊳), and DATA_MAP.md (header, §1 tool line, new §8 row). No orders, no process changes, no external calls, PROMOTED unchanged. The task-observer log lives outside AUREL_RESEARCH, so, as in prior cycles, it was not written and the lesson is recorded in findings and backlog instead.
 2026/11/11  6:52:45.99 done
+========== 2026/11/11  9:42:06.98 cycle start ==========
+Cycle 37 is complete. One deepening analysis ran in the foreground, all numbers are filled, and writes stayed inside AUREL_RESEARCH.
+
+**What was asked.** Cycle 27 found that wall geometry (stop width, TP distance) persists week to week with lag-1 correlation around 0.5 to 0.8. Cycle 34 found that the CBOE gold volatility index GVZ is an efficient volatility forecast. This cycle combined the two: is the slow state of wall geometry just expected volatility in disguise, or does wall placement carry its own state?
+
+**Pre-registered test.** Weekly geometry was regressed on GVZ and 21-day realized volatility, both known before the week's first entry. The judgment was the ratio of residual to raw lag-1 autocorrelation, with the same residualization applied to entry-time ATR as a control that volatility-driven persistence can be removed. A within-year shuffle placebo confirmed the residualization itself does not destroy persistence.
+
+**Result: H_B passed (geometry is independent of volatility).**
+
+| Quantity | raw lag-1 r (in / out) | residual r after GVZ+RV (in / out) | share explained |
+|---|---|---|---|
+| log stop width in bp (primary) | +0.589 / +0.599 | +0.553 / +0.501 | 6% / 16% |
+| entry ATR (control) | +0.717 / +0.736 | +0.127 / +0.283 | 82% / 62% |
+| TP distance in R (secondary) | +0.465 / +0.569 | +0.155 / +0.309 | 67% / 46% |
+
+Volatility persistence is mostly absorbed by GVZ, but stop-width persistence is not, even after residualizing on contemporaneous ATR. Stop width is also sub-linear in volatility (log elasticity 0.2 to 0.6 versus 0.85 to 1.1 for ATR). GVZ level does not condition trade R (in-sample Δμ +0.011R), so the gate rule blocked the out-of-sample run and the implied-vol family is closed as an entry condition.
+
+**Strongest counter-argument, recorded.** "Independent of volatility" may just mean "the same range persists for weeks": consecutive weeks reusing the same wall pair would produce mechanical autocorrelation in stop width. Separating this needs a same-wall exclusion using reconstructed SL/TP levels. That is logged as the next branch, not run.
+
+**Files written.** New script and result under scripts and data, one findings entry appended to findings/2026-11-11.md, backlog and DATA_MAP updated. The backlog also now carries the three refutation lane rewrite proposals from earlier today (variance-unit VRP cell, cycle 35 knowledge split by window, Friday 16:00 to 16:50 forward cell), and the Thursday-to-Friday reversal hypothesis is marked broken per the 08:30 refutation. No scans, no MT5, no external calls, no production files touched. PROMOTED unchanged.
+2026/11/11  9:51:23.63 done
