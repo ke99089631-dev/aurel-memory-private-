@@ -105,3 +105,4 @@
 {"seq": 105, "kind": "zone", "ts": "2026-11-09T16:45:00", "recorded_at": "2026-11-09T16:45:58", "note": "", "id": "Z-0004", "zone": "勝ち", "env": "", "images": []}
 {"seq": 106, "kind": "zone", "ts": "2026-11-11T10:28:00", "recorded_at": "2026-11-11T10:29:10", "note": "", "id": "Z-0005", "zone": "負け", "env": "", "images": []}
 {"seq": 107, "kind": "zone", "ts": "2026-11-11T14:47:00", "recorded_at": "2026-11-11T14:47:54", "note": "", "id": "Z-0006", "zone": "勝ち", "env": "", "images": []}
+{"seq": 108, "kind": "zone", "ts": "2026-11-11T18:55:00", "recorded_at": "2026-11-11T18:55:32", "note": "", "id": "Z-0007", "zone": "負け", "env": "", "images": []}
