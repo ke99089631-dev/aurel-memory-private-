@@ -989,3 +989,23 @@ Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-11.md`
 **Files written, all under AUREL_RESEARCH.** Scripts `refute_c36_friday_late.py`, `_b.py`, `_c.py`, their result and log files under data, the entry copy in `data/refute_c36_findings_entry.md`, and the findings append. spread_log.jsonl was read only. No orders, no production edits, no process actions, no scan, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED were left unchanged. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/11  8:28:24.64 done
 ========== 2026/11/11 11:15:07.78 refute start ==========
+Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-11.md` under a `[REFUTE]` header dated 11:30, the fourth REFUTE entry in the file.
+
+**Target.** PROMOTED.md is still empty. The only unrefuted research-lane entry is cycle 37 at 09:55, which claimed H_B PASS: weekly wall width in basis points has a slow state that GVZ, 21-day realized vol and entry-time ATR cannot explain, while ATR's own persistence is removed by the same residualization. I reproduced its numbers exactly once I matched its definition, which is the log of the weekly mean, not the mean of logs.
+
+**Verdicts, by rules pre-registered in the script docstrings.**
+
+| Attack | Verdict | Key numbers |
+|---|---|---|
+| R1 same-wall reuse (the research lane's own flagged weakness) | survived | 43 to 53% of trades reuse a prior-week SL/TP level. New-wall-only r1 is 0.38 in-sample and 0.47 out, ratios 0.65 and 0.78. A same-size random subsample control shows the in-sample drop is pure attenuation; out-of-sample reuse carries about 0.05 to 0.07 of r1, one tenth of the total. |
+| R2 vol at the range-formation horizon (prior 5-day range, prior 5-day daily range) | survived | Ratios 0.84 and 0.81. Even the same week's realized range leaves persistence untouched, ratio about 1.0. Walls are sub-daily structures, median 23 bp against a 124 bp daily range. |
+| R5 composition (hour × side × wall-kind fixed effects) | survived | r1 0.62 and 0.62, unchanged. |
+| R6 the 3.0 USD minimum SL floor | inconclusive by rule | 29% of in-sample trades sit on the floor, but non-floored trades keep r1 at 0.52 and 0.56. The floor is not the carrier. |
+| Supplement c, price level as a known driver | descriptive, decisive | USD wall width has a log elasticity to price of 0.41 in-sample, so bp width inherits the random-walk persistence of 1/price. Adding weekly mean price to the full known set leaves residual r1 of 0.01 in-sample (p 0.37), 0.31 out (p 0.000), 0.21 recent. All four independent windows fall below half the raw value. |
+
+**Reading.** By the pre-registered rules H_B survives, and the research lane's methodological claim about the ATR control is correct. But the knowledge statement "a slow state specific to wall placement" is broken in-sample and only half-present out-of-sample. In 2010 to 2020 the slow state is the gold price level plus multi-day range, nothing else. Cycle 37's within-year shuffle placebo preserves low-frequency variation by design, which is exactly the component carrying the persistence, so its calibration was blind to this. In 2021 to 2026 the elasticity is about 1, width is price-neutral, and a genuine residual of r1 0.31 remains. The 2021 to 2023 sub-window alone would pass the lane's own "vol is the whole story" hypothesis.
+
+**Proposed rewrite for the research lane.** Add weekly mean price and the 5-day daily range to the known drivers in the forward cell, pair the within-year placebo with a year-fixed-effects-only placebo, and close the same-wall branch since reuse is not the main cause. Nothing is promoted.
+
+**Files written, all under AUREL_RESEARCH.** Scripts `refute_c37_geometry.py`, `_b.py`, `_c.py`, their result and log files under data, the entry copy in `data/refute_c37_findings_entry.md`, and the findings append. No orders, no production edits, no process actions, no scan, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED were left unchanged. The task-observer log sits outside the write boundary and was not written, same as prior runs.
+2026/11/11 11:28:35.64 done
