@@ -1009,3 +1009,6 @@ Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-11.md`
 
 **Files written, all under AUREL_RESEARCH.** Scripts `refute_c37_geometry.py`, `_b.py`, `_c.py`, their result and log files under data, the entry copy in `data/refute_c37_findings_entry.md`, and the findings append. No orders, no production edits, no process actions, no scan, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED were left unchanged. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/11 11:28:35.64 done
+========== 2026/11/11 14:15:07.79 refute start ==========
+You've hit your session limit · resets 2:40pm (Asia/Tokyo)
+2026/11/11 14:17:35.07 done
