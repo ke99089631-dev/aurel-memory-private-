@@ -1031,3 +1031,6 @@ Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-11.md`
 
 **Files written, all under AUREL_RESEARCH.** Script `refute_c38_fts.py`, result and log under data, the entry copy in `data/refute_c38_findings_entry.md`, and the findings append. No orders, no production edits, no process actions, no scan, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED unchanged. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/11 17:23:58.98 done
+========== 2026/11/11 20:15:07.61 refute start ==========
+You've reached your Fable limit. Switch to another model, or manage usage credits at claude.ai/settings/usage?from=cc_cli_limit_message, to continue.
+2026/11/11 20:15:14.10 done
