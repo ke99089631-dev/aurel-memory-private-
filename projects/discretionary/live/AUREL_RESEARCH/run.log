@@ -832,3 +832,24 @@ Cycle 38 is complete. One findings entry is appended with all numbers filled, th
 
 **Next steps logged in backlog.** A forward cell for 2026-07+ data (does the negative crash-day sign persist), the factor-separation question tied to intraday rate/dollar data, and the cache re-fetch. No PROMOTED change, no orders, no process or production edits.
 2026/11/11 12:51:08.10 done
+========== 2026/11/11 15:42:14.85 cycle start ==========
+Cycle 39 is complete. It was the scheduled meta cycle (charter F.6 requires one every 10 cycles; the backlog pinned it to c39), and the analysis ran in under a second on files already on disk.
+
+**What I did.** I mined the research lane's own 36 cycles of findings as data: every `在 … (t …)` → `外 … (t …)` pair on the same line, deduplicated, with controls and injected positives excluded. The pre-registration lives in the script docstring, written before the numbers were seen.
+
+**Results (all filled, no placeholders):**
+
+- **Replication of in-sample claims.** Where the lane reported in-sample |t| ≥ 2, the out-of-sample window agreed in sign with |t| ≥ 1.5 in 56% of 71 pairs. Split by kind after hand-checking mis-parses: conditioning cells (mean-R differences) replicated 0 of 3; structural or path facts replicated 5 of 6. The calibration group (in-sample |t| < 1) replicated at 7%, matching the null expectation of 6.7%, so the mining itself is not manufacturing the signal.
+- **Gate ㉛ before/after.** Post-gate cycles c30–38 declared 4 cells "not run" and ran 16 that returned null. Applying the gate retroactively to the 17 pre-gate cells it would have blocked, 4 lit up out-of-sample and all 4 were later broken by the refute lane. Lost surviving candidates: zero. I propose formal adoption.
+- **MDE.** Median R-unit MDE fell from 0.114 to 0.050. The cause is the twin and placebo designs of c32–35, not more data.
+- **Forward cells.** 20 open, 16 waiting on gold M5 from 2026-07 onward, 0 judged. One dataset is holding 16 IOUs.
+- **M1 failed as predicted-against.** Reported t values are not null-distributed (in-sample R-unit sd 2.23, 46% with |t| ≥ 2), which means the findings text is a selection of notable numbers, not a registry. False-discovery rate cannot be computed from prose.
+
+**Strongest counter-argument recorded.** The tokens are not independent cells. The same effect appears in headers, bodies, and θ variants, and roughly 3 in 10 R-unit pairs were mis-parsed before hand cleaning. The 56% figure measures the lane's reporting honesty, not the existence of edges. The before/after comparison is 26 vs 9 cycles and is confounded with the shift toward twin designs.
+
+**Files written** (all under AUREL_RESEARCH): `scripts/c39_meta_audit2.py`, `data/c39_meta_audit2_result.md` plus token dump and log, one findings entry appended to today's file, backlog updated (meta item closed, 4 new items), and a DATA_MAP §2 row.
+
+**What's next.** The main proposal is a machine-readable cell registry (`data/cells.csv`, one row per pre-registered cell) starting at c40, so the c49 meta can compute replication and FDR from a registry instead of prose. Conditioning-type forward cells should be judged as one family with BH correction once the M5 extension lands, rather than one at a time.
+
+No orders, no process changes, no MT5 connection, no writes outside AUREL_RESEARCH. PROMOTED.md unchanged.
+2026/11/11 15:51:41.80 done

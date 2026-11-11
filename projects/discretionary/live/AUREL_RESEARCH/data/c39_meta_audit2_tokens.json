@@ -1,0 +1,7425 @@
+{
+"m1": {
+"在|R": {
+"n": 13,
+"mean": -0.5523076923076923,
+"sd": 2.2309532859525687,
+"f2": 0.46153846153846156,
+"f3": 0.15384615384615385,
+"mx": 4.5
+},
+"在|R?": {
+"n": 50,
+"mean": 0.8273999999999999,
+"sd": 4.1303065113319395,
+"f2": 0.32,
+"f3": 0.18,
+"mx": 20.8
+},
+"在|pp": {
+"n": 7,
+"mean": -1.4142857142857141,
+"sd": 1.518254009741202,
+"f2": 0.42857142857142855,
+"f3": 0.2857142857142857,
+"mx": 3.28
+},
+"在|pp?": {
+"n": 6,
+"mean": -0.4533333333333333,
+"sd": 1.7504475618157396,
+"f2": 0.3333333333333333,
+"f3": 0.0,
+"mx": 2.7
+},
+"在|bp": {
+"n": 24,
+"mean": 2.7254166666666664,
+"sd": 4.8281754400301296,
+"f2": 0.5,
+"f3": 0.25,
+"mx": 19.4
+},
+"在|bp?": {
+"n": 49,
+"mean": 1.232857142857143,
+"sd": 3.8332737314207033,
+"f2": 0.3673469387755102,
+"f3": 0.1836734693877551,
+"mx": 15.4
+},
+"在|pct": {
+"n": 6,
+"mean": -1.596666666666667,
+"sd": 4.899929251189926,
+"f2": 0.5,
+"f3": 0.16666666666666666,
+"mx": 10.8
+},
+"在|none": {
+"n": 79,
+"mean": 1.1305063291139243,
+"sd": 3.823384826984571,
+"f2": 0.43037974683544306,
+"f3": 0.24050632911392406,
+"mx": 16.1
+},
+"外|R": {
+"n": 10,
+"mean": 0.5809999999999998,
+"sd": 1.9102498382265194,
+"f2": 0.2,
+"f3": 0.2,
+"mx": 4.04
+},
+"外|R?": {
+"n": 67,
+"mean": 0.4655223880597015,
+"sd": 2.062733757979774,
+"f2": 0.3283582089552239,
+"f3": 0.13432835820895522,
+"mx": 6.0
+},
+"外|pp?": {
+"n": 8,
+"mean": -0.5387500000000001,
+"sd": 1.9836793915780415,
+"f2": 0.375,
+"f3": 0.0,
+"mx": 2.93
+},
+"外|bp?": {
+"n": 82,
+"mean": 1.066219512195122,
+"sd": 2.9326104497503493,
+"f2": 0.3902439024390244,
+"f3": 0.2926829268292683,
+"mx": 9.5
+},
+"外|pct": {
+"n": 7,
+"mean": 2.5885714285714294,
+"sd": 8.628532954818041,
+"f2": 0.14285714285714285,
+"f3": 0.14285714285714285,
+"mx": 22.1
+},
+"外|none": {
+"n": 93,
+"mean": 1.4233333333333331,
+"sd": 3.0832289445705587,
+"f2": 0.3763440860215054,
+"f3": 0.22580645161290322,
+"mx": 20.8
+},
+"近年|R?": {
+"n": 43,
+"mean": 0.77,
+"sd": 1.3013966856163932,
+"f2": 0.20930232558139536,
+"f3": 0.046511627906976744,
+"mx": 3.3
+},
+"近年|pp?": {
+"n": 11,
+"mean": 1.0154545454545454,
+"sd": 1.0735116546769636,
+"f2": 0.09090909090909091,
+"f3": 0.0,
+"mx": 2.6
+},
+"近年|bp?": {
+"n": 42,
+"mean": 1.0326190476190475,
+"sd": 2.5609364326963027,
+"f2": 0.5,
+"f3": 0.2857142857142857,
+"mx": 6.2
+},
+"近年|none": {
+"n": 57,
+"mean": 0.8463157894736841,
+"sd": 2.4732935181792857,
+"f2": 0.3508771929824561,
+"f3": 0.22807017543859648,
+"mx": 9.0
+}
+},
+"m2": {
+"R": {
+"<1": {
+"n": 17,
+"same": 0.5882352941176471,
+"rep15": 0.11764705882352941,
+"rep2": 0.11764705882352941,
+"opp15": 0.17647058823529413,
+"mean_tout": 0.14294117647058818
+},
+"1-2": {
+"n": 11,
+"same": 0.45454545454545453,
+"rep15": 0.09090909090909091,
+"rep2": 0.0,
+"opp15": 0.09090909090909091,
+"mean_tout": -0.060909090909090885
+},
+">=2": {
+"n": 13,
+"same": 0.7692307692307693,
+"rep15": 0.5384615384615384,
+"rep2": 0.46153846153846156,
+"opp15": 0.07692307692307693,
+"mean_tout": 1.8515384615384616
+},
+">=3": {
+"n": 7,
+"same": 0.8571428571428571,
+"rep15": 0.7142857142857143,
+"rep2": 0.7142857142857143,
+"opp15": 0.0,
+"mean_tout": 2.825714285714286
+}
+},
+"R_explicit": {
+"<1": {
+"n": 2,
+"same": 1.0,
+"rep15": 0.0,
+"rep2": 0.0,
+"opp15": 0.0,
+"mean_tout": 0.655
+},
+"1-2": {
+"n": 1,
+"same": 1.0,
+"rep15": 0.0,
+"rep2": 0.0,
+"opp15": 0.0,
+"mean_tout": 0.58
+},
+">=2": {
+"n": 3,
+"same": 0.6666666666666666,
+"rep15": 0.6666666666666666,
+"rep2": 0.6666666666666666,
+"opp15": 0.0,
+"mean_tout": 1.6066666666666667
+},
+">=3": {
+"n": 2,
+"same": 0.5,
+"rep15": 0.5,
+"rep2": 0.5,
+"opp15": 0.0,
+"mean_tout": 1.345
+}
+},
+"struct": {
+"<1": {
+"n": 21,
+"same": 0.47619047619047616,
+"rep15": 0.0,
+"rep2": 0.0,
+"opp15": 0.2857142857142857,
+"mean_tout": -0.46190476190476193
+},
+"1-2": {
+"n": 22,
+"same": 0.7272727272727273,
+"rep15": 0.13636363636363635,
+"rep2": 0.09090909090909091,
+"opp15": 0.18181818181818182,
+"mean_tout": -0.23954545454545448
+},
+">=2": {
+"n": 30,
+"same": 0.8333333333333334,
+"rep15": 0.6333333333333333,
+"rep2": 0.6,
+"opp15": 0.03333333333333333,
+"mean_tout": 2.665
+},
+">=3": {
+"n": 13,
+"same": 1.0,
+"rep15": 0.9230769230769231,
+"rep2": 0.9230769230769231,
+"opp15": 0.0,
+"mean_tout": 4.83
+}
+},
+"none": {
+"<1": {
+"n": 18,
+"same": 0.4444444444444444,
+"rep15": 0.1111111111111111,
+"rep2": 0.0,
+"opp15": 0.16666666666666666,
+"mean_tout": -0.16611111111111113
+},
+"1-2": {
+"n": 16,
+"same": 0.6875,
+"rep15": 0.375,
+"rep2": 0.3125,
+"opp15": 0.0625,
+"mean_tout": 1.158125
+},
+">=2": {
+"n": 28,
+"same": 0.8214285714285714,
+"rep15": 0.5,
+"rep2": 0.35714285714285715,
+"opp15": 0.07142857142857142,
+"mean_tout": 2.1728571428571426
+},
+">=3": {
+"n": 18,
+"same": 0.8333333333333334,
+"rep15": 0.5555555555555556,
+"rep2": 0.4444444444444444,
+"opp15": 0.1111111111111111,
+"mean_tout": 2.6761111111111107
+}
+},
+"all": {
+"<1": {
+"n": 56,
+"same": 0.5,
+"rep15": 0.07142857142857142,
+"rep2": 0.03571428571428571,
+"opp15": 0.21428571428571427,
+"mean_tout": -0.18321428571428577
+},
+"1-2": {
+"n": 49,
+"same": 0.6530612244897959,
+"rep15": 0.20408163265306123,
+"rep2": 0.14285714285714285,
+"opp15": 0.12244897959183673,
+"mean_tout": 0.25693877551020405
+},
+">=2": {
+"n": 71,
+"same": 0.8169014084507042,
+"rep15": 0.5633802816901409,
+"rep2": 0.4788732394366197,
+"opp15": 0.056338028169014086,
+"mean_tout": 2.3219718309859156
+},
+">=3": {
+"n": 38,
+"same": 0.8947368421052632,
+"rep15": 0.7105263157894737,
+"rep2": 0.6578947368421053,
+"opp15": 0.05263157894736842,
+"mean_tout": 3.440526315789474
+}
+},
+"early": {
+"<1": {
+"n": 20,
+"same": 0.55,
+"rep15": 0.1,
+"rep2": 0.05,
+"opp15": 0.15,
+"mean_tout": -0.011500000000000028
+},
+"1-2": {
+"n": 18,
+"same": 0.5555555555555556,
+"rep15": 0.2777777777777778,
+"rep2": 0.2222222222222222,
+"opp15": 0.1111111111111111,
+"mean_tout": 0.6305555555555555
+},
+">=2": {
+"n": 32,
+"same": 0.78125,
+"rep15": 0.46875,
+"rep2": 0.46875,
+"opp15": 0.0625,
+"mean_tout": 2.7096875
+},
+">=3": {
+"n": 18,
+"same": 0.8333333333333334,
+"rep15": 0.6666666666666666,
+"rep2": 0.6666666666666666,
+"opp15": 0.05555555555555555,
+"mean_tout": 4.167777777777778
+}
+},
+"late": {
+"<1": {
+"n": 36,
+"same": 0.4722222222222222,
+"rep15": 0.05555555555555555,
+"rep2": 0.027777777777777776,
+"opp15": 0.25,
+"mean_tout": -0.27861111111111114
+},
+"1-2": {
+"n": 31,
+"same": 0.7096774193548387,
+"rep15": 0.16129032258064516,
+"rep2": 0.0967741935483871,
+"opp15": 0.12903225806451613,
+"mean_tout": 0.040000000000000153
+},
+">=2": {
+"n": 39,
+"same": 0.8461538461538461,
+"rep15": 0.6410256410256411,
+"rep2": 0.48717948717948717,
+"opp15": 0.05128205128205128,
+"mean_tout": 2.003846153846154
+},
+">=3": {
+"n": 20,
+"same": 0.95,
+"rep15": 0.75,
+"rep2": 0.65,
+"opp15": 0.05,
+"mean_tout": 2.786
+}
+}
+},
+"m3": {
+"pre": {
+"ncyc": 26,
+"R_pairs": 28,
+"R_in_tokens": 37,
+"gate_mentions": 0,
+"norun_mentions": 0,
+"hdr": {
+"PASS": 10,
+"null": 30,
+"FAIL": 5,
+"gate": 0
+}
+},
+"post": {
+"ncyc": 9,
+"R_pairs": 12,
+"R_in_tokens": 25,
+"gate_mentions": 4,
+"norun_mentions": 9,
+"hdr": {
+"PASS": 4,
+"null": 16,
+"FAIL": 0,
+"gate": 4
+}
+}
+},
+"m4": {
+"pre": {
+"R": [
+29,
+0.114
+],
+"R_none": [
+28,
+0.123
+],
+"PP_R": [
+6,
+0.1008
+],
+"BP": [
+1,
+1.28
+]
+},
+"post": {
+"R": [
+7,
+0.05
+],
+"R_none": [
+28,
+0.045
+],
+"PP_R": [
+4,
+0.07919999999999999
+],
+"BP": [
+12,
+10.5
+]
+}
+},
+"m5": {
+"open": 74,
+"forward": 20,
+"needs": 18,
+"m5_ext_mentions": 13,
+"forward_since_2026_07": 16
+},
+"pairs": [
+{
+"cyc": 2,
+"unit": "R?",
+"t_in": 4.5,
+"t_out": 6.0,
+"eff_in": 11696.0,
+"eff_out": 7708.0,
+"excl": false
+},
+{
+"cyc": 3,
+"unit": "none",
+"t_in": 0.03,
+"t_out": 0.13,
+"eff_in": 0.0001,
+"eff_out": 0.0007,
+"excl": false
+},
+{
+"cyc": 5,
+"unit": "none",
+"t_in": -0.45,
+"t_out": 0.03,
+"eff_in": -0.011,
+"eff_out": 0.001,
+"excl": false
+},
+{
+"cyc": 5,
+"unit": "none",
+"t_in": -0.35,
+"t_out": 0.28,
+"eff_in": -0.008,
+"eff_out": 0.009,
+"excl": false
+},
+{
+"cyc": 5,
+"unit": "none",
+"t_in": 1.7,
+"t_out": -0.23,
+"eff_in": 0.04,
+"eff_out": -0.008,
+"excl": false
+},
+{
+"cyc": 5,
+"unit": "none",
+"t_in": 1.69,
+"t_out": 0.25,
+"eff_in": 0.034,
+"eff_out": 0.007,
+"excl": false
+},
+{
+"cyc": 5,
+"unit": "none",
+"t_in": -2.41,
+"t_out": -0.86,
+"eff_in": -0.046,
+"eff_out": -0.023,
+"excl": false
+},
+{
+"cyc": 5,
+"unit": "none",
+"t_in": 1.51,
+"t_out": -1.46,
+"eff_in": 0.029,
+"eff_out": -0.039,
+"excl": false
+},
+{
+"cyc": 6,
+"unit": "none",
+"t_in": -1.07,
+"t_out": 0.03,
+"eff_in": -0.0398,
+"eff_out": 0.0009,
+"excl": false
+},
+{
+"cyc": 7,
+"unit": "R?",
+"t_in": 0.19,
+"t_out": -0.49,
+"eff_in": 0.0044,
+"eff_out": -0.02,
+"excl": false
+},
+{
+"cyc": 7,
+"unit": "R?",
+"t_in": 1.03,
+"t_out": 0.35,
+"eff_in": 0.02,
+"eff_out": 0.012,
+"excl": false
+},
+{
+"cyc": 7,
+"unit": "R?",
+"t_in": 2.95,
+"t_out": 1.1,
+"eff_in": 0.096,
+"eff_out": 0.055,
+"excl": false
+},
+{
+"cyc": 8,
+"unit": "R?",
+"t_in": -0.07,
+"t_out": 1.71,
+"eff_in": -0.002,
+"eff_out": 0.046,
+"excl": false
+},
+{
+"cyc": 8,
+"unit": "R?",
+"t_in": 0.49,
+"t_out": -0.41,
+"eff_in": 0.011,
+"eff_out": -0.011,
+"excl": false
+},
+{
+"cyc": 8,
+"unit": "R?",
+"t_in": -2.26,
+"t_out": 0.45,
+"eff_in": -0.054,
+"eff_out": 0.014,
+"excl": false
+},
+{
+"cyc": 8,
+"unit": "none",
+"t_in": 1.26,
+"t_out": -2.23,
+"eff_in": 0.031,
+"eff_out": -0.069,
+"excl": false
+},
+{
+"cyc": 9,
+"unit": "R?",
+"t_in": 1.02,
+"t_out": 0.0,
+"eff_in": 0.025,
+"eff_out": 0.0,
+"excl": false
+},
+{
+"cyc": 9,
+"unit": "R?",
+"t_in": -0.74,
+"t_out": 2.24,
+"eff_in": -0.026,
+"eff_out": 0.102,
+"excl": false
+},
+{
+"cyc": 9,
+"unit": "none",
+"t_in": -0.19,
+"t_out": 1.08,
+"eff_in": -0.01,
+"eff_out": 0.071,
+"excl": false
+},
+{
+"cyc": 10,
+"unit": "R?",
+"t_in": 0.55,
+"t_out": 0.85,
+"eff_in": 0.011,
+"eff_out": 0.023,
+"excl": false
+},
+{
+"cyc": 10,
+"unit": "none",
+"t_in": 1.19,
+"t_out": 0.64,
+"eff_in": 0.023,
+"eff_out": 0.017,
+"excl": false
+},
+{
+"cyc": 10,
+"unit": "none",
+"t_in": 0.74,
+"t_out": -0.32,
+"eff_in": 0.014,
+"eff_out": -0.009,
+"excl": false
+},
+{
+"cyc": 10,
+"unit": "none",
+"t_in": -0.52,
+"t_out": 2.0,
+"eff_in": -0.01,
+"eff_out": 0.053,
+"excl": false
+},
+{
+"cyc": 10,
+"unit": "none",
+"t_in": 2.48,
+"t_out": 0.65,
+"eff_in": 0.082,
+"eff_out": 0.03,
+"excl": false
+},
+{
+"cyc": 10,
+"unit": "none",
+"t_in": 1.11,
+"t_out": -0.38,
+"eff_in": 0.021,
+"eff_out": -0.01,
+"excl": false
+},
+{
+"cyc": 13,
+"unit": "none",
+"t_in": 1.8,
+"t_out": 3.94,
+"eff_in": 0.0394,
+"eff_out": 0.1336,
+"excl": false
+},
+{
+"cyc": 13,
+"unit": "bp",
+"t_in": 1.36,
+"t_out": 1.02,
+"eff_in": 2.85,
+"eff_out": 3.67,
+"excl": false
+},
+{
+"cyc": 13,
+"unit": "R?",
+"t_in": 2.16,
+"t_out": -1.52,
+"eff_in": 6.0,
+"eff_out": -0.019,
+"excl": false
+},
+{
+"cyc": 15,
+"unit": "none",
+"t_in": -0.71,
+"t_out": -0.78,
+"eff_in": -0.028,
+"eff_out": -0.053,
+"excl": false
+},
+{
+"cyc": 15,
+"unit": "R?",
+"t_in": -0.62,
+"t_out": -0.6,
+"eff_in": -0.029,
+"eff_out": -0.086,
+"excl": false
+},
+{
+"cyc": 15,
+"unit": "none",
+"t_in": 2.4,
+"t_out": 3.8,
+"eff_in": 0.095,
+"eff_out": 0.089,
+"excl": false
+},
+{
+"cyc": 15,
+"unit": "R?",
+"t_in": -0.64,
+"t_out": -2.08,
+"eff_in": -0.042,
+"eff_out": -0.381,
+"excl": false
+},
+{
+"cyc": 15,
+"unit": "R?",
+"t_in": -0.71,
+"t_out": -0.78,
+"eff_in": -0.028,
+"eff_out": -0.053,
+"excl": false
+},
+{
+"cyc": 15,
+"unit": "none",
+"t_in": 2.4,
+"t_out": 2.8,
+"eff_in": 0.095,
+"eff_out": 0.239,
+"excl": false
+},
+{
+"cyc": 16,
+"unit": "bp",
+"t_in": 14.3,
+"t_out": 6.9,
+"eff_in": 3.12,
+"eff_out": 3.29,
+"excl": false
+},
+{
+"cyc": 16,
+"unit": "none",
+"t_in": 1.58,
+"t_out": 1.53,
+"eff_in": 1.25,
+"eff_out": 2.04,
+"excl": false
+},
+{
+"cyc": 16,
+"unit": "none",
+"t_in": -3.93,
+"t_out": 0.31,
+"eff_in": -1.26,
+"eff_out": 0.14,
+"excl": false
+},
+{
+"cyc": 16,
+"unit": "none",
+"t_in": -0.81,
+"t_out": -0.86,
+"eff_in": -0.68,
+"eff_out": -1.15,
+"excl": false
+},
+{
+"cyc": 16,
+"unit": "bp",
+"t_in": 5.31,
+"t_out": 4.01,
+"eff_in": 4.47,
+"eff_out": 6.09,
+"excl": false
+},
+{
+"cyc": 16,
+"unit": "bp?",
+"t_in": -2.23,
+"t_out": -0.45,
+"eff_in": -3.6,
+"eff_out": -1.09,
+"excl": false
+},
+{
+"cyc": 16,
+"unit": "none",
+"t_in": 14.3,
+"t_out": 6.9,
+"eff_in": 3.12,
+"eff_out": 3.29,
+"excl": false
+},
+{
+"cyc": 16,
+"unit": "none",
+"t_in": -7.3,
+"t_out": -1.2,
+"eff_in": -1.44,
+"eff_out": -0.38,
+"excl": false
+},
+{
+"cyc": 16,
+"unit": "none",
+"t_in": -7.8,
+"t_out": 1.6,
+"eff_in": -0.71,
+"eff_out": 0.19,
+"excl": false
+},
+{
+"cyc": 16,
+"unit": "bp",
+"t_in": 19.4,
+"t_out": 8.5,
+"eff_in": 2.61,
+"eff_out": 2.12,
+"excl": false
+},
+{
+"cyc": 16,
+"unit": "bp?",
+"t_in": 2.8,
+"t_out": 3.3,
+"eff_in": 0.51,
+"eff_out": 1.17,
+"excl": false
+},
+{
+"cyc": 16,
+"unit": "bp?",
+"t_in": 15.4,
+"t_out": 9.5,
+"eff_in": 2.98,
+"eff_out": 2.96,
+"excl": false
+},
+{
+"cyc": 16,
+"unit": "bp?",
+"t_in": -11.1,
+"t_out": -2.5,
+"eff_in": -1.59,
+"eff_out": -0.53,
+"excl": false
+},
+{
+"cyc": 16,
+"unit": "R",
+"t_in": 3.54,
+"t_out": -0.21,
+"eff_in": 0.0817,
+"eff_out": -0.0069,
+"excl": false
+},
+{
+"cyc": 17,
+"unit": "bp",
+"t_in": 4.8,
+"t_out": 5.4,
+"eff_in": 1.52,
+"eff_out": 2.02,
+"excl": false
+},
+{
+"cyc": 17,
+"unit": "none",
+"t_in": 4.7,
+"t_out": 6.0,
+"eff_in": 1.02,
+"eff_out": 1.91,
+"excl": false
+},
+{
+"cyc": 17,
+"unit": "none",
+"t_in": -0.5,
+"t_out": -0.4,
+"eff_in": -0.26,
+"eff_out": -0.25,
+"excl": false
+},
+{
+"cyc": 17,
+"unit": "none",
+"t_in": 1.8,
+"t_out": 3.9,
+"eff_in": 0.56,
+"eff_out": 1.84,
+"excl": false
+},
+{
+"cyc": 17,
+"unit": "none",
+"t_in": 0.6,
+"t_out": 1.7,
+"eff_in": 0.45,
+"eff_out": 1.39,
+"excl": false
+},
+{
+"cyc": 17,
+"unit": "none",
+"t_in": 4.7,
+"t_out": 5.4,
+"eff_in": 0.61,
+"eff_out": 1.94,
+"excl": false
+},
+{
+"cyc": 17,
+"unit": "none",
+"t_in": 1.1,
+"t_out": 3.0,
+"eff_in": 0.35,
+"eff_out": 1.44,
+"excl": false
+},
+{
+"cyc": 17,
+"unit": "none",
+"t_in": 1.5,
+"t_out": 3.3,
+"eff_in": 0.48,
+"eff_out": 1.29,
+"excl": false
+},
+{
+"cyc": 17,
+"unit": "bp",
+"t_in": -2.2,
+"t_out": 1.1,
+"eff_in": -0.124,
+"eff_out": 0.077,
+"excl": false
+},
+{
+"cyc": 17,
+"unit": "bp?",
+"t_in": 5.8,
+"t_out": 6.7,
+"eff_in": 0.016,
+"eff_out": 0.018,
+"excl": false
+},
+{
+"cyc": 17,
+"unit": "none",
+"t_in": -2.6,
+"t_out": 1.4,
+"eff_in": -0.96,
+"eff_out": 0.82,
+"excl": false
+},
+{
+"cyc": 18,
+"unit": "none",
+"t_in": 5.7,
+"t_out": 7.33,
+"eff_in": 0.843,
+"eff_out": 0.632,
+"excl": false
+},
+{
+"cyc": 18,
+"unit": "R?",
+"t_in": 1.44,
+"t_out": -1.29,
+"eff_in": 0.032,
+"eff_out": -2026.0,
+"excl": false
+},
+{
+"cyc": 18,
+"unit": "R?",
+"t_in": 1.4,
+"t_out": 1.31,
+"eff_in": 0.101,
+"eff_out": 0.161,
+"excl": false
+},
+{
+"cyc": 19,
+"unit": "R",
+"t_in": -0.72,
+"t_out": -0.13,
+"eff_in": -0.0065,
+"eff_out": -0.0016,
+"excl": false
+},
+{
+"cyc": 19,
+"unit": "R?",
+"t_in": -6.2,
+"t_out": -0.4,
+"eff_in": -0.019,
+"eff_out": -0.003,
+"excl": false
+},
+{
+"cyc": 19,
+"unit": "none",
+"t_in": -6.2,
+"t_out": -0.4,
+"eff_in": 1.0,
+"eff_out": 1.0,
+"excl": false
+},
+{
+"cyc": 20,
+"unit": "bp",
+"t_in": -0.74,
+"t_out": -0.02,
+"eff_in": -0.031,
+"eff_out": -0.001,
+"excl": false
+},
+{
+"cyc": 20,
+"unit": "pct",
+"t_in": 2.7,
+"t_out": 0.5,
+"eff_in": 0.8,
+"eff_out": 0.21,
+"excl": false
+},
+{
+"cyc": 20,
+"unit": "pct",
+"t_in": -2.7,
+"t_out": -1.4,
+"eff_in": -0.68,
+"eff_out": -0.45,
+"excl": false
+},
+{
+"cyc": 21,
+"unit": "R?",
+"t_in": 2.1,
+"t_out": 1.3,
+"eff_in": 0.0,
+"eff_out": 10.0,
+"excl": false
+},
+{
+"cyc": 21,
+"unit": "R?",
+"t_in": 1.2,
+"t_out": -2.27,
+"eff_in": 0.0,
+"eff_out": -0.272,
+"excl": false
+},
+{
+"cyc": 22,
+"unit": "bp",
+"t_in": 2.6,
+"t_out": 1.7,
+"eff_in": 4.18,
+"eff_out": 2.56,
+"excl": false
+},
+{
+"cyc": 22,
+"unit": "bp?",
+"t_in": 3.9,
+"t_out": 0.9,
+"eff_in": 5.27,
+"eff_out": 1.84,
+"excl": false
+},
+{
+"cyc": 22,
+"unit": "bp?",
+"t_in": 1.9,
+"t_out": 0.5,
+"eff_in": 1.28,
+"eff_out": 0.31,
+"excl": false
+},
+{
+"cyc": 22,
+"unit": "bp?",
+"t_in": 2.8,
+"t_out": 1.4,
+"eff_in": 2.1,
+"eff_out": 1.14,
+"excl": false
+},
+{
+"cyc": 22,
+"unit": "none",
+"t_in": -3.0,
+"t_out": -0.6,
+"eff_in": -1.47,
+"eff_out": -0.42,
+"excl": false
+},
+{
+"cyc": 22,
+"unit": "none",
+"t_in": 2.6,
+"t_out": 1.7,
+"eff_in": 4.18,
+"eff_out": 2.56,
+"excl": false
+},
+{
+"cyc": 22,
+"unit": "none",
+"t_in": 1.9,
+"t_out": 0.5,
+"eff_in": 1.28,
+"eff_out": 0.31,
+"excl": false
+},
+{
+"cyc": 22,
+"unit": "none",
+"t_in": 1.4,
+"t_out": 1.3,
+"eff_in": 2.53,
+"eff_out": 3.01,
+"excl": false
+},
+{
+"cyc": 22,
+"unit": "none",
+"t_in": 2.4,
+"t_out": 1.8,
+"eff_in": 5.64,
+"eff_out": 4.9,
+"excl": false
+},
+{
+"cyc": 22,
+"unit": "none",
+"t_in": 0.7,
+"t_out": -0.2,
+"eff_in": 1.65,
+"eff_out": -0.46,
+"excl": false
+},
+{
+"cyc": 22,
+"unit": "none",
+"t_in": 3.9,
+"t_out": 0.9,
+"eff_in": 5.27,
+"eff_out": 1.84,
+"excl": false
+},
+{
+"cyc": 22,
+"unit": "none",
+"t_in": 2.8,
+"t_out": 1.4,
+"eff_in": 2.1,
+"eff_out": 1.14,
+"excl": false
+},
+{
+"cyc": 22,
+"unit": "none",
+"t_in": 1.5,
+"t_out": 1.1,
+"eff_in": 3.13,
+"eff_out": 3.31,
+"excl": false
+},
+{
+"cyc": 22,
+"unit": "none",
+"t_in": 3.0,
+"t_out": 1.5,
+"eff_in": 7.69,
+"eff_out": 5.49,
+"excl": false
+},
+{
+"cyc": 22,
+"unit": "none",
+"t_in": 0.9,
+"t_out": -0.4,
+"eff_in": 2.14,
+"eff_out": -1.47,
+"excl": false
+},
+{
+"cyc": 22,
+"unit": "none",
+"t_in": 3.3,
+"t_out": 0.9,
+"eff_in": 2.0,
+"eff_out": 2.0,
+"excl": false
+},
+{
+"cyc": 22,
+"unit": "bp?",
+"t_in": 11.5,
+"t_out": 6.4,
+"eff_in": 3.27,
+"eff_out": 2.89,
+"excl": false
+},
+{
+"cyc": 22,
+"unit": "bp?",
+"t_in": 0.0,
+"t_out": 1.3,
+"eff_in": 0.03,
+"eff_out": 2.87,
+"excl": false
+},
+{
+"cyc": 22,
+"unit": "bp?",
+"t_in": -2.5,
+"t_out": 0.8,
+"eff_in": -1.44,
+"eff_out": 0.63,
+"excl": false
+},
+{
+"cyc": 23,
+"unit": "R?",
+"t_in": 0.37,
+"t_out": -2.54,
+"eff_in": 0.021,
+"eff_out": -0.262,
+"excl": false
+},
+{
+"cyc": 23,
+"unit": "R?",
+"t_in": 1.19,
+"t_out": -0.57,
+"eff_in": 0.017,
+"eff_out": -0.02,
+"excl": false
+},
+{
+"cyc": 23,
+"unit": "R?",
+"t_in": -0.19,
+"t_out": -1.33,
+"eff_in": -0.011,
+"eff_out": -0.131,
+"excl": false
+},
+{
+"cyc": 23,
+"unit": "R?",
+"t_in": 0.64,
+"t_out": -0.22,
+"eff_in": 0.007,
+"eff_out": -0.004,
+"excl": false
+},
+{
+"cyc": 23,
+"unit": "R?",
+"t_in": 1.1,
+"t_out": -1.33,
+"eff_in": 0.052,
+"eff_out": -0.103,
+"excl": false
+},
+{
+"cyc": 23,
+"unit": "R?",
+"t_in": -0.19,
+"t_out": -2.54,
+"eff_in": 2010.0,
+"eff_out": 24.0,
+"excl": false
+},
+{
+"cyc": 24,
+"unit": "bp?",
+"t_in": 0.32,
+"t_out": 0.11,
+"eff_in": 0.038,
+"eff_out": 0.018,
+"excl": false
+},
+{
+"cyc": 24,
+"unit": "bp",
+"t_in": -1.45,
+"t_out": -0.67,
+"eff_in": -5.8,
+"eff_out": -4.2,
+"excl": false
+},
+{
+"cyc": 24,
+"unit": "bp?",
+"t_in": 1.33,
+"t_out": -0.62,
+"eff_in": 0.148,
+"eff_out": -0.142,
+"excl": false
+},
+{
+"cyc": 24,
+"unit": "bp?",
+"t_in": 0.54,
+"t_out": 0.77,
+"eff_in": 0.046,
+"eff_out": 0.027,
+"excl": false
+},
+{
+"cyc": 24,
+"unit": "bp",
+"t_in": 0.7,
+"t_out": -1.1,
+"eff_in": 5.2,
+"eff_out": -8.9,
+"excl": false
+},
+{
+"cyc": 24,
+"unit": "bp?",
+"t_in": 0.48,
+"t_out": -1.53,
+"eff_in": 0.084,
+"eff_out": -0.202,
+"excl": false
+},
+{
+"cyc": 24,
+"unit": "bp",
+"t_in": -2.1,
+"t_out": -0.67,
+"eff_in": -7.18,
+"eff_out": -5.47,
+"excl": false
+},
+{
+"cyc": 24,
+"unit": "bp",
+"t_in": 2.3,
+"t_out": -0.5,
+"eff_in": 20.2,
+"eff_out": -6.6,
+"excl": false
+},
+{
+"cyc": 26,
+"unit": "R",
+"t_in": 0.89,
+"t_out": 1.18,
+"eff_in": 0.053,
+"eff_out": 0.083,
+"excl": false
+},
+{
+"cyc": 27,
+"unit": "pp",
+"t_in": -0.69,
+"t_out": 1.19,
+"eff_in": -0.68,
+"eff_out": 1.26,
+"excl": false
+},
+{
+"cyc": 27,
+"unit": "pp",
+"t_in": -3.15,
+"t_out": -2.56,
+"eff_in": -1.43,
+"eff_out": -1.4,
+"excl": false
+},
+{
+"cyc": 27,
+"unit": "pp",
+"t_in": -0.05,
+"t_out": 1.51,
+"eff_in": -0.04,
+"eff_out": 1.64,
+"excl": false
+},
+{
+"cyc": 27,
+"unit": "pp?",
+"t_in": -2.6,
+"t_out": -2.3,
+"eff_in": 1.0,
+"eff_out": 9.0,
+"excl": false
+},
+{
+"cyc": 27,
+"unit": "pp?",
+"t_in": -2.7,
+"t_out": -2.93,
+"eff_in": -0.113,
+"eff_out": -0.171,
+"excl": false
+},
+{
+"cyc": 27,
+"unit": "pp",
+"t_in": 0.58,
+"t_out": 1.04,
+"eff_in": 0.58,
+"eff_out": 1.51,
+"excl": false
+},
+{
+"cyc": 27,
+"unit": "pp?",
+"t_in": 0.05,
+"t_out": -1.65,
+"eff_in": 0.05,
+"eff_out": -2.4,
+"excl": false
+},
+{
+"cyc": 27,
+"unit": "pp",
+"t_in": -2.31,
+"t_out": 0.78,
+"eff_in": -2.28,
+"eff_out": 1.12,
+"excl": false
+},
+{
+"cyc": 28,
+"unit": "none",
+"t_in": 0.0,
+"t_out": 0.42,
+"eff_in": 0.0,
+"eff_out": 0.025,
+"excl": false
+},
+{
+"cyc": 28,
+"unit": "none",
+"t_in": 0.38,
+"t_out": 1.84,
+"eff_in": 0.013,
+"eff_out": 0.066,
+"excl": false
+},
+{
+"cyc": 28,
+"unit": "bp",
+"t_in": 0.33,
+"t_out": 0.49,
+"eff_in": 0.36,
+"eff_out": 0.79,
+"excl": false
+},
+{
+"cyc": 28,
+"unit": "none",
+"t_in": -0.32,
+"t_out": -0.35,
+"eff_in": -0.008,
+"eff_out": -0.011,
+"excl": false
+},
+{
+"cyc": 28,
+"unit": "bp?",
+"t_in": -2.29,
+"t_out": 1.97,
+"eff_in": -0.098,
+"eff_out": 0.037,
+"excl": false
+},
+{
+"cyc": 29,
+"unit": "R?",
+"t_in": 1.33,
+"t_out": 1.44,
+"eff_in": 0.027,
+"eff_out": 24.0,
+"excl": false
+},
+{
+"cyc": 30,
+"unit": "bp?",
+"t_in": 1.04,
+"t_out": -0.96,
+"eff_in": 6.1,
+"eff_out": -6.8,
+"excl": false
+},
+{
+"cyc": 31,
+"unit": "bp",
+"t_in": 1.69,
+"t_out": 0.45,
+"eff_in": 8.5,
+"eff_out": 3.9,
+"excl": false
+},
+{
+"cyc": 31,
+"unit": "bp?",
+"t_in": 1.67,
+"t_out": 0.88,
+"eff_in": 10.4,
+"eff_out": 8.7,
+"excl": false
+},
+{
+"cyc": 31,
+"unit": "bp",
+"t_in": 1.84,
+"t_out": 0.7,
+"eff_in": 15.9,
+"eff_out": 8.2,
+"excl": false
+},
+{
+"cyc": 31,
+"unit": "bp?",
+"t_in": -0.49,
+"t_out": 0.01,
+"eff_in": 2012.0,
+"eff_out": 0.1,
+"excl": false
+},
+{
+"cyc": 31,
+"unit": "bp?",
+"t_in": 1.69,
+"t_out": 0.45,
+"eff_in": 2243.0,
+"eff_out": 263.0,
+"excl": false
+},
+{
+"cyc": 31,
+"unit": "bp?",
+"t_in": 1.25,
+"t_out": 0.61,
+"eff_in": 6.4,
+"eff_out": 5.4,
+"excl": false
+},
+{
+"cyc": 31,
+"unit": "bp?",
+"t_in": 1.7,
+"t_out": 0.46,
+"eff_in": 8.5,
+"eff_out": 3.9,
+"excl": false
+},
+{
+"cyc": 31,
+"unit": "bp?",
+"t_in": 1.71,
+"t_out": 0.46,
+"eff_in": 8.5,
+"eff_out": 3.9,
+"excl": false
+},
+{
+"cyc": 31,
+"unit": "bp?",
+"t_in": 1.22,
+"t_out": 1.02,
+"eff_in": 7.7,
+"eff_out": 10.6,
+"excl": false
+},
+{
+"cyc": 31,
+"unit": "bp?",
+"t_in": 1.84,
+"t_out": 0.7,
+"eff_in": 17.2,
+"eff_out": 53.0,
+"excl": false
+},
+{
+"cyc": 31,
+"unit": "R?",
+"t_in": 0.95,
+"t_out": 0.77,
+"eff_in": 9259.0,
+"eff_out": 1425.0,
+"excl": false
+},
+{
+"cyc": 31,
+"unit": "bp",
+"t_in": 1.53,
+"t_out": 2.25,
+"eff_in": 14.8,
+"eff_out": 33.8,
+"excl": false
+},
+{
+"cyc": 31,
+"unit": "bp?",
+"t_in": 0.66,
+"t_out": 0.13,
+"eff_in": 4.7,
+"eff_out": 1.1,
+"excl": false
+},
+{
+"cyc": 31,
+"unit": "bp?",
+"t_in": 1.51,
+"t_out": 1.56,
+"eff_in": 12.7,
+"eff_out": 16.2,
+"excl": false
+},
+{
+"cyc": 32,
+"unit": "R?",
+"t_in": 8.7,
+"t_out": 3.6,
+"eff_in": 0.048,
+"eff_out": 0.022,
+"excl": false
+},
+{
+"cyc": 32,
+"unit": "none",
+"t_in": 16.1,
+"t_out": 7.3,
+"eff_in": 0.11,
+"eff_out": 0.057,
+"excl": false
+},
+{
+"cyc": 32,
+"unit": "none",
+"t_in": 4.0,
+"t_out": -2.1,
+"eff_in": 0.037,
+"eff_out": -0.021,
+"excl": false
+},
+{
+"cyc": 33,
+"unit": "pp",
+"t_in": -3.28,
+"t_out": -2.49,
+"eff_in": -1.74,
+"eff_out": -1.54,
+"excl": false
+},
+{
+"cyc": 33,
+"unit": "R?",
+"t_in": 0.45,
+"t_out": 0.97,
+"eff_in": 0.533,
+"eff_out": 1612.0,
+"excl": false
+},
+{
+"cyc": 33,
+"unit": "R?",
+"t_in": -3.28,
+"t_out": -2.49,
+"eff_in": 8857.0,
+"eff_out": 5829.0,
+"excl": false
+},
+{
+"cyc": 34,
+"unit": "bp",
+"t_in": 0.61,
+"t_out": 1.27,
+"eff_in": 5.8,
+"eff_out": 15.0,
+"excl": false
+},
+{
+"cyc": 34,
+"unit": "R",
+"t_in": 1.87,
+"t_out": 0.58,
+"eff_in": 0.0046,
+"eff_out": 0.0019,
+"excl": false
+},
+{
+"cyc": 34,
+"unit": "none",
+"t_in": 8.91,
+"t_out": 4.74,
+"eff_in": 17.4,
+"eff_out": 1354.0,
+"excl": false
+},
+{
+"cyc": 34,
+"unit": "none",
+"t_in": 7.72,
+"t_out": 4.81,
+"eff_in": 0.656,
+"eff_out": 1.115,
+"excl": false
+},
+{
+"cyc": 34,
+"unit": "bp?",
+"t_in": 0.61,
+"t_out": 1.27,
+"eff_in": 2739.0,
+"eff_out": 1354.0,
+"excl": false
+},
+{
+"cyc": 34,
+"unit": "bp?",
+"t_in": 0.07,
+"t_out": -1.98,
+"eff_in": 0.5,
+"eff_out": -19.4,
+"excl": false
+},
+{
+"cyc": 34,
+"unit": "bp?",
+"t_in": -1.89,
+"t_out": -0.49,
+"eff_in": 2014.0,
+"eff_out": -4.1,
+"excl": false
+},
+{
+"cyc": 34,
+"unit": "bp",
+"t_in": 1.36,
+"t_out": 2.64,
+"eff_in": 41.0,
+"eff_out": 125.0,
+"excl": false
+},
+{
+"cyc": 34,
+"unit": "R?",
+"t_in": 2.77,
+"t_out": 1.73,
+"eff_in": 0.0092,
+"eff_out": 0.0069,
+"excl": false
+},
+{
+"cyc": 35,
+"unit": "R",
+"t_in": -4.5,
+"t_out": -2.9,
+"eff_in": -0.035,
+"eff_out": -0.034,
+"excl": false
+},
+{
+"cyc": 35,
+"unit": "R?",
+"t_in": -0.26,
+"t_out": 1.19,
+"eff_in": -0.034,
+"eff_out": 0.076,
+"excl": false
+},
+{
+"cyc": 35,
+"unit": "none",
+"t_in": -3.8,
+"t_out": -2.4,
+"eff_in": 1.0,
+"eff_out": 1.0,
+"excl": false
+},
+{
+"cyc": 35,
+"unit": "R?",
+"t_in": 1.2,
+"t_out": 1.6,
+"eff_in": 0.0,
+"eff_out": 1.0,
+"excl": false
+},
+{
+"cyc": 35,
+"unit": "R",
+"t_in": -2.12,
+"t_out": -2.13,
+"eff_in": -0.026,
+"eff_out": -0.047,
+"excl": false
+},
+{
+"cyc": 35,
+"unit": "R?",
+"t_in": -1.28,
+"t_out": 0.49,
+"eff_in": -0.034,
+"eff_out": 0.029,
+"excl": false
+},
+{
+"cyc": 36,
+"unit": "bp",
+"t_in": 2.83,
+"t_out": 2.53,
+"eff_in": 13.8,
+"eff_out": 13.4,
+"excl": false
+},
+{
+"cyc": 36,
+"unit": "bp?",
+"t_in": -0.47,
+"t_out": -0.68,
+"eff_in": -2.4,
+"eff_out": -5.6,
+"excl": false
+},
+{
+"cyc": 36,
+"unit": "bp",
+"t_in": 4.23,
+"t_out": 3.43,
+"eff_in": 7.8,
+"eff_out": 6.8,
+"excl": false
+},
+{
+"cyc": 36,
+"unit": "none",
+"t_in": 4.8,
+"t_out": 1.8,
+"eff_in": 5.05,
+"eff_out": 3.46,
+"excl": false
+},
+{
+"cyc": 36,
+"unit": "bp?",
+"t_in": 2.83,
+"t_out": 2.53,
+"eff_in": 2010.0,
+"eff_out": 13.4,
+"excl": false
+},
+{
+"cyc": 36,
+"unit": "none",
+"t_in": -0.47,
+"t_out": -0.68,
+"eff_in": -2.4,
+"eff_out": -5.6,
+"excl": false
+},
+{
+"cyc": 36,
+"unit": "none",
+"t_in": -0.6,
+"t_out": 3.43,
+"eff_in": -0.3,
+"eff_out": 6.8,
+"excl": false
+},
+{
+"cyc": 36,
+"unit": "none",
+"t_in": 2.0,
+"t_out": -0.23,
+"eff_in": 2.6,
+"eff_out": -0.6,
+"excl": false
+},
+{
+"cyc": 36,
+"unit": "none",
+"t_in": -0.14,
+"t_out": 1.99,
+"eff_in": -0.015,
+"eff_out": 0.358,
+"excl": false
+},
+{
+"cyc": 36,
+"unit": "none",
+"t_in": 2.06,
+"t_out": 1.29,
+"eff_in": 2.5,
+"eff_out": -3.6,
+"excl": false
+},
+{
+"cyc": 36,
+"unit": "none",
+"t_in": -1.7,
+"t_out": -3.4,
+"eff_in": -0.168,
+"eff_out": -0.553,
+"excl": false
+},
+{
+"cyc": 37,
+"unit": "bp?",
+"t_in": 3.1,
+"t_out": 3.5,
+"eff_in": 0.204,
+"eff_out": 0.47,
+"excl": false
+},
+{
+"cyc": 37,
+"unit": "bp?",
+"t_in": 2.0,
+"t_out": 2.6,
+"eff_in": 0.044,
+"eff_out": 0.182,
+"excl": false
+},
+{
+"cyc": 37,
+"unit": "R?",
+"t_in": 5.6,
+"t_out": 4.6,
+"eff_in": 0.446,
+"eff_out": 0.704,
+"excl": false
+},
+{
+"cyc": 38,
+"unit": "bp?",
+"t_in": 1.66,
+"t_out": -5.47,
+"eff_in": 2012.0,
+"eff_out": 2021.0,
+"excl": false
+},
+{
+"cyc": 38,
+"unit": "bp",
+"t_in": -0.55,
+"t_out": 0.06,
+"eff_in": -5.2,
+"eff_out": 0.8,
+"excl": false
+},
+{
+"cyc": 38,
+"unit": "bp",
+"t_in": 1.66,
+"t_out": -5.47,
+"eff_in": 16.5,
+"eff_out": -70.7,
+"excl": false
+},
+{
+"cyc": 38,
+"unit": "bp?",
+"t_in": 0.7,
+"t_out": -3.6,
+"eff_in": 4.6,
+"eff_out": -32.4,
+"excl": false
+},
+{
+"cyc": 38,
+"unit": "bp?",
+"t_in": -1.7,
+"t_out": 4.2,
+"eff_in": -11.9,
+"eff_out": 38.3,
+"excl": false
+},
+{
+"cyc": 38,
+"unit": "bp?",
+"t_in": 0.77,
+"t_out": -3.55,
+"eff_in": 5.4,
+"eff_out": -32.8,
+"excl": false
+},
+{
+"cyc": 38,
+"unit": "bp?",
+"t_in": 1.71,
+"t_out": -3.41,
+"eff_in": 26.8,
+"eff_out": -72.0,
+"excl": false
+},
+{
+"cyc": 38,
+"unit": "bp?",
+"t_in": -0.84,
+"t_out": -0.7,
+"eff_in": -10.0,
+"eff_out": -13.5,
+"excl": false
+}
+],
+"toks": [
+{
+"cyc": 2,
+"label": "在",
+"unit": "R?",
+"t": 4.5,
+"eff": 11696.0,
+"excl": false
+},
+{
+"cyc": 2,
+"label": "外",
+"unit": "R?",
+"t": 6.0,
+"eff": 7708.0,
+"excl": false
+},
+{
+"cyc": 3,
+"label": "在",
+"unit": "none",
+"t": 0.03,
+"eff": 0.0001,
+"excl": false
+},
+{
+"cyc": 3,
+"label": "外",
+"unit": "none",
+"t": 0.13,
+"eff": 0.0007,
+"excl": false
+},
+{
+"cyc": 3,
+"label": "外",
+"unit": "none",
+"t": -0.19,
+"eff": 0.97,
+"excl": false
+},
+{
+"cyc": 3,
+"label": "外",
+"unit": "none",
+"t": -0.31,
+"eff": 0.023,
+"excl": false
+},
+{
+"cyc": 5,
+"label": "在",
+"unit": "none",
+"t": -0.45,
+"eff": -0.011,
+"excl": false
+},
+{
+"cyc": 5,
+"label": "外",
+"unit": "none",
+"t": 0.03,
+"eff": 0.001,
+"excl": false
+},
+{
+"cyc": 5,
+"label": "近年",
+"unit": "none",
+"t": -0.41,
+"eff": -0.024,
+"excl": false
+},
+{
+"cyc": 5,
+"label": "近年",
+"unit": "none",
+"t": 0.2,
+"eff": 0.012,
+"excl": false
+},
+{
+"cyc": 5,
+"label": "在",
+"unit": "none",
+"t": -0.35,
+"eff": -0.008,
+"excl": false
+},
+{
+"cyc": 5,
+"label": "外",
+"unit": "none",
+"t": 0.28,
+"eff": 0.009,
+"excl": false
+},
+{
+"cyc": 5,
+"label": "近年",
+"unit": "none",
+"t": 0.96,
+"eff": 0.049,
+"excl": false
+},
+{
+"cyc": 5,
+"label": "在",
+"unit": "none",
+"t": 1.7,
+"eff": 0.04,
+"excl": false
+},
+{
+"cyc": 5,
+"label": "外",
+"unit": "none",
+"t": -0.23,
+"eff": -0.008,
+"excl": false
+},
+{
+"cyc": 5,
+"label": "近年",
+"unit": "none",
+"t": 0.1,
+"eff": 0.005,
+"excl": false
+},
+{
+"cyc": 5,
+"label": "在",
+"unit": "none",
+"t": 1.69,
+"eff": 0.034,
+"excl": false
+},
+{
+"cyc": 5,
+"label": "外",
+"unit": "none",
+"t": 0.25,
+"eff": 0.007,
+"excl": false
+},
+{
+"cyc": 5,
+"label": "近年",
+"unit": "none",
+"t": -0.79,
+"eff": -0.033,
+"excl": false
+},
+{
+"cyc": 5,
+"label": "在",
+"unit": "none",
+"t": 0.53,
+"eff": 0.011,
+"excl": false
+},
+{
+"cyc": 5,
+"label": "在",
+"unit": "none",
+"t": -2.41,
+"eff": -0.046,
+"excl": false
+},
+{
+"cyc": 5,
+"label": "外",
+"unit": "none",
+"t": -0.86,
+"eff": -0.023,
+"excl": false
+},
+{
+"cyc": 5,
+"label": "近年",
+"unit": "none",
+"t": -0.42,
+"eff": -0.016,
+"excl": false
+},
+{
+"cyc": 5,
+"label": "在",
+"unit": "none",
+"t": 1.51,
+"eff": 0.029,
+"excl": false
+},
+{
+"cyc": 5,
+"label": "外",
+"unit": "none",
+"t": -1.46,
+"eff": -0.039,
+"excl": false
+},
+{
+"cyc": 5,
+"label": "近年",
+"unit": "none",
+"t": -1.14,
+"eff": -0.045,
+"excl": false
+},
+{
+"cyc": 5,
+"label": "在",
+"unit": "R?",
+"t": -2.41,
+"eff": 2.0,
+"excl": false
+},
+{
+"cyc": 5,
+"label": "在",
+"unit": "R?",
+"t": 1.7,
+"eff": 1.0,
+"excl": false
+},
+{
+"cyc": 5,
+"label": "在",
+"unit": "none",
+"t": -2.4,
+"eff": -0.046,
+"excl": false
+},
+{
+"cyc": 6,
+"label": "在",
+"unit": "none",
+"t": -1.07,
+"eff": -0.0398,
+"excl": false
+},
+{
+"cyc": 6,
+"label": "外",
+"unit": "none",
+"t": 0.03,
+"eff": 0.0009,
+"excl": false
+},
+{
+"cyc": 6,
+"label": "近年",
+"unit": "none",
+"t": -0.19,
+"eff": 130.0,
+"excl": false
+},
+{
+"cyc": 6,
+"label": "近年",
+"unit": "none",
+"t": 0.71,
+"eff": 0.06,
+"excl": false
+},
+{
+"cyc": 6,
+"label": "外",
+"unit": "R?",
+"t": 1.92,
+"eff": 2.0,
+"excl": false
+},
+{
+"cyc": 6,
+"label": "外",
+"unit": "R?",
+"t": 1.9,
+"eff": 2.0,
+"excl": false
+},
+{
+"cyc": 6,
+"label": "外",
+"unit": "R?",
+"t": 1.9,
+"eff": 0.05,
+"excl": false
+},
+{
+"cyc": 7,
+"label": "近年",
+"unit": "R?",
+"t": 1.43,
+"eff": 48.0,
+"excl": false
+},
+{
+"cyc": 7,
+"label": "外",
+"unit": "R?",
+"t": -2.2,
+"eff": 3.0,
+"excl": false
+},
+{
+"cyc": 7,
+"label": "外",
+"unit": "none",
+"t": 2.1,
+"eff": 96.0,
+"excl": false
+},
+{
+"cyc": 7,
+"label": "在",
+"unit": "R?",
+"t": 0.19,
+"eff": 0.0044,
+"excl": false
+},
+{
+"cyc": 7,
+"label": "外",
+"unit": "R?",
+"t": -0.49,
+"eff": -0.02,
+"excl": false
+},
+{
+"cyc": 7,
+"label": "近年",
+"unit": "R?",
+"t": -0.37,
+"eff": -0.026,
+"excl": false
+},
+{
+"cyc": 7,
+"label": "近年",
+"unit": "R?",
+"t": 1.13,
+"eff": 0.119,
+"excl": false
+},
+{
+"cyc": 7,
+"label": "在",
+"unit": "R?",
+"t": 1.03,
+"eff": 0.02,
+"excl": false
+},
+{
+"cyc": 7,
+"label": "外",
+"unit": "R?",
+"t": 0.35,
+"eff": 0.012,
+"excl": false
+},
+{
+"cyc": 7,
+"label": "近年",
+"unit": "R?",
+"t": 1.6,
+"eff": 157.0,
+"excl": false
+},
+{
+"cyc": 7,
+"label": "外",
+"unit": "R?",
+"t": -2.37,
+"eff": -0.137,
+"excl": false
+},
+{
+"cyc": 7,
+"label": "近年",
+"unit": "R?",
+"t": -2.74,
+"eff": -0.273,
+"excl": false
+},
+{
+"cyc": 7,
+"label": "在",
+"unit": "R?",
+"t": 2.95,
+"eff": 0.096,
+"excl": false
+},
+{
+"cyc": 7,
+"label": "外",
+"unit": "R?",
+"t": 1.1,
+"eff": 0.055,
+"excl": false
+},
+{
+"cyc": 8,
+"label": "在",
+"unit": "R?",
+"t": -0.07,
+"eff": -0.002,
+"excl": false
+},
+{
+"cyc": 8,
+"label": "外",
+"unit": "R?",
+"t": 1.71,
+"eff": 0.046,
+"excl": false
+},
+{
+"cyc": 8,
+"label": "近年",
+"unit": "R?",
+"t": 1.14,
+"eff": 0.046,
+"excl": false
+},
+{
+"cyc": 8,
+"label": "在",
+"unit": "R?",
+"t": 0.49,
+"eff": 0.011,
+"excl": false
+},
+{
+"cyc": 8,
+"label": "外",
+"unit": "R?",
+"t": -0.41,
+"eff": -0.011,
+"excl": false
+},
+{
+"cyc": 8,
+"label": "在",
+"unit": "R?",
+"t": -2.26,
+"eff": -0.054,
+"excl": false
+},
+{
+"cyc": 8,
+"label": "外",
+"unit": "R?",
+"t": 0.45,
+"eff": 0.014,
+"excl": false
+},
+{
+"cyc": 8,
+"label": "近年",
+"unit": "R?",
+"t": 1.02,
+"eff": 0.046,
+"excl": false
+},
+{
+"cyc": 8,
+"label": "外",
+"unit": "R?",
+"t": 0.73,
+"eff": 0.024,
+"excl": false
+},
+{
+"cyc": 8,
+"label": "近年",
+"unit": "R?",
+"t": 1.19,
+"eff": 0.056,
+"excl": false
+},
+{
+"cyc": 8,
+"label": "外",
+"unit": "none",
+"t": 0.73,
+"eff": 0.019,
+"excl": false
+},
+{
+"cyc": 8,
+"label": "在",
+"unit": "none",
+"t": -2.05,
+"eff": -0.048,
+"excl": false
+},
+{
+"cyc": 8,
+"label": "近年",
+"unit": "none",
+"t": 1.86,
+"eff": 0.088,
+"excl": false
+},
+{
+"cyc": 8,
+"label": "在",
+"unit": "none",
+"t": 1.26,
+"eff": 0.031,
+"excl": false
+},
+{
+"cyc": 8,
+"label": "外",
+"unit": "none",
+"t": -2.23,
+"eff": -0.069,
+"excl": false
+},
+{
+"cyc": 8,
+"label": "近年",
+"unit": "none",
+"t": -1.47,
+"eff": -0.069,
+"excl": false
+},
+{
+"cyc": 8,
+"label": "外",
+"unit": "none",
+"t": 1.9,
+"eff": 0.104,
+"excl": false
+},
+{
+"cyc": 8,
+"label": "外",
+"unit": "none",
+"t": -2.9,
+"eff": -0.078,
+"excl": false
+},
+{
+"cyc": 8,
+"label": "近年",
+"unit": "none",
+"t": -3.1,
+"eff": -0.124,
+"excl": false
+},
+{
+"cyc": 8,
+"label": "在",
+"unit": "none",
+"t": 1.22,
+"eff": 2012.0,
+"excl": false
+},
+{
+"cyc": 8,
+"label": "在",
+"unit": "none",
+"t": 2.01,
+"eff": 4.0,
+"excl": false
+},
+{
+"cyc": 9,
+"label": "在",
+"unit": "none",
+"t": -0.74,
+"eff": -0.026,
+"excl": false
+},
+{
+"cyc": 9,
+"label": "在",
+"unit": "R?",
+"t": 1.02,
+"eff": 0.025,
+"excl": false
+},
+{
+"cyc": 9,
+"label": "外",
+"unit": "R?",
+"t": 0.0,
+"eff": 0.0,
+"excl": false
+},
+{
+"cyc": 9,
+"label": "近年",
+"unit": "R?",
+"t": 0.63,
+"eff": 0.03,
+"excl": false
+},
+{
+"cyc": 9,
+"label": "在",
+"unit": "R?",
+"t": -0.74,
+"eff": -0.026,
+"excl": false
+},
+{
+"cyc": 9,
+"label": "外",
+"unit": "R?",
+"t": 2.24,
+"eff": 0.102,
+"excl": false
+},
+{
+"cyc": 9,
+"label": "近年",
+"unit": "R?",
+"t": 3.07,
+"eff": 0.206,
+"excl": false
+},
+{
+"cyc": 9,
+"label": "外",
+"unit": "R?",
+"t": 3.4,
+"eff": 0.052,
+"excl": false
+},
+{
+"cyc": 9,
+"label": "外",
+"unit": "none",
+"t": 2.39,
+"eff": 0.048,
+"excl": false
+},
+{
+"cyc": 9,
+"label": "外",
+"unit": "none",
+"t": 2.27,
+"eff": 0.107,
+"excl": false
+},
+{
+"cyc": 9,
+"label": "近年",
+"unit": "none",
+"t": 3.2,
+"eff": 0.214,
+"excl": false
+},
+{
+"cyc": 9,
+"label": "在",
+"unit": "none",
+"t": -0.19,
+"eff": -0.01,
+"excl": false
+},
+{
+"cyc": 9,
+"label": "外",
+"unit": "none",
+"t": 1.08,
+"eff": 0.071,
+"excl": false
+},
+{
+"cyc": 9,
+"label": "近年",
+"unit": "R?",
+"t": 1.55,
+"eff": 0.149,
+"excl": false
+},
+{
+"cyc": 9,
+"label": "近年",
+"unit": "R?",
+"t": 1.55,
+"eff": 20.0,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "在",
+"unit": "R?",
+"t": 0.55,
+"eff": 0.011,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "外",
+"unit": "R?",
+"t": 0.85,
+"eff": 0.023,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "近年",
+"unit": "R?",
+"t": -0.39,
+"eff": -0.015,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "在",
+"unit": "none",
+"t": 1.19,
+"eff": 0.023,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "外",
+"unit": "none",
+"t": 0.64,
+"eff": 0.017,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "近年",
+"unit": "none",
+"t": 0.51,
+"eff": 0.02,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "在",
+"unit": "none",
+"t": 0.74,
+"eff": 0.014,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "外",
+"unit": "none",
+"t": -0.32,
+"eff": -0.009,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "在",
+"unit": "none",
+"t": -0.52,
+"eff": -0.01,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "外",
+"unit": "none",
+"t": 2.0,
+"eff": 0.053,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "近年",
+"unit": "none",
+"t": 1.57,
+"eff": 0.062,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "在",
+"unit": "none",
+"t": 2.48,
+"eff": 0.082,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "外",
+"unit": "none",
+"t": 0.65,
+"eff": 0.03,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "在",
+"unit": "none",
+"t": 0.74,
+"eff": 0.026,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "在",
+"unit": "none",
+"t": 1.11,
+"eff": 0.021,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "外",
+"unit": "none",
+"t": -0.38,
+"eff": -0.01,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "近年",
+"unit": "none",
+"t": -0.74,
+"eff": -0.029,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "外",
+"unit": "none",
+"t": 1.35,
+"eff": 0.036,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "近年",
+"unit": "none",
+"t": 1.29,
+"eff": 0.051,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "近年",
+"unit": "none",
+"t": -1.46,
+"eff": -0.079,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "外",
+"unit": "none",
+"t": 1.11,
+"eff": 0.045,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "近年",
+"unit": "none",
+"t": 1.1,
+"eff": 0.067,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "外",
+"unit": "none",
+"t": 1.18,
+"eff": 0.049,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "近年",
+"unit": "none",
+"t": 1.52,
+"eff": 0.096,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "外",
+"unit": "none",
+"t": -0.47,
+"eff": -0.017,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "在",
+"unit": "none",
+"t": 1.28,
+"eff": 0.036,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "在",
+"unit": "none",
+"t": 1.72,
+"eff": 0.048,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "在",
+"unit": "none",
+"t": -0.52,
+"eff": 2010.0,
+"excl": false
+},
+{
+"cyc": 10,
+"label": "外",
+"unit": "none",
+"t": 2.0,
+"eff": 1.2,
+"excl": false
+},
+{
+"cyc": 12,
+"label": "外",
+"unit": "none",
+"t": 1.69,
+"eff": 8.0,
+"excl": false
+},
+{
+"cyc": 13,
+"label": "在",
+"unit": "none",
+"t": 1.8,
+"eff": 0.0394,
+"excl": false
+},
+{
+"cyc": 13,
+"label": "外",
+"unit": "none",
+"t": 3.94,
+"eff": 0.1336,
+"excl": false
+},
+{
+"cyc": 13,
+"label": "近年",
+"unit": "none",
+"t": 4.62,
+"eff": 0.2022,
+"excl": false
+},
+{
+"cyc": 13,
+"label": "在",
+"unit": "bp",
+"t": 1.36,
+"eff": 2.85,
+"excl": false
+},
+{
+"cyc": 13,
+"label": "外",
+"unit": "bp",
+"t": 1.02,
+"eff": 3.67,
+"excl": false
+},
+{
+"cyc": 13,
+"label": "近年",
+"unit": "bp",
+"t": 1.33,
+"eff": 8.45,
+"excl": false
+},
+{
+"cyc": 13,
+"label": "外",
+"unit": "bp?",
+"t": 1.99,
+"eff": 4.0,
+"excl": false
+},
+{
+"cyc": 13,
+"label": "外",
+"unit": "R?",
+"t": -0.04,
+"eff": 3.0,
+"excl": false
+},
+{
+"cyc": 13,
+"label": "近年",
+"unit": "R?",
+"t": -0.23,
+"eff": 6.0,
+"excl": false
+},
+{
+"cyc": 13,
+"label": "在",
+"unit": "R?",
+"t": 2.16,
+"eff": 6.0,
+"excl": false
+},
+{
+"cyc": 13,
+"label": "外",
+"unit": "R?",
+"t": -1.52,
+"eff": -0.019,
+"excl": false
+},
+{
+"cyc": 13,
+"label": "外",
+"unit": "R?",
+"t": 3.76,
+"eff": 0.05,
+"excl": false
+},
+{
+"cyc": 13,
+"label": "外",
+"unit": "none",
+"t": 2.2,
+"eff": 0.057,
+"excl": false
+},
+{
+"cyc": 13,
+"label": "外",
+"unit": "R?",
+"t": 3.4,
+"eff": 0.233,
+"excl": false
+},
+{
+"cyc": 15,
+"label": "外",
+"unit": "none",
+"t": 3.94,
+"eff": 0.134,
+"excl": false
+},
+{
+"cyc": 15,
+"label": "在",
+"unit": "none",
+"t": -0.62,
+"eff": -0.029,
+"excl": false
+},
+{
+"cyc": 15,
+"label": "近年",
+"unit": "none",
+"t": -0.13,
+"eff": -0.018,
+"excl": false
+},
+{
+"cyc": 15,
+"label": "在",
+"unit": "none",
+"t": -0.71,
+"eff": -0.028,
+"excl": false
+},
+{
+"cyc": 15,
+"label": "外",
+"unit": "none",
+"t": -0.78,
+"eff": -0.053,
+"excl": false
+},
+{
+"cyc": 15,
+"label": "近年",
+"unit": "none",
+"t": 0.23,
+"eff": 0.018,
+"excl": false
+},
+{
+"cyc": 15,
+"label": "外",
+"unit": "none",
+"t": 3.94,
+"eff": 0.1336,
+"excl": false
+},
+{
+"cyc": 15,
+"label": "在",
+"unit": "none",
+"t": 1.8,
+"eff": 0.0394,
+"excl": false
+},
+{
+"cyc": 15,
+"label": "近年",
+"unit": "none",
+"t": 4.62,
+"eff": 0.2022,
+"excl": false
+},
+{
+"cyc": 15,
+"label": "在",
+"unit": "R?",
+"t": -0.62,
+"eff": -0.029,
+"excl": false
+},
+{
+"cyc": 15,
+"label": "外",
+"unit": "R?",
+"t": -0.6,
+"eff": -0.086,
+"excl": false
+},
+{
+"cyc": 15,
+"label": "近年",
+"unit": "R?",
+"t": -0.13,
+"eff": -0.018,
+"excl": false
+},
+{
+"cyc": 15,
+"label": "外",
+"unit": "R?",
+"t": 3.96,
+"eff": 0.124,
+"excl": false
+},
+{
+"cyc": 15,
+"label": "在",
+"unit": "none",
+"t": 2.4,
+"eff": 0.095,
+"excl": false
+},
+{
+"cyc": 15,
+"label": "外",
+"unit": "none",
+"t": 3.8,
+"eff": 0.089,
+"excl": false
+},
+{
+"cyc": 15,
+"label": "近年",
+"unit": "none",
+"t": 5.8,
+"eff": 1.0,
+"excl": false
+},
+{
+"cyc": 15,
+"label": "在",
+"unit": "R?",
+"t": -0.64,
+"eff": -0.042,
+"excl": false
+},
+{
+"cyc": 15,
+"label": "外",
+"unit": "R?",
+"t": -2.08,
+"eff": -0.381,
+"excl": false
+},
+{
+"cyc": 15,
+"label": "近年",
+"unit": "R?",
+"t": -1.67,
+"eff": -0.331,
+"excl": false
+},
+{
+"cyc": 15,
+"label": "在",
+"unit": "R?",
+"t": -0.71,
+"eff": -0.028,
+"excl": false
+},
+{
+"cyc": 15,
+"label": "外",
+"unit": "R?",
+"t": -0.78,
+"eff": -0.053,
+"excl": false
+},
+{
+"cyc": 15,
+"label": "近年",
+"unit": "R?",
+"t": 0.23,
+"eff": 0.018,
+"excl": false
+},
+{
+"cyc": 15,
+"label": "外",
+"unit": "none",
+"t": 3.62,
+"eff": 0.129,
+"excl": false
+},
+{
+"cyc": 15,
+"label": "外",
+"unit": "none",
+"t": 2.8,
+"eff": 0.239,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "外",
+"unit": "bp?",
+"t": -0.21,
+"eff": 4.0,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "在",
+"unit": "bp",
+"t": 14.3,
+"eff": 3.12,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "外",
+"unit": "bp?",
+"t": 6.9,
+"eff": 3.29,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "近年",
+"unit": "bp?",
+"t": 4.7,
+"eff": 4.65,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "在",
+"unit": "none",
+"t": 1.58,
+"eff": 1.25,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "外",
+"unit": "none",
+"t": 1.53,
+"eff": 2.04,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "近年",
+"unit": "none",
+"t": 1.26,
+"eff": 3.23,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "在",
+"unit": "none",
+"t": -3.93,
+"eff": -1.26,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "外",
+"unit": "none",
+"t": 0.31,
+"eff": 0.14,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "近年",
+"unit": "none",
+"t": -0.39,
+"eff": -0.29,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "在",
+"unit": "none",
+"t": -0.81,
+"eff": -0.68,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "外",
+"unit": "none",
+"t": -0.86,
+"eff": -1.15,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "近年",
+"unit": "none",
+"t": -0.91,
+"eff": -2.04,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "在",
+"unit": "bp",
+"t": 5.31,
+"eff": 4.47,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "外",
+"unit": "bp?",
+"t": 4.01,
+"eff": 6.09,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "近年",
+"unit": "bp?",
+"t": 2.94,
+"eff": 8.56,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "在",
+"unit": "bp?",
+"t": -2.23,
+"eff": -3.6,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "外",
+"unit": "bp?",
+"t": -0.45,
+"eff": -1.09,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "近年",
+"unit": "bp?",
+"t": 0.29,
+"eff": 1.16,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "在",
+"unit": "none",
+"t": 14.3,
+"eff": 3.12,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "外",
+"unit": "none",
+"t": 6.9,
+"eff": 3.29,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "近年",
+"unit": "none",
+"t": 4.7,
+"eff": 4.65,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "在",
+"unit": "none",
+"t": -7.3,
+"eff": -1.44,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "外",
+"unit": "none",
+"t": -1.2,
+"eff": -0.38,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "在",
+"unit": "none",
+"t": -7.8,
+"eff": -0.71,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "外",
+"unit": "none",
+"t": 1.6,
+"eff": 0.19,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "在",
+"unit": "bp",
+"t": 19.4,
+"eff": 2.61,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "外",
+"unit": "bp?",
+"t": 8.5,
+"eff": 2.12,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "近年",
+"unit": "bp?",
+"t": 5.5,
+"eff": 2.69,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "在",
+"unit": "bp?",
+"t": 2.8,
+"eff": 0.51,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "外",
+"unit": "bp?",
+"t": 3.3,
+"eff": 1.17,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "近年",
+"unit": "bp?",
+"t": 2.6,
+"eff": 1.96,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "在",
+"unit": "bp?",
+"t": 15.4,
+"eff": 2.98,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "外",
+"unit": "bp?",
+"t": 9.5,
+"eff": 2.96,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "近年",
+"unit": "bp?",
+"t": 6.2,
+"eff": 4.2,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "外",
+"unit": "bp?",
+"t": 4.5,
+"eff": 23.0,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "在",
+"unit": "bp?",
+"t": -11.1,
+"eff": -1.59,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "外",
+"unit": "bp?",
+"t": -2.5,
+"eff": -0.53,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "近年",
+"unit": "bp?",
+"t": -1.0,
+"eff": -0.38,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "外",
+"unit": "bp?",
+"t": -4.1,
+"eff": 10.0,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "在",
+"unit": "R",
+"t": 3.54,
+"eff": 0.0817,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "外",
+"unit": "R",
+"t": -0.21,
+"eff": -0.0069,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "近年",
+"unit": "R?",
+"t": 0.3,
+"eff": 0.0145,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "外",
+"unit": "R?",
+"t": 1.46,
+"eff": 0.064,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "近年",
+"unit": "R?",
+"t": 2.17,
+"eff": 0.139,
+"excl": false
+},
+{
+"cyc": 16,
+"label": "外",
+"unit": "R?",
+"t": -1.15,
+"eff": -0.037,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "在",
+"unit": "bp",
+"t": 4.8,
+"eff": 1.52,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "外",
+"unit": "bp?",
+"t": 5.4,
+"eff": 2.02,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "外",
+"unit": "bp?",
+"t": -3.1,
+"eff": 1.84,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "外",
+"unit": "bp?",
+"t": 7.2,
+"eff": 2021.0,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "在",
+"unit": "none",
+"t": 4.7,
+"eff": 1.02,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "外",
+"unit": "none",
+"t": 6.0,
+"eff": 1.91,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "近年",
+"unit": "none",
+"t": 4.6,
+"eff": 2.85,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "在",
+"unit": "none",
+"t": -0.5,
+"eff": -0.26,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "外",
+"unit": "none",
+"t": -0.4,
+"eff": -0.25,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "近年",
+"unit": "none",
+"t": 0.7,
+"eff": 0.72,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "在",
+"unit": "none",
+"t": 1.8,
+"eff": 0.56,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "外",
+"unit": "none",
+"t": 3.9,
+"eff": 1.84,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "近年",
+"unit": "none",
+"t": 3.1,
+"eff": 2.53,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "在",
+"unit": "none",
+"t": 0.6,
+"eff": 0.45,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "外",
+"unit": "none",
+"t": 1.7,
+"eff": 1.39,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "在",
+"unit": "none",
+"t": 4.7,
+"eff": 0.61,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "外",
+"unit": "none",
+"t": 5.4,
+"eff": 1.94,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "在",
+"unit": "none",
+"t": 1.1,
+"eff": 0.35,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "外",
+"unit": "none",
+"t": 3.0,
+"eff": 1.44,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "近年",
+"unit": "none",
+"t": 2.1,
+"eff": 1.78,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "外",
+"unit": "none",
+"t": -2.2,
+"eff": 1.15,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "在",
+"unit": "none",
+"t": 1.5,
+"eff": 0.48,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "外",
+"unit": "none",
+"t": 3.3,
+"eff": 1.29,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "近年",
+"unit": "none",
+"t": -1.0,
+"eff": 2.28,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "在",
+"unit": "bp",
+"t": -2.2,
+"eff": -0.124,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "外",
+"unit": "bp?",
+"t": 1.1,
+"eff": 0.077,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "近年",
+"unit": "bp?",
+"t": 0.7,
+"eff": 0.084,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "外",
+"unit": "bp?",
+"t": 5.1,
+"eff": 0.676,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "近年",
+"unit": "bp?",
+"t": 3.6,
+"eff": 0.717,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "外",
+"unit": "bp?",
+"t": 7.8,
+"eff": 18.0,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "在",
+"unit": "bp?",
+"t": 5.8,
+"eff": 0.016,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "外",
+"unit": "bp?",
+"t": 6.7,
+"eff": 0.018,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "近年",
+"unit": "bp?",
+"t": 4.8,
+"eff": 0.02,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "外",
+"unit": "none",
+"t": -2.0,
+"eff": -1.27,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "外",
+"unit": "bp?",
+"t": 3.3,
+"eff": 1.29,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "在",
+"unit": "none",
+"t": -2.6,
+"eff": -0.96,
+"excl": false
+},
+{
+"cyc": 17,
+"label": "外",
+"unit": "none",
+"t": 1.4,
+"eff": 0.82,
+"excl": false
+},
+{
+"cyc": 18,
+"label": "外",
+"unit": "R",
+"t": -0.65,
+"eff": -0.009,
+"excl": false
+},
+{
+"cyc": 18,
+"label": "在",
+"unit": "R",
+"t": -2.5,
+"eff": -0.022,
+"excl": false
+},
+{
+"cyc": 18,
+"label": "外",
+"unit": "bp",
+"t": 6.0,
+"eff": 1.91,
+"excl": false
+},
+{
+"cyc": 18,
+"label": "外",
+"unit": "none",
+"t": 5.25,
+"eff": 0.761,
+"excl": false
+},
+{
+"cyc": 18,
+"label": "在",
+"unit": "none",
+"t": 5.7,
+"eff": 0.843,
+"excl": false
+},
+{
+"cyc": 18,
+"label": "近年",
+"unit": "none",
+"t": 4.46,
+"eff": 0.77,
+"excl": false
+},
+{
+"cyc": 18,
+"label": "外",
+"unit": "none",
+"t": 7.33,
+"eff": 0.632,
+"excl": false
+},
+{
+"cyc": 18,
+"label": "在",
+"unit": "none",
+"t": 12.4,
+"eff": 0.82,
+"excl": false
+},
+{
+"cyc": 18,
+"label": "外",
+"unit": "R",
+"t": -0.65,
+"eff": -0.0093,
+"excl": false
+},
+{
+"cyc": 18,
+"label": "近年",
+"unit": "R",
+"t": 0.5,
+"eff": 0.016,
+"excl": false
+},
+{
+"cyc": 18,
+"label": "在",
+"unit": "R?",
+"t": -2.47,
+"eff": 2013.0,
+"excl": false
+},
+{
+"cyc": 18,
+"label": "在",
+"unit": "R?",
+"t": 1.44,
+"eff": 0.032,
+"excl": false
+},
+{
+"cyc": 18,
+"label": "外",
+"unit": "R?",
+"t": -1.29,
+"eff": -2026.0,
+"excl": false
+},
+{
+"cyc": 18,
+"label": "外",
+"unit": "R",
+"t": -0.21,
+"eff": -0.003,
+"excl": false
+},
+{
+"cyc": 18,
+"label": "在",
+"unit": "R",
+"t": -2.67,
+"eff": -0.0242,
+"excl": false
+},
+{
+"cyc": 18,
+"label": "近年",
+"unit": "R",
+"t": 0.98,
+"eff": 0.03,
+"excl": false
+},
+{
+"cyc": 18,
+"label": "外",
+"unit": "R",
+"t": 4.04,
+"eff": 0.369,
+"excl": false
+},
+{
+"cyc": 18,
+"label": "近年",
+"unit": "R?",
+"t": 3.3,
+"eff": 0.537,
+"excl": false
+},
+{
+"cyc": 18,
+"label": "在",
+"unit": "R?",
+"t": 1.4,
+"eff": 0.101,
+"excl": false
+},
+{
+"cyc": 18,
+"label": "外",
+"unit": "R?",
+"t": 1.31,
+"eff": 0.161,
+"excl": false
+},
+{
+"cyc": 18,
+"label": "在",
+"unit": "R",
+"t": -2.3,
+"eff": -0.024,
+"excl": false
+},
+{
+"cyc": 18,
+"label": "外",
+"unit": "R",
+"t": 4.0,
+"eff": 0.37,
+"excl": false
+},
+{
+"cyc": 18,
+"label": "外",
+"unit": "R?",
+"t": 4.0,
+"eff": 16.0,
+"excl": false
+},
+{
+"cyc": 19,
+"label": "外",
+"unit": "R?",
+"t": -0.19,
+"eff": 1.042,
+"excl": false
+},
+{
+"cyc": 19,
+"label": "在",
+"unit": "R",
+"t": -0.72,
+"eff": -0.0065,
+"excl": false
+},
+{
+"cyc": 19,
+"label": "外",
+"unit": "R",
+"t": -0.13,
+"eff": -0.0016,
+"excl": false
+},
+{
+"cyc": 19,
+"label": "在",
+"unit": "R?",
+"t": -6.2,
+"eff": -0.019,
+"excl": false
+},
+{
+"cyc": 19,
+"label": "外",
+"unit": "R?",
+"t": -0.4,
+"eff": -0.003,
+"excl": false
+},
+{
+"cyc": 19,
+"label": "外",
+"unit": "none",
+"t": 1.76,
+"eff": 0.028,
+"excl": false
+},
+{
+"cyc": 19,
+"label": "在",
+"unit": "none",
+"t": -6.2,
+"eff": 1.0,
+"excl": false
+},
+{
+"cyc": 19,
+"label": "外",
+"unit": "none",
+"t": -0.4,
+"eff": 1.0,
+"excl": false
+},
+{
+"cyc": 19,
+"label": "外",
+"unit": "none",
+"t": 0.93,
+"eff": 0.677,
+"excl": false
+},
+{
+"cyc": 19,
+"label": "外",
+"unit": "none",
+"t": 1.14,
+"eff": 0.029,
+"excl": false
+},
+{
+"cyc": 20,
+"label": "外",
+"unit": "pct",
+"t": 22.1,
+"eff": 15.44,
+"excl": false
+},
+{
+"cyc": 20,
+"label": "在",
+"unit": "pct",
+"t": -10.8,
+"eff": -7.61,
+"excl": false
+},
+{
+"cyc": 20,
+"label": "近年",
+"unit": "pct",
+"t": 14.0,
+"eff": 13.0,
+"excl": false
+},
+{
+"cyc": 20,
+"label": "近年",
+"unit": "pct",
+"t": 0.14,
+"eff": 0.05,
+"excl": false
+},
+{
+"cyc": 20,
+"label": "在",
+"unit": "pct",
+"t": -1.09,
+"eff": -0.246,
+"excl": false
+},
+{
+"cyc": 20,
+"label": "近年",
+"unit": "pct",
+"t": 1.47,
+"eff": 0.516,
+"excl": false
+},
+{
+"cyc": 20,
+"label": "在",
+"unit": "pct",
+"t": 1.52,
+"eff": 0.314,
+"excl": false
+},
+{
+"cyc": 20,
+"label": "在",
+"unit": "bp",
+"t": -0.74,
+"eff": -0.031,
+"excl": false
+},
+{
+"cyc": 20,
+"label": "外",
+"unit": "bp",
+"t": -0.02,
+"eff": -0.001,
+"excl": false
+},
+{
+"cyc": 20,
+"label": "近年",
+"unit": "bp?",
+"t": 0.08,
+"eff": 0.006,
+"excl": false
+},
+{
+"cyc": 20,
+"label": "外",
+"unit": "pct",
+"t": -0.2,
+"eff": -0.09,
+"excl": false
+},
+{
+"cyc": 20,
+"label": "在",
+"unit": "pct",
+"t": 2.7,
+"eff": 0.8,
+"excl": false
+},
+{
+"cyc": 20,
+"label": "外",
+"unit": "pct",
+"t": 0.5,
+"eff": 0.21,
+"excl": false
+},
+{
+"cyc": 20,
+"label": "外",
+"unit": "pct",
+"t": -0.7,
+"eff": -0.16,
+"excl": false
+},
+{
+"cyc": 20,
+"label": "外",
+"unit": "pct",
+"t": -0.88,
+"eff": -0.21,
+"excl": false
+},
+{
+"cyc": 20,
+"label": "外",
+"unit": "pct",
+"t": -1.3,
+"eff": -0.33,
+"excl": false
+},
+{
+"cyc": 20,
+"label": "近年",
+"unit": "none",
+"t": 1.4,
+"eff": 0.04,
+"excl": false
+},
+{
+"cyc": 20,
+"label": "在",
+"unit": "pct",
+"t": -2.7,
+"eff": -0.68,
+"excl": false
+},
+{
+"cyc": 20,
+"label": "外",
+"unit": "pct",
+"t": -1.4,
+"eff": -0.45,
+"excl": false
+},
+{
+"cyc": 21,
+"label": "外",
+"unit": "R",
+"t": -0.37,
+"eff": -0.051,
+"excl": false
+},
+{
+"cyc": 21,
+"label": "在",
+"unit": "R?",
+"t": 2.1,
+"eff": 0.0,
+"excl": false
+},
+{
+"cyc": 21,
+"label": "近年",
+"unit": "R?",
+"t": 2.4,
+"eff": 10.0,
+"excl": false
+},
+{
+"cyc": 21,
+"label": "外",
+"unit": "R?",
+"t": 1.3,
+"eff": 10.0,
+"excl": false
+},
+{
+"cyc": 21,
+"label": "外",
+"unit": "R",
+"t": -1.19,
+"eff": -0.145,
+"excl": false
+},
+{
+"cyc": 21,
+"label": "近年",
+"unit": "R?",
+"t": 0.45,
+"eff": 0.093,
+"excl": false
+},
+{
+"cyc": 21,
+"label": "在",
+"unit": "R?",
+"t": 1.2,
+"eff": 0.09,
+"excl": false
+},
+{
+"cyc": 21,
+"label": "在",
+"unit": "R?",
+"t": 1.2,
+"eff": 0.0,
+"excl": false
+},
+{
+"cyc": 21,
+"label": "外",
+"unit": "R?",
+"t": -2.27,
+"eff": -0.272,
+"excl": false
+},
+{
+"cyc": 21,
+"label": "在",
+"unit": "R?",
+"t": 0.05,
+"eff": 0.002,
+"excl": false
+},
+{
+"cyc": 21,
+"label": "在",
+"unit": "none",
+"t": -2.34,
+"eff": 1.0,
+"excl": false
+},
+{
+"cyc": 21,
+"label": "近年",
+"unit": "none",
+"t": -2.11,
+"eff": 3.0,
+"excl": false
+},
+{
+"cyc": 21,
+"label": "外",
+"unit": "R?",
+"t": -1.88,
+"eff": -0.23,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "在",
+"unit": "bp",
+"t": 2.6,
+"eff": 4.18,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "外",
+"unit": "bp?",
+"t": 1.7,
+"eff": 2.56,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "外",
+"unit": "bp?",
+"t": -0.2,
+"eff": -0.46,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "在",
+"unit": "bp?",
+"t": 3.9,
+"eff": 5.27,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "外",
+"unit": "bp?",
+"t": 0.9,
+"eff": 1.84,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "在",
+"unit": "bp?",
+"t": 1.9,
+"eff": 1.28,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "外",
+"unit": "bp?",
+"t": 0.5,
+"eff": 0.31,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "在",
+"unit": "bp?",
+"t": 2.8,
+"eff": 2.1,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "外",
+"unit": "bp?",
+"t": 1.4,
+"eff": 1.14,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "在",
+"unit": "bp",
+"t": 3.3,
+"eff": 2.06,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "在",
+"unit": "bp?",
+"t": 0.0,
+"eff": 0.03,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "在",
+"unit": "bp?",
+"t": 2.7,
+"eff": 500.0,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "在",
+"unit": "none",
+"t": -3.0,
+"eff": -1.47,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "外",
+"unit": "none",
+"t": -0.6,
+"eff": -0.42,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "在",
+"unit": "none",
+"t": 2.6,
+"eff": 4.18,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "外",
+"unit": "none",
+"t": 1.7,
+"eff": 2.56,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "近年",
+"unit": "none",
+"t": 2.4,
+"eff": 5.12,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "在",
+"unit": "none",
+"t": 1.9,
+"eff": 1.28,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "外",
+"unit": "none",
+"t": 0.5,
+"eff": 0.31,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "近年",
+"unit": "none",
+"t": 1.5,
+"eff": 1.26,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "在",
+"unit": "none",
+"t": 1.4,
+"eff": 2.53,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "外",
+"unit": "none",
+"t": 1.3,
+"eff": 3.01,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "在",
+"unit": "none",
+"t": 2.4,
+"eff": 5.64,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "外",
+"unit": "none",
+"t": 1.8,
+"eff": 4.9,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "在",
+"unit": "none",
+"t": 0.7,
+"eff": 1.65,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "外",
+"unit": "none",
+"t": -0.2,
+"eff": -0.46,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "近年",
+"unit": "none",
+"t": 0.7,
+"eff": 2.62,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "在",
+"unit": "none",
+"t": 2.8,
+"eff": 0.0,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "在",
+"unit": "none",
+"t": -2.8,
+"eff": -1.44,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "在",
+"unit": "none",
+"t": 3.9,
+"eff": 5.27,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "外",
+"unit": "none",
+"t": 0.9,
+"eff": 1.84,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "近年",
+"unit": "none",
+"t": 1.7,
+"eff": 5.43,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "在",
+"unit": "none",
+"t": 2.8,
+"eff": 2.1,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "外",
+"unit": "none",
+"t": 1.4,
+"eff": 1.14,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "近年",
+"unit": "none",
+"t": 2.6,
+"eff": 2.75,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "在",
+"unit": "none",
+"t": 1.5,
+"eff": 3.13,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "外",
+"unit": "none",
+"t": 1.1,
+"eff": 3.31,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "在",
+"unit": "none",
+"t": 3.0,
+"eff": 7.69,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "外",
+"unit": "none",
+"t": 1.5,
+"eff": 5.49,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "在",
+"unit": "none",
+"t": 0.9,
+"eff": 2.14,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "外",
+"unit": "none",
+"t": -0.4,
+"eff": -1.47,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "近年",
+"unit": "none",
+"t": 0.6,
+"eff": 3.27,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "在",
+"unit": "none",
+"t": 3.3,
+"eff": 2.0,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "外",
+"unit": "none",
+"t": 0.9,
+"eff": 2.0,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "近年",
+"unit": "none",
+"t": 2.0,
+"eff": 3.0,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "在",
+"unit": "bp?",
+"t": 11.5,
+"eff": 3.27,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "外",
+"unit": "bp?",
+"t": 6.4,
+"eff": 2.89,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "近年",
+"unit": "bp?",
+"t": 4.1,
+"eff": 3.48,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "外",
+"unit": "bp?",
+"t": 1.3,
+"eff": 2.87,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "近年",
+"unit": "bp?",
+"t": 1.8,
+"eff": 7.14,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "在",
+"unit": "bp?",
+"t": -2.5,
+"eff": -1.44,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "外",
+"unit": "bp?",
+"t": 0.8,
+"eff": 0.63,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "近年",
+"unit": "bp?",
+"t": 1.5,
+"eff": 2.0,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "在",
+"unit": "bp?",
+"t": -9.6,
+"eff": -2.07,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "在",
+"unit": "bp?",
+"t": 3.7,
+"eff": 19.0,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "在",
+"unit": "bp?",
+"t": 3.5,
+"eff": 100.0,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "外",
+"unit": "bp?",
+"t": 0.87,
+"eff": 100.0,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "外",
+"unit": "bp?",
+"t": 3.3,
+"eff": 4.5,
+"excl": false
+},
+{
+"cyc": 22,
+"label": "近年",
+"unit": "bp?",
+"t": 2.6,
+"eff": 2.75,
+"excl": false
+},
+{
+"cyc": 23,
+"label": "在",
+"unit": "R?",
+"t": 0.37,
+"eff": 0.021,
+"excl": false
+},
+{
+"cyc": 23,
+"label": "外",
+"unit": "R?",
+"t": -2.54,
+"eff": -0.262,
+"excl": false
+},
+{
+"cyc": 23,
+"label": "在",
+"unit": "R?",
+"t": 1.19,
+"eff": 0.017,
+"excl": false
+},
+{
+"cyc": 23,
+"label": "外",
+"unit": "R?",
+"t": -0.57,
+"eff": -0.02,
+"excl": false
+},
+{
+"cyc": 23,
+"label": "在",
+"unit": "R?",
+"t": -0.19,
+"eff": -0.011,
+"excl": false
+},
+{
+"cyc": 23,
+"label": "外",
+"unit": "R?",
+"t": -1.33,
+"eff": -0.131,
+"excl": false
+},
+{
+"cyc": 23,
+"label": "在",
+"unit": "R?",
+"t": 0.64,
+"eff": 0.007,
+"excl": false
+},
+{
+"cyc": 23,
+"label": "外",
+"unit": "R?",
+"t": -0.22,
+"eff": -0.004,
+"excl": false
+},
+{
+"cyc": 23,
+"label": "近年",
+"unit": "R?",
+"t": -0.6,
+"eff": -0.106,
+"excl": false
+},
+{
+"cyc": 23,
+"label": "在",
+"unit": "R?",
+"t": 1.1,
+"eff": 0.052,
+"excl": false
+},
+{
+"cyc": 23,
+"label": "外",
+"unit": "R?",
+"t": -1.33,
+"eff": -0.103,
+"excl": false
+},
+{
+"cyc": 23,
+"label": "在",
+"unit": "R?",
+"t": 1.19,
+"eff": 0.0165,
+"excl": false
+},
+{
+"cyc": 23,
+"label": "外",
+"unit": "R?",
+"t": -0.57,
+"eff": -0.0195,
+"excl": false
+},
+{
+"cyc": 23,
+"label": "近年",
+"unit": "R?",
+"t": -0.33,
+"eff": -0.0206,
+"excl": false
+},
+{
+"cyc": 23,
+"label": "外",
+"unit": "R?",
+"t": -1.39,
+"eff": -0.108,
+"excl": false
+},
+{
+"cyc": 23,
+"label": "外",
+"unit": "R?",
+"t": -1.76,
+"eff": -0.251,
+"excl": false
+},
+{
+"cyc": 23,
+"label": "近年",
+"unit": "R?",
+"t": 0.73,
+"eff": 0.124,
+"excl": false
+},
+{
+"cyc": 23,
+"label": "外",
+"unit": "R?",
+"t": -0.22,
+"eff": -0.0043,
+"excl": false
+},
+{
+"cyc": 23,
+"label": "在",
+"unit": "R?",
+"t": -0.19,
+"eff": 2010.0,
+"excl": false
+},
+{
+"cyc": 23,
+"label": "外",
+"unit": "R?",
+"t": -2.54,
+"eff": 24.0,
+"excl": false
+},
+{
+"cyc": 23,
+"label": "外",
+"unit": "R?",
+"t": 2.28,
+"eff": 0.154,
+"excl": false
+},
+{
+"cyc": 24,
+"label": "在",
+"unit": "bp?",
+"t": 0.32,
+"eff": 0.038,
+"excl": false
+},
+{
+"cyc": 24,
+"label": "外",
+"unit": "bp?",
+"t": 0.11,
+"eff": 0.018,
+"excl": false
+},
+{
+"cyc": 24,
+"label": "在",
+"unit": "bp",
+"t": -1.45,
+"eff": -5.8,
+"excl": false
+},
+{
+"cyc": 24,
+"label": "外",
+"unit": "bp?",
+"t": -0.67,
+"eff": -4.2,
+"excl": false
+},
+{
+"cyc": 24,
+"label": "在",
+"unit": "bp?",
+"t": 1.33,
+"eff": 0.148,
+"excl": false
+},
+{
+"cyc": 24,
+"label": "外",
+"unit": "bp?",
+"t": -0.62,
+"eff": -0.142,
+"excl": false
+},
+{
+"cyc": 24,
+"label": "在",
+"unit": "bp?",
+"t": 0.54,
+"eff": 0.046,
+"excl": false
+},
+{
+"cyc": 24,
+"label": "外",
+"unit": "bp?",
+"t": 0.77,
+"eff": 0.027,
+"excl": false
+},
+{
+"cyc": 24,
+"label": "在",
+"unit": "bp",
+"t": 0.7,
+"eff": 5.2,
+"excl": false
+},
+{
+"cyc": 24,
+"label": "外",
+"unit": "bp?",
+"t": -1.1,
+"eff": -8.9,
+"excl": false
+},
+{
+"cyc": 24,
+"label": "在",
+"unit": "bp?",
+"t": 0.48,
+"eff": 0.084,
+"excl": false
+},
+{
+"cyc": 24,
+"label": "外",
+"unit": "bp?",
+"t": -1.53,
+"eff": -0.202,
+"excl": false
+},
+{
+"cyc": 24,
+"label": "在",
+"unit": "bp",
+"t": -2.1,
+"eff": -7.18,
+"excl": false
+},
+{
+"cyc": 24,
+"label": "外",
+"unit": "bp?",
+"t": -0.67,
+"eff": -5.47,
+"excl": false
+},
+{
+"cyc": 24,
+"label": "近年",
+"unit": "bp?",
+"t": -1.04,
+"eff": -12.1,
+"excl": false
+},
+{
+"cyc": 24,
+"label": "在",
+"unit": "bp",
+"t": 2.3,
+"eff": 20.2,
+"excl": false
+},
+{
+"cyc": 24,
+"label": "外",
+"unit": "bp?",
+"t": -0.5,
+"eff": -6.6,
+"excl": false
+},
+{
+"cyc": 24,
+"label": "外",
+"unit": "R?",
+"t": 0.31,
+"eff": 0.12,
+"excl": false
+},
+{
+"cyc": 24,
+"label": "在",
+"unit": "bp",
+"t": 2.3,
+"eff": 20.0,
+"excl": false
+},
+{
+"cyc": 26,
+"label": "在",
+"unit": "R",
+"t": 0.89,
+"eff": 0.053,
+"excl": false
+},
+{
+"cyc": 26,
+"label": "外",
+"unit": "R",
+"t": 1.18,
+"eff": 0.083,
+"excl": false
+},
+{
+"cyc": 26,
+"label": "近年",
+"unit": "R",
+"t": 0.89,
+"eff": 0.081,
+"excl": false
+},
+{
+"cyc": 27,
+"label": "在",
+"unit": "pp",
+"t": -0.69,
+"eff": -0.68,
+"excl": false
+},
+{
+"cyc": 27,
+"label": "外",
+"unit": "pp",
+"t": 1.19,
+"eff": 1.26,
+"excl": false
+},
+{
+"cyc": 27,
+"label": "在",
+"unit": "pp",
+"t": -3.15,
+"eff": -1.43,
+"excl": false
+},
+{
+"cyc": 27,
+"label": "外",
+"unit": "pp",
+"t": -2.56,
+"eff": -1.4,
+"excl": false
+},
+{
+"cyc": 27,
+"label": "近年",
+"unit": "pp",
+"t": -0.16,
+"eff": -0.12,
+"excl": false
+},
+{
+"cyc": 27,
+"label": "近年",
+"unit": "pp?",
+"t": 0.2,
+"eff": 2.0,
+"excl": false
+},
+{
+"cyc": 27,
+"label": "近年",
+"unit": "pp?",
+"t": 0.6,
+"eff": 0.88,
+"excl": false
+},
+{
+"cyc": 27,
+"label": "在",
+"unit": "pp",
+"t": -0.05,
+"eff": -0.04,
+"excl": false
+},
+{
+"cyc": 27,
+"label": "外",
+"unit": "pp?",
+"t": 1.51,
+"eff": 1.64,
+"excl": false
+},
+{
+"cyc": 27,
+"label": "近年",
+"unit": "pp?",
+"t": 1.7,
+"eff": 2.67,
+"excl": false
+},
+{
+"cyc": 27,
+"label": "在",
+"unit": "pp?",
+"t": -2.6,
+"eff": 1.0,
+"excl": false
+},
+{
+"cyc": 27,
+"label": "外",
+"unit": "pp?",
+"t": -2.3,
+"eff": 9.0,
+"excl": false
+},
+{
+"cyc": 27,
+"label": "在",
+"unit": "pp?",
+"t": 1.3,
+"eff": 10.0,
+"excl": false
+},
+{
+"cyc": 27,
+"label": "在",
+"unit": "pp?",
+"t": -2.7,
+"eff": -0.113,
+"excl": false
+},
+{
+"cyc": 27,
+"label": "外",
+"unit": "pp?",
+"t": -2.93,
+"eff": -0.171,
+"excl": false
+},
+{
+"cyc": 27,
+"label": "近年",
+"unit": "pp?",
+"t": -0.51,
+"eff": -0.045,
+"excl": false
+},
+{
+"cyc": 27,
+"label": "在",
+"unit": "pp",
+"t": 0.58,
+"eff": 0.58,
+"excl": false
+},
+{
+"cyc": 27,
+"label": "外",
+"unit": "pp",
+"t": 1.04,
+"eff": 1.51,
+"excl": false
+},
+{
+"cyc": 27,
+"label": "近年",
+"unit": "pp?",
+"t": 0.13,
+"eff": 0.52,
+"excl": false
+},
+{
+"cyc": 27,
+"label": "在",
+"unit": "pp?",
+"t": 0.05,
+"eff": 0.05,
+"excl": false
+},
+{
+"cyc": 27,
+"label": "外",
+"unit": "pp?",
+"t": -1.65,
+"eff": -2.4,
+"excl": false
+},
+{
+"cyc": 27,
+"label": "在",
+"unit": "pp?",
+"t": 0.78,
+"eff": 0.78,
+"excl": false
+},
+{
+"cyc": 27,
+"label": "在",
+"unit": "pp",
+"t": -2.31,
+"eff": -2.28,
+"excl": false
+},
+{
+"cyc": 27,
+"label": "外",
+"unit": "pp?",
+"t": 0.78,
+"eff": 1.12,
+"excl": false
+},
+{
+"cyc": 27,
+"label": "外",
+"unit": "pp",
+"t": -3.2,
+"eff": -1.4,
+"excl": false
+},
+{
+"cyc": 28,
+"label": "在",
+"unit": "none",
+"t": 0.0,
+"eff": 0.0,
+"excl": false
+},
+{
+"cyc": 28,
+"label": "外",
+"unit": "none",
+"t": 0.42,
+"eff": 0.025,
+"excl": false
+},
+{
+"cyc": 28,
+"label": "在",
+"unit": "none",
+"t": 0.38,
+"eff": 0.013,
+"excl": false
+},
+{
+"cyc": 28,
+"label": "外",
+"unit": "none",
+"t": 1.84,
+"eff": 0.066,
+"excl": false
+},
+{
+"cyc": 28,
+"label": "在",
+"unit": "none",
+"t": 0.0,
+"eff": 0.05,
+"excl": false
+},
+{
+"cyc": 28,
+"label": "近年",
+"unit": "none",
+"t": -0.41,
+"eff": -0.035,
+"excl": false
+},
+{
+"cyc": 28,
+"label": "近年",
+"unit": "none",
+"t": 2.32,
+"eff": 0.116,
+"excl": false
+},
+{
+"cyc": 28,
+"label": "在",
+"unit": "bp",
+"t": 0.33,
+"eff": 0.36,
+"excl": false
+},
+{
+"cyc": 28,
+"label": "外",
+"unit": "bp?",
+"t": 0.49,
+"eff": 0.79,
+"excl": false
+},
+{
+"cyc": 28,
+"label": "外",
+"unit": "bp?",
+"t": 1.79,
+"eff": 1.05,
+"excl": false
+},
+{
+"cyc": 28,
+"label": "近年",
+"unit": "bp?",
+"t": 1.53,
+"eff": 1.67,
+"excl": false
+},
+{
+"cyc": 28,
+"label": "在",
+"unit": "none",
+"t": -0.32,
+"eff": -0.008,
+"excl": false
+},
+{
+"cyc": 28,
+"label": "外",
+"unit": "none",
+"t": -0.35,
+"eff": -0.011,
+"excl": false
+},
+{
+"cyc": 28,
+"label": "在",
+"unit": "pct",
+"t": 0.79,
+"eff": 25.0,
+"excl": false
+},
+{
+"cyc": 28,
+"label": "在",
+"unit": "bp?",
+"t": 2.06,
+"eff": 0.138,
+"excl": false
+},
+{
+"cyc": 28,
+"label": "在",
+"unit": "bp?",
+"t": -2.29,
+"eff": -0.098,
+"excl": false
+},
+{
+"cyc": 28,
+"label": "外",
+"unit": "bp?",
+"t": 1.97,
+"eff": 0.037,
+"excl": false
+},
+{
+"cyc": 28,
+"label": "近年",
+"unit": "bp?",
+"t": 2.03,
+"eff": 0.087,
+"excl": false
+},
+{
+"cyc": 28,
+"label": "外",
+"unit": "bp?",
+"t": 2.09,
+"eff": 0.102,
+"excl": false
+},
+{
+"cyc": 28,
+"label": "近年",
+"unit": "bp?",
+"t": 2.51,
+"eff": 0.187,
+"excl": false
+},
+{
+"cyc": 28,
+"label": "外",
+"unit": "bp?",
+"t": 0.07,
+"eff": 0.002,
+"excl": false
+},
+{
+"cyc": 28,
+"label": "外",
+"unit": "bp?",
+"t": -2.12,
+"eff": 0.129,
+"excl": false
+},
+{
+"cyc": 28,
+"label": "近年",
+"unit": "pp?",
+"t": 1.65,
+"eff": 2.5,
+"excl": false
+},
+{
+"cyc": 28,
+"label": "外",
+"unit": "pp?",
+"t": 1.8,
+"eff": 276.0,
+"excl": false
+},
+{
+"cyc": 29,
+"label": "近年",
+"unit": "R?",
+"t": 2.09,
+"eff": 24.0,
+"excl": false
+},
+{
+"cyc": 29,
+"label": "在",
+"unit": "R?",
+"t": 1.33,
+"eff": 0.027,
+"excl": false
+},
+{
+"cyc": 29,
+"label": "外",
+"unit": "R?",
+"t": 1.44,
+"eff": 24.0,
+"excl": false
+},
+{
+"cyc": 30,
+"label": "近年",
+"unit": "bp?",
+"t": 0.99,
+"eff": 158.0,
+"excl": false
+},
+{
+"cyc": 30,
+"label": "在",
+"unit": "bp?",
+"t": 1.04,
+"eff": 6.1,
+"excl": false
+},
+{
+"cyc": 30,
+"label": "外",
+"unit": "bp?",
+"t": -0.96,
+"eff": -6.8,
+"excl": false
+},
+{
+"cyc": 30,
+"label": "近年",
+"unit": "bp?",
+"t": 1.54,
+"eff": 11.3,
+"excl": false
+},
+{
+"cyc": 30,
+"label": "外",
+"unit": "R?",
+"t": 0.04,
+"eff": -0.037,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "在",
+"unit": "bp",
+"t": 1.69,
+"eff": 8.5,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "外",
+"unit": "bp?",
+"t": 0.45,
+"eff": 3.9,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "近年",
+"unit": "bp?",
+"t": 0.55,
+"eff": 8.6,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "在",
+"unit": "bp?",
+"t": 1.67,
+"eff": 10.4,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "外",
+"unit": "bp?",
+"t": 0.88,
+"eff": 8.7,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "近年",
+"unit": "bp?",
+"t": 1.13,
+"eff": 19.6,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "在",
+"unit": "bp",
+"t": 1.84,
+"eff": 15.9,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "外",
+"unit": "bp?",
+"t": 0.7,
+"eff": 8.2,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "近年",
+"unit": "R",
+"t": 0.95,
+"eff": 0.024,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "在",
+"unit": "bp?",
+"t": -0.49,
+"eff": 2012.0,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "外",
+"unit": "bp?",
+"t": 0.01,
+"eff": 0.1,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "在",
+"unit": "bp?",
+"t": 1.69,
+"eff": 2243.0,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "外",
+"unit": "bp?",
+"t": 0.45,
+"eff": 263.0,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "近年",
+"unit": "bp?",
+"t": 0.55,
+"eff": 119.0,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "在",
+"unit": "bp?",
+"t": 1.25,
+"eff": 6.4,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "外",
+"unit": "bp?",
+"t": 0.61,
+"eff": 5.4,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "在",
+"unit": "bp?",
+"t": 1.7,
+"eff": 8.5,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "外",
+"unit": "bp?",
+"t": 0.46,
+"eff": 3.9,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "在",
+"unit": "bp?",
+"t": 1.71,
+"eff": 8.5,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "在",
+"unit": "bp?",
+"t": 1.67,
+"eff": 395.0,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "外",
+"unit": "bp?",
+"t": 0.88,
+"eff": 2.1,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "近年",
+"unit": "bp?",
+"t": 1.13,
+"eff": 4.5,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "在",
+"unit": "bp?",
+"t": 1.82,
+"eff": 11.2,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "在",
+"unit": "bp?",
+"t": 1.22,
+"eff": 7.7,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "外",
+"unit": "bp?",
+"t": 1.02,
+"eff": 10.6,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "在",
+"unit": "bp?",
+"t": 1.84,
+"eff": 17.2,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "外",
+"unit": "bp?",
+"t": 0.7,
+"eff": 53.0,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "在",
+"unit": "bp?",
+"t": 1.87,
+"eff": 16.0,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "在",
+"unit": "R?",
+"t": 0.95,
+"eff": 9259.0,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "外",
+"unit": "R?",
+"t": 0.77,
+"eff": 1425.0,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "近年",
+"unit": "R?",
+"t": 0.49,
+"eff": 754.0,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "在",
+"unit": "bp",
+"t": 1.53,
+"eff": 14.8,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "外",
+"unit": "bp?",
+"t": 2.25,
+"eff": 33.8,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "近年",
+"unit": "bp?",
+"t": 1.1,
+"eff": 28.8,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "近年",
+"unit": "bp?",
+"t": -0.51,
+"eff": -5.2,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "在",
+"unit": "bp?",
+"t": 0.66,
+"eff": 4.7,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "外",
+"unit": "bp?",
+"t": 0.13,
+"eff": 1.1,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "近年",
+"unit": "bp?",
+"t": -1.2,
+"eff": -14.7,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "在",
+"unit": "bp?",
+"t": 1.51,
+"eff": 12.7,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "外",
+"unit": "bp?",
+"t": 1.56,
+"eff": 16.2,
+"excl": false
+},
+{
+"cyc": 31,
+"label": "在",
+"unit": "bp?",
+"t": 1.69,
+"eff": 8.5,
+"excl": false
+},
+{
+"cyc": 32,
+"label": "在",
+"unit": "R?",
+"t": 8.7,
+"eff": 0.048,
+"excl": false
+},
+{
+"cyc": 32,
+"label": "外",
+"unit": "R?",
+"t": 3.6,
+"eff": 0.022,
+"excl": false
+},
+{
+"cyc": 32,
+"label": "近年",
+"unit": "R?",
+"t": 1.35,
+"eff": 0.012,
+"excl": false
+},
+{
+"cyc": 32,
+"label": "在",
+"unit": "R?",
+"t": 20.8,
+"eff": 0.105,
+"excl": false
+},
+{
+"cyc": 32,
+"label": "在",
+"unit": "R?",
+"t": -10.6,
+"eff": -0.057,
+"excl": false
+},
+{
+"cyc": 32,
+"label": "在",
+"unit": "none",
+"t": 16.1,
+"eff": 0.11,
+"excl": false
+},
+{
+"cyc": 32,
+"label": "外",
+"unit": "none",
+"t": 7.3,
+"eff": 0.057,
+"excl": false
+},
+{
+"cyc": 32,
+"label": "近年",
+"unit": "none",
+"t": 4.0,
+"eff": 0.049,
+"excl": false
+},
+{
+"cyc": 32,
+"label": "外",
+"unit": "none",
+"t": 20.8,
+"eff": 0.105,
+"excl": false
+},
+{
+"cyc": 32,
+"label": "在",
+"unit": "none",
+"t": 4.0,
+"eff": 0.037,
+"excl": false
+},
+{
+"cyc": 32,
+"label": "外",
+"unit": "none",
+"t": -2.1,
+"eff": -0.021,
+"excl": false
+},
+{
+"cyc": 32,
+"label": "近年",
+"unit": "none",
+"t": -2.9,
+"eff": -0.038,
+"excl": false
+},
+{
+"cyc": 32,
+"label": "近年",
+"unit": "R?",
+"t": -0.5,
+"eff": -0.017,
+"excl": false
+},
+{
+"cyc": 33,
+"label": "近年",
+"unit": "pp",
+"t": 1.75,
+"eff": 2.88,
+"excl": false
+},
+{
+"cyc": 33,
+"label": "外",
+"unit": "pp?",
+"t": 0.97,
+"eff": 1.21,
+"excl": false
+},
+{
+"cyc": 33,
+"label": "在",
+"unit": "pp?",
+"t": 0.45,
+"eff": 0.5,
+"excl": false
+},
+{
+"cyc": 33,
+"label": "在",
+"unit": "pp",
+"t": -3.28,
+"eff": -1.74,
+"excl": false
+},
+{
+"cyc": 33,
+"label": "外",
+"unit": "pp?",
+"t": -2.49,
+"eff": -1.54,
+"excl": false
+},
+{
+"cyc": 33,
+"label": "近年",
+"unit": "pp?",
+"t": -0.54,
+"eff": -0.49,
+"excl": false
+},
+{
+"cyc": 33,
+"label": "近年",
+"unit": "pp?",
+"t": 1.87,
+"eff": 2.2,
+"excl": false
+},
+{
+"cyc": 33,
+"label": "在",
+"unit": "R?",
+"t": 0.45,
+"eff": 0.533,
+"excl": false
+},
+{
+"cyc": 33,
+"label": "外",
+"unit": "R?",
+"t": 0.97,
+"eff": 1612.0,
+"excl": false
+},
+{
+"cyc": 33,
+"label": "近年",
+"unit": "R?",
+"t": 1.75,
+"eff": 925.0,
+"excl": false
+},
+{
+"cyc": 33,
+"label": "在",
+"unit": "R?",
+"t": -3.28,
+"eff": 8857.0,
+"excl": false
+},
+{
+"cyc": 33,
+"label": "外",
+"unit": "R?",
+"t": -2.49,
+"eff": 5829.0,
+"excl": false
+},
+{
+"cyc": 33,
+"label": "近年",
+"unit": "R?",
+"t": -0.54,
+"eff": 2977.0,
+"excl": false
+},
+{
+"cyc": 33,
+"label": "近年",
+"unit": "pp?",
+"t": 1.67,
+"eff": -0.33,
+"excl": false
+},
+{
+"cyc": 33,
+"label": "近年",
+"unit": "pp?",
+"t": 1.8,
+"eff": 1.0,
+"excl": false
+},
+{
+"cyc": 33,
+"label": "近年",
+"unit": "pp?",
+"t": 2.6,
+"eff": 5.0,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "外",
+"unit": "R?",
+"t": 4.74,
+"eff": 2021.0,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "近年",
+"unit": "R?",
+"t": 1.37,
+"eff": 2024.0,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "在",
+"unit": "bp",
+"t": 0.61,
+"eff": 5.8,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "外",
+"unit": "R?",
+"t": 1.27,
+"eff": 15.0,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "在",
+"unit": "R",
+"t": 1.87,
+"eff": 0.0046,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "外",
+"unit": "R?",
+"t": 0.58,
+"eff": 0.0019,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "在",
+"unit": "none",
+"t": 8.91,
+"eff": 17.4,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "外",
+"unit": "none",
+"t": 4.74,
+"eff": 1354.0,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "近年",
+"unit": "none",
+"t": 1.37,
+"eff": 602.0,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "外",
+"unit": "none",
+"t": 7.27,
+"eff": 3.9,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "近年",
+"unit": "none",
+"t": 3.35,
+"eff": 3.32,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "在",
+"unit": "none",
+"t": 7.72,
+"eff": 0.656,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "外",
+"unit": "none",
+"t": 4.81,
+"eff": 1.115,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "近年",
+"unit": "none",
+"t": 4.61,
+"eff": 1.269,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "在",
+"unit": "bp?",
+"t": 0.61,
+"eff": 2739.0,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "外",
+"unit": "bp?",
+"t": 1.27,
+"eff": 1354.0,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "近年",
+"unit": "bp?",
+"t": 1.85,
+"eff": 602.0,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "在",
+"unit": "bp?",
+"t": 0.07,
+"eff": 0.5,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "外",
+"unit": "bp?",
+"t": -1.98,
+"eff": -19.4,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "近年",
+"unit": "bp?",
+"t": -2.8,
+"eff": -31.8,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "外",
+"unit": "bp?",
+"t": -2.29,
+"eff": -15.1,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "近年",
+"unit": "bp?",
+"t": -3.32,
+"eff": -23.4,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "在",
+"unit": "bp?",
+"t": -1.89,
+"eff": 2014.0,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "外",
+"unit": "bp?",
+"t": -0.49,
+"eff": -4.1,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "在",
+"unit": "bp",
+"t": 1.36,
+"eff": 41.0,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "外",
+"unit": "bp?",
+"t": 2.64,
+"eff": 125.0,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "近年",
+"unit": "bp?",
+"t": 3.1,
+"eff": 247.0,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "在",
+"unit": "R?",
+"t": -0.14,
+"eff": -0.058,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "外",
+"unit": "R?",
+"t": 0.7,
+"eff": 0.024,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "近年",
+"unit": "R?",
+"t": -0.39,
+"eff": -0.02,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "近年",
+"unit": "R?",
+"t": 1.5,
+"eff": 0.155,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "在",
+"unit": "R?",
+"t": 2.77,
+"eff": 0.0092,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "外",
+"unit": "R?",
+"t": 1.73,
+"eff": 0.0069,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "外",
+"unit": "volpt",
+"t": 8.9,
+"eff": 2.1,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "近年",
+"unit": "none",
+"t": 0.16,
+"eff": 0.09,
+"excl": false
+},
+{
+"cyc": 34,
+"label": "近年",
+"unit": "none",
+"t": 1.85,
+"eff": 25.0,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "在",
+"unit": "R",
+"t": -4.5,
+"eff": -0.035,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "外",
+"unit": "R?",
+"t": -2.9,
+"eff": -0.034,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "在",
+"unit": "R?",
+"t": -0.26,
+"eff": -0.034,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "外",
+"unit": "R?",
+"t": 1.19,
+"eff": 0.076,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "在",
+"unit": "none",
+"t": -3.8,
+"eff": 1.0,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "外",
+"unit": "none",
+"t": -2.4,
+"eff": 1.0,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "近年",
+"unit": "none",
+"t": -1.8,
+"eff": 12.0,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "在",
+"unit": "R?",
+"t": -3.2,
+"eff": 1.0,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "在",
+"unit": "R?",
+"t": 1.2,
+"eff": 0.0,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "外",
+"unit": "R?",
+"t": 1.6,
+"eff": 1.0,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "近年",
+"unit": "R?",
+"t": 2.0,
+"eff": 12.0,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "外",
+"unit": "R?",
+"t": 2.6,
+"eff": 0.064,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "近年",
+"unit": "R?",
+"t": 2.6,
+"eff": 0.097,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "外",
+"unit": "R?",
+"t": 1.1,
+"eff": 0.036,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "近年",
+"unit": "R?",
+"t": 0.8,
+"eff": 0.041,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "近年",
+"unit": "R?",
+"t": -1.5,
+"eff": 288.0,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "在",
+"unit": "R?",
+"t": 8.3,
+"eff": 0.012,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "在",
+"unit": "R",
+"t": -2.12,
+"eff": -0.026,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "外",
+"unit": "R?",
+"t": -2.13,
+"eff": -0.047,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "近年",
+"unit": "R?",
+"t": -0.97,
+"eff": -0.037,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "在",
+"unit": "R?",
+"t": -1.28,
+"eff": -0.034,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "外",
+"unit": "R?",
+"t": 0.49,
+"eff": 0.029,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "近年",
+"unit": "R?",
+"t": 0.66,
+"eff": 0.063,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "在",
+"unit": "R?",
+"t": -0.26,
+"eff": -0.007,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "近年",
+"unit": "R?",
+"t": 0.97,
+"eff": 0.1,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "近年",
+"unit": "R?",
+"t": 2.6,
+"eff": 12.0,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "外",
+"unit": "R?",
+"t": -2.9,
+"eff": 12.0,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "近年",
+"unit": "R?",
+"t": 1.4,
+"eff": 12.0,
+"excl": false
+},
+{
+"cyc": 35,
+"label": "在",
+"unit": "R?",
+"t": 0.8,
+"eff": 33.0,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "在",
+"unit": "bp",
+"t": 2.83,
+"eff": 13.8,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "外",
+"unit": "bp?",
+"t": 2.53,
+"eff": 13.4,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "外",
+"unit": "bp?",
+"t": 0.17,
+"eff": 1.4,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "在",
+"unit": "bp?",
+"t": -0.47,
+"eff": -2.4,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "外",
+"unit": "bp?",
+"t": -0.68,
+"eff": -5.6,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "在",
+"unit": "R",
+"t": -1.01,
+"eff": -0.023,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "在",
+"unit": "bp",
+"t": 4.23,
+"eff": 7.8,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "外",
+"unit": "bp?",
+"t": 3.43,
+"eff": 6.8,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "在",
+"unit": "none",
+"t": 4.8,
+"eff": 5.05,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "外",
+"unit": "none",
+"t": 1.8,
+"eff": 3.46,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "在",
+"unit": "bp?",
+"t": 2.83,
+"eff": 2010.0,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "外",
+"unit": "bp?",
+"t": 0.17,
+"eff": 2021.0,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "外",
+"unit": "bp?",
+"t": 0.1,
+"eff": 0.9,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "近年",
+"unit": "bp?",
+"t": -0.03,
+"eff": 2024.0,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "在",
+"unit": "none",
+"t": -0.47,
+"eff": -2.4,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "外",
+"unit": "none",
+"t": -0.68,
+"eff": -5.6,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "在",
+"unit": "none",
+"t": -1.11,
+"eff": -5.5,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "在",
+"unit": "none",
+"t": -0.6,
+"eff": -0.3,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "外",
+"unit": "none",
+"t": 3.43,
+"eff": 6.8,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "在",
+"unit": "none",
+"t": 2.0,
+"eff": 2.6,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "外",
+"unit": "none",
+"t": -0.23,
+"eff": -0.6,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "外",
+"unit": "none",
+"t": -1.07,
+"eff": -7.7,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "近年",
+"unit": "none",
+"t": -1.49,
+"eff": -7.1,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "外",
+"unit": "none",
+"t": -1.7,
+"eff": -9.2,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "在",
+"unit": "none",
+"t": -0.14,
+"eff": -0.015,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "外",
+"unit": "none",
+"t": 1.99,
+"eff": 0.358,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "外",
+"unit": "none",
+"t": -3.39,
+"eff": -0.553,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "在",
+"unit": "none",
+"t": 2.06,
+"eff": 2.5,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "外",
+"unit": "none",
+"t": 1.29,
+"eff": -3.6,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "外",
+"unit": "none",
+"t": -0.21,
+"eff": -1.7,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "近年",
+"unit": "none",
+"t": -1.67,
+"eff": 19.7,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "在",
+"unit": "R?",
+"t": -1.01,
+"eff": 2179.0,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "外",
+"unit": "bp?",
+"t": -0.23,
+"eff": -0.6,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "近年",
+"unit": "bp?",
+"t": -1.49,
+"eff": -7.1,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "外",
+"unit": "bp?",
+"t": 1.3,
+"eff": 7.2,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "在",
+"unit": "none",
+"t": -1.7,
+"eff": -0.168,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "外",
+"unit": "none",
+"t": -3.4,
+"eff": -0.553,
+"excl": false
+},
+{
+"cyc": 36,
+"label": "外",
+"unit": "none",
+"t": 2.0,
+"eff": 0.36,
+"excl": false
+},
+{
+"cyc": 37,
+"label": "在",
+"unit": "R",
+"t": 0.53,
+"eff": 0.011,
+"excl": false
+},
+{
+"cyc": 37,
+"label": "在",
+"unit": "bp?",
+"t": 3.1,
+"eff": 0.204,
+"excl": false
+},
+{
+"cyc": 37,
+"label": "外",
+"unit": "bp?",
+"t": 3.5,
+"eff": 0.47,
+"excl": false
+},
+{
+"cyc": 37,
+"label": "近年",
+"unit": "bp?",
+"t": 2.4,
+"eff": 0.555,
+"excl": false
+},
+{
+"cyc": 37,
+"label": "在",
+"unit": "bp?",
+"t": 2.0,
+"eff": 0.044,
+"excl": false
+},
+{
+"cyc": 37,
+"label": "外",
+"unit": "bp?",
+"t": 2.6,
+"eff": 0.182,
+"excl": false
+},
+{
+"cyc": 37,
+"label": "近年",
+"unit": "bp?",
+"t": 3.0,
+"eff": 0.356,
+"excl": false
+},
+{
+"cyc": 37,
+"label": "在",
+"unit": "R?",
+"t": 5.6,
+"eff": 0.446,
+"excl": false
+},
+{
+"cyc": 37,
+"label": "外",
+"unit": "R?",
+"t": 4.6,
+"eff": 0.704,
+"excl": false
+},
+{
+"cyc": 37,
+"label": "近年",
+"unit": "none",
+"t": -9.0,
+"eff": 1.0,
+"excl": false
+},
+{
+"cyc": 37,
+"label": "在",
+"unit": "pp",
+"t": -1.0,
+"eff": -1.67,
+"excl": false
+},
+{
+"cyc": 37,
+"label": "在",
+"unit": "R?",
+"t": 0.53,
+"eff": 20.2,
+"excl": false
+},
+{
+"cyc": 38,
+"label": "在",
+"unit": "bp?",
+"t": 1.66,
+"eff": 2012.0,
+"excl": false
+},
+{
+"cyc": 38,
+"label": "外",
+"unit": "bp?",
+"t": -5.47,
+"eff": 2021.0,
+"excl": false
+},
+{
+"cyc": 38,
+"label": "近年",
+"unit": "bp?",
+"t": -4.52,
+"eff": -93.9,
+"excl": false
+},
+{
+"cyc": 38,
+"label": "在",
+"unit": "bp",
+"t": -0.55,
+"eff": -5.2,
+"excl": false
+},
+{
+"cyc": 38,
+"label": "外",
+"unit": "bp?",
+"t": 0.06,
+"eff": 0.8,
+"excl": false
+},
+{
+"cyc": 38,
+"label": "在",
+"unit": "R",
+"t": 0.91,
+"eff": 0.038,
+"excl": false
+},
+{
+"cyc": 38,
+"label": "在",
+"unit": "bp",
+"t": 1.66,
+"eff": 16.5,
+"excl": false
+},
+{
+"cyc": 38,
+"label": "外",
+"unit": "bp?",
+"t": -5.47,
+"eff": -70.7,
+"excl": false
+},
+{
+"cyc": 38,
+"label": "在",
+"unit": "bp?",
+"t": 0.7,
+"eff": 4.6,
+"excl": false
+},
+{
+"cyc": 38,
+"label": "外",
+"unit": "bp?",
+"t": -3.6,
+"eff": -32.4,
+"excl": false
+},
+{
+"cyc": 38,
+"label": "近年",
+"unit": "bp?",
+"t": -2.9,
+"eff": -49.5,
+"excl": false
+},
+{
+"cyc": 38,
+"label": "在",
+"unit": "bp?",
+"t": -1.7,
+"eff": -11.9,
+"excl": false
+},
+{
+"cyc": 38,
+"label": "外",
+"unit": "bp?",
+"t": 4.2,
+"eff": 38.3,
+"excl": false
+},
+{
+"cyc": 38,
+"label": "近年",
+"unit": "bp?",
+"t": 3.7,
+"eff": 44.4,
+"excl": false
+},
+{
+"cyc": 38,
+"label": "在",
+"unit": "bp?",
+"t": 0.77,
+"eff": 5.4,
+"excl": false
+},
+{
+"cyc": 38,
+"label": "外",
+"unit": "bp?",
+"t": -3.55,
+"eff": -32.8,
+"excl": false
+},
+{
+"cyc": 38,
+"label": "近年",
+"unit": "bp?",
+"t": -2.92,
+"eff": -50.2,
+"excl": false
+},
+{
+"cyc": 38,
+"label": "在",
+"unit": "bp?",
+"t": 1.71,
+"eff": 26.8,
+"excl": false
+},
+{
+"cyc": 38,
+"label": "外",
+"unit": "bp?",
+"t": -3.41,
+"eff": -72.0,
+"excl": false
+},
+{
+"cyc": 38,
+"label": "近年",
+"unit": "bp?",
+"t": -4.14,
+"eff": -127.6,
+"excl": false
+},
+{
+"cyc": 38,
+"label": "近年",
+"unit": "bp?",
+"t": 0.72,
+"eff": 19.6,
+"excl": false
+},
+{
+"cyc": 38,
+"label": "在",
+"unit": "bp?",
+"t": -0.84,
+"eff": -10.0,
+"excl": false
+},
+{
+"cyc": 38,
+"label": "外",
+"unit": "bp?",
+"t": -0.7,
+"eff": -13.5,
+"excl": false
+},
+{
+"cyc": 38,
+"label": "外",
+"unit": "bp?",
+"t": 1.16,
+"eff": 18.9,
+"excl": false
+},
+{
+"cyc": 38,
+"label": "外",
+"unit": "bp?",
+"t": 1.04,
+"eff": 14.9,
+"excl": false
+},
+{
+"cyc": 38,
+"label": "在",
+"unit": "R",
+"t": 0.9,
+"eff": 0.038,
+"excl": false
+}
+]
+}
