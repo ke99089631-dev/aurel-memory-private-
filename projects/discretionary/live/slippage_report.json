@@ -2,11 +2,11 @@
  "summary": {
   "n": 1,
   "entry_slip_0.3": {
-   "n": 0,
-   "median": null,
-   "mean": 0.0,
-   "p90": null,
-   "adverse_share": 0.0
+   "n": 1,
+   "median": 0.13,
+   "mean": 0.13,
+   "p90": 0.13,
+   "adverse_share": 100.0
   },
   "chase_slip_0.3": {
    "n": 1,
@@ -14,11 +14,11 @@
    "p90": 1.55
   },
   "entry_slip_1": {
-   "n": 0,
-   "median": null,
-   "mean": 0.0,
-   "p90": null,
-   "adverse_share": 0.0
+   "n": 1,
+   "median": 0.19,
+   "mean": 0.19,
+   "p90": 0.19,
+   "adverse_share": 100.0
   },
   "chase_slip_1": {
    "n": 1,
@@ -26,11 +26,11 @@
    "p90": 1.64
   },
   "entry_slip_3": {
-   "n": 0,
-   "median": null,
-   "mean": 0.0,
-   "p90": null,
-   "adverse_share": 0.0
+   "n": 1,
+   "median": 0.12,
+   "mean": 0.12,
+   "p90": 0.12,
+   "adverse_share": 100.0
   },
   "chase_slip_3": {
    "n": 1,
@@ -38,10 +38,10 @@
    "p90": 1.62
   },
   "entry_slip_120": {
-   "n": 0,
-   "median": null,
-   "mean": 0.0,
-   "p90": null,
+   "n": 1,
+   "median": -1.86,
+   "mean": -1.86,
+   "p90": -1.86,
    "adverse_share": 0.0
   },
   "chase_slip_120": {
@@ -60,16 +60,16 @@
   "tp": {
    "n": 1,
    "fill_ok": 0,
-   "fill_miss": 0
+   "fill_miss": 1
   },
   "spread_at_entry": {
-   "median": null,
-   "p90": null,
-   "max": null
+   "median": 0.15,
+   "p90": 0.15,
+   "max": 0.15
   },
-  "open_vs_tick_abs_median": null,
+  "open_vs_tick_abs_median": 2.56,
   "adopt_latency_s": 1.0,
-  "generated": "2026-11-11 20:00:31"
+  "generated": "2026-11-11 20:30:37"
  },
  "rows": [
   {
@@ -78,10 +78,18 @@
    "risk": 2.76299999999992,
    "exit_reason": "TP",
    "R": 2.265,
+   "bid0": 4052.36,
+   "spread_pt": 0.15,
+   "slip_0.3": 0.13,
+   "slip_1": 0.19,
+   "slip_3": 0.12,
+   "slip_120": -1.86,
+   "open_vs_tick": 2.56,
    "chase_slip_0.3": 1.55,
    "chase_slip_1": 1.64,
    "chase_slip_3": 1.62,
-   "chase_slip_120": 5.24
+   "chase_slip_120": 5.24,
+   "tp_fill_ok": false
   }
  ]
 }
