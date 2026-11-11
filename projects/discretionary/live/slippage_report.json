@@ -1,6 +1,6 @@
 {
  "summary": {
-  "n": 0,
+  "n": 1,
   "entry_slip_0.3": {
    "n": 0,
    "median": null,
@@ -38,7 +38,7 @@
    "max": null
   },
   "tp": {
-   "n": 0,
+   "n": 1,
    "fill_ok": 0,
    "fill_miss": 0
   },
@@ -49,7 +49,15 @@
   },
   "open_vs_tick_abs_median": null,
   "adopt_latency_s": 1.0,
-  "generated": "2026-11-11 23:01:18"
+  "generated": "2026-11-11 23:31:29"
  },
- "rows": []
+ "rows": [
+  {
+   "id": "S-0497",
+   "side": "SELL",
+   "risk": 5.777999999999793,
+   "exit_reason": "TP",
+   "R": 1.502
+  }
+ ]
 }
