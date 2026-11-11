@@ -1013,3 +1013,21 @@ Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-11.md`
 You've hit your session limit · resets 2:40pm (Asia/Tokyo)
 2026/11/11 14:17:35.07 done
 ========== 2026/11/11 17:15:07.59 refute start ==========
+Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-11.md` under a `[REFUTE]` header dated 17:30, the fifth REFUTE entry in the file.
+
+**Target.** PROMOTED.md is still empty. The 14:15 refute slot died on a session limit, so cycle 38 (flight-to-safety, 12:50) was never challenged. Cycle 39 is a meta audit with no market claim. Cycle 38 self-declared both hypotheses null, but it carried a strong structural claim: since 2021 gold moves with stocks on extreme days, framed as "gold amplifies equity tails". I reproduced its table to ±0.1 bp and confirmed the trailing-sd event definition has no look-ahead.
+
+**Verdicts, by rules pre-registered in the script docstring.**
+
+| Claim | Verdict | Key numbers |
+|---|---|---|
+| Sign: 2021+ gold moves with stocks on extreme days | survived | US100 as the equity index gives t −5.38. Leave-one-year-out stays at t −4.5 or beyond for all six years. Winsorized t −6.5, Mann-Whitney z −5.8, all three sub-windows negative. |
+| Framing: "tail-specific amplification" | broken by rule, substantively inconclusive | 53% of the −71 bp out-of-sample differential is the ordinary linear beta of 0.116 estimated on non-extreme days alone. The residual tail excess of −33 bp has t between 1.0 and 3.0 depending on the estimator, is zero in 2021-22, and sits in 2023-24. The rule fired at its own boundary. |
+| "6 of 6 years negative" as evidence | not evidence of a tail effect | A pure linear-beta null reproduces 6/6 in 64% of simulations. |
+| "3000 times the 5-minute magnitude" | broken | Unit confusion. The daily beta equals the 5-minute contemporaneous beta summed over the session, ratio 0.96 to 1.37. c20's 0.01 bp was a one-bar lead-lag response. |
+| Common third factor (the research lane's own doubt) | descriptive, supportive | On crash days where 10-year real yields rose the same day, gold fell −61 bp with t −4.8. On crash days where real yields fell, gold was flat at −4 bp. The same 2×2 shape holds in-sample (−25 vs +19). The rate-up share of crash days went from 31% to 50%. |
+
+**Reading.** The reversal is real but misattributed. Gold acquired a positive beta of 0.12 to 0.21 to US equities after 2021, which is c20's +15% five-minute correlation seen at daily scale. Extreme days are mostly that beta extrapolated, and the "safe haven" behaviour did not vanish so much as get overwritten on rate-driven selloffs. The FRED daily windows do not align with the cash session, so the factor split is a handover, not a judgment. I proposed the research lane rewrite its forward cell in terms of tail excess rather than sign, since sign will pass automatically as long as the beta persists.
+
+**Files written, all under AUREL_RESEARCH.** Script `refute_c38_fts.py`, result and log under data, the entry copy in `data/refute_c38_findings_entry.md`, and the findings append. No orders, no production edits, no process actions, no scan, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED unchanged. The task-observer log sits outside the write boundary and was not written, same as prior runs.
+2026/11/11 17:23:58.98 done
