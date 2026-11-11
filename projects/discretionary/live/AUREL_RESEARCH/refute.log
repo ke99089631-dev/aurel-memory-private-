@@ -1034,3 +1034,6 @@ Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-11.md`
 ========== 2026/11/11 20:15:07.61 refute start ==========
 You've reached your Fable limit. Switch to another model, or manage usage credits at claude.ai/settings/usage?from=cc_cli_limit_message, to continue.
 2026/11/11 20:15:14.10 done
+========== 2026/11/11 23:15:06.97 refute start ==========
+You've reached your Fable limit. Switch to another model, or manage usage credits at claude.ai/settings/usage?from=cc_cli_limit_message, to continue.
+2026/11/11 23:15:14.23 done
