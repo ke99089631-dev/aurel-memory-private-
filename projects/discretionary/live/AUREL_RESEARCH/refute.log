@@ -988,3 +988,4 @@ Refutation complete. Verdict appended to `AUREL_RESEARCH/findings/2026-11-11.md`
 
 **Files written, all under AUREL_RESEARCH.** Scripts `refute_c36_friday_late.py`, `_b.py`, `_c.py`, their result and log files under data, the entry copy in `data/refute_c36_findings_entry.md`, and the findings append. spread_log.jsonl was read only. No orders, no production edits, no process actions, no scan, no MT5 connection, no external requests. Backlog, DATA_MAP and PROMOTED were left unchanged. The task-observer log sits outside the write boundary and was not written, same as prior runs.
 2026/11/11  8:28:24.64 done
+========== 2026/11/11 11:15:07.78 refute start ==========
