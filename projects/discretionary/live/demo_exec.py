@@ -390,7 +390,12 @@ def run(dry=True, armed=False, once=False):
             fresh = (now - float(f["entry_time"])) <= FRESH_SEC if f["entry_time"] else False
             tag = "新規発火"
             if not fresh:
-                print("[skip] %s %s（発火が古い>%ds・バックフィル防止）" % (f["sid"], f["side"], FRESH_SEC))
+                age = int(now - float(f["entry_time"])) if f["entry_time"] else None
+                print("[skip] %s %s（発火が古い>%ds・バックフィル防止・age=%s）" % (f["sid"], f["side"], FRESH_SEC, age))
+                # ★2026-11-11 会長GO: 見送りも台帳に残す(黙って捨てない)。11-01〜の時差ずれで8本を無記録で捨てた反省。
+                log_exec({"kind": "skip", "sid": f["sid"], "side": f["side"], "mode": f.get("mode"),
+                          "sl": f["sl"], "tp": f["tp"], "entry_ref": f["entry"],
+                          "why": "発火が古い>%ds (age=%ss)" % (FRESH_SEC, age)})
                 seen.add(f["sid"]); continue
             # ★方針フィルタ: 本命 touch2sb は発注。旧reaccel等は observe（FIRE_MODES空＝記録のみ）。
             do_fire = (f["mode"] == "touch2sb") or \
@@ -414,6 +419,9 @@ def run(dry=True, armed=False, once=False):
                         seen.add(f["sid"]); continue
                 except Exception as e:
                     print("[建玉確認エラー・安全側で撃たず] %s %r" % (f["sid"], e))
+                    log_exec({"kind": "skip", "sid": f["sid"], "side": f["side"], "mode": f.get("mode"),
+                              "sl": f["sl"], "tp": f["tp"], "entry_ref": f["entry"],
+                              "why": "建玉確認エラー・安全側で撃たず: %r" % (e,)})
                     seen.add(f["sid"]); continue
             line = ("%s %s %s %s(%s) lot%.2f SL%.3f TP%.3f (entry≈%.3f wall%.3f)"
                     % (tag, f["sid"], f["side"], f["wall_kind"], f["mode"], LOT,
