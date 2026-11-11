@@ -816,3 +816,19 @@ Volatility persistence is mostly absorbed by GVZ, but stop-width persistence is 
 
 **Files written.** New script and result under scripts and data, one findings entry appended to findings/2026-11-11.md, backlog and DATA_MAP updated. The backlog also now carries the three refutation lane rewrite proposals from earlier today (variance-unit VRP cell, cycle 35 knowledge split by window, Friday 16:00 to 16:50 forward cell), and the Thursday-to-Friday reversal hypothesis is marked broken per the 08:30 refutation. No scans, no MT5, no external calls, no production files touched. PROMOTED unchanged.
 2026/11/11  9:51:23.63 done
+========== 2026/11/11 12:42:14.82 cycle start ==========
+Cycle 38 is complete. One findings entry is appended with all numbers filled, the backlog and DATA_MAP are updated, and nothing outside AUREL_RESEARCH was touched.
+
+**What I tested.** The source map had no row for gold's most-cited mechanism, safe-haven demand, so this exploration cycle tested it event-by-event on the existing US500 and XAU M5 caches. Events were US cash-session (09:30 to 16:00 ET) moves beyond 1.5 trailing-60-day standard deviations, which is knowable on the day. Equal-sized up days served as a volatility-matched control. The script ran in 1.8 seconds, no scan.
+
+**Results, both pre-registered cells null.**
+- **Same-session reaction (H1) flips sign.** In-sample 2012-20 gold rose a weak +16.5 bp more on crash days than on surge days (t 1.66, below the MDE of 19.8). Out-of-sample 2021-26H1 the gap is −70.7 bp (t −5.47): gold fell 32 bp on equity crash days and rose 38 bp on surge days, negative in all six years. Since 2021 gold has amplified equity tail days rather than hedged them. The threshold choice does not change this.
+- **Next-session carry-over (H2) is absent.** Crash-day-to-next-close gold returns are indistinguishable from other days in both windows (MDE 19 to 26 bp), with no signal in the overnight or next-cash split or at 2 to 5 day horizons. A +15 bp injection only lifts t to about 1.2, so the null means "at most about 20 bp", as the pre-registration anticipated.
+- **Production gate not passed.** Wall-to-wall trades entered in the session after a crash day show Δμ +0.038R (t 0.91), under the 0.048R gate, so the out-of-sample was not printed.
+
+**Strongest counter-argument, recorded.** The 2021+ co-movement may not mean gold "became a risk asset". Those extreme days were largely rate and dollar shock days, so both assets may just be responding to a shared third factor. Two bid-only daily series cannot separate that. The question is attached to the existing high-priority request for intraday EURUSD or US10Y data.
+
+**New hygiene fact, now in DATA_MAP.** The US500 cache is missing 97 whole weekdays, 68 of them between mid-June and October 2020, plus 12 days in December 2022 and 9 in April 2014. The map's "24 holes" counted gaps, not days, so three earlier cycles' 2020 equity statistics silently lacked summer 2020. XAU is missing 23 weekdays (mostly July 2013) and US100 11. A re-fetch is logged as free offline needs-data, and a methodology candidate asks every grid-based daily statistic to print missing weekdays by year at load time.
+
+**Next steps logged in backlog.** A forward cell for 2026-07+ data (does the negative crash-day sign persist), the factor-separation question tied to intraday rate/dollar data, and the cache re-fetch. No PROMOTED change, no orders, no process or production edits.
+2026/11/11 12:51:08.10 done
