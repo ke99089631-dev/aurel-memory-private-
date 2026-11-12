@@ -4,13 +4,13 @@
  "fake_th": 0.6,
  "streak_th": 3,
  "n_needed": 30,
- "generated": "2026-11-12 06:45",
+ "generated": "2026-11-13 06:45",
  "summary": {
   "all": {
-   "n": 341,
-   "avg_R": 0.157,
-   "sum_R": 53.47,
-   "win": 48.1,
+   "n": 346,
+   "avg_R": 0.172,
+   "sum_R": 59.49,
+   "win": 48.6,
    "max_dd_R": -15.94
   },
   "dead": {
@@ -21,10 +21,10 @@
    "max_dd_R": -9.84
   },
   "not_dead": {
-   "n": 287,
-   "avg_R": 0.165,
-   "sum_R": 47.3,
-   "win": 49.5,
+   "n": 292,
+   "avg_R": 0.183,
+   "sum_R": 53.32,
+   "win": 50.0,
    "max_dd_R": -11.72
   }
  },
@@ -3097,6 +3097,51 @@
    "dead": false,
    "R": 1.284,
    "entry_jst": "2026-11-11 22:35"
+  },
+  "S-0499": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.518,
+   "entry_jst": "2026-11-12 00:30"
+  },
+  "S-0500": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 2.618,
+   "entry_jst": "2026-11-12 01:50"
+  },
+  "S-0501": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 0.75,
+   "entry_jst": "2026-11-12 17:35"
+  },
+  "S-0502": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 2.135,
+   "entry_jst": "2026-11-12 22:20"
+  },
+  "S-0506": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-13 05:05"
   }
  }
 }
