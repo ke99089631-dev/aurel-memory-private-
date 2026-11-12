@@ -1,6 +1,6 @@
 {
  "summary": {
-  "n": 1,
+  "n": 2,
   "entry_slip_0.3": {
    "n": 0,
    "median": null,
@@ -30,9 +30,9 @@
    "adverse_share": 0.0
   },
   "sl": {
-   "n": 1,
+   "n": 2,
    "measured": 0,
-   "not_triggered_on_tick": 1,
+   "not_triggered_on_tick": 2,
    "median": null,
    "p90": null,
    "max": null
@@ -49,13 +49,20 @@
   },
   "open_vs_tick_abs_median": null,
   "adopt_latency_s": 1.0,
-  "generated": "2026-11-13 04:09:03"
+  "generated": "2026-11-13 04:39:14"
  },
  "rows": [
   {
    "id": "S-0504",
    "side": "BUY",
    "risk": 2.769999999999982,
+   "exit_reason": "SL",
+   "R": -1.0
+  },
+  {
+   "id": "S-0505",
+   "side": "SELL",
+   "risk": 0.11000000000012733,
    "exit_reason": "SL",
    "R": -1.0
   }
