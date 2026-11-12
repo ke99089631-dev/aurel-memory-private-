@@ -1,41 +1,41 @@
 {
  "summary": {
-  "n": 2,
+  "n": 1,
   "entry_slip_0.3": {
    "n": 1,
-   "median": -0.04,
-   "mean": -0.04,
-   "p90": -0.04,
-   "adverse_share": 0.0
+   "median": 0.07,
+   "mean": 0.07,
+   "p90": 0.07,
+   "adverse_share": 100.0
   },
   "entry_slip_1": {
    "n": 1,
-   "median": 0.01,
-   "mean": 0.01,
-   "p90": 0.01,
+   "median": 0.11,
+   "mean": 0.11,
+   "p90": 0.11,
    "adverse_share": 100.0
   },
   "entry_slip_3": {
    "n": 1,
-   "median": -0.03,
-   "mean": -0.03,
-   "p90": -0.03,
-   "adverse_share": 0.0
+   "median": 0.14,
+   "mean": 0.14,
+   "p90": 0.14,
+   "adverse_share": 100.0
   },
   "entry_slip_120": {
    "n": 1,
-   "median": -1.74,
-   "mean": -1.74,
-   "p90": -1.74,
-   "adverse_share": 0.0
+   "median": 0.14,
+   "mean": 0.14,
+   "p90": 0.14,
+   "adverse_share": 100.0
   },
   "sl": {
-   "n": 2,
-   "measured": 1,
+   "n": 1,
+   "measured": 0,
    "not_triggered_on_tick": 1,
-   "median": 3.44,
-   "p90": 3.44,
-   "max": 3.44
+   "median": null,
+   "p90": null,
+   "max": null
   },
   "tp": {
    "n": 0,
@@ -47,32 +47,24 @@
    "p90": 0.16,
    "max": 0.16
   },
-  "open_vs_tick_abs_median": 3.39,
+  "open_vs_tick_abs_median": 11.03,
   "adopt_latency_s": 1.0,
-  "generated": "2026-11-13 05:39:28"
+  "generated": "2026-11-13 06:09:34"
  },
  "rows": [
-  {
-   "id": "S-0505",
-   "side": "SELL",
-   "risk": 0.11000000000012733,
-   "exit_reason": "SL",
-   "R": -1.0,
-   "bid0": 3883.84,
-   "spread_pt": 0.16,
-   "slip_0.3": -0.04,
-   "slip_1": 0.01,
-   "slip_3": -0.03,
-   "slip_120": -1.74,
-   "open_vs_tick": -3.39,
-   "sl_slip": 3.44
-  },
   {
    "id": "S-0506",
    "side": "BUY",
    "risk": 4.089999999999691,
    "exit_reason": "SL",
-   "R": -1.0
+   "R": -1.0,
+   "bid0": 3874.21,
+   "spread_pt": 0.16,
+   "slip_0.3": 0.07,
+   "slip_1": 0.11,
+   "slip_3": 0.14,
+   "slip_120": 0.14,
+   "open_vs_tick": 11.03
   }
  ]
 }
