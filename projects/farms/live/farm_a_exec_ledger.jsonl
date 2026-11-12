@@ -51,3 +51,4 @@
 {"farm": "A-US100", "ts": "2026-11-11T17:42:35", "symbol": "NAS100.r", "side": "BUY", "wall": 28545.91, "sl": 28180.115, "tp": 29488.11, "risk": 392.845, "confirm_id": "1794425700", "mode": "observe", "why": "同時2本の枠が埋まり(非重複)"}
 {"farm": "A-US100", "ts": "2026-11-11T18:42:36", "symbol": "NAS100.r", "side": "BUY", "wall": 28588.71, "sl": 28208.791, "tp": 29567.289, "risk": 380.169, "confirm_id": "1794429300", "mode": "observe", "why": "同時2本の枠が埋まり(非重複)"}
 {"farm": "A-US100", "ts": "2026-11-11T18:57:36", "symbol": "NAS100.r", "side": "BUY", "wall": 28613.21, "sl": 28225.206, "tp": 29612.614, "risk": 372.754, "confirm_id": "1794430200", "mode": "observe", "why": "同時2本の枠が埋まり(非重複)"}
+{"farm": "A-US100", "ts": "2026-11-12T13:37:44", "symbol": "NAS100.r", "side": "SELL", "wall": 28073.54, "sl": 28253.776, "tp": 27609.296, "risk": 181.336, "confirm_id": "1794497400", "mode": "fire", "lot": 0.1, "retcode": 10009, "deal": 51263925, "position": 56859824, "ok": true}
