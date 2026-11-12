@@ -111,3 +111,4 @@
 {"kind": "update", "target": "P-0006", "logged_at": "2026-11-12 21:55:28", "mfe_R": 0.27, "mae_R": 0.39, "hold_bars": 1}
 {"kind": "update", "target": "P-0006", "logged_at": "2026-11-12 22:00:01", "mfe_R": 0.29, "mae_R": 0.39, "hold_bars": 2}
 {"kind": "update", "target": "P-0006", "logged_at": "2026-11-12 22:05:05", "mfe_R": 0.45, "mae_R": 0.41, "hold_bars": 3}
+{"kind": "update", "target": "P-0006", "logged_at": "2026-11-12 22:10:10", "status": "closed", "exit": 3931.94, "exit_reason": "SL", "exit_time": 1794488700, "exit_jst": "2026-11-12 22:05", "hold_bars": 4, "mfe_R": 2.25, "mae_R": 1.45, "R": -1.0, "netR": -1.112}
