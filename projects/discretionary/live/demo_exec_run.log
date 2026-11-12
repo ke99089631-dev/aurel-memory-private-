@@ -108,3 +108,6 @@ UnicodeDecodeError: 'utf-8' codec can't decode byte 0x8f in position 0: invalid 
 [skip] S-0356 BUY（発火が古い>180s・バックフィル防止）
 [skip] S-0359 BUY（発火が古い>180s・バックフィル防止）
 [skip] S-0360 BUY（発火が古い>180s・バックフィル防止）
+[モード] LIVE デモ発注（armed=True）
+[接続] デモ 802307 / VantageTradingLtd-Demo / 残高987.21 検証OK
+[起動] デモ執行 20秒おき（Ctrl+C / KILLファイルで停止）
