@@ -1088,3 +1088,6 @@ You've reached your Fable limit. Switch to another model, or manage usage credit
 ========== 2026/11/14  2:15:05.92 refute start ==========
 You've reached your Fable limit. Switch to another model, or manage usage credits at claude.ai/settings/usage?from=cc_cli_limit_message, to continue.
 2026/11/14  2:15:13.22 done
+========== 2026/11/14  5:15:05.90 refute start ==========
+You've reached your Fable limit. Switch to another model, or manage usage credits at claude.ai/settings/usage?from=cc_cli_limit_message, to continue.
+2026/11/14  5:15:12.64 done
