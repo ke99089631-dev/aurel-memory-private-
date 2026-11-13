@@ -1461,3 +1461,6 @@ Traceback (most recent call last):
   File "<frozen importlib._bootstrap_external>", line 1187, in get_data
 MemoryError
 OpenBLAS error: Memory allocation still failed after 10 retries, giving up.
+[探索観測] yfinance BTC-USD 取得中...
+  M5 17278本 (2026-09-15 00:00:00+00:00..2026-11-13 23:45:00+00:00)
+  新規記録 0本 / 台帳累計 101本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_d_btc_explore_ledger.jsonl
