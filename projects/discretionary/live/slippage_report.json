@@ -31,11 +31,11 @@
   },
   "sl": {
    "n": 1,
-   "measured": 0,
-   "not_triggered_on_tick": 1,
-   "median": null,
-   "p90": null,
-   "max": null
+   "measured": 1,
+   "not_triggered_on_tick": 0,
+   "median": 0.915,
+   "p90": 0.915,
+   "max": 0.915
   },
   "tp": {
    "n": 0,
@@ -49,7 +49,7 @@
   },
   "open_vs_tick_abs_median": null,
   "adopt_latency_s": 1.0,
-  "generated": "2026-11-13 08:40:10"
+  "generated": "2026-11-13 09:10:19"
  },
  "rows": [
   {
@@ -57,7 +57,8 @@
    "side": "SELL",
    "risk": 3.2649999999998727,
    "exit_reason": "SL",
-   "R": -1.0
+   "R": -1.0,
+   "sl_slip": 0.915
   }
  ]
 }
