@@ -9669,3 +9669,4 @@
 {"kind": "update", "target": "S-0519", "logged_at": "2026-11-14 04:15:32", "slip_src": "tick-sim L=1s", "spread_pt": 0.15, "slip_pt": -0.28, "sl_slip_pt": 1.495}
 {"kind": "update", "target": "S-0507", "logged_at": "2026-11-14 04:45:36", "slip_src": "tick-sim L=1s", "sl_slip_pt": 0.915}
 {"kind": "update", "target": "S-0507", "logged_at": "2026-11-14 05:15:47", "slip_src": "tick-sim L=1s", "sl_slip_pt": 0.915}
+{"kind": "update", "target": "S-0507", "logged_at": "2026-11-14 05:45:54", "slip_src": "tick-sim L=1s", "sl_slip_pt": 0.915}
