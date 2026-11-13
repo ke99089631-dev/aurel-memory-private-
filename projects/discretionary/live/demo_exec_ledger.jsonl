@@ -26,3 +26,4 @@
 {"kind": "skip", "sid": "T2-1794442200", "side": "SELL", "mode": "touch2sb", "sl": 4008.479, "tp": 3905.5, "entry_ref": 3972.41, "why": "発火が古い>180s (age=78968s)", "logged_at": "2026-11-13 07:11:08"}
 {"kind": "skip", "sid": "T2-1794442500", "side": "SELL", "mode": "touch2sb", "sl": 4007.514, "tp": 3902.836, "entry_ref": 3982.22, "why": "発火が古い>180s (age=78668s)", "logged_at": "2026-11-13 07:11:08"}
 {"kind": "skip", "sid": "S-0508", "side": "BUY", "mode": "reaccel", "sl": 3882.485, "tp": 3894.92, "entry_ref": 3889.15, "why": "発火が古い>180s (age=313s)", "logged_at": "2026-11-13 09:15:13"}
+{"kind": "skip", "sid": "S-0509", "side": "BUY", "mode": "reaccel", "sl": 3882.932, "tp": 3896.256, "entry_ref": 3887.03, "why": "発火が古い>180s (age=325s)", "logged_at": "2026-11-13 10:05:25"}
