@@ -2,25 +2,25 @@
  "summary": {
   "n": 2,
   "entry_slip_0.3": {
-   "n": 0,
-   "median": null,
-   "mean": 0.0,
-   "p90": null,
+   "n": 1,
+   "median": -0.18,
+   "mean": -0.18,
+   "p90": -0.18,
    "adverse_share": 0.0
   },
   "entry_slip_1": {
-   "n": 0,
-   "median": null,
-   "mean": 0.0,
-   "p90": null,
+   "n": 1,
+   "median": -0.13,
+   "mean": -0.13,
+   "p90": -0.13,
    "adverse_share": 0.0
   },
   "entry_slip_3": {
-   "n": 0,
-   "median": null,
-   "mean": 0.0,
-   "p90": null,
-   "adverse_share": 0.0
+   "n": 1,
+   "median": 0.11,
+   "mean": 0.11,
+   "p90": 0.11,
+   "adverse_share": 100.0
   },
   "entry_slip_120": {
    "n": 0,
@@ -43,13 +43,13 @@
    "fill_miss": 0
   },
   "spread_at_entry": {
-   "median": null,
-   "p90": null,
-   "max": null
+   "median": 0.15,
+   "p90": 0.15,
+   "max": 0.15
   },
-  "open_vs_tick_abs_median": null,
+  "open_vs_tick_abs_median": 2.43,
   "adopt_latency_s": 1.0,
-  "generated": "2026-11-13 09:40:33"
+  "generated": "2026-11-13 10:10:34"
  },
  "rows": [
   {
@@ -65,7 +65,14 @@
    "side": "BUY",
    "risk": 6.545000000000073,
    "exit_reason": "SL",
-   "R": -1.0
+   "R": -1.0,
+   "bid0": 3891.46,
+   "spread_pt": 0.15,
+   "slip_0.3": -0.18,
+   "slip_1": -0.13,
+   "slip_3": 0.11,
+   "slip_120": null,
+   "open_vs_tick": -2.43
   }
  ]
 }
