@@ -4,27 +4,27 @@
  "fake_th": 0.6,
  "streak_th": 3,
  "n_needed": 30,
- "generated": "2026-11-13 06:45",
+ "generated": "2026-11-14 06:45",
  "summary": {
   "all": {
-   "n": 346,
-   "avg_R": 0.172,
-   "sum_R": 59.49,
-   "win": 48.6,
+   "n": 354,
+   "avg_R": 0.166,
+   "sum_R": 58.74,
+   "win": 48.3,
    "max_dd_R": -15.94
   },
   "dead": {
-   "n": 54,
-   "avg_R": 0.114,
-   "sum_R": 6.18,
-   "win": 40.7,
+   "n": 55,
+   "avg_R": 0.153,
+   "sum_R": 8.43,
+   "win": 41.8,
    "max_dd_R": -9.84
   },
   "not_dead": {
-   "n": 292,
-   "avg_R": 0.183,
-   "sum_R": 53.32,
-   "win": 50.0,
+   "n": 299,
+   "avg_R": 0.168,
+   "sum_R": 50.31,
+   "win": 49.5,
    "max_dd_R": -11.72
   }
  },
@@ -3134,6 +3134,15 @@
    "R": 2.135,
    "entry_jst": "2026-11-12 22:20"
   },
+  "S-0503": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-13 00:00"
+  },
   "S-0506": {
    "version": "deadrange_v1",
    "fake10": 0.6,
@@ -3142,6 +3151,69 @@
    "dead": false,
    "R": -1.0,
    "entry_jst": "2026-11-13 05:05"
+  },
+  "S-0507": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-13 06:05"
+  },
+  "S-0508": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-13 09:10"
+  },
+  "S-0509": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 3,
+   "dead": true,
+   "R": 2.251,
+   "entry_jst": "2026-11-13 10:00"
+  },
+  "S-0510": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-13 10:30"
+  },
+  "S-0514": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": 0.992,
+   "entry_jst": "2026-11-13 21:40"
+  },
+  "S-0517": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.001,
+   "entry_jst": "2026-11-14 00:15"
+  },
+  "S-0519": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-14 03:10"
   }
  }
 }
