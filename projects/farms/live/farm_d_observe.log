@@ -1438,3 +1438,25 @@
 [探索観測] yfinance BTC-USD 取得中...
   M5 17260本 (2026-09-15 00:00:00+00:00..2026-11-13 22:15:00+00:00)
   新規記録 0本 / 台帳累計 101本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_d_btc_explore_ledger.jsonl
+Traceback (most recent call last):
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_d_btc_explore.py", line 28, in <module>
+    import pandas as pd
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\pandas\__init__.py", line 128, in <module>
+    from pandas.core.computation.api import eval
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\pandas\core\computation\api.py", line 2, in <module>
+    from pandas.core.computation.eval import eval
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\pandas\core\computation\eval.py", line 23, in <module>
+    from pandas.core.computation.engines import ENGINES
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\pandas\core\computation\engines.py", line 16, in <module>
+    from pandas.core.computation.ops import (
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\pandas\core\computation\ops.py", line 29, in <module>
+    from pandas.core.computation.scope import DEFAULT_GLOBALS
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\pandas\core\computation\scope.py", line 12, in <module>
+    import pprint
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 991, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1087, in get_code
+  File "<frozen importlib._bootstrap_external>", line 1187, in get_data
+MemoryError
