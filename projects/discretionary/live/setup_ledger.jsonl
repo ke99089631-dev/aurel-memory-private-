@@ -9634,3 +9634,4 @@
 {"kind": "update", "target": "S-0516", "logged_at": "2026-11-13 23:05:08", "waiting_resolved": true, "entry": 3881.02, "entry_time": 1794578400, "entry_jst": "2026-11-13 23:00", "status": "closed", "mfe_R": 0.08, "mae_R": 0.6, "hold_bars": 0, "exit": 3880.645, "exit_reason": "TP", "R": 0.044, "exit_time": 1794578400, "outcome": "本物"}
 {"kind": "update", "target": "S-0507", "logged_at": "2026-11-13 23:14:03", "slip_src": "tick-sim L=1s", "sl_slip_pt": 0.915}
 {"kind": "update", "target": "S-0516", "logged_at": "2026-11-13 23:15:08", "reaccel": {"retest_time": 1794577800, "retest_jst": "2026-11-13 22:50", "retest_tol": 0.58, "entry": 3880.43, "entry_time": 1794579000, "entry_jst": "2026-11-13 23:10", "sl": 3889.485, "tp": 3880.645, "swing": 3887.54, "wait_bars": 4, "status": "invalid", "why": "建値がSL/TPの外"}, "reaccel_frozen": true}
+{"kind": "update", "target": "S-0507", "logged_at": "2026-11-13 23:44:17", "slip_src": "tick-sim L=1s", "sl_slip_pt": 0.915}
