@@ -1,6 +1,6 @@
 {
  "summary": {
-  "n": 1,
+  "n": 2,
   "entry_slip_0.3": {
    "n": 0,
    "median": null,
@@ -38,7 +38,7 @@
    "max": 0.915
   },
   "tp": {
-   "n": 0,
+   "n": 1,
    "fill_ok": 0,
    "fill_miss": 0
   },
@@ -49,7 +49,7 @@
   },
   "open_vs_tick_abs_median": null,
   "adopt_latency_s": 1.0,
-  "generated": "2026-11-13 22:43:50"
+  "generated": "2026-11-13 23:14:03"
  },
  "rows": [
   {
@@ -59,6 +59,13 @@
    "exit_reason": "SL",
    "R": -1.0,
    "sl_slip": 0.915
+  },
+  {
+   "id": "S-0516",
+   "side": "SELL",
+   "risk": 8.465000000000146,
+   "exit_reason": "TP",
+   "R": 0.044
   }
  ]
 }
