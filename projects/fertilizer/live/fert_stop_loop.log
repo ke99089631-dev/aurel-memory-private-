@@ -8160,3 +8160,20 @@ OpenBLAS error: Memory allocation still failed after 10 retries, giving up.
 [!!] LIVEデモ発注モード(逆指値を実際に置く/変える/消す)
 [KILL_FERT] 停止
 [終了]
+Traceback (most recent call last):
+  File "C:\Users\user\.aurel\memory\projects\fertilizer\live\fert_reaccel_stop_exec.py", line 808, in <module>
+    main()
+  File "C:\Users\user\.aurel\memory\projects\fertilizer\live\fert_reaccel_stop_exec.py", line 792, in main
+    sess = FertSession(env)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\user\.aurel\memory\projects\fertilizer\live\fert_reaccel_stop_exec.py", line 188, in __init__
+    raise RuntimeError("FERT initialize失敗: %s" % (mt5.last_error(),))
+RuntimeError: FERT initialize失敗: (-6, 'Terminal: Authorization failed')
+[接続] 肥料reaccel(逆指値) 27972608 / VantageTradingLtd-Live / 残高114.72 / XAUUSD+  armed=True risk2.0% runtime=C:\Users\user\.aurel\memory\projects\fertilizer\live
+[!!] LIVEデモ発注モード(逆指値を実際に置く/変える/消す)
+[KILL_FERT] 停止
+[終了]
+[接続] 肥料reaccel(逆指値) 27972608 / VantageTradingLtd-Live / 残高114.72 / XAUUSD+  armed=True risk2.0% runtime=C:\Users\user\.aurel\memory\projects\fertilizer\live
+[!!] LIVEデモ発注モード(逆指値を実際に置く/変える/消す)
+[KILL_FERT] 停止
+[終了]
