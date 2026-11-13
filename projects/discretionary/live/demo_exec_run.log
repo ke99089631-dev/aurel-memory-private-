@@ -113,3 +113,4 @@ UnicodeDecodeError: 'utf-8' codec can't decode byte 0x8f in position 0: invalid 
 [起動] デモ執行 20秒おき（Ctrl+C / KILLファイルで停止）
 [skip] S-0508 BUY（発火が古い>180s・バックフィル防止・age=313）
 [skip] S-0509 BUY（発火が古い>180s・バックフィル防止・age=325）
+[skip] S-0510 BUY（発火が古い>180s・バックフィル防止・age=306）
