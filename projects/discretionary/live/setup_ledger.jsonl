@@ -9685,3 +9685,5 @@
 {"kind": "update", "target": "S-0507", "logged_at": "2026-11-14 08:46:48", "slip_src": "tick-sim L=1s", "sl_slip_pt": 0.915}
 {"kind": "update", "target": "S-0507", "logged_at": "2026-11-14 09:16:48", "slip_src": "tick-sim L=1s", "sl_slip_pt": 0.915}
 {"kind": "update", "target": "S-0507", "logged_at": "2026-11-14 09:47:02", "slip_src": "tick-sim L=1s", "sl_slip_pt": 0.915}
+{"kind": "update", "target": "S-0507", "logged_at": "2026-11-14 10:03:47", "slip_src": "tick-sim L=1s", "spread_pt": 0.21, "slip_pt": -0.11, "sl_slip_pt": 0.045}
+{"kind": "update", "target": "S-0520", "logged_at": "2026-11-14 10:03:47", "slip_src": "tick-sim L=1s", "spread_pt": 0.15, "slip_pt": -0.03, "sl_slip_pt": 0.004}
