@@ -3538,3 +3538,41 @@ RuntimeError: yfinance NQ=F 取得0件
 [live観測] yfinance NQ=F 取得中...
   M5 13600本 (2026-09-04 04:05:00+00:00..2026-11-13 21:55:00+00:00)
   新規記録 0本 / 台帳累計 38本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_a_forward_ledger.jsonl
+[live観測] yfinance NQ=F 取得中...
+Traceback (most recent call last):
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_a_forward.py", line 159, in <module>
+    main()
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_a_forward.py", line 118, in main
+    run_live_observe()
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_a_forward.py", line 145, in run_live_observe
+    m5 = fetch_live_m5()
+         ^^^^^^^^^^^^^^^
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_a_forward.py", line 125, in fetch_live_m5
+    import yfinance as yf
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\yfinance\__init__.py", line 23, in <module>
+    from .search import Search
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\yfinance\search.py", line 27, in <module>
+    from .data import YfData
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\yfinance\data.py", line 13, in <module>
+    from . import utils, cache
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\yfinance\cache.py", line 52, in <module>
+    class _TzDBManager:
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\yfinance\cache.py", line 54, in _TzDBManager
+    _cache_dir = _os.path.join(_ad.user_cache_dir(), "py-yfinance")
+                               ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\platformdirs\__init__.py", line 186, in user_cache_dir
+    ).user_cache_dir
+      ^^^^^^^^^^^^^^
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\platformdirs\windows.py", line 69, in user_cache_dir
+    path = os.path.normpath(get_win_folder("CSIDL_LOCAL_APPDATA"))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\platformdirs\windows.py", line 364, in get_win_folder
+    return _resolve_win_folder(csidl_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\platformdirs\windows.py", line 303, in get_win_folder_via_ctypes
+    shell32 = WinDLL("shell32")
+              ^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python312\Lib\ctypes\__init__.py", line 379, in __init__
+    self._handle = _dlopen(self._name, mode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 1455] ページング ファイルが小さすぎるため、この操作を完了できません。
