@@ -1485,3 +1485,6 @@ Traceback (most recent call last):
   File "<frozen importlib._bootstrap_external>", line 1087, in get_code
   File "<frozen importlib._bootstrap_external>", line 1187, in get_data
 MemoryError
+[探索観測] yfinance BTC-USD 取得中...
+  M5 16965本 (2026-09-16 00:00:00+00:00..2026-11-14 01:15:00+00:00)
+  新規記録 0本 / 台帳累計 101本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_d_btc_explore_ledger.jsonl
