@@ -3484,3 +3484,25 @@ MemoryError
 [live観測] yfinance ES=F 取得中...
   M5 13602本 (2026-09-04 04:05:00+00:00..2026-11-13 21:55:00+00:00)
   新規記録 0本 / 台帳累計 50本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_b_forward_ledger.jsonl
+[live観測] yfinance ES=F 取得中...
+Exception ignored from cffi callback <function buffer_callback at 0x000002471FB7FBA0>:
+Traceback (most recent call last):
+  File "C:\Users\user\ImperialFlow\venv\Lib\site-packages\curl_cffi\curl.py", line 130, in buffer_callback
+    buffer.write(ffi.buffer(ptr, nmemb)[:])
+MemoryError: 
+$ES=F: possibly delisted; no price data found  (period=60d)
+
+1 Failed download:
+['ES=F']: possibly delisted; no price data found  (period=60d)
+Traceback (most recent call last):
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_b_forward.py", line 148, in <module>
+    main()
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_b_forward.py", line 143, in main
+    run_live_observe(); return
+    ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_b_forward.py", line 121, in run_live_observe
+    m5 = fetch_live_m5()
+         ^^^^^^^^^^^^^^^
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_b_forward.py", line 96, in fetch_live_m5
+    raise RuntimeError("yfinance %s 取得0件" % LIVE_TICKER)
+RuntimeError: yfinance ES=F 取得0件
