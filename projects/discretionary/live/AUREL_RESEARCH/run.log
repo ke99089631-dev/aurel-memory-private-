@@ -967,3 +967,22 @@ You've reached your Fable limit. Switch to another model, or manage usage credit
 You've reached your Fable limit. Switch to another model, or manage usage credits at claude.ai/settings/usage?from=cc_cli_limit_message, to continue.
 2026/11/16  9:42:11.00 done
 ========== 2026/11/16 12:42:05.60 cycle start ==========
+Cycle 41 is complete. All numeric results were produced and recorded in this turn.
+
+**What I tested.** An exploration item new to the source map: asymmetric volatility. Stocks show the leverage effect, where a down day raises next-day volatility. Baur 2012 reported the reverse for gold, with up shocks raising volatility, attributed to safe-haven inflows. I also derived a prediction from cycle 38: if gold now moves with stocks on extreme days, its asymmetry should have shifted toward the stock-like sign. Per the home-market rule, US500 was tested first as the method's positive control.
+
+**Results** (session-day grid, next-day log realized variance regressed on signed return with magnitude and lagged variance controlled, sign-flip permutation null):
+
+| Market | In-sample γ (×1e-4/bp) | Out-of-sample γ | Verdict |
+|---|---|---|---|
+| US500 | −12.4 (t −5.7) | −18.3 (t −10.9) | PASS, all 13 years negative |
+| XAU | −2.05 (t −1.6, p 0.09) | −0.18 (t −0.1) | null, both hypotheses fail |
+
+Gold has no next-day asymmetry in either direction. The MDE says a 5 to 7 percent next-day variance difference between ±1 sd days would have been visible. The news-impact curve is monotone for US500 and flat for gold. The production gate was not passed: prior-day sign changes the wall-to-wall mean R by +0.014R (t 0.72), so the out-of-sample conditioning cell was not run.
+
+**Strongest counter-argument recorded.** Gold's yearly γ flips sign with each year's trend: Spearman +0.69 between yearly γ and annual return, 14 of 17 years agree, versus US500 at −0.15 with 2 of 13. A pooled γ near zero may therefore be the average of a state-dependent asymmetry, not its absence. This is post hoc, so it goes to a forward pre-registered cell (trend-sign interaction, 500 or more valid days) rather than a retest on the same data. A secondary caveat is bid-only data: same-day asymmetry is negative and growing in 2021+, which could be a quote-widening artifact, added as a fourth question for the XAU ask M1 data need.
+
+**Bookkeeping done.** Findings entry appended to findings/2026-11-16.md. Backlog gained the c41 entry, the forward cell, and a new methodology candidate (always include a state interaction when testing signed asymmetries). I also closed the "same-wall reuse" branch, since the refute lane answered it on 11-11 (reuse carries about a tenth of the persistence), and rewrote the c37 forward cell per the refute lane's proposal. DATA_MAP got a §1 tool bullet and a §8 source-map row. Three rows were added to the cell registry.
+
+**Boundaries.** Read-only throughout: existing npz and json caches only, no scan, no MT5, no network, no production or executor touched. Total compute about 18 seconds. No PROMOTED change.
+2026/11/16 12:57:23.78 done
