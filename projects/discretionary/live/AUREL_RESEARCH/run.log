@@ -1010,3 +1010,22 @@ The literature-size +49 bp is excluded in-sample. The "calm before the storm" ha
 **Next cycle candidate.** The BLS CPI release schedule is likely rule-parseable the same way; acquiring it would unlock the pooled announcement cell (NFP+FOMC+CPI, 300+ events, MDE ≈0.2 on the continuation β).
 2026/11/16 18:48:36.14 done
 ========== 2026/11/17  0:30:03.57 cycle start ==========
+Cycle complete. Everything ran synchronously and all numbers are filled in.
+
+**What this cycle did (cycle43, exploration track)**
+
+Tested a source-of-edge row missing from the §8 map: index-derivative expiration days (quarterly triple witching and monthly third-Friday OPEX) on US500 as the home market, with gold on the same grid. The calendar was derived by rule (third Friday, Good Friday months excluded), so no external data was needed. Analysis used only the existing M5 npz caches and the scan json, 19 s plus a 1 s post-hoc check.
+
+**Results (both pre-registered US500 cells null)**
+
+- Close-of-day volatility on triple-witching Fridays: variance ratio 1.00 in-sample, 0.76 out-of-sample. Rank test AUC 0.51 and 0.50, so no distributional shift at all. Out-of-sample the last 5 minutes on OPEX days are actually quieter.
+- Next-day reversal: the interaction is positive (continuation-leaning), not negative as in the literature, and permutation z is only 1.19. Literature-sized reversal cannot be excluded either, since MDE is 1.25. Logged as undecidable, no forward cell registered.
+- Gold: the large "last 5 minute" variance ratio out-of-sample is 73% three outlier days. Removing them gives 0.98. Null.
+- Gate ㉛: scan trades entered on OPEX Fridays underperform in-sample by −0.083R (t −1.64) and −0.040R (t −0.54) out-of-sample. No rule.
+
+**Strongest counter-argument recorded**: the 16:00 ET bid bar of a futures-tracking CFD is not the cash closing auction, so this cannot see MOC or rebalance pressure at the auction print. Logged as a low-priority data need.
+
+**Main methodological lesson (㊽ candidate)**: mean-square variance ratios on 5–30 minute returns are so heavy-tailed that the permutation null spread was 4.5× the Gaussian estimate, which broke my pre-registered decidability. Event-day volatility cells should pre-register rank or median statistics and size power from an empirical permutation null. HC1 t on event interactions was also overstated (2.26 vs z 1.19).
+
+**Files written** (all under AUREL_RESEARCH): findings/2026-11-17.md (one entry), scripts/c43_expiration_day_effects.py and c43b, data/c43* results and logs, three rows in data/cells.csv, backlog.md (closed item, needs-data, ㊽), DATA_MAP.md (§6 calendar entry, §8 new row, version line). PROMOTED unchanged. No orders, no process operations, no external calls, no task-observer write (outside the allowed folder, same handling as previous cycles).
+2026/11/17  0:41:02.52 done
