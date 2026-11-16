@@ -1216,3 +1216,25 @@ No promotion, PROMOTED.md unchanged, backlog untouched (proposals left in the en
 Per the lane's standing convention and my write boundary, no task-observer log was written outside `AUREL_RESEARCH` — the two reusable methodology lessons are recorded in the findings entry instead.
 2026/11/16 21:41:41.75 done
 ========== 2026/11/17  3:30:03.66 refute start ==========
+Verdict appended to `AUREL_RESEARCH/findings/2026-11-17.md` under `[REFUTE]`. All writes confined to `AUREL_RESEARCH/` (scripts + data + findings); no orders, no production edits, no process/MT5 touch, no prop access.
+
+**Target** — cycle43's only positive carry-forward: gold's non-OPEX Friday 15:30→16:00 ET direction "continuing" into Monday 10:00. External 2021-26H1 β +1.843 (HC1 t 2.70, n 208), sign strategy +20.8 bp/day (t 3.15), recent +37.2 (t 3.05), in-sample null. Research branch (d) would have annotated c36's prospective Friday→Monday cell with it.
+
+**Verdict: broken as framed — survived as a statistical fact.** 10 break rules pre-registered; 2 landed.
+
+Eight attacks failed (the number is robust): exact replication; outlier removal (top-3 contributors = only 20% of S, t stays 2.68); drift decomposition (long-gold carry explains **0%**); rank tests (Spearman p 0.017, Wilcoxon p 0.006); weekday-specificity (other four weekdays all null, Friday interaction t 2.86); sign-randomization p 0.0015; cost (net t 2.54 at 2× cost + swap; breaks only above 9.9 bp); boundary re-splits 2019/21/22/23 all preserve the structure and odd/even years are symmetric; ±5-min grid shifts; shared-endpoint removal. Post-hoc, vol-normalization also failed to kill it (+0.212σ, t 2.87) — so it isn't just bp scaling with gold's vol.
+
+Two landed, and three mechanism tests killed the *story*:
+- **Multiple testing (decisive)**: Bonferroni 0.074 (family 45) / 0.118 (72). Structurally, β_ctrl/S_ctrl were never hypotheses — they're the **control arm** of a test about OPEX days.
+- **Year-cluster inference**: wild bootstrap null t sd 1.83 ⇒ HC1 t 2.70 is ~1.8× inflated; effective t ≈ 1.5. (I flag this attack as weak — G=6 clusters, min achievable p ≈ 0.031.)
+- **Window decomposition**: splitting Fri 16:00→Mon 10:00 at gold's real session boundaries, the **true weekend gap carries 14% (t 1.23)**, the hour right after 16:00 is a mild *reversal* (16:00→16:30 t −2.53, same sign in both eras), and the effect lives in the Monday session — 40 hours after the predictor window closes. The "weekend hedging carry-over" mechanism isn't where the number is.
+- **No dose-response**: sign agreement 54.8% overall, **50.0% at |LAST| ≥ 10 bp**, and |LAST| < 5 bp alone gives the same +20.2 (t 2.36). A 2 bp tick predicts as well as a 50 bp move.
+- Stale-quote explanation dead: zero fully-stale Fridays, flat-bar median 0.00, flat-heavy Fridays weaker.
+
+Two things beyond the verdict:
+
+1. **A specification defect in branch (d)**: c36's prospective 5-weekday-pair cell is a *reversal* cell (β<0, in t≤−2 ∧ out t≤−1.5). W-FRI is *continuation* (β>0). Appending the window would have created a sign-undefined cell. Branch (d) should not be executed as written — I left a correctly specified replacement in the entry (target = Sun 18:05→Mon 10:00, vol-normalized, with an |LAST|-top-tercile dose-response precondition), and unlike cycle42 this one is decidable: ~101 Fridays ≈ 2.7 years at the external effect size, ~40 ≈ 1.1 years at the recent one.
+2. **A methodology correction to my own lane**: "drop the top 3 contributors" — the move that killed c43's gold LAST5 VR 7.5 — is not sufficient. Same instrument, same Fridays, 20% concentration and rank-significant; what killed this one was multiple testing and clustering. Logged alongside new lesson ㊾: `mean(sign(x)·y)` erases dose-response, so a significant sign strategy is never by itself evidence of a mechanism.
+
+Per the lane's standing convention and the write boundary, no task-observer log was written outside `AUREL_RESEARCH`; both reusable lessons are in the findings entry. backlog / DATA_MAP / cells.csv / PROMOTED left untouched for the research lane.
+2026/11/17  3:46:11.65 done
