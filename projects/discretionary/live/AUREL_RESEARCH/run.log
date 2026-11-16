@@ -986,3 +986,4 @@ Gold has no next-day asymmetry in either direction. The MDE says a 5 to 7 percen
 
 **Boundaries.** Read-only throughout: existing npz and json caches only, no scan, no MT5, no network, no production or executor touched. Total compute about 18 seconds. No PROMOTED change.
 2026/11/16 12:57:23.78 done
+========== 2026/11/16 18:30:03.20 cycle start ==========
