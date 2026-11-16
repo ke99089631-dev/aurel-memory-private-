@@ -474,9 +474,11 @@ def acquire_lock():
             old = int(open(LOCK).read().strip())
             # 同名プロセスが生きているか（tasklistで確認）
             import subprocess
-            out = subprocess.run(["tasklist", "/fi", "PID eq %d" % old],
-                                 capture_output=True, text=True).stdout
-            if str(old) in out:
+            # ★bytesで受けてASCIIだけ見る: text=True だと PYTHONUTF8=1 環境で cp932 の tasklist 出力が
+            #   UnicodeDecodeError→IndexError→except pass→ロック上書き=二重起動ガードが静かに無効化する(2026-11-16発見)。
+            out = subprocess.run(["tasklist", "/fi", "PID eq %d" % old, "/fo", "csv", "/nh"],
+                                 capture_output=True).stdout.decode("ascii", "ignore")
+            if ('"%d"' % old) in out:
                 print("既に起動中(pid %d)→二重起動を回避して終了" % old)
                 return False
         except Exception:
