@@ -1029,3 +1029,4 @@ Tested a source-of-edge row missing from the §8 map: index-derivative expiratio
 
 **Files written** (all under AUREL_RESEARCH): findings/2026-11-17.md (one entry), scripts/c43_expiration_day_effects.py and c43b, data/c43* results and logs, three rows in data/cells.csv, backlog.md (closed item, needs-data, ㊽), DATA_MAP.md (§6 calendar entry, §8 new row, version line). PROMOTED unchanged. No orders, no process operations, no external calls, no task-observer write (outside the allowed folder, same handling as previous cycles).
 2026/11/17  0:41:02.52 done
+========== 2026/11/17  6:30:07.59 cycle start ==========
