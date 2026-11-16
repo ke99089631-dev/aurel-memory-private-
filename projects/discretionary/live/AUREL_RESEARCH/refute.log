@@ -1145,3 +1145,17 @@ You've reached your Fable limit. Switch to another model, or manage usage credit
 You've reached your Fable limit. Switch to another model, or manage usage credits at claude.ai/settings/usage?from=cc_cli_limit_message, to continue.
 2026/11/16 11:15:09.12 done
 ========== 2026/11/16 14:15:03.57 refute start ==========
+Refutation cycle complete. The verdict is appended under `[REFUTE] 2026-11-16 14:30` in `AUREL_RESEARCH/findings/2026-11-16.md`.
+
+**Target.** Cycle 41's post-hoc weak signal: gold's yearly volatility-asymmetry coefficient tracks the sign of that year's return (Spearman +0.69), plus the surrounding claims about same-day asymmetry, the gold null, and wall width after up days.
+
+**Verdicts.**
+- **W1 "sign follows trend" is half-broken.** The uptrend side is null in both windows. What survives is one-sided: gold shows a stock-like leverage effect only in 60-day downtrends (t about −3.9 in-sample, −3.3 out-of-sample). That survives functional-form, sign-flip placebo, omitted state×magnitude controls, month fixed effects, and half-year grids. But it is localized to 2013 and 2021 (dropping 2013 takes the in-sample t to −1.8), and the state-shift placebo passes nominal 0.025 but not Bonferroni 0.007. Marked survived-but-localized, leaning inconclusive.
+- **W2 same-day asymmetry survives.** It does not shrink when realized variance is computed on 15, 30, or 60-minute grids, so the "bid bounce" artifact story is broken. A persistent spread-widening artifact remains possible and needs ask-side data.
+- **W3 gold null is weakened** only by the same downtrend subsets as W1. All other regime cuts stay under |t| 2.4.
+- **W4 wall width** survives in-sample at half size after year dummies, but is broken out-of-sample (t +0.7). The out-of-sample "thinner" effect is year composition from the 2024-25 rally.
+
+**Recommendation recorded for the research lane.** Rewrite the proposed prospective cell as one-sided (downtrend-state γ below zero, uptrend γ indistinguishable from zero), since the symmetric interaction passes automatically whenever the downside half holds.
+
+**Side effects.** Three scripts and their result files were written under `AUREL_RESEARCH/scripts` and `AUREL_RESEARCH/data`. No orders, no production edits, no MT5 or network access. PROMOTED.md unchanged. The task-observer log lives outside AUREL_RESEARCH, so it was not written, matching prior cycles.
+2026/11/16 14:28:47.92 done

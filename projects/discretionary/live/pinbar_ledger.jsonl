@@ -116,3 +116,6 @@
 {"kind": "update", "target": "P-0007", "logged_at": "2026-11-16 14:15:16", "status": "open", "spread_pt": 0.16, "mfe_R": 0.0, "mae_R": 0.0, "hold_bars": 0, "confirm_time": 1794805500, "confirm_jst": "2026-11-16 14:05", "entry_time": 1794805800, "entry_jst": "2026-11-16 14:10", "entry": 3869.61, "sl": 3863.45, "tp": 3912.733, "risk": 6.16, "rr": 7.0}
 {"kind": "update", "target": "P-0007", "logged_at": "2026-11-16 14:15:16", "mfe_R": 0.07, "mae_R": 0.48, "hold_bars": 1}
 {"kind": "update", "target": "P-0007", "logged_at": "2026-11-16 14:20:20", "mfe_R": 0.82, "mae_R": 0.48, "hold_bars": 2}
+{"kind": "update", "target": "P-0007", "logged_at": "2026-11-16 14:25:24", "mfe_R": 1.44, "mae_R": 0.48, "hold_bars": 3}
+{"kind": "update", "target": "P-0007", "logged_at": "2026-11-16 14:30:28", "mfe_R": 1.44, "mae_R": 0.48, "hold_bars": 4}
+{"kind": "update", "target": "P-0007", "logged_at": "2026-11-16 14:35:02", "mfe_R": 1.44, "mae_R": 0.63, "hold_bars": 5}
