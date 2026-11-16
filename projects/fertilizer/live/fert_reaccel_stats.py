@@ -33,6 +33,24 @@ def _rows():
     return out
 
 
+def _paper_reaccel_r():
+    """紙(setup_ledger)の reaccel 確定R を sid→R で返す(影の計測用・読取のみ)。"""
+    led = os.path.normpath(os.path.join(HERE, "..", "..", "discretionary", "live", "setup_ledger.jsonl"))
+    out = {}
+    if not os.path.exists(led):
+        return out
+    for ln in open(led, encoding="utf-8"):
+        try:
+            r = json.loads(ln)
+        except Exception:
+            continue
+        sid = r.get("id") if r.get("kind") == "setup" else r.get("target")
+        ra = r.get("reaccel")
+        if sid and isinstance(ra, dict) and ra.get("status") == "closed" and ra.get("R") is not None:
+            out[sid] = ra["R"]
+    return out
+
+
 def _st(xs):
     if not xs:
         return {"n": 0}
@@ -97,6 +115,27 @@ def main():
     md += line("トレンド", res["trend"]) + line("チョップ", res["chop"])
     md += line("keep×トレンド", res["keep_trend"]) + line("drop×トレンド", res["drop_trend"])
     md += "  節目: トレンド側30本(いま%d本)。それまでは「サンプル不足」。\n\n" % len(trend)
+    # ★2026-11-16 会長GO: トレンドゲート(R-01発動)の影。skip-trend した sid の「撃っていたら」= 紙(setup_ledger)の同sid reaccel R。
+    #   出口(事前固定): 紙トレンド側60本で再採点・閾値0.10/0.15も同時に見る・影の合計Rがプラスならゲート解除。
+    skips = {r["sid"]: r for r in rows if r.get("event") == "skip-trend"}
+    paper_r = _paper_reaccel_r()
+    shadow = [{"sid": s, "R": paper_r.get(s), "gold_er": k.get("gold_er"), "ts": k.get("ts")} for s, k in skips.items()]
+    shadow_closed = [x for x in shadow if x["R"] is not None]
+    res["trend_gate"] = {"since": "2026-11-16", "gate_er": TREND_TH, "n_skipped": len(skips),
+                         "shadow": _st(shadow_closed), "n_shadow_open": len(shadow) - len(shadow_closed),
+                         "exit_rule": "紙トレンド側60本で再採点(0.10/0.15も)・影の合計R>0なら解除"}
+    sens = {}
+    for th in (0.10, 0.12, 0.15):
+        sens["%.2f" % th] = {"trend": _st([c for c in closes if c.get("gold_er") is not None and float(c["gold_er"]) >= th]),
+                             "chop": _st([c for c in closes if c.get("gold_er") is not None and float(c["gold_er"]) < th])}
+    res["trend_gate"]["threshold_sensitivity"] = sens
+    json.dump(res, open(OUT_JS, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    md += "## ③ トレンドゲート(2026-11-16 会長GO・R-01発動): 外した本とその影\n"
+    md += "  外した本 %d (影=紙の同sid R・確定%d/未確定%d)\n" % (len(skips), len(shadow_closed), len(shadow) - len(shadow_closed))
+    md += line("影(撃っていたら)", res["trend_gate"]["shadow"])
+    for th, v in sens.items():
+        md += "  閾値%s: " % th + line("トレンド", v["trend"]).strip() + " / " + line("チョップ", v["chop"]).strip() + "\n"
+    md += "  出口: %s\n\n" % res["trend_gate"]["exit_rule"]
     md += "## 明細(確定)\n"
     for c in closes:
         md += "  %s %s %s 建%.2f→出%.2f %s R%+.2f %+.2f$ v1=%s ER%s(%s)\n" % (

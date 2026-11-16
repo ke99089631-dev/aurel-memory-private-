@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-16 06:45",
+ "generated": "2026-11-16 19:01",
  "n_fill": 90,
  "n_open": 1,
  "all": {
@@ -78,5 +78,71 @@
  "trend_milestone": {
   "n_needed": 30,
   "n_now": 16
+ },
+ "trend_gate": {
+  "since": "2026-11-16",
+  "gate_er": 0.12,
+  "n_skipped": 0,
+  "shadow": {
+   "n": 0
+  },
+  "n_shadow_open": 0,
+  "exit_rule": "紙トレンド側60本で再採点(0.10/0.15も)・影の合計R>0なら解除",
+  "threshold_sensitivity": {
+   "0.10": {
+    "trend": {
+     "n": 25,
+     "sum_R": -8.79,
+     "avg_R": -0.351,
+     "win": 28.0,
+     "max_dd_R": -12.2,
+     "profit_usd": -26.95
+    },
+    "chop": {
+     "n": 64,
+     "sum_R": 5.39,
+     "avg_R": 0.084,
+     "win": 40.6,
+     "max_dd_R": -9.1,
+     "profit_usd": -92.56
+    }
+   },
+   "0.12": {
+    "trend": {
+     "n": 16,
+     "sum_R": -8.91,
+     "avg_R": -0.557,
+     "win": 18.8,
+     "max_dd_R": -9.0,
+     "profit_usd": -40.03
+    },
+    "chop": {
+     "n": 73,
+     "sum_R": 5.52,
+     "avg_R": 0.076,
+     "win": 41.1,
+     "max_dd_R": -11.1,
+     "profit_usd": -79.48
+    }
+   },
+   "0.15": {
+    "trend": {
+     "n": 7,
+     "sum_R": -2.42,
+     "avg_R": -0.346,
+     "win": 28.6,
+     "max_dd_R": -3.0,
+     "profit_usd": 0.19
+    },
+    "chop": {
+     "n": 82,
+     "sum_R": -0.97,
+     "avg_R": -0.012,
+     "win": 37.8,
+     "max_dd_R": -13.13,
+     "profit_usd": -119.7
+    }
+   }
+  }
  }
 }

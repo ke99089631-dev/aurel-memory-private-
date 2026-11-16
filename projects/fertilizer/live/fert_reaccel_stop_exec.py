@@ -92,6 +92,52 @@ STREAK_CUT_FRAC = 0.5
 STREAK_CUT_ENABLED = False
 MKT_DEVIATION_PT = 50            # 成行の許容スリッページ(ポイント)。0.01刻みなら≈0.50ドル。これ超は約定拒否
 NOTIFY = False
+# ★2026-11-16 会長GO「goだ」: トレンド地合いゲート(事前固定 R-01 の発動・PREREGISTERED-RULES.md)。
+#   R-01(11-10固定): 紙トレンド側30本到達時に平均R<-0.2 なら「ER≥0.12 の本は撃たない」。11-16判定: 32本 -0.323R → 条件成立。
+#   やり方: sid を最初に armed で見た瞬間に 24h効率比ER を1回だけ測って判定を固定(runtime に永続)。trend なら置かない・
+#   成行も拾わない・既に置いた逆指値は取り下げる。skip-trend を台帳に1回記録=影(撃っていたら)は紙(setup_ledger)の同sid R で測る。
+#   ER が測れない(足API不通)時は撃つ(ゲートは「分かる時だけ外す」・分からない時に黙って止めない)。
+#   出口(事前固定・11-16): 紙トレンド側60本で再採点。閾値0.10/0.15も同時に見る。skip-trend の影(紙R)合計がプラスなら解除。
+#   これは「測るための固定」で永続でない(会長2026-10-26)。
+TREND_GATE_ENABLED = True
+TREND_GATE_ER = 0.12             # _gold_er / fert_reaccel_stats.TREND_TH と同じ閾値
+_TREND_VERDICT_CACHE = {}        # sid -> {"er","regime","ts"} (起動中のキャッシュ。永続は runtime/fert_trend_gate.json)
+
+
+def _trend_gate_path():
+    return os.path.join(_runtime_dir(), "fert_trend_gate.json")
+
+
+def _trend_verdict(sid, side=None, a=None):
+    """sid の地合い判定を1回だけ測って固定する。戻り値=(blocked:bool, er, regime)。
+       ゲート無効なら常に (False, None, None)。測れない時は (False, None, None) で撃つ側に倒す(台帳には er=None を残す)。"""
+    if not TREND_GATE_ENABLED:
+        return False, None, None
+    v = _TREND_VERDICT_CACHE.get(sid)
+    if v is None:
+        try:
+            if os.path.exists(_trend_gate_path()):
+                _TREND_VERDICT_CACHE.update(json.load(open(_trend_gate_path(), encoding="utf-8")))
+        except Exception:
+            pass
+        v = _TREND_VERDICT_CACHE.get(sid)
+    if v is None:
+        er, reg = _gold_er(th=TREND_GATE_ER)
+        if er is None:
+            return False, None, None       # 測れない=撃つ側・固定しない(次tickで再計測)
+        v = {"er": er, "regime": reg, "ts": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")}
+        _TREND_VERDICT_CACHE[sid] = v
+        try:
+            json.dump(_TREND_VERDICT_CACHE, open(_trend_gate_path(), "w", encoding="utf-8"), ensure_ascii=False)
+        except Exception as e:
+            print("トレンド判定の保存失敗:", e)
+        if v["regime"] == "trend":
+            _log({"event": "skip-trend", "sid": sid, "side": side, "gold_er": er, "gold_regime": reg,
+                  "gate_er": TREND_GATE_ER, "wall_kind": (a or {}).get("wall_kind"),
+                  "v1_keep": (a or {}).get("v1_keep"), "v1_drop": (a or {}).get("v1_drop"),
+                  "why": "トレンド地合い(ER%.4f≥%.2f)=撃たない(R-01 2026-11-16発動)" % (er or 0.0, TREND_GATE_ER)})
+            print("[トレンドゲート・撃たない] %s %s ER%.4f" % (sid, side, er or 0.0))
+    return (v.get("regime") == "trend"), v.get("er"), v.get("regime")
 
 # runtime(done集合)は git同期の外へ=消失/巻き戻しに強い。MT5Fert端末の隣に置く。
 def _runtime_dir():
@@ -602,6 +648,15 @@ def scan_once(sess, armed_flag, observe):
         sid = a["sid"]
         if sid in posn or sid in done:
             continue                       # 既に約定/決着
+        # ★2026-11-16 会長GO: トレンド地合いゲート(R-01発動)。判定は sid ごとに1回固定。trend なら何も置かず、置いてあれば取り下げる。
+        blocked, _ger, _greg = _trend_verdict(sid, a.get("side"), a)
+        if blocked:
+            if sid in pend:
+                r = sess.cancel(pend[sid].ticket) if not observe else None
+                _log({"event": "cancel", "sid": sid, "why": "トレンドゲート(R-01)", "order": pend[sid].ticket,
+                      "retcode": getattr(r, "retcode", None), "observe": observe})
+                print("[取消・トレンドゲート] %s" % sid)
+            continue
         arm = compute_arm(sess, a)
         if arm is None:
             continue
