@@ -47,7 +47,8 @@ def load(sym):
     say(f"- {sym}: {len(ts)} 本 {t[0]}〜{t[-1]} UTC（⑩）・格子の穴 {(np.diff(ts)!=300).sum()}・flat 全体 {fl.mean()*100:.1f}%・曜日別 " + " ".join(f"{WD[w]}{fl[wd==w].mean()*100:.1f}%" for w in range(7)) + "（⑪）")
     return ts, cl
 def epoch_et(dates, hour, minute):
-    naive = pd.DatetimeIndex(dates) + pd.Timedelta(hours=hour, minutes=minute)
+    mins = np.asarray(hour, dtype=float) * 60 + np.asarray(minute, dtype=float)
+    naive = pd.DatetimeIndex(dates) + pd.to_timedelta(np.broadcast_to(mins, (len(dates),)), unit="m")
     loc = naive.tz_localize(NY, nonexistent="NaT", ambiguous="NaT"); utc = loc.tz_convert("UTC").tz_localize(None)
     return np.asarray((utc - pd.Timestamp("1970-01-01")) / pd.Timedelta(seconds=1), dtype=float)
 def price_at(ts, cl, T):
@@ -62,10 +63,10 @@ def nfp_dates_v2(y0=2009, y1=2026):
             if rel.month == 7 and rel.day == 4: rel -= pd.Timedelta(days=1)
             out.append(rel)
     return pd.DatetimeIndex(out)
-def hc1_fe(y, x, g):
+def hc1_fe(y, x, g, min_n=20):
     """y = Σ α_g + β x ; HC1 se for β; returns dict"""
     m = np.isfinite(y) & np.isfinite(x); y, x, g = y[m], x[m], g[m]; n = len(y)
-    if n < 20: return dict(n=n, b=np.nan, se=np.nan, t=np.nan)
+    if n < min_n: return dict(n=n, b=np.nan, se=np.nan, t=np.nan)
     G = np.unique(g); X = np.column_stack([(g == k).astype(float) for k in G] + [x]); k = X.shape[1]
     XtXi = np.linalg.pinv(X.T @ X); beta = XtXi @ X.T @ y; e = y - X @ beta
     V = XtXi @ ((X * e[:, None]).T @ (X * e[:, None])) @ XtXi * n / (n - k); se = math.sqrt(V[-1, -1])
@@ -153,7 +154,11 @@ def run(sym, judge=True):
     # bid artefact check: JUMP' = P(t0+30)/P(t0+5)
     say("- 反証 (1) bid 人工物: JUMP' = P(t0+30)/P(t0+5)（初動足を外す）での β: " + "・".join(f"{lab} {fb(hc1_fe(E[E.valid&E.type.isin(types)&(E.year>=lo)&(E.year<=hi)].POST.to_numpy(float), E[E.valid&E.type.isin(types)&(E.year>=lo)&(E.year<=hi)].JUMPp.to_numpy(float), E[E.valid&E.type.isin(types)&(E.year>=lo)&(E.year<=hi)].type.to_numpy()))}" for lab, lo, hi in ERAS))
     # yearly β (descriptive)
-    say("- 年別 β（プール・記述）: " + " ".join(f"{yv}:{hc1_fe(E[E.valid&E.type.isin(types)&(E.year==yv)].POST.to_numpy(float), E[E.valid&E.type.isin(types)&(E.year==yv)].JUMP.to_numpy(float), E[E.valid&E.type.isin(types)&(E.year==yv)].type.to_numpy())['b']:+.2f}" for yv in range(2010, 2027)))
+    say("- 年別 β（プール・記述・n≥12）: " + " ".join(f"{yv}:{hc1_fe(E[E.valid&E.type.isin(types)&(E.year==yv)].POST.to_numpy(float), E[E.valid&E.type.isin(types)&(E.year==yv)].JUMP.to_numpy(float), E[E.valid&E.type.isin(types)&(E.year==yv)].type.to_numpy(), 12)['b']:+.2f}" for yv in range(2010, 2027)))
+    # post-hoc description: pool including CPI regardless of PC (calendar validated out-of-sample and on US500), and CPI-only
+    say("- **記述・事後（判定に使わない）CPI 込みプール NFP＋FOMC＋CPI と CPI 単独の β**: " + " ｜ ".join(
+        (lambda e3, e1: f"{lab} 3 種 {fb(hc1_fe(e3.POST.to_numpy(float), e3.JUMP.to_numpy(float), e3.type.to_numpy()))} p {perm_signflip(e3.POST.to_numpy(float), e3.JUMP.to_numpy(float), e3.type.to_numpy(), hc1_fe(e3.POST.to_numpy(float), e3.JUMP.to_numpy(float), e3.type.to_numpy())['b'])[0]:.3f}・S {np.mean(np.sign(e3.JUMP)*e3.POST):+.1f} bp・CPI 単独 {fb(hc1_fe(e1.POST.to_numpy(float), e1.JUMP.to_numpy(float), e1.type.to_numpy()))}・CPI J 日限定 {fb(hc1_fe(e1[e1.J].POST.to_numpy(float), e1[e1.J].JUMP.to_numpy(float), e1[e1.J].type.to_numpy()))}")(
+            E[E.valid & (E.year >= lo) & (E.year <= hi)], E[E.valid & (E.type == 'CPI') & (E.year >= lo) & (E.year <= hi)]) for lab, lo, hi in ERAS))
     # economic size
     for lab in RES:
         lvl = RES[lab]["lvl"]; cost = 0.16 / lvl * 1e4 if sym == "XAU" else np.nan
@@ -177,7 +182,7 @@ pos = np.searchsorted(t0s, et_, side="right") - 1; pos = np.clip(pos, 0, len(t0s
 inpost = (et_ >= t0s[pos]) & (et_ < t0s[pos] + 7200)
 posn = np.clip(np.searchsorted(t0s, et_, side="left"), 0, len(t0s) - 1); alive = (et_ < t0s[posn]) & (hold_end >= t0s[posn])
 # same-clock control: entries on non-event weekdays within [08:30,10:30) or [14:00,16:00) ET
-e_ny = pd.to_datetime(tr.entry_time.astype(np.int64), unit="s", utc=True).tz_convert(NY); hh = e_ny.hour.to_numpy() + e_ny.minute.to_numpy() / 60; wd_ = e_ny.weekday.to_numpy()
+e_ny = pd.DatetimeIndex(pd.to_datetime(tr.entry_time.to_numpy().astype(np.int64), unit="s", utc=True)).tz_convert(NY); hh = e_ny.hour.to_numpy() + e_ny.minute.to_numpy() / 60; wd_ = e_ny.weekday.to_numpy()
 clockwin = ((hh >= 8.5) & (hh < 10.5)) | ((hh >= 14) & (hh < 16)); evday = pd.DatetimeIndex(e_ny.tz_localize(None).normalize()).isin(pd.DatetimeIndex(E_X.date))
 tr["inpost"] = inpost; tr["ctrl"] = clockwin & ~evday & (wd_ <= 4)
 def welch(a, b):
@@ -203,8 +208,10 @@ i, o = RX["在 2010-20"], RX["外 2021-26H1"]
 pool_ok = RX["在 2010-20"]["n"] >= 300
 cont = pool_ok and i["o"]["b"] > 0 and i["o"]["t"] >= 2 and i["p"] < 0.025 and o["o"]["b"] > 0 and o["o"]["t"] >= 1.5
 rev = pool_ok and i["o"]["b"] < 0 and i["o"]["t"] <= -2 and i["p"] < 0.025 and o["o"]["b"] < 0 and o["o"]["t"] <= -1.5
-tag = "PASS（継続・post-announcement drift）" if cont else ("PASS（反転・初動オーバーシュート）" if rev else ("void（プール n<300）" if not pool_ok else "null"))
+tag = "PASS（継続・post-announcement drift）" if cont else ("PASS（反転・初動オーバーシュート）" if rev else ("void（事前規則: プール 在 n<300）" if not pool_ok else "null"))
+in_ok = i["o"]["b"] > 0 and i["o"]["t"] >= 2 and i["p"] < 0.025; out_ok = o["o"]["b"] > 0 and o["o"]["t"] >= 1.5
 say(f"- C1 金 プール{TYPES}: 在 {fb(i['o'])} p {i['p']:.3f}／外 {fb(o['o'])} p {o['p']:.3f}／近年 {fb(RX['近年 2024-26H1']['o'])} → **{tag}**")
+say(f"- 参考（n 規則を外した場合の同じ判定規則）: 在 条件 {'成立' if in_ok else '不成立'}（β>0 ∧ t≥2 ∧ p<0.025）・外 確認 {'成立' if out_ok else '不成立'}（同符号 ∧ t≥1.5）→ {'PASS' if (in_ok and out_ok) else 'null'}・在の実測 se {i['o']['se']:.3f} は事前見積 0.06〜0.08 の内側（決着可能性は n 300 でなく se で満たされていた）")
 say(f"- 用量反応（㊾）: 符号一致率 |JUMP| 三分位 在 {'/'.join(f'{a*100:.0f}' for a in i['agree'])}%／外 {'/'.join(f'{a*100:.0f}' for a in o['agree'])}%／近年 {'/'.join(f'{a*100:.0f}' for a in RX['近年 2024-26H1']['agree'])}%")
 say(f"\n- 実行 {time.time()-T0:.1f} s・npz 2 本＋json＋FOMC_dates.csv＋CPI_dates.csv・scan 無し・MT5 無し・外部通信無し（CPI 暦取得は scripts/c44_cpi_dates.py で別に実施）。seed {SEED}。")
 open(OUT, "w", encoding="utf-8").write("\n".join(L) + "\n"); print("saved", OUT)
