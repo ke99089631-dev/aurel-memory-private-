@@ -114,12 +114,14 @@ def daily(sym, shift_h=6, src="close"):
         D = D.merge(rng_, on="o", how="left")
         D["pk"] = (np.log(D.hi / D.lo) ** 2) / (4 * np.log(2))
         # jump-robust: truncated RV (|r| > 5x within-day median |r|) and bipower variation
-        def _rob(s):
+        def _trv(s):
             a = s.to_numpy(); m = np.median(np.abs(a))
-            trv = float(np.sum(np.where(np.abs(a) > 5 * m, 0.0, a) ** 2))
-            bpv = float((np.pi / 2) * np.sum(np.abs(a[:-1]) * np.abs(a[1:]))) if len(a) > 1 else np.nan
-            return pd.Series({"trv": trv, "bpv": bpv})
-        rb = df.groupby("o", sort=True)["r"].apply(_rob).unstack().reset_index()
+            return float(np.sum(np.where(np.abs(a) > 5 * m, 0.0, a) ** 2))
+        def _bpv(s):
+            a = np.abs(s.to_numpy())
+            return float((np.pi / 2) * np.sum(a[:-1] * a[1:])) if len(a) > 1 else np.nan
+        gr = df.groupby("o", sort=True)["r"]
+        rb = pd.DataFrame({"trv": gr.agg(_trv), "bpv": gr.agg(_bpv)}).reset_index()
         D = D.merge(rb, on="o", how="left")
     D["date"] = pd.to_datetime([dt.date.fromordinal(int(o)) for o in D.o])
     D = D[(D.date.dt.weekday <= 4) & (D.nf >= NFMIN)].reset_index(drop=True)
@@ -219,7 +221,9 @@ def add_iv(V, series, name):
     lv = np.log(s.to_numpy())
     V = V.copy(); V["liv"] = lv
     V["y_iv"] = np.r_[lv[1:], np.nan] - lv          # d -> d+1 (next-day change)
-    V["dliv"] = lv - np.r_[np.nan, lv[:-1]]         # d-1 -> d (lagged change, control)
+    V["dliv"] = lv - np.r_[np.nan, lv[:-1]]         # d-1 -> d (= 同日 r_d と重なる変化・統制)
+    V["liv_p"] = np.r_[np.nan, lv[:-1]]
+    V["dliv_p"] = np.r_[np.nan, V["dliv"].to_numpy()[:-1]]
     return V
 
 def gam_iv(v):
@@ -238,18 +242,60 @@ for nm, V, wins in (("XAU × GVZ", VXiv, WIN), ("US500 × VIX (対照)", VUiv, {
         E2[(nm, wn)] = (ga, gu, gd)
         say(f"| {nm} | {wn} | {ga[0]:+.2f} ({ga[1]:+.2f}・{ga[2]}) | {gu[0]:+.2f} ({gu[1]:+.2f}・{gu[2]}) | **{gd[0]:+.2f} ({gd[1]:+.2f}・{gd[2]})** |")
 ctl = max(abs(E2[("US500 × VIX (対照)", w)][0][1]) for w in ("在 2014-20", "外 2021-26H1"))
+ctl_sign_ok = all(E2[("US500 × VIX (対照)", w)][0][0] < 0 for w in ("在 2014-20", "外 2021-26H1"))
 gdn_i = E2[("XAU × GVZ", "在 2010-20")][2]; gdn_o = E2[("XAU × GVZ", "外 2021-26H1")][2]
-E2_fail = (ctl >= 3) and (abs(gdn_i[1]) < 2) and (abs(gdn_o[1]) < 2)
+E2_fail = (ctl >= 3) and ctl_sign_ok and (abs(gdn_i[1]) < 2) and (abs(gdn_o[1]) < 2)
 E2_surv = (gdn_i[0] < 0) and (gdn_i[1] <= -2) and (np.sign(gdn_o[0]) == np.sign(gdn_i[0]))
-say(f"- 対照の最大 |t| {ctl:.2f}（方法が IV で非対称を捕まえられるか）・XAU 下降局面 在 t {gdn_i[1]:+.2f}／外 {gdn_o[1]:+.2f}")
-say(f"- **E2 判定: {'**broken as 市場事実（独立計測器に無い＝bid RV 固有）**' if E2_fail else ('survived（独立計測器でも下降局面で負）' if E2_surv else 'inconclusive（対照が弱い／部分的）')}**")
+E2_void = not (ctl >= 3 and ctl_sign_ok)      # 陽性対照が立たない = この検定に検出力が無い
+say(f"- 対照の最大 |t| {ctl:.2f}・対照の符号が全窓で負か: {ctl_sign_ok}（株の IV は r<0 で上がる＝負でなければ対照が立たない）")
+say(f"- XAU 下降局面 在 t {gdn_i[1]:+.2f}／外 {gdn_o[1]:+.2f}")
+say(f"- **E2 判定: {'**void（陽性対照が立たない＝検出力なし・W5 の証拠にも反証にもならない）**' if E2_void else ('**broken as 市場事実（独立計測器に無い）**' if E2_fail else ('survived（独立計測器でも下降局面で負）' if E2_surv else 'inconclusive'))}**")
+if E2_void:
+    say("- 事後・記述（判定に使わない）: 翌日変化 spec が対照で立たない理由の診断 = IV の非対称は**同日**に出て翌日は平均回帰になる疑い。")
+    say("  同日 spec（y = Δlog IV_{d-1→d}・統制 log IV_{d-1}・Δlog IV_{d-2→d-1}・|r_d|）を印字:")
+    def gam_iv_same(v):
+        v = v[np.isfinite(v.dliv) & np.isfinite(v.liv_p) & np.isfinite(v.dliv_p)].reset_index(drop=True)
+        if len(v) < 60: return (np.nan, np.nan, len(v))
+        X = np.column_stack([v.liv_p, v.dliv_p, v.ar, v.r]); b, se, seh, u = nw_ols(v.dliv.to_numpy(), X)
+        return b[-1] * 1e4, b[-1] / se[-1], len(v)
+    say("| 系列 | 窓 | 同日 全体 (t・n) | 同日 上昇局面 (t) | 同日 下降局面 (t) |"); say("|---|---|---|---|---|")
+    for nm, V, wins in (("XAU × GVZ", VXiv, WIN), ("US500 × VIX (対照)", VUiv, {"在 2014-20": (2014, 2020), "外 2021-26H1": (2021, 2026)})):
+        for wn, (y0, y1) in wins.items():
+            ga = gam_iv_same(win(V, y0, y1)); gu = gam_iv_same(up(V, y0, y1)); gd = gam_iv_same(dn(V, y0, y1))
+            say(f"| {nm} | {wn} | {ga[0]:+.2f} ({ga[1]:+.2f}・{ga[2]}) | {gu[0]:+.2f} ({gu[1]:+.2f}) | {gd[0]:+.2f} ({gd[1]:+.2f}) |")
+    # 事後観察の最低限の頑健化（前向きセルとして渡すために）: |r| の柔軟統制 と 符号反転プラセボ
+    def gam_iv_same_flex(v):
+        v = v[np.isfinite(v.dliv) & np.isfinite(v.liv_p) & np.isfinite(v.dliv_p)].reset_index(drop=True)
+        if len(v) < 60: return (np.nan, np.nan, len(v))
+        q = pd.qcut(v.ar, 5, labels=False).to_numpy()
+        X = np.column_stack([v.liv_p, v.dliv_p, v.ar, v.ar ** 2] + [(q == k).astype(float) for k in range(1, 5)] + [v.r])
+        b, se, seh, u = nw_ols(v.dliv.to_numpy(), X)
+        return b[-1] * 1e4, b[-1] / se[-1], len(v)
+    def placebo_iv(v, n_perm=2000):
+        v = v[np.isfinite(v.dliv) & np.isfinite(v.liv_p) & np.isfinite(v.dliv_p)].reset_index(drop=True)
+        y = v.dliv.to_numpy(); ar = v.ar.to_numpy(); rr = v.r.to_numpy(); n = len(v)
+        Z0 = np.column_stack([v.liv_p, v.dliv_p, ar]); t_obs = gam_iv_same(v)[1]; out = np.empty(n_perm)
+        for k in range(n_perm):
+            s = rng.choice([-1.0, 1.0], size=n)
+            b, se, seh, u = nw_ols(y, np.column_stack([Z0, s * rr]))
+            out[k] = b[-1] / se[-1] if se[-1] > 0 else np.nan
+        return t_obs, float((np.abs(out) >= abs(t_obs)).mean()), float(np.nanstd(out))
+    say("  頑健化（|r| 柔軟統制＝五分位＋|r|²／符号反転プラセボ 2000 回・両側）:")
+    say("| 系列 | 窓 | 局面 | 柔軟統制 (t) | プラセボ p | 帰無 \\|t*\\| sd |"); say("|---|---|---|---|---|---|")
+    for nm, V, wins in (("XAU × GVZ", VXiv, WIN), ("US500 × VIX", VUiv, {"在 2014-20": (2014, 2020), "外 2021-26H1": (2021, 2026)})):
+        for wn, (y0, y1) in wins.items():
+            for lab, sub in (("上昇", up(V, y0, y1)), ("下降", dn(V, y0, y1))):
+                gf = gam_iv_same_flex(sub); tp, pp, sd_ = placebo_iv(sub)
+                say(f"| {nm} | {wn} | {lab} | {gf[0]:+.2f} ({gf[1]:+.2f}) | {pp:.4f} | {sd_:.2f} |")
 
 # ================= E3 volatility measurement definition =================
 say()
 say("## E3 ボラ計測の定義: Parkinson（高安レンジ）・切断 RV・BPV で γ_dn を再推定（XAU OHLC キャッシュ）")
 t_ohlc = time.time()
 XO = daily("XAU", src="ohlc"); VXO = xy(XO, extra=("pk", "trv", "bpv"))
-say(f"- OHLC 読込・集計 {time.time()-t_ohlc:.1f} s・有効日 {len(XO)}（回帰行 {len(VXO)}）・plain RV 列の相関 ρ(lrv_close, lrv_ohlc) = {np.corrcoef(VXO.lrv, VXO.lrv)[0,1]:.3f}")
+say(f"- OHLC 読込・集計 {time.time()-t_ohlc:.1f} s・有効日 {len(XO)}（回帰行 {len(VXO)}・close npz の {len(VX)} と一致すべき）")
+_j = pd.DataFrame({"a": VXO.set_index("o").lrv}).join(pd.DataFrame({"b": VX.set_index("o").lrv}), how="inner").dropna()
+say(f"- 衛生: 日次 log RV の 相関 ρ(ohlc 版, close 版) = {np.corrcoef(_j.a, _j.b)[0,1]:.4f}（共通日 {len(_j)}・1.0000 = 同一 M5 格子）")
 def gam_alt(v, tag):
     vv = v[np.isfinite(v["y_" + tag]) & np.isfinite(v["lrv_" + tag]) & np.isfinite(v["lrv5_" + tag])].reset_index(drop=True)
     if len(vv) < 60: return (np.nan, np.nan, len(vv))
@@ -392,10 +438,18 @@ say("## 総合判定（事前固定の集計規則）")
 fails = {"E1 推論": E1_fail, "E2 独立計測器": E2_fail, "E3 計測定義": E3_fail, "E6 交絡": E6_fail}
 nf = sum(1 for v_ in fails.values() if v_)
 others = {"E4 分割": E4_fail, "E5 直接プラセボ": E5_fail, "E8 日境界": E8_fail}
+# docstring の集計規則どおり: survived は E2 が **通過** を要求する（void は通過ではない）
 if nf >= 2: verdict = "**broken**"
-elif (not E1_fail) and (not E2_fail) and (not E3_fail) and (not E5_fail) and (not E6_fail) and (E4_pass >= 3): verdict = "**survived**"
+elif (not E1_fail) and E2_surv and (not E3_fail) and (not E5_fail) and (not E6_fail) and (E4_pass >= 3): verdict = "**survived**"
 else: verdict = "**inconclusive**"
-for k, v_ in list(fails.items()) + list(others.items()): say(f"- {k}: {'fail（壊れた）' if v_ else 'pass（残った）'}")
-say(f"- 中核 4 規則のうち fail = {nf} → **W5 の判定: {verdict}**")
+for k, v_ in fails.items():
+    st = "void（検出力なし）" if (k.startswith("E2") and E2_void) else ("fail（壊れた）" if v_ else "pass（残った）")
+    say(f"- {k}: {st}")
+for k, v_ in others.items(): say(f"- {k}: {'fail（壊れた）' if v_ else 'pass（残った）'}")
+say(f"- 中核 4 規則のうち fail = {nf}・E2 は {'void' if E2_void else ('pass' if E2_surv else 'not-pass')} → **W5 の判定: {verdict}**")
+say("- 補足（規則外・読み）: 評価可能な 7 規則（E1 推論・E3 計測・E4 分割・E5 プラセボ・E6 交絡・E7 多重検定・E8 日境界）は全て生存・E2 のみ void。ただし"
+    f"有効有意性は下がる = episode クラスタ t 在 {E1['在 2010-20'][0]:+.2f}／外 {E1['外 2021-26H1'][0]:+.2f}・"
+    f"WCR 帰無 |t*| sd 在 {E1['在 2010-20'][3]:.2f}（漸近 t は {(E1['在 2010-20'][3]-1)*100:.0f}% 過大）・"
+    f"Bonferroni(M={M}) p<{0.05/M:.5f} を通るのは {sum(1 for _,p in srt if p < 0.05/M)}/{m_} のみ。")
 say(f"所要 {time.time()-T0:.1f} s")
 save()

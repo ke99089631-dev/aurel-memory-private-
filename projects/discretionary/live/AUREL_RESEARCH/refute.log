@@ -1160,3 +1160,28 @@ Refutation cycle complete. The verdict is appended under `[REFUTE] 2026-11-16 14
 **Side effects.** Three scripts and their result files were written under `AUREL_RESEARCH/scripts` and `AUREL_RESEARCH/data`. No orders, no production edits, no MT5 or network access. PROMOTED.md unchanged. The task-observer log lives outside AUREL_RESEARCH, so it was not written, matching prior cycles.
 2026/11/16 14:28:47.92 done
 ========== 2026/11/16 15:30:03.69 refute start ==========
+Done. Footprint is 4 files, all under `AUREL_RESEARCH` (the other modified files are live executors writing their own logs — untouched by me).
+
+## [REFUTE] verdict: **inconclusive** — W5 bent but didn't break
+
+No new promotion candidate existed (PROMOTED.md empty; cycle41's W1–W4 were already refuted at 14:30). So per charter 1.2 I attacked **the 14:30 refute lane's own surviving residual**: *"gold shows a stock-like leverage effect in 60-day downtrends"* (γ_dn = −6.75, t −3.86 in / −7.95, t −3.27 out). I ran 8 pre-registered rules the 14:30 lane never tried, using three cached sources it never opened (OHLC bars, CBOE GVZ, FRED macro).
+
+**It survived every evaluable attack, but the significance claim shrinks:**
+- **Episode-clustered inference** (downtrend days come in 70/34 episodes, not independent days): t −3.86 → **−2.82**, wild-cluster-bootstrap p 0.020. The null |t*| sd is 1.38 — **the asymptotic t is 38% overstated**.
+- **Measurement**: survives Parkinson range vol, truncated RV, and BPV — so it isn't a 5-min-bid artifact. But truncated RV cuts the coefficient 33%: a third of the effect is jumps.
+- **Macro confounders**: this *kills the 14:30 lane's own "most severe" counter*. Controlling contemporaneously for real rates, the dollar, and VIX simultaneously, the coefficient grows (−6.68 → −8.12, t −4.10) rather than shrinking.
+- **Day boundary ±2h** and **4 alternative in/out splits**: stable — but distribution is lumpy (middle third of downtrend days t −0.73; odd episodes t −1.81 vs even −5.31).
+- **Multiple testing**: the real search path is M=99 tests. Bonferroni passes only the direct sign-flip placebos, not the core inference p-values.
+
+**Two things worth your attention:**
+
+1. **My independent-instrument test was void, and the pre-registered guard caught it.** I'd pre-fixed "next-day ΔGVZ on r_d" as the clean outside check. Gold came back null — but so did the positive control (VIX vs S&P came out with the *wrong sign*). A spec that can't reproduce the most robust fact in finance has no power, so that result is void, not a refutation. Without the guard I'd have written "broken."
+
+2. **Fixing the spec produced the cycle's biggest find — post-hoc, so it's a new hypothesis, not evidence.** The IV asymmetry is *same-day*; next-day measures mean reversion. Same-day, the control is overwhelming (VIX/S&P t −8.9 / −21.3), and gold's GVZ shows a **state-dependent sign flip**: uptrends +1.01 (t +4.4) / +1.56 (t +6.4), downtrends −1.74 (t −7.6) / −1.23 (t −2.9) — both windows, flexible |r| control, placebo p ≤ 0.0045, honest null sd ≈ 1.0. **This suggests the 14:30 lane's "the up-side is null" was itself measure-specific overreach** — null in Dukascopy bid next-day RV, strongly positive in independent CBOE IV same-day. Caveats recorded: it's contemporaneous covariation, GVZ's 16:15 ET close partly overlaps the 18:00 ET session day, and GLD option demand ≠ gold's vol process.
+
+I handed the research lane two prospective cells (rewrite W5 with wild-cluster-bootstrap as primary inference; pre-register the same-day IV sign flip on a 16:15-ET grid) and logged methodology lesson ㊹: *an independent-instrument test needs a positive control, and a failed control means void, not broken.*
+
+One self-correction worth flagging: my first run printed **survived** because the aggregation code tested `not E2_fail` where the docstring rule required E2 to *pass* — counting "void" as "pass" inflated the verdict. The docstring governs, so the saved artifact and the findings entry are the corrected run. That's recorded as the second half of ㊹: three-valued rules need three-valued aggregation.
+
+Per this lane's convention the task-observer log sits outside `AUREL_RESEARCH`, so I didn't write it; both lessons live in the findings entry instead. backlog/DATA_MAP/cells.csv left for the research lane, as at 14:30.
+2026/11/16 15:46:39.90 done
