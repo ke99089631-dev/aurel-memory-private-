@@ -1030,3 +1030,20 @@ Tested a source-of-edge row missing from the §8 map: index-derivative expiratio
 **Files written** (all under AUREL_RESEARCH): findings/2026-11-17.md (one entry), scripts/c43_expiration_day_effects.py and c43b, data/c43* results and logs, three rows in data/cells.csv, backlog.md (closed item, needs-data, ㊽), DATA_MAP.md (§6 calendar entry, §8 new row, version line). PROMOTED unchanged. No orders, no process operations, no external calls, no task-observer write (outside the allowed folder, same handling as previous cycles).
 2026/11/17  0:41:02.52 done
 ========== 2026/11/17  6:30:07.59 cycle start ==========
+Cycle 44 is complete. Everything was run synchronously this turn and all numbers are filled in.
+
+**What this cycle did**
+
+- **Acquired the CPI release calendar** (202 releases, 2010-01 to 2026-11, 12 per year, 11 in the 2025 shutdown year) and registered it in DATA_MAP as experiment-ready. The BLS archive blocks scripted clients with HTTP 403, so the dates came from reading the page one year-section at a time via WebFetch. This is recorded honestly as an LLM-assisted read, not rule extraction, with the count checks and known delayed dates confirming it.
+- **Ran the pre-registered pooled post-announcement drift cell** on gold using only the existing M5 close cache (15 seconds). The jump test showed the CPI calendar is valid out-of-sample (gold J rate 72%, US500 83%) but fails in-sample in both markets (35–36%): pre-2021 CPI releases simply did not move either market at the five-minute scale. Per the pre-registered rule, CPI was excluded and the pool was NFP plus FOMC.
+- **Result: null.** In-sample β was +0.189 (t 2.94, permutation p 0.004) but out-of-sample +0.135 (t 1.04, MDE 0.26). The in-sample signal is two-thirds the already-known FOMC component from cycle 42. The pre-registered n≥300 rule technically makes the verdict "void", and I flagged that the rule should have been written in terms of standard error (which was met), as methodology candidate ㊿.
+- **Production gate passed, then flagged.** Scan trades entered within two hours after NFP/FOMC show +0.48R out-of-sample (t 3.2, n 85), but in-sample only t 1.15. That is exactly the "in-sample null, out-of-sample t 3" pattern the lane has identified as its main source of false leads, and it is an entry-side condition, which the charter forbids promoting. Logged as a forward description cell and offered to the refute lane for a twin test.
+
+**Strongest counter-argument recorded:** the in-sample pooled β is not independent evidence. It mostly re-states cycle 42's FOMC number with a smaller standard error, and the genuinely new component (NFP, CPI) does not stand on its own.
+
+**Housekeeping from the refute lane's 03:40 handoff:** cancelled branch (d) from cycle 43, registered the correctly specified W-FRI forward cell (Sunday open to Monday 10:00 ET, volatility-normalized, with a dose-response condition), added two needs-data items (gold M5 spread series, an independent gold 5-minute source), and recorded methodology lesson ㊾. Also repaired a pre-existing unquoted comma in the cycle-40 row of the cells registry, which had been breaking CSV parsing.
+
+**Files written** (all under AUREL_RESEARCH): two new scripts plus a supplement, the CPI calendar and raw list, three result/log files, one findings entry, backlog and DATA_MAP updates, and three registry rows. No orders, no production edits, no process actions, no MT5 connection.
+
+**Next for a future cycle:** PCE and retail-sales calendars remain needs-data (likely fetchable the same per-year way), and the refute lane may want to attack the +0.48R post-announcement entry group with the cycle-33 twin design.
+2026/11/17  6:54:00.79 done
