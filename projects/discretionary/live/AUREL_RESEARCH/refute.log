@@ -1186,3 +1186,32 @@ One self-correction worth flagging: my first run printed **survived** because th
 Per this lane's convention the task-observer log sits outside `AUREL_RESEARCH`, so I didn't write it; both lessons live in the findings entry instead. backlog/DATA_MAP/cells.csv left for the research lane, as at 14:30.
 2026/11/16 15:46:39.90 done
 ========== 2026/11/16 21:30:03.17 refute start ==========
+Done. Verdict appended to `AUREL_RESEARCH/findings/2026-11-16.md` under `[REFUTE]`.
+
+**Target** (only surviving positive signal in cycle42, 18:45): gold's post-statement continuation — `POST(14:30→16:00) ~ J30(14:00→14:30)` β +0.318, HC1 t +3.12, n 62, in-sample 2013-20; `NEXT` β +0.651, t +2.92.
+
+**Verdict: broken as a promotion candidate / prospective cell — survived-but-undecidable as a statistical fact.**
+
+Six attacks failed (the signal is real in-sample):
+- Control-day baseline: β +0.030 (t 0.54, n 1741); interaction t +2.52 → not generic afternoon autocorrelation, FOMC-specific
+- Shared-endpoint artifact excluded (gap windows: β +0.287, t +3.19)
+- Permutation p 0.0095; year-block bootstrap t +3.42, p 0.019
+- Influence-robust in-sample (drop worst point → t +3.85; LOYO min t +2.18; sign 41/62, p 0.015)
+- Trend confound decomposes to ±0.2 bp; demeaning by control days leaves β unchanged
+- My own HC1-se attack backfired: random 50/50 splits give sd 0.213 vs 2·se 0.204 (ratio 1.04) — the se is calibrated, so the odd/even split asymmetry I found is not a refutation
+
+Three attacks landed:
+- **Localization**: all of it is 2013-16 (β +0.396, t 3.03, n 30). Pooled 2017-2026H1 — n 76, 2.5× the discovery sample — gives β +0.186, t +0.90. It had already died in the back half of its own in-sample window, 4 years before the declared 2021 OOS boundary. (Decay itself is not separable: era interaction t −0.86.)
+- **Multiple testing**: Bonferroni(36) on the family cycle42 itself declared → p 0.065; BH(36) needs t ≥ 3.20, observed 3.12
+- **Cost**: the 14:30→16:00 trade nets t 1.46 at 1× spread, in-sample. Only the overnight version clears cost, and its swap is unrecorded; split by era it is 2013-16 +11.6 USD/trade (t 4.21) vs 2017-20 +0.46 (t 0.17)
+
+Two things worth flagging beyond the verdict:
+
+1. **An identification limit, not a test result.** My variance-matched placebo returns z +8.35, but it's untrustworthy in the opposite direction from my first (mis-calibrated) date-shift placebo: control days with |J30| ≥ 45 bp number 14 in 8 years against 21 statement days, so the null redraws nearly the same days. Gold's statement-day |J30| is 7.3× control-day. "FOMC-specific" and "large-move-specific" cannot be separated in this data — R1's interaction and R10's |J30|-tercile result are one fact, not two confirmations.
+
+2. **The proposed prospective cell should not be registered.** At the post-2017 effective β, t ≥ 2 needs ~372–528 statement days (46–66 years), and pooling in non-FOMC releases won't shrink the se because the se is driven by x-variance.
+
+No promotion, PROMOTED.md unchanged, backlog untouched (proposals left in the entry for the research lane, including two methodology candidates: variance-matched placebos as an identification-limit rule, and "split the in-sample window and check the back half" as a standard screen).
+
+Per the lane's standing convention and my write boundary, no task-observer log was written outside `AUREL_RESEARCH` — the two reusable methodology lessons are recorded in the findings entry instead.
+2026/11/16 21:41:41.75 done
