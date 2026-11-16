@@ -1,0 +1,35 @@
+2010 entries 10
+2011 entries 10
+2012 entries 8
+2013 entries 9
+2014 entries 9
+2015 entries 8
+2016 entries 8
+2017 entries 8
+2018 entries 8
+2019 entries 9
+2020 entries 10
+2026 cal entries 8
+2025 cal entries 9
+2024 cal entries 8
+2023 cal entries 8
+2022 cal entries 8
+2021 cal entries 8
+2027 cal entries 8
+
+saved C:\Users\user\.aurel\memory\projects\discretionary\live\AUREL_RESEARCH\data\macro\FOMC_dates.csv: 154 rows (144 scheduled) 2010-01-27〜2027-11-17 in 3.0s
+year   2010  2011  2012  2013  2014  2015  2016  2017  2018  2019  2020  2021  2022  2023  2024  2025  2026  2027
+n        10    10     8     9     9     8     8     8     8     9    10     8     8     8     8     9     8     8
+sched     8     8     8     8     8     8     8     8     8     8     8     8     8     8     8     8     8     8
+weekday of scheduled statement days: {1: 8, 2: 131, 3: 5} (0=Mon)
+           date  year  scheduled                                  label     source  wd
+3    2010-05-09  2010          0           May 9 Conference Call - 2010   hist2010   6
+7    2010-10-15  2010          0      October 15 Conference Call - 2010   hist2010   4
+14   2011-08-01  2011          0        August 1 Conference Call - 2011   hist2011   0
+18   2011-11-28  2011          0     November 28 Conference Call - 2011   hist2011   0
+34   2013-10-16  2013          0        October 16 (unscheduled) - 2013   hist2013   2
+38   2014-03-04  2014          0          March  4 (unscheduled) - 2014   hist2014   1
+84   2019-10-04  2019          0         October 4 (unscheduled) - 2019   hist2019   4
+88   2020-03-02  2020          0   March 2 (unscheduled) Meeting - 2020   hist2020   0
+89   2020-03-15  2020          0  March 15 (unscheduled) Meeting - 2020   hist2020   6
+134  2025-08-22  2025          0              August 22 (notation vote)  calendars   4

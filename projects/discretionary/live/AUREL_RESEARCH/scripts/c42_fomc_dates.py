@@ -14,6 +14,12 @@ HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE);
 OUT = os.path.join(MAC, "FOMC_dates.csv")
 HDR = {"User-Agent": "Mozilla/5.0"}
 MON = {m: i for i, m in enumerate(["January","February","March","April","May","June","July","August","September","October","November","December"], 1)}
+MON.update({m[:3]: i for m, i in list(MON.items())}); MON.update({"Sept": 9})
+def parse_months(tok):
+    """'April' / 'April/May' / 'Jan/Feb' -> (m1, m2 or None); None if unknown"""
+    parts = [p.strip() for p in tok.split("/")]
+    if not all(p in MON for p in parts): return None
+    return MON[parts[0]], (MON[parts[-1]] if len(parts) > 1 else None)
 def get(url):
     return urllib.request.urlopen(urllib.request.Request(url, headers=HDR), timeout=25).read().decode("utf-8", "ignore")
 rows = []
@@ -32,11 +38,13 @@ for y in range(2010, 2021):
     n0 = len(rows)
     for h in heads:
         # formats: "January 27-28 Meeting - 2015" / "April 30-May 1 Meeting - 2019" / "March 15 Meeting (unscheduled) - 2020"
-        m = re.match(r"\s*([A-Z][a-z]+)\s+(\d{1,2})(?:\s*-\s*(?:([A-Z][a-z]+)\s+)?(\d{1,2}))?\s*(.*)", h)
+        m = re.match(r"\s*([A-Z][a-z]+(?:/[A-Z][a-z]+)?)\s+(\d{1,2})(?:\s*-\s*(?:([A-Z][a-z]+)\s+)?(\d{1,2}))?\s*(.*)", h)
         if not m: print("  unparsed:", h); continue
-        mo1, d1, mo2, d2, rest = m.groups()
-        if mo1 not in MON: continue
-        add(y, MON[mo1], int(d1), MON[mo2] if mo2 else None, int(d2) if d2 else None, h, f"hist{y}")
+        mo1, d1, mo2, d2, rest = m.groups(); pm = parse_months(mo1)
+        if pm is None: print("  unparsed month:", h); continue
+        m1, m2 = pm
+        if mo2: m2 = MON.get(mo2, m2)
+        add(y, m1, int(d1), m2, int(d2) if d2 else None, h, f"hist{y}")
     print(y, "entries", len(rows) - n0)
 # calendar page (recent years)
 html = get("https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm")
@@ -48,12 +56,12 @@ for i in range(1, len(blocks) - 1, 2):
     n0 = len(rows)
     for mon, dstr in ents:
         lab = dstr; dstr_clean = re.sub(r"[*†]|\(.*?\)", "", dstr).strip()
-        mons = [m_.strip() for m_ in re.split(r"/", mon)]
-        if not all(mm in MON for mm in mons): print("  unparsed month", mon); continue
+        pm = parse_months(mon)
+        if pm is None: print("  unparsed month", mon); continue
         nums = re.findall(r"\d{1,2}", dstr_clean)
         if not nums: print("  unparsed date", y, mon, dstr); continue
         d1 = int(nums[0]); d2 = int(nums[-1]) if len(nums) > 1 else None
-        m1 = MON[mons[0]]; m2 = MON[mons[-1]] if len(mons) > 1 else None
+        m1, m2 = pm
         if d2 is not None and m2 is None and d2 < d1: m2 = m1 % 12 + 1  # cross-month without explicit second month
         unsched = bool(re.search(r"unscheduled", dstr, re.I))
         add(y, m1, d1, m2, d2, f"{mon} {dstr}" + (" (unscheduled)" if unsched else ""), "calendars")

@@ -987,3 +987,25 @@ Gold has no next-day asymmetry in either direction. The MDE says a 5 to 7 percen
 **Boundaries.** Read-only throughout: existing npz and json caches only, no scan, no MT5, no network, no production or executor touched. Total compute about 18 seconds. No PROMOTED change.
 2026/11/16 12:57:23.78 done
 ========== 2026/11/16 18:30:03.20 cycle start ==========
+Cycle 42 is complete. All numbers are filled in, and the only files I changed are under AUREL_RESEARCH. The other modified files in git status are live executor logs that were already dirty at session start.
+
+**What I picked and why.** The backlog and DATA_MAP had carried the CPI/FOMC announcement calendar as "要取得" since cycle 24, blocking the announcement-pool cell and three other rows. The FOMC schedule is public on federalreserve.gov and rule-parseable, so I acquired it this cycle instead of deferring to AUREL main, then tested the Lucca–Moench pre-FOMC drift with US500 as the home-base control and gold as the target. Exploration track, new §8 row.
+
+**Calendar acquired and validated.** `data/macro/FOMC_dates.csv` holds 144 scheduled statement days, exactly 8 per year 2010–2027, plus 10 unscheduled meetings flagged separately. The first regex dropped 8 cross-month meetings; the per-year count check caught it. Data validation: on statement days after 2013-03-20 the 14:00→14:05 ET move is 5.5× (US500) and 8.5× (gold) the control median, with jump rates 0.63 and 0.76.
+
+**Results (pre-registered, Bonferroni 2, both null):**
+
+| Cell | In-sample | Out-of-sample |
+|---|---|---|
+| US500 pre-FOMC drift (prev-day 14:00 → 12:00 ET) | +4.5 bp, t 0.48, MDE 18.6 | +14.8 bp, t 1.12, MDE 26.3 |
+| XAU same window | +5.0 bp, t 0.54, MDE 18.5 | −8.6 bp, t −0.56, MDE 30.8 |
+| Gate ㉛: scan trades entered in that window | Δμ −0.042R, t −0.65, MDE 0.13 | not run (gate failed) |
+
+The literature-size +49 bp is excluded in-sample. The "calm before the storm" half of the paper does replicate: US500 pre-announcement variance ratio 0.39. Gold shows neither the drift nor the c38-derived prediction that 2021+ gold would share the equity sign. This is the second failure of that prediction after cycle 41.
+
+**Strongest counter-argument recorded.** The null excludes only the literature-size effect. The out-of-sample +14.8 bp matches the post-2011 "decayed" size reported by later papers and would need about 130 meetings (17 years) to separate from zero, so the question is undecidable on our data and I did not register a forward cell for it. One post-hoc descriptive signal, gold continuing the 14:00→14:30 statement move through the next morning (in-sample β +0.32, t 3.1; out-of-sample t 0.7), was routed to the pooled-announcement design that still needs the CPI calendar.
+
+**Housekeeping done.** Findings entry appended to `findings/2026-11-16.md`, three rows added to `data/cells.csv`, DATA_MAP §6 and §8 updated (FOMC row now 済 null, CPI/PCE row remains 要取得), backlog updated including the two forward-cell rewrites the refute lane requested and two methodology candidates (㊹ void-vs-broken for independent instruments, ㊺ acquire cheap public calendars in-cycle). PROMOTED unchanged. No orders, no process operations, no MT5, no production edits. External traffic was 12 read-only page fetches from federalreserve.gov.
+
+**Next cycle candidate.** The BLS CPI release schedule is likely rule-parseable the same way; acquiring it would unlock the pooled announcement cell (NFP+FOMC+CPI, 300+ events, MDE ≈0.2 on the continuation β).
+2026/11/16 18:48:36.14 done
