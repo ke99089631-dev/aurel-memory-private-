@@ -1159,3 +1159,4 @@ Refutation cycle complete. The verdict is appended under `[REFUTE] 2026-11-16 14
 
 **Side effects.** Three scripts and their result files were written under `AUREL_RESEARCH/scripts` and `AUREL_RESEARCH/data`. No orders, no production edits, no MT5 or network access. PROMOTED.md unchanged. The task-observer log lives outside AUREL_RESEARCH, so it was not written, matching prior cycles.
 2026/11/16 14:28:47.92 done
+========== 2026/11/16 15:30:03.69 refute start ==========
