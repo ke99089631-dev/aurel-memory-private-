@@ -1313,3 +1313,31 @@ Most serious counter-refutation against myself, recorded in the entry: my centra
 Writes: `scripts/refute_c46_cpi_clock.py`, `_b.py`, `data/refute_c46_cpi_clock.md`, `_b.md`, two run logs, the findings entry. No orders, no production edits, no process/MT5/prop access — `git status` confirms every write of mine is under `AUREL_RESEARCH/`.
 2026/11/17 21:50:14.06 done
 ========== 2026/11/18  3:30:03.87 refute start ==========
+Done. Verdict appended to `AUREL_RESEARCH/findings/2026-11-18.md` under a `[REFUTE]` header.
+
+## Target
+c47's only positive carry-forward: the post-hoc **DiD_W3 = ΔE_W3(ANN_J) − ΔE_W3(UJ) = out-of-sample +0.492 (day-clustered t 2.52)**, and its reading *"scheduled-release jumps create a vol state; unscheduled 5σ jumps don't change state (ΔE_W3 ≈ 0)"*. c47's own "most serious refutation (i)" argued the DiD was the *right* definition — so that's what I attacked.
+
+## Verdict: broken (with one surviving residual I could not kill)
+
+14 break rules pre-registered in three stages; 8 fired.
+
+**What broke**
+- **The estimator is mechanically biased.** On 38k event-free bars, vol persistence λ(ρ_W3~ρ_PRE) = **+0.308** (t(λ−1) = −51), not 1. DiD forces λ=1, so it inherits `(1−λ)·ΔPRE` = **+0.384 = 78% of the +0.492**. The arms' pre-state differs by construction (Ē_PRE: UJ +0.609 vs ANN_J +0.054).
+- **Matched placebo arms with zero jumps reproduce it.** Same ET hour × ρ_PRE ±0.15 non-event bars: DiD = **+0.404** (72% of observed), one-sided empirical p **0.14**.
+- **"UJ doesn't change state" is the λ=1 artifact.** Correctly adjusted, UJ *does* build vol: A_W3 = **+0.421 log (1.23×, t 7.81)** out, +0.365 (t 10.2) in. The reported ≈0 was a real +0.42 cancelling a −0.41 bias.
+- **Multiplicity:** family of 24 post-hoc DiD cells → nominal p 0.0116 becomes **Holm 0.2445** (BH 0.070).
+- **Independent sample (US500, c47's own revival condition):** fails — in-sample DiD_W3 **−0.016 (t −0.04)**; under the correct spec the sign *flips* (out −0.440; arm-mean contrast −0.048). The PRE imbalance replicates and amplifies (+0.878, t 16.0).
+
+**What survived**
+- c47's main-cell null was right, and so was putting the main cell on the *level* — the attempted switch to DiD was the error.
+- "Jumps are a symptom of an already-rough state" — strongest fact in the entry, now replicated in a second market.
+- W1 (first hour after release) passes every adjustment in both markets — but that's Ederington–Lee, already descriptive in c47.
+
+## My own main attack missed
+R3 (PRE-as-covariate, my declared main rule) came in at **+0.280, t 1.68** against my thresholds of 0.246 / t 1.5 — just outside. Four PRE-controlled variants cluster at +0.24…+0.31 and the placebo does *not* reproduce that (+0.079). So the honest reading is "the DiD is broken; the correctly-specified cell is **inconclusive**", not "the arm difference is zero". My threshold wording decided that verdict — the third consecutive repeat of the same failure mode this lane logged on 11-17 (15:40 (ii), 21:30 (ii)). Logged as unresolved.
+
+Also flagged: c47's revival condition was **unachievable as written** (22 valid US500 in-sample events → MDE 0.91 log vs a +0.49 target), so part of T1's hit is a verdict on the rule, not the hypothesis.
+
+Writes confined to `AUREL_RESEARCH/` (3 scripts, 6 data/log files, findings append). No orders, no production edits, no process/MT5/prop access, no external calls; 98.1 s total. `backlog.md`/`DATA_MAP.md`/`cells.csv`/`PROMOTED.md` untouched per lane convention — handoff items are in the entry's 申し送り section. Per the same boundary I did not write the task-observer log or memory files (both sit outside `AUREL_RESEARCH`); the two methodology candidates (60: print λ and the mechanical term before using any pre/post difference; 61: check MDE feasibility before writing a revival condition) are recorded in the findings entry instead.
+2026/11/18  3:51:22.45 done
