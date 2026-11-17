@@ -1239,3 +1239,28 @@ Two things beyond the verdict:
 Per the lane's standing convention and the write boundary, no task-observer log was written outside `AUREL_RESEARCH`; both reusable lessons are in the findings entry. backlog / DATA_MAP / cells.csv / PROMOTED left untouched for the research lane.
 2026/11/17  3:46:11.65 done
 ========== 2026/11/17  9:30:08.25 refute start ==========
+Verdict appended to `AUREL_RESEARCH/findings/2026-11-17.md` under `[REFUTE]`. All writes confined to `AUREL_RESEARCH/` (3 scripts + 3 result .md + logs + findings); no orders, no production edits, no process/MT5/prop touch.
+
+**Target** — cycle44's only positive carry-forward, and the one the research lane explicitly handed me: gate ㉛ external, "2021+ gold scan breakouts entered in the 2 hours after NFP 08:30 / FOMC 14:00 ET beat same-clock non-announcement days by Δμ +0.481R (Welch t 3.23, n 85/1440)", in-sample null (t 1.15) — the ㊶ pattern. Request was "break +0.48R with twins (same clock, same geometry, c33 SET S)".
+
+**Verdict: survived as a statistical fact — the "2 hours" framing is broken.** 21 pre-registered break rules across 3 stages; 2 landed, and I retracted 2 of my own attacks.
+
+What failed to break it:
+- **Clustering** — day-clustered t 3.05, event-clustered 3.05, day-pairs bootstrap t 3.08 (p 0.0010). The inflation that killed c42 (1.8×) is absent here (1.06×) because 67 day-clusters are available.
+- **Both twins the lane asked for.** Clock twin: hour-matched +0.484 (t 3.23) — both windows positive independently (AM +0.414, PM +0.580). Geometry twin: 1:1 caliper matching gave t 1.98, which formally landed — but the control pool fell 1440→76. With the pool kept (regression adjustment +0.454, HC1 t 2.99; 1:5 matching +0.472, t 2.47), **geometry explains ~6%, not 27%** — the t drop was SE inflation. R5 retracted.
+- **Cost** — doubling/tripling makes it *stronger* (+0.505 at 2×), since ev trades carry 48% wider stops so cost in R units is smaller. Breaks only above 12× trigger spread.
+- **Placebo** — t0 shifted ±7/14/21/28 days: 8/8 negative, max −0.008.
+- **Calibration, 20000 draws** — the gate's in-sample condition |Δμ|≥0.048 passes **64.5%** of random event-day sets, so it is not a screen (this part landed, as methodology). But the external t null is sd 1.023 and t≥3.23 occurs 12/20000 → p ≤ 6.5e-4. Conditioning on the exact ㊶ pattern (gate pass ∧ in-sample null) gives 6/11907 → **p ≤ 5.9e-4**: the "in-sample null → external t 3" shape does not inflate t. Bonferroni survives at family ≤72 (gate family is 13 → 0.0076), dies at ≥100.
+- **Year/day robustness** — LOYO min t 2.64; 0 of 67 days drop it below t 2. Day-level, one obs per day: Mann-Whitney p 0.0060.
+- **My best alternative hypothesis died hardest.** H_VOL ("announcement days are just high-vol days"): the 67 highest-ATR non-announcement days — **2.3× the volatility of real announcement days** — give Δμ **−0.097** (t −0.95), and 0/1500 random high-vol draws reach +0.481. The top-ATR-quintile localization is an announcement × volatility interaction, not volatility.
+
+What landed: **no proximity dose-response** — 0-30 min −0.123, 30-60 +0.565, 60-120 +0.685, and the **2-4h window is equally strong (+0.514, t 2.25)**, decaying only at 4-6h. The "2 hours" cut is post-hoc; the real span is ~0-4h and flat. I retracted the sharper version of this (the "first 30 min is negative" is noise: n 7, sign-test p 0.299).
+
+Two things beyond the verdict:
+
+1. **No promotion, and the reason is structural, not statistical.** This is entry-side conditioning, which 補遺 D forbids, on 5.5 years / 67 announcement days, with the top 10 of 85 trades carrying it (remove them → t 1.42). The in-sample announcement-day-outside-window term is *negative* (−0.094, t −2.17) against external +0.105 — an era sign flip. Critically, the scan exists in **one frozen configuration (c4)**, so "announcement mechanism" and "this wall/SL geometry meeting announcement-day bars" cannot be separated with what's on disk. I left that as the needs-data item. Unlike c42 this one is prospectively decidable: ~29 announcement days ≈ 1.0 year at the observed effect, and it should be declared broken if Δμ falls below +0.30.
+
+2. **Two methodology lessons, both from my own errors this session.** (51) A 1:1 caliper match's t drop is not a kill — always decompose point-estimate change from SE change; here 1:1 said t 1.98 while the real adjustment was 6%. (52) "High-volatility day" should be a standing default alternative tested with a volatility-matched placebo — it cost one line and killed the confound outright.
+
+Per the lane's write boundary, no task-observer log was written outside `AUREL_RESEARCH`; both lessons are in the findings entry. backlog / DATA_MAP / cells.csv / PROMOTED left untouched for the research lane, along with a specification fix (window → 0-4h) and a recommendation to re-specify or demote gate ㉛.
+2026/11/17  9:47:09.53 done
