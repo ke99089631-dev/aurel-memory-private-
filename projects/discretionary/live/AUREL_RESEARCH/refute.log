@@ -1265,3 +1265,26 @@ Two things beyond the verdict:
 Per the lane's write boundary, no task-observer log was written outside `AUREL_RESEARCH`; both lessons are in the findings entry. backlog / DATA_MAP / cells.csv / PROMOTED left untouched for the research lane, along with a specification fix (window → 0-4h) and a recommendation to re-specify or demote gate ㉛.
 2026/11/17  9:47:09.53 done
 ========== 2026/11/17 15:30:07.85 refute start ==========
+Done. Verdict appended to `AUREL_RESEARCH/findings/2026-11-17.md` under `## [REFUTE] 2026-11-17 15:40`.
+
+## Target
+cycle45 (12:55) — the only mechanism claim in the lane: **H_SCHED PASS**, "the +0.48R post-announcement edge is specific to *scheduled* releases and does not generalize to 5σ jumps" (外 β_UJ +0.089 t 1.06 vs β_ANN +0.514 t 4.02, ANN−UJ +0.425 t 2.84).
+
+## Verdict: **broken** (4 of 12 pre-declared BREAK rules landed) / survived-but-respecified
+
+**What broke it — the comparison was asymmetric.** c45's ANN arm is *unconditional* on a jump; the UJ arm is *conditioned* on one. Splitting ANN with the same 5σ detector: announcements whose release bar did **not** jump give **+0.588 (t 3.08, n 74)** — on their own, without any jump. So the effect doesn't need a jump, the two arms differ in two dimensions at once, and the H_GEN/H_SCHED dichotomy is mis-specified. Symmetrized, **ANN_J − UJ = +0.319 (t 1.74)**, failing c45's own t≥2 threshold. Not a single-release-type artifact: NFP_NJ +0.633 (t 2.26), FOMC_NJ +0.576 (t 2.47).
+
+**The decision rule also broke.** H_GEN's own threshold (β_UJ ≥ 0.5·β_ANN = +0.257) sits inside β_UJ's 95% CI (upper +0.252); the contrast γ = −0.168 (t −1.63) can't reject it. And the "UJ is null" leg (|t_UJ|<1.5) passes **70% of pure-noise arms** (8 placebo-UJ cells → null sd 1.46; 87% even at nominal sd 1). c45 had an `inconclusive` branch pre-declared — that was the correct branch.
+
+**Post-hoc, the mechanism reading broke too:** no dose-response in announcement size either — the *quietest* release quartile is strongest (|r|≤8bp → **+0.981, t 4.01**; Q4−Q1 −0.410).
+
+## What I could not break (8 attacks failed)
+The ANN > UJ difference itself is robust: 2000 pseudo-announcement draws give null sd 0.88, max +2.55 vs observed +2.82 → **empirical p 0.0000**; geometry adjustment moves it 1%; triple cost makes it stronger; 11 split redefinitions give t 2.15–2.92; event-level MWU **p 0.0006**; the purest unscheduled subset (no US calendar hours) is flat at +0.038 (t 0.20); window outside the announcement window is +0.173 (t 1.55).
+
+## Most severe refutation of my own verdict
+**I did not break c45's direction — I broke its entitlement to the conclusion.** The honest statement is "probably right, not established here." I also retracted my own stronger reading: ANN_NJ vs ANN_J is null at event level (+0.210, t 0.77, p 0.26), so "no jump is better" is unsupported — only "a jump isn't required." My BREAK-A was written as a one-sided threshold; written as a symmetric contrast it would have misfired, so my rule-writing held the conclusion. The c4 single-frozen-scan confound stays unresolved.
+
+Two methodology lessons recorded in the entry (54: check both arms carry the *same* conditioning outside the dimension under test, before reading "A doesn't generalize to B"; 55: "control arm is null" needs its noise pass-rate printed, and specificity claims need TOST, not non-rejection).
+
+No orders, no production edits, no process touches, no MT5, no external calls, no prop. Writes confined to `AUREL_RESEARCH/` (2 scripts, 2 result .md, 2 run logs, findings append); `backlog`/`DATA_MAP`/`cells.csv`/`PROMOTED` left to the research lane. Per the lane's write boundary, no task-observer log was written outside `AUREL_RESEARCH` — both lessons live in the findings entry instead.
+2026/11/17 15:44:11.04 done
