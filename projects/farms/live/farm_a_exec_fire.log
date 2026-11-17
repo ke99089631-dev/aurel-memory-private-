@@ -23069,3 +23069,16 @@ MemoryError
 [接続] 畑A 806782 / VantageTradingLtd-Demo / 残高981.33 / NAS100.r  armed=True
 [!!] 二重ロック解錠=LIVEデモ発注モード。NAS100.rに実際に撃ちます。
 [終了]
+[接続] 畑A 806782 / VantageTradingLtd-Demo / 残高981.33 / NAS100.r  armed=True
+[!!] 二重ロック解錠=LIVEデモ発注モード。NAS100.rに実際に撃ちます。
+[紙双子・新規] cid1794938400 SELL entry26943.56
+[発注OK] SELL lot0.10 SL27179.39 TP26325.38 ret=10009
+[終了]
+[接続] 畑A 806782 / VantageTradingLtd-Demo / 残高981.33 / NAS100.r  armed=True
+[!!] 二重ロック解錠=LIVEデモ発注モード。NAS100.rに実際に撃ちます。
+[紙双子・新規] cid1794938700 SELL entry26983.06
+[発注OK] SELL lot0.10 SL27204.35 TP26394.29 ret=10009
+[終了]
+[接続] 畑A 806782 / VantageTradingLtd-Demo / 残高981.33 / NAS100.r  armed=True
+[!!] 二重ロック解錠=LIVEデモ発注モード。NAS100.rに実際に撃ちます。
+[終了]
