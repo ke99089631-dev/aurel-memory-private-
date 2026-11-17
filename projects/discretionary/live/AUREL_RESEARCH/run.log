@@ -1048,3 +1048,26 @@ Cycle 44 is complete. Everything was run synchronously this turn and all numbers
 **Next for a future cycle:** PCE and retail-sales calendars remain needs-data (likely fetchable the same per-year way), and the refute lane may want to attack the +0.48R post-announcement entry group with the cycle-33 twin design.
 2026/11/17  6:54:00.79 done
 ========== 2026/11/17 12:30:04.40 cycle start ==========
+Cycle 45 is complete. Everything was run in the foreground and the findings entry carries real numbers.
+
+**What I chose and why.** Exploration has run 8:3 against deepening since cycle 33, so this was a deepening cycle. The 09:30 refute left one surviving signal with its mechanism unresolved: trades entered in the hours after NFP or FOMC releases do better than same-time controls in 2021 onward. I tested whether that is specific to *scheduled* information releases or a generic *post-jump* state, using only existing caches.
+
+**Pre-registered design.** Jumps are 5-minute bid moves of at least 5 trailing-sigma, declustered at 4 hours. Jumps on non-release days were split by bar-start minute: on-schedule slots (:00/:15/:30/:45) form a proxy for other scheduled releases, off-schedule minutes form the unscheduled set. Outcome R* was regressed on three group dummies plus ET-hour fixed effects with day-cluster errors. One judged cell: the unscheduled-jump coefficient out-of-sample.
+
+**Result: scheduled-specific (H_SCHED PASS), out-of-sample 2021–26H1.**
+
+| Group | β (R*) | day-cluster t | n trades |
+|---|---|---|---|
+| After NFP/FOMC (0–4h) | +0.514 | 4.02 | 138 |
+| After other scheduled-slot jumps | +0.191 | 2.10 | 228 |
+| After unscheduled jumps | +0.089 | 1.06 | 280 |
+| Difference, release minus unscheduled | +0.425 | 2.84 | |
+
+Unscheduled jumps are as large as release jumps, and their trades have the same ATR and time-of-day profile, yet show no edge. No dose response in jump size, and the result holds at 4σ and 6σ thresholds. The release effect is direction-agnostic (aligned +0.53, against +0.45), so it is not "ride the announcement move". In-sample 2010–20 all three groups are null, as expected.
+
+**Strongest counter-argument recorded.** One of the two ±7-day placebos came out at t 2.4, so window-set t-values here likely run 1.3 to 1.5 times hot. The difference t of 2.84 should be read as roughly 2.0, right at the boundary. The unscheduled coefficient itself is well inside the null either way, so the direction of the verdict stands. The deeper structural problem from the refute remains: this is entry-side conditioning, which the charter bars from promotion, and no second scan configuration exists to separate "release" from "geometry". Nothing goes to PROMOTED.
+
+**Files written, all under AUREL_RESEARCH.** The script and its result markdown, a run log, a reusable cache of 2166 declustered jump events tagged release-day / scheduled-slot / unscheduled, three rows in the cell registry, the findings entry, and updates to DATA_MAP (§2 cache, §8 row, version log) and backlog. The backlog now also carries the refute's handoffs: the forward cell rewritten to 0–4h with day-cluster t and an unscheduled-jump control arm, the gate redefinition as a print rule, and methodology candidates 51 to 53. The task-observer skill was loaded but no log was written outside AUREL_RESEARCH, per the lane's standing rule.
+
+No orders, no production edits, no process or MT5 access, no external calls. Total compute 4 seconds.
+2026/11/17 12:46:05.56 done
