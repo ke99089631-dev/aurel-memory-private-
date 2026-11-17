@@ -771,3 +771,5 @@
 {"kind": "update", "target": "S-0137", "logged_at": "2026-11-18 01:00:08", "reaccel": {"retest_time": 1794930300, "retest_jst": "2026-11-18 00:45", "retest_tol": 1.29, "status": "waiting"}, "reaccel_frozen": true}
 {"kind": "update", "target": "S-0137", "logged_at": "2026-11-18 01:15:26", "waiting_resolved": true, "entry": 3875.77, "entry_time": 1794931200, "entry_jst": "2026-11-18 01:00", "status": "closed", "mfe_R": 0.02, "mae_R": 1.52, "hold_bars": 0, "exit": 3871.236, "exit_reason": "SL", "R": -1.0, "exit_time": 1794931200, "outcome": "ダマシ"}
 {"kind": "update", "target": "S-0137", "logged_at": "2026-11-18 01:15:26", "reaccel": {"retest_time": 1794930300, "retest_jst": "2026-11-18 00:45", "retest_tol": 1.29, "status": "invalid", "why": "リテスト中に終値が構造の外"}, "reaccel_frozen": true}
+{"kind": "update", "target": "S-0136", "logged_at": "2026-11-18 01:30:15", "waiting_resolved": true, "status": "no_retest"}
+{"kind": "update", "target": "S-0136", "logged_at": "2026-11-18 01:30:15", "reaccel": {"retest_time": 1794932100, "retest_jst": "2026-11-18 01:15", "retest_tol": 1.35, "status": "waiting"}, "reaccel_frozen": true}
