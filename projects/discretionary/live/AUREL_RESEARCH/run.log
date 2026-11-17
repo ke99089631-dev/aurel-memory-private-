@@ -1072,3 +1072,25 @@ Unscheduled jumps are as large as release jumps, and their trades have the same 
 No orders, no production edits, no process or MT5 access, no external calls. Total compute 4 seconds.
 2026/11/17 12:46:05.56 done
 ========== 2026/11/17 18:30:03.97 cycle start ==========
+Cycle 46 is complete. One findings entry was appended with real numbers, and the backlog, cell registry, and DATA_MAP were updated. No orders, no process changes, no writes outside AUREL_RESEARCH.
+
+**What this cycle tested**
+
+The refute lane at 15:40 had broken cycle 45's "scheduled-release-specific" verdict but left one surviving description: gold scan trades opened 0 to 4 hours after NFP or FOMC release times do about +0.5R better than same-clock controls in 2021+, and information size, jumps, volatility, geometry, and the release day itself had all been ruled out. I asked whether that "release clock" belongs to NFP/FOMC specifically or to scheduled releases in general, and tested it on an independent third release: CPI at 08:30 ET. CPI had never been used as a treatment arm, its calendar passed the volatility check out-of-sample, and both arms were built symmetrically per the new methodology 54 rule. Everything ran from existing caches in 34 seconds.
+
+**Result (out-of-sample 2021 to 2026H1, hour fixed effects, day-clustered)**
+
+| Arm | β (R) | t | n trades / days |
+|---|---|---|---|
+| NFP+FOMC (replication) | +0.511 | 4.01 | 138 / 82 |
+| CPI | +0.143 | 1.30 | 102 / 57 |
+| NFP+FOMC minus CPI | +0.368 | 2.23 | |
+
+Pre-registered verdict is **inconclusive**: CPI fails the PASS rule (empirical p 0.15 against 400 weekday-matched fake-CPI sets), but its upper confidence bound (+0.36) does not fall below half the NFP/FOMC effect (+0.26), so the "NFP/FOMC-specific" FAIL rule is not met either. The reading, stated as a reading and not a verdict: the clock does not transfer to CPI. The CPI arm is the same size as its own ±7-day placebos, flips sign year by year, and goes to zero after removing its top five trades. This happened even though CPI moved gold more than NFP did in this period, so neither "importance" nor "scheduledness" explains the NFP/FOMC effect. What remains common to NFP and FOMC but weak for CPI is their direct effect on rate expectations, which points to a rate-path hypothesis that needs intraday US10Y or Fed-funds-futures data.
+
+**Strongest counter-argument recorded**: power. MDE is 0.22R and the FAIL rule would have required a CPI estimate below −0.10, so a half-strength CPI effect is still inside the interval. The difference statistic's null distribution was also not calibrated this cycle.
+
+**Housekeeping from the refute handoff**: cycle 45's verdict was corrected to inconclusive in the cell registry and backlog, its forward cell was rewritten to the symmetric ANN_J vs UJ comparison plus equivalence test, methodology candidates 54, 55, and 56 were registered, and the CPI arm was added as a third arm to the forward announcement cell with explicit revive/kill thresholds. Priority of intraday rates data was raised in needs-data.
+
+Files written: `scripts/c46_cpi_scheduled_clock.py`, `data/c46_cpi_scheduled_clock_result.md`, `data/c46_run.log`, plus edits to `findings/2026-11-17.md`, `backlog.md`, `data/cells.csv`, `DATA_MAP.md`. PROMOTED.md unchanged.
+2026/11/17 18:40:06.84 done

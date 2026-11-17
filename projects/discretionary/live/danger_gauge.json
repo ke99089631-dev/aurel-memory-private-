@@ -1,0 +1,32 @@
+{
+ "generated": "2026-11-17 18:45",
+ "rule": "R-05 (2026-11-17 会長GO)",
+ "metric": "紙・再加速 正味R(コックピットと同じ)",
+ "n_closed": 372,
+ "g1_chop_avg": {
+  "n": 66,
+  "n_needed": 100,
+  "avg_R": -0.049,
+  "unlabeled": 3,
+  "hit": false,
+  "state": "サンプル不足(66/100)"
+ },
+ "g2_drawdown": {
+  "cum_R": 39.19,
+  "peak_R": 48.71,
+  "dd_now": -9.53,
+  "limit": -15.0,
+  "hit": false,
+  "state": "想定内(-9.5R / 線-15R)"
+ },
+ "g3_big_share": {
+  "n": 100,
+  "big_n": 12,
+  "share": 0.12,
+  "min": 0.05,
+  "hit": false,
+  "state": "健在(12%)"
+ },
+ "any_hit": false,
+ "action": "触れたら『合わない』の検討(サイズ縮小/休止・会長GO)。レシピは変えない。"
+}
