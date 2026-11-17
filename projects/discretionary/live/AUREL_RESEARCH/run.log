@@ -1117,3 +1117,25 @@ Verdict: null. Neither faster decay nor longer persistence. The vol level 2 to 4
 **Files written, all under AUREL_RESEARCH:** two scripts, two result markdowns, two run logs, a reusable 2214-event excess-vol cache, two rows in the cells registry, a new findings file for today, and updates to DATA_MAP and backlog. The backlog now carries a cheap next-cycle candidate: re-run the same detector on the US500 npz as an independent event set to pre-register the vol-creation hypothesis properly. PROMOTED was not touched.
 2026/11/18  0:44:34.57 done
 ========== 2026/11/18  6:30:04.31 cycle start ==========
+Cycle 48 is complete. Everything ran in the foreground (7.5 s total), the findings entry has real numbers, and the registry parses.
+
+**What this cycle asked.** Exploration track, new §8 source row: does the day's S&P 500 cash-hours realized volatility predict the next gold session's realized volatility, after controlling for gold's own vol history and gold's option-implied vol (GVZ)? A yes would mean the gold option market under-prices equity vol shocks.
+
+**Pre-registered result.** The cell passes by rule, with GVZ alignment confirmed as the positive control.
+
+| Window | γ_S (equity vol → next-day gold vol) | NW t | MDE |
+|---|---|---|---|
+| In-sample 2012-20 | +0.104 | 4.38 | 0.048 |
+| Out-of-sample 2021-26H1 | +0.052 | 2.39 | 0.044 |
+| Recent 2024-26H1 | +0.032 | 1.05 | 0.061 |
+
+The lag-10 control is zero, the reverse direction (gold → equities) is zero, and the effect is specifically the deviation of equity vol from its 5-day mean, not its level.
+
+**Why it is not a tradable edge.** A post-hoc decomposition reverses the mechanism reading. The "lead" appears even in gold's Asia/London hours before US equities reopen, but once the same hours' US500 overnight vol is added as a control, the coefficient collapses to −0.008 (t −0.3) in-sample and turns negative out-of-sample. So the pattern is equity vol persisting into its own next session, plus gold vol co-moving with it hour by hour. This matches cycle 20's conclusion for returns: cross-market linkage is contemporaneous, with no delay. Economic size out-of-sample is +1.5% of next-day gold vol per one-sd shock, below the pre-declared 2% threshold, and GVZ's next-day response (+0.14%) is exactly what a 30-day IV should show for a one-day bump. The effect also decays monotonically from 2014-17 to near zero in 2024-26. Gate ㉛ blocked any strategy cell (in-sample |Δμ| 0.024R).
+
+**Strongest counter-argument recorded.** The "no delayed transmission" reading rests on a look-ahead control and cannot separate equity-to-gold spillover from a shared intraday rates/dollar factor. That needs EURUSD or US10Y intraday data, already on the needs-data list.
+
+**Housekeeping done.** The refute lane's overnight break of cycle 47's DiD reading is now reflected in backlog and DATA_MAP: the correct statement is that 5σ jumps of any kind create a 1.2–1.5× vol state for 2–4 hours, with arm differences only in the first hour. Methodology candidates 60, 61 and 62 are logged. Four rows were added to cells.csv. PROMOTED is unchanged.
+
+**Next for AUREL main.** Nothing blocks. Low-priority needs: one-day gold option IV (GLD weeklies) to test receivability, and the FOMC afternoon vol-path branch that remains untested.
+2026/11/18  6:52:25.48 done
