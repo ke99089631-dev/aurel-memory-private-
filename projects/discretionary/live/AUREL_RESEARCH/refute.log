@@ -1289,3 +1289,26 @@ Two methodology lessons recorded in the entry (54: check both arms carry the *sa
 No orders, no production edits, no process touches, no MT5, no external calls, no prop. Writes confined to `AUREL_RESEARCH/` (2 scripts, 2 result .md, 2 run logs, findings append); `backlog`/`DATA_MAP`/`cells.csv`/`PROMOTED` left to the research lane. Per the lane's write boundary, no task-observer log was written outside `AUREL_RESEARCH` — both lessons live in the findings entry instead.
 2026/11/17 15:44:11.04 done
 ========== 2026/11/17 21:30:09.32 refute start ==========
+Done. Refutation appended to `AUREL_RESEARCH/findings/2026-11-17.md` under `[REFUTE] 2026-11-17 21:30`.
+
+## Target
+cycle46 (18:35). Its *verdict* was already `inconclusive` by its own pre-registered rule, so there was nothing to break there. I attacked (a) the **reading** it wrote outside the verdict ("the scheduled-release clock doesn't transfer to CPI; drop scheduled-ness from the mechanism axis"), (b) the lane's only positive carryover **β_ANN = +0.511** (out 2021-26H1, t 4.01), and (c) the two calibration gaps c46 self-declared as unfilled.
+
+My central alternative explanation: **H_DOW** — NFP is 214/216 Fridays at 08:30, FOMC is 115/119 Wednesdays at 14:00, while CPI scatters Tue–Fri. If gold's 2021+ edge lives in the *weekday × intraday cell*, then ANN−CPI = +0.37 is weekday arithmetic, not a mechanism. Nobody in 46 cycles had taken the weekday×hour interaction (09:30 did hour-only; c46 did additive weekday FE).
+
+## Verdict: survived / broken (split)
+12 break rules pre-registered across two stages; 4 landed, 2 of which I withdraw or narrow.
+
+**My headline attack died on my own test.** Weekday×hour cell-matched β_ANN = **+0.533 (t 3.86)** — point estimate *rises* 5%. And the pure day-of-week placebo (non-announcement Friday mornings / Wednesday afternoons) is **−0.035 / +0.037**, flat. H_DOW explains none of it. β_ANN also passed the strictest matched placebo yet — weekday × hour × same-day realized-vol quintile — at **0/400 (p 0.0000)**, excess +0.393.
+
+**What did break:**
+1. c46's headline statistic is uninformative. Replacing the CPI arm with random weekday-matched non-announcement days gives t(ANN−fake) null **mean +2.54, sd 0.84**; the observed +2.23 sits *below* the null center (p 0.6375). That t is determined by β_ANN alone and says nothing about CPI. (Direction of c46's reading unharmed — I narrow this rule to "can't be quoted as evidence strength.")
+2. c46's calibration understated the baseline 3×. Its weekday-only fake set drew days quieter than real CPI days (4.9 vs 6.1 bp). Vol-matched, fake β mean is **+0.103** vs the real CPI arm's +0.143 — so **CPI's excess is +0.040 (p 0.235)**, i.e. zero, not "28% of ANN". c46's reading is right, and righter than its own evidence.
+3. **The lane's "in-sample ANN is null" has been wrong for three cycles.** Splitting ANN gives in-sample NFP morning −0.051 (t −0.47) and in-sample **FOMC afternoon +0.320 (t 2.06, empirical p 0.0100 vs 400 fake Wednesdays, both in-sample halves positive, LOYO 8/8 positive)**. The null was the average of a negative and a positive arm. So the "in-null → out-t3 (㊶)" characterisation is wrong for the FOMC half, which is the lane's first arm positive both in and out of sample.
+
+Proper TOST with joint cluster covariance (c46 treated 0.5·β_ANN as a constant) gives t(γ) = −0.90 — c46's `inconclusive` was correct.
+
+Most serious counter-refutation against myself, recorded in the entry: my central hypothesis failed, BREAK-DOW2 landed only because I wrote its bar at t≥1.5 on n=9 trades (same "break-rule wording decides the verdict" trap the 15:40 lane flagged — withdrawn), the in-sample FOMC arm is 54 trades found post hoc, and construction dependence (single frozen scan config, one bid feed) remains the unresolved pressure point. **PROMOTED.md unchanged; no promotion.**
+
+Writes: `scripts/refute_c46_cpi_clock.py`, `_b.py`, `data/refute_c46_cpi_clock.md`, `_b.md`, two run logs, the findings entry. No orders, no production edits, no process/MT5/prop access — `git status` confirms every write of mine is under `AUREL_RESEARCH/`.
+2026/11/17 21:50:14.06 done
