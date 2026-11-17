@@ -1116,3 +1116,4 @@ Verdict: null. Neither faster decay nor longer persistence. The vol level 2 to 4
 
 **Files written, all under AUREL_RESEARCH:** two scripts, two result markdowns, two run logs, a reusable 2214-event excess-vol cache, two rows in the cells registry, a new findings file for today, and updates to DATA_MAP and backlog. The backlog now carries a cheap next-cycle candidate: re-run the same detector on the US500 npz as an independent event set to pre-register the vol-creation hypothesis properly. PROMOTED was not touched.
 2026/11/18  0:44:34.57 done
+========== 2026/11/18  6:30:04.31 cycle start ==========
