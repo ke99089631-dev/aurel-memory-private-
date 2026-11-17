@@ -1264,3 +1264,4 @@ Two things beyond the verdict:
 
 Per the lane's write boundary, no task-observer log was written outside `AUREL_RESEARCH`; both lessons are in the findings entry. backlog / DATA_MAP / cells.csv / PROMOTED left untouched for the research lane, along with a specification fix (window → 0-4h) and a recommendation to re-specify or demote gate ㉛.
 2026/11/17  9:47:09.53 done
+========== 2026/11/17 15:30:07.85 refute start ==========
