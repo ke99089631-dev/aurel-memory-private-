@@ -3,43 +3,43 @@
   "n": 1,
   "entry_slip_0.3": {
    "n": 1,
-   "median": 0.2,
-   "mean": 0.2,
-   "p90": 0.2,
+   "median": 0.09,
+   "mean": 0.09,
+   "p90": 0.09,
    "adverse_share": 100.0
   },
   "entry_slip_1": {
    "n": 1,
-   "median": 0.3,
-   "mean": 0.3,
-   "p90": 0.3,
+   "median": 0.18,
+   "mean": 0.18,
+   "p90": 0.18,
    "adverse_share": 100.0
   },
   "entry_slip_3": {
    "n": 1,
-   "median": -0.25,
-   "mean": -0.25,
-   "p90": -0.25,
-   "adverse_share": 0.0
+   "median": 0.35,
+   "mean": 0.35,
+   "p90": 0.35,
+   "adverse_share": 100.0
   },
   "entry_slip_120": {
    "n": 1,
-   "median": -1.92,
-   "mean": -1.92,
-   "p90": -1.92,
+   "median": -0.77,
+   "mean": -0.77,
+   "p90": -0.77,
    "adverse_share": 0.0
   },
   "sl": {
-   "n": 0,
-   "measured": 0,
+   "n": 1,
+   "measured": 1,
    "not_triggered_on_tick": 0,
-   "median": null,
-   "p90": null,
-   "max": null
+   "median": 0.137,
+   "p90": 0.137,
+   "max": 0.137
   },
   "tp": {
-   "n": 1,
-   "fill_ok": 1,
+   "n": 0,
+   "fill_ok": 0,
    "fill_miss": 0
   },
   "spread_at_entry": {
@@ -49,23 +49,23 @@
   },
   "open_vs_tick_abs_median": 0.0,
   "adopt_latency_s": 1.0,
-  "generated": "2026-11-17 23:59:39"
+  "generated": "2026-11-18 00:29:51"
  },
  "rows": [
   {
-   "id": "S-0551",
-   "side": "BUY",
-   "risk": 3.0270000000000437,
-   "exit_reason": "TP",
-   "R": 2.172,
-   "bid0": 3861.78,
+   "id": "S-0552",
+   "side": "SELL",
+   "risk": 6.843000000000302,
+   "exit_reason": "SL",
+   "R": -1.0,
+   "bid0": 3857.91,
    "spread_pt": 0.15,
-   "slip_0.3": 0.2,
-   "slip_1": 0.3,
-   "slip_3": -0.25,
-   "slip_120": -1.92,
+   "slip_0.3": 0.09,
+   "slip_1": 0.18,
+   "slip_3": 0.35,
+   "slip_120": -0.77,
    "open_vs_tick": 0.0,
-   "tp_fill_ok": true
+   "sl_slip": 0.137
   }
  ]
 }

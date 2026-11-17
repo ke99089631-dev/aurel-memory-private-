@@ -1094,3 +1094,4 @@ Pre-registered verdict is **inconclusive**: CPI fails the PASS rule (empirical p
 
 Files written: `scripts/c46_cpi_scheduled_clock.py`, `data/c46_cpi_scheduled_clock_result.md`, `data/c46_run.log`, plus edits to `findings/2026-11-17.md`, `backlog.md`, `data/cells.csv`, `DATA_MAP.md`. PROMOTED.md unchanged.
 2026/11/17 18:40:06.84 done
+========== 2026/11/18  0:30:03.88 cycle start ==========
