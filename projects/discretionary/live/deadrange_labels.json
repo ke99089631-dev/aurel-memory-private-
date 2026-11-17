@@ -4,27 +4,27 @@
  "fake_th": 0.6,
  "streak_th": 3,
  "n_needed": 30,
- "generated": "2026-11-17 06:45",
+ "generated": "2026-11-18 06:45",
  "summary": {
   "all": {
-   "n": 368,
+   "n": 379,
    "avg_R": 0.14,
-   "sum_R": 51.43,
-   "win": 47.6,
+   "sum_R": 53.1,
+   "win": 47.8,
    "max_dd_R": -15.94
   },
   "dead": {
-   "n": 58,
-   "avg_R": 0.114,
-   "sum_R": 6.62,
-   "win": 41.4,
+   "n": 60,
+   "avg_R": 0.099,
+   "sum_R": 5.92,
+   "win": 41.7,
    "max_dd_R": -9.84
   },
   "not_dead": {
-   "n": 310,
-   "avg_R": 0.145,
-   "sum_R": 44.81,
-   "win": 48.7,
+   "n": 319,
+   "avg_R": 0.148,
+   "sum_R": 47.17,
+   "win": 48.9,
    "max_dd_R": -11.72
   }
  },
@@ -3340,6 +3340,105 @@
    "dead": true,
    "R": -1.0,
    "entry_jst": "2026-11-17 04:25"
+  },
+  "S-0540": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 4,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-11-17 06:50"
+  },
+  "S-0542": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 5,
+   "dead": true,
+   "R": 0.3,
+   "entry_jst": "2026-11-17 11:05"
+  },
+  "S-0545": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-17 12:20"
+  },
+  "S-0546": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 2.108,
+   "entry_jst": "2026-11-17 14:00"
+  },
+  "S-0548": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-17 18:55"
+  },
+  "S-0549": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-17 22:40"
+  },
+  "S-0551": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 2,
+   "dead": false,
+   "R": 0.718,
+   "entry_jst": "2026-11-17 23:30"
+  },
+  "S-0552": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-18 00:05"
+  },
+  "S-0553": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 1.133,
+   "entry_jst": "2026-11-18 00:30"
+  },
+  "S-0554": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.901,
+   "entry_jst": "2026-11-18 01:15"
+  },
+  "S-0555": {
+   "version": "deadrange_v1",
+   "fake10": 0.6,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 0.503,
+   "entry_jst": "2026-11-18 04:40"
   }
  }
 }
