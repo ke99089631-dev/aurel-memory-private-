@@ -1095,3 +1095,24 @@ Pre-registered verdict is **inconclusive**: CPI fails the PASS rule (empirical p
 Files written: `scripts/c46_cpi_scheduled_clock.py`, `data/c46_cpi_scheduled_clock_result.md`, `data/c46_run.log`, plus edits to `findings/2026-11-17.md`, `backlog.md`, `data/cells.csv`, `DATA_MAP.md`. PROMOTED.md unchanged.
 2026/11/17 18:40:06.84 done
 ========== 2026/11/18  0:30:03.88 cycle start ==========
+Cycle 47 is complete. One pre-registered cell was run, filled with real numbers, and recorded as null, with the strongest counter-argument and a re-specified follow-up logged.
+
+**What was tested.** After a 5σ five-minute jump in gold, does excess volatility relative to the same clock on non-event days decay faster when the jump is a scheduled release bar (NFP, FOMC, CPI at ≥5σ) than when it is an unscheduled jump from the c45 cache? This targets the open mechanism question behind the "+0.5R after NFP/FOMC" that cycles 45 and 46 left unexplained. It ran on the existing XAU M5 npz plus the c45 jump cache in 14 seconds. No scan, no MT5, no external calls.
+
+**Result of the pre-registered cell (excess log realized variance 2 to 4 hours after, announcement minus unscheduled, size and clock adjusted, day-clustered):**
+
+| Window | D_W3 | t | permutation p | MDE |
+|---|---|---|---|---|
+| In-sample 2010–20 | +0.076 | +0.67 | 0.47 | 0.225 |
+| Out-of-sample 2021–26H1 | +0.102 | +0.61 | 0.44 | 0.335 |
+
+Verdict: null. Neither faster decay nor longer persistence. The vol level 2 to 4 hours after a jump is the same whether the jump was scheduled or not.
+
+**What the descriptive tables added:**
+- The arms differ before and immediately after, not later. Announcement jumps start from a calm hour and spike to about 2.4× baseline in the first hour. Unscheduled jumps sit inside an already rough hour at 1.3 to 1.4× baseline and only reach 1.7×. This mirrors cycle 32's finding that wall breaks are positions inside rough hours rather than events.
+- A post-hoc difference-in-differences reading says unscheduled jumps do not change the vol state at all, while announcement jumps create vol that persists 4 to 8 hours out-of-sample only. In-sample it reverts. That is the familiar "in-sample null, out-of-sample t 2.5" pattern, so it is logged as a new hypothesis, not a result.
+- The strategy tie-in closed one candidate mechanism. Scan trades entered in the 0 to 4 hour announcement window walk paths 1.5× rougher than controls, and path roughness has zero rank correlation with their R. The "calm path reaches TP" story is dead.
+- The out-of-sample cell is under-powered for a 15% vol difference, which I recorded as the strongest counter-argument alongside the pre-state confound.
+
+**Files written, all under AUREL_RESEARCH:** two scripts, two result markdowns, two run logs, a reusable 2214-event excess-vol cache, two rows in the cells registry, a new findings file for today, and updates to DATA_MAP and backlog. The backlog now carries a cheap next-cycle candidate: re-run the same detector on the US500 npz as an independent event set to pre-register the vol-creation hypothesis properly. PROMOTED was not touched.
+2026/11/18  0:44:34.57 done
