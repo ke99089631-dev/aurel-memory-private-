@@ -1288,3 +1288,4 @@ Two methodology lessons recorded in the entry (54: check both arms carry the *sa
 
 No orders, no production edits, no process touches, no MT5, no external calls, no prop. Writes confined to `AUREL_RESEARCH/` (2 scripts, 2 result .md, 2 run logs, findings append); `backlog`/`DATA_MAP`/`cells.csv`/`PROMOTED` left to the research lane. Per the lane's write boundary, no task-observer log was written outside `AUREL_RESEARCH` — both lessons live in the findings entry instead.
 2026/11/17 15:44:11.04 done
+========== 2026/11/17 21:30:09.32 refute start ==========
