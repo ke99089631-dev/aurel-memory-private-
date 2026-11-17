@@ -9929,3 +9929,4 @@
 {"kind": "update", "target": "S-0544", "logged_at": "2026-11-17 11:30:05", "frozen": true, "status": "closed", "exit": 3864.682, "exit_reason": "SL", "R": -1.0, "mfe_R": 0.02, "mae_R": 1.23, "hold_bars": 1, "exit_time": 1794882300, "outcome": "ダマシ"}
 {"kind": "update", "target": "S-0544", "logged_at": "2026-11-17 11:30:05", "reaccel": {"retest_time": 1794881700, "retest_jst": "2026-11-17 11:15", "retest_tol": 1.03, "status": "invalid", "why": "リテスト中に終値が構造の外"}, "reaccel_frozen": true}
 {"kind": "update", "target": "S-0542", "logged_at": "2026-11-17 11:40:10", "waiting_resolved": true, "status": "no_retest"}
+{"kind": "update", "target": "S-0544", "logged_at": "2026-11-17 11:55:59", "slip_src": "tick-sim L=1s", "spread_pt": 0.16, "slip_pt": -0.01, "sl_slip_pt": 0.052}
