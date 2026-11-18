@@ -1370,3 +1370,25 @@ Two methodology candidates recorded (63: EIV non-sender placebo for any "predict
 Read-only throughout: no orders, no production edits, no process/schtask touch, no MT5, no external calls, no prop. PROMOTED.md unchanged — nothing promoted. Per the lane convention noted in c48's own entry, I did not write a task-observer log outside AUREL_RESEARCH; the reusable lessons are in the findings entry instead.
 2026/11/18  9:46:31.68 done
 ========== 2026/11/18 15:30:04.64 refute start ==========
+Done. Verdict appended to `AUREL_RESEARCH/findings/2026-11-18.md` under `[REFUTE] 2026-11-18 15:40`, and a `refute_c40` row added to `data/cells.csv`.
+
+## Target
+c49 (12:45) is a meta cycle with no market cell to break, but its finding (1) named the one thing this lane never touched: **c40's gold LAST(15:30→16:00 ET) ~ ON(prev 16:00→09:30), 外 t 3.95** — `forward=yes` in the registry, verdict column empty, skipped for 7 days because the 11-12〜15 shutdown fell between target slots. c49 predicted it would die "the same death as c43 W-FRI (multiple testing, year clustering)." I pre-registered 20 attacks in 4 groups with BREAK-A〜D before looking at numbers.
+
+## Verdict: **split — T3/T4 broken (economics, forward condition) / T1 survived (statistics), T2 survived + mechanism corrected**
+
+**What did not break (c49's prediction was wrong).** Replication matched to 4 decimals. All 7 window variants at ±5 min hold (外 |t| ≥2.58). Dropping the `LAST≠0` filter — c40 selected on its own dependent variable — changes nothing. Stale bars 0.1%. The mechanical term runs the *opposite* way (LAST(D−1)~FIRST_B(D) = −0.0057), so quote error cannot manufacture it. LOYO fails 0/6 years, sign-flip p 0.0000, both halves, 5/5 weekdays. Year-clustered inference is where c43 died: here t 3.95 → **1.90**, wild cluster p **0.0299** — boundary, but inside the rule.
+
+**What broke.**
+- **Magnitude.** 外 ex-2026H1 — the calculation c40 flagged as its own biggest reservation and never ran — is β **+0.0106 (t 2.68)** vs 2026H1-only **+0.0599 (t 3.79)**; interaction t **3.05**. The sign survives without the last half-year, so "the latest window creates it" is wrong, but the headline +0.0262 is a mixture in which 9% of days carry 5.7× the β. The stable value is +0.0106 against MDE 0.0079.
+- **Receivability.** The sign strategy fails **c40's own pre-registered condition** (net>0 ∧ t≥1.5) on the 外 data c40 already had: 1× cost net +0.355 (**t 1.07**), observed p90 cost +0.087 (t 0.26), 2× cost **−0.360**. c40 reported the point estimate "+0.2〜+0.6 bp/day" without an se — the se is 0.332, the same order as the estimate. Per-year 1× net is ≈0 or negative in 5 of 6 years; everything is in 2026H1's 123 days. Removing the top 5% of days takes gross to −0.506, and the median day (+0.697) is already below cost (0.807).
+- **Mechanism, corrected not destroyed.** c40b's profile was truncated at 16:00 because it borrowed the US-equity grid. Extended to 17 slots, 16:00 is still the only positive and passes BH *and* Holm — but **16:30 is a significant reversal (−2.03): 43% gives back within 30 minutes**, and moving the exit to 16:30 takes 1× net to +0.081. That reads as transitory pressure into the 16:00 ET reference print, not slow participants repricing.
+
+## Two disclosures about my own work
+1. **One BREAK-D leg was invalid and I withdrew it.** I declared "a placebo earning ≥50% of gross" as a break condition and used US500's overnight direction, which duly earned 59% — but it agrees in sign with gold 56.2% of the time, so it is not a null. Joint regression gives b_gold +0.0265 (t 3.83) vs b_US500 +0.0017 (t 0.32), and on disagreement days gold still gives +0.0202 (t 2.28). The effect is gold-specific. BREAK-D stands on its other two independent legs.
+2. **BREAK-B was a hair from flipping the verdict.** I wrote it as a conjunction (t<2.0 **and** β<0.015); ex-2026H1 met the β leg and missed the t leg. As a disjunction it would have printed "broken." Sign-survival and magnitude-survival need to be separate conditions — logged as methodology candidate 65.
+
+The handover that matters: the registered forward cell is miscalibrated. Back-solving from the observed sd, net t≥1.5 over 250 days needs **gross ≥1.5–2.7 bp/day** — 2.5–4.5× the 2021-25 rate of 0.60, roughly 2026H1's 5.76. As written it tests whether the 2026H1 volatility regime continues, not whether an edge exists, and should say so. My own strongest counter-argument is also logged: **2026H1 may be a regime, not an outlier** (|LAST| 15.6 vs 7.0 bp, price 4682 vs 1953), and under D2 that is the window one is supposed to measure — which would weaken my T3 verdict to "correct for 2021-25, undecided for 2026H1 onward."
+
+Read-only throughout: no orders, no production edits, no process/schtask/MT5 contact, no external calls, no prop. **PROMOTED.md unchanged** — nothing promoted. Per the lane convention I did not write a task-observer log outside AUREL_RESEARCH; the reusable lessons are methodology candidates 65/66/67 in the entry.
+2026/11/18 15:46:47.00 done
