@@ -1,0 +1,19 @@
+exit_reason top vs reaccel: same 313 diff 17 only top 93 only reaccel 57
+reaccel closed 387 Counter({'SL': 202, 'TP': 184, 'TIME': 1})
+lane Counter({'3': 387}) entry_mode Counter({'retest': 387})
+reaccel.status Counter({'closed': 387})
+reaccel closed exit<=11-09: 323 Counter({'SL': 166, 'TP': 156, 'TIME': 1})
+top-only closes 93 Counter({'SL': 82, 'TP': 11}) chase status Counter({'invalid': 66, 'closed': 27})
+top exit_time==reaccel exit_time: 287 / 330  top R==reaccel R: 187
+SL (reaccel-only) with sl_slip 177
+top 6 sl_slip:
+  S-0521 slip +7.179 USD risk 7.77 (0.924R) entry ET 11-13 16:55 exit ET 11-15 Sun 18:00 hold 1 side BUY spread 0.21 entry_slip -0.15
+  S-0519 slip +1.495 USD risk 3.00 (0.498R) entry ET 11-13 13:10 exit ET 11-13 Fri 13:30 hold 4 side BUY spread 0.15 entry_slip -0.28
+  S-0407 slip +0.646 USD risk 8.58 (0.075R) entry ET 10-30 16:40 exit ET 11-01 Sun 17:00 hold 4 side SELL spread 0.21 entry_slip -0.23
+  S-0478 slip +0.597 USD risk 15.19 (0.039R) entry ET 11-09 23:30 exit ET 11-10 Tue 03:00 hold 42 side BUY spread 0.16 entry_slip -0.41
+  S-0325 slip +0.487 USD risk 4.58 (0.106R) entry ET 10-22 22:25 exit ET 10-22 Thu 22:25 hold 0 side SELL spread 0.15 entry_slip 0.38
+  S-0221 slip +0.369 USD risk 5.58 (0.066R) entry ET 10-13 21:45 exit ET 10-13 Tue 21:50 hold 1 side SELL spread 0.16 entry_slip 0.12
+sl_slip: mean 0.108 trimmed(ex top1) 0.068 ex top3 0.056; sum R 2.91 ex top1 1.98 ex top3 1.38; median R 0.0043
+SL exits ET17: 2 ET18:00-18:10: 4 Sunday reopen: 11
+事後 winsor95 帯A n18 mean +0.063 vs B n159 +0.055 Δ +0.008 t +0.48 MDE 0.034; 中央値差 +0.017
+  中央値差の置換 p(片側) 0.073
