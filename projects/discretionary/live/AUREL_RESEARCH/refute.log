@@ -1420,3 +1420,4 @@ PROMOTED unchanged — the origin is post-hoc, so the pre-registration half of t
 
 One session note worth keeping: the rule that earned its keep here is *a test whose conclusion is "not an artifact" is worthless without a positive control run in the same breath* — mine failed its control and I only caught it because I pre-registered the control. The companion rules (print a placebo group's volatility before reading its null; never write "persists in all N periods" before printing it year-by-year in volatility units) are in the entry as methodology candidates 69–71. I did not write a task-observer log file, since this lane's writes are confined to `AUREL_RESEARCH`.
 2026/11/18 21:55:12.71 done
+========== 2026/11/19  3:30:04.42 refute start ==========
