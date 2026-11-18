@@ -1188,3 +1188,33 @@ Cycle 50 is complete. Everything ran synchronously, all numbers are filled in, a
 **Files written:** scripts c50 and c50b, their result and log files, one findings entry, a backlog item with one forward cell and methodology candidate 68, DATA_MAP §1 tool and §8 row, two cells.csv rows. No orders, no production or process touches, no MT5, no external calls.
 2026/11/18 18:46:55.54 done
 ========== 2026/11/19  0:30:04.16 cycle start ==========
+Cycle 51 is complete. One pre-registered exploration test was run, both cells came out null, and the entry is recorded with real numbers.
+
+**What was tested**
+Whether the mechanical commodity-index futures roll (S&P GSCI business days 5–9, BCOM 6–10, gold rolling in odd months) leaves a price-pressure footprint on spot gold in the hour before the 13:30 ET COMEX settlement. Controls were the same business-day positions in even months, which automatically match weekday composition. US500 served as a no-roll negative control. The business-day windows were verified against the public S&P GSCI and BCOM methodology documents; the gold contract-month cycle remains a memory-based assumption and is flagged as such.
+
+**Results (9.4 s run, XAU and US500 M5 caches only)**
+
+| Cell | In-sample 2010-20 | Out-of-sample 2021-26H1 |
+|---|---|---|
+| Pre-settlement hour, roll minus control (bp) | +3.20, t +1.89, MDE 3.39 | +0.49, t +0.20, MDE 4.97 |
+| Post-settlement hour reversal (bp) | −1.03, t −0.63 | −2.11, t −1.15 |
+| Volatility ratio roll/control in that hour | 1.02 | 0.93 (recent 0.74) |
+
+Both pre-registered hypotheses are null. The in-sample sign is opposite to the predicted selling pressure, and roll days show no excess volatility at all, so the flow itself is invisible in spot. The time-of-day placebo family ranks the main cell 2nd of 24 in-sample and 17th out-of-sample. The production gate did not pass (in-sample Δμ 0.024R, below the 0.048R threshold).
+
+**Strongest counter-argument recorded**
+Spot is not where the mechanism lives. Index rolls are calendar-spread trades, and any pressure shows in the front-minus-next spread, which gold's deep arbitrage absorbs. This null only bounds the spot path at roughly 3–5 bp per hour. The mechanism itself needs GC front and next-month M5 data, logged as the existing "needs data" item with its priority now justified by numbers.
+
+**Files written (all under AUREL_RESEARCH)**
+- `findings/2026-11-19.md` with the full cycle 51 entry.
+- `scripts/c51_index_roll_footprint.py`, `data/c51_index_roll_footprint_result.md`, `data/c51_run.log`.
+- `backlog.md`: item registered before the run, then closed with results, plus a methodology candidate (print the flow's volatility footprint before testing price drift) and the month-parity control as a reusable tool.
+- `DATA_MAP.md`: new roll-calendar entry in section 6 and the futures-roll row in section 8 updated to "spot path null, spread dimension still needs GC data".
+- `data/cells.csv`: two rows appended.
+
+**Notes**
+The first run crashed in the placebo block because a column named `T` collided with the pandas transpose attribute. The column was renamed and the entire script re-run, so every number above comes from the single clean run. No orders, no process or production-file changes, no MT5 connection. The modified `slippage_report.json` in git status is written by a running executor, not by this cycle.
+
+Sources used for the roll windows: [S&P GSCI Methodology](https://www.spglobal.com/spdji/en/documents/methodologies/methodology-sp-gsci.pdf), [BCOM Methodology](https://assets.bbhub.io/professional/sites/10/BCOM-Methodology-MAR-2022_FINAL.pdf).
+2026/11/19  0:42:47.00 done

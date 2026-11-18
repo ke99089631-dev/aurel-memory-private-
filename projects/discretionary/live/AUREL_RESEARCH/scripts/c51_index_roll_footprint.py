@@ -121,7 +121,7 @@ def build(sym):
         if o < dt.date(2010, 1, 1).toordinal() or o > dt.date(2026, 6, 30).toordinal(): continue
         bd = BD[o]; m = d.month
         rec = dict(ord=o, year=d.year, month=m, wd=d.weekday(), bd=bd, odd=(m % 2 == 1),
-                   T=(m in GSCI_MONTHS and GSCI_BD[0] <= bd <= GSCI_BD[1]), CA=((m not in GSCI_MONTHS) and GSCI_BD[0] <= bd <= GSCI_BD[1]),
+                   TR=(m in GSCI_MONTHS and GSCI_BD[0] <= bd <= GSCI_BD[1]), CA=((m not in GSCI_MONTHS) and GSCI_BD[0] <= bd <= GSCI_BD[1]),
                    TB=(m in BCOM_MONTHS and BCOM_BD[0] <= bd <= BCOM_BD[1]), CB=((m not in BCOM_MONTHS) and BCOM_BD[0] <= bd <= BCOM_BD[1]),
                    PRE60=win(G, F, di, o, 12 * 12 + 6, 13 * 12 + 6), SET30=win(G, F, di, o, 13 * 12, 13 * 12 + 6),
                    POST60=win(G, F, di, o, 13 * 12 + 6, 14 * 12 + 6))
@@ -144,8 +144,8 @@ say(f"- GSCI 窓 T = 奇数月 BD{GSCI_BD[0]}–{GSCI_BD[1]}／C_A = 偶数月 �
 say(f"- 反証 (ii): c30 金オプション満期（第 4 最終営業日）の BD 位置 {min(OPX_BD)}〜{max(OPX_BD)}（中央値 {int(np.median(OPX_BD))}）＝ BD5–9 と重ならない: {min(OPX_BD) > 9}")
 
 df = build("XAU")
-for c in ["T", "CA", "TB", "CB"]: say(f"- {c} 日数 {int(df[c].sum())}（PRE60 有効 {int(df.loc[df[c], 'PRE60'].notna().sum())}）")
-say("- 曜日組成 T vs C_A（月〜金 %）: " + "/".join(f"{(df[df.T].wd==w).mean()*100:.0f}" for w in range(5)) + " vs " + "/".join(f"{(df[df.CA].wd==w).mean()*100:.0f}" for w in range(5)))
+for c in ["TR", "CA", "TB", "CB"]: say(f"- {c} 日数 {int(df[c].sum())}（PRE60 有効 {int(df.loc[df[c], 'PRE60'].notna().sum())}）")
+say("- 曜日組成 T vs C_A（月〜金 %）: " + "/".join(f"{(df[df.TR].wd==w).mean()*100:.0f}" for w in range(5)) + " vs " + "/".join(f"{(df[df.CA].wd==w).mean()*100:.0f}" for w in range(5)))
 say(f"- PRE60 sd {df.PRE60.std():.1f} bp・|PRE60| 中央値 {df.PRE60.abs().median():.1f}・POST60 sd {df.POST60.std():.1f}・DAY sd {df.DAY.std():.0f}（有効 {df.PRE60.notna().sum()}/{len(df)}）")
 
 RES = {}
@@ -156,20 +156,20 @@ def cell(d_, col, tm, cm, label, key):
 
 say("\n## H_ROLL（主）PRE60 12:30→13:30 ET・T − C_A（GSCI）")
 for wn, (y0, y1) in WIN.items():
-    d_ = df[(df.year >= y0) & (df.year <= y1)]; cell(d_, "PRE60", "T", "CA", wn, ("PRE60", wn))
+    d_ = df[(df.year >= y0) & (df.year <= y1)]; cell(d_, "PRE60", "TR", "CA", wn, ("PRE60", wn))
 say("## H_REV（副）POST60 13:30→14:30 ET・T − C_A")
 for wn, (y0, y1) in WIN.items():
-    d_ = df[(df.year >= y0) & (df.year <= y1)]; cell(d_, "POST60", "T", "CA", wn, ("POST60", wn))
+    d_ = df[(df.year >= y0) & (df.year <= y1)]; cell(d_, "POST60", "TR", "CA", wn, ("POST60", wn))
 say("## 副: SET30 13:00→13:30・DAY（セッション日次）・BCOM 窓（TB − CB）")
 for wn, (y0, y1) in WIN.items():
     d_ = df[(df.year >= y0) & (df.year <= y1)]
-    cell(d_, "SET30", "T", "CA", wn, ("SET30", wn)); cell(d_, "DAY", "T", "CA", wn, ("DAY", wn)); cell(d_, "PRE60", "TB", "CB", wn + "（BCOM）", ("PRE60B", wn))
+    cell(d_, "SET30", "TR", "CA", wn, ("SET30", wn)); cell(d_, "DAY", "TR", "CA", wn, ("DAY", wn)); cell(d_, "PRE60", "TB", "CB", wn + "（BCOM）", ("PRE60B", wn))
 
 say("\n## プラセボ ①: 時刻 family（T − C_A を ET 各 1 時間窓で・max|t|）")
 for wn, (y0, y1) in WIN.items():
     d_ = df[(df.year >= y0) & (df.year <= y1)]; ts = []
     for h in range(24):
-        d, t, se, na, nb = welch(d_.loc[d_.T, f"H{h:02d}"], d_.loc[d_.CA, f"H{h:02d}"]); ts.append((h, d, t))
+        d, t, se, na, nb = welch(d_.loc[d_.TR, f"H{h:02d}"], d_.loc[d_.CA, f"H{h:02d}"]); ts.append((h, d, t))
     tv = np.array([x[2] for x in ts if np.isfinite(x[2])]); hm = max(ts, key=lambda x: abs(x[2]) if np.isfinite(x[2]) else -1)
     say(f"  - {wn}: 24 窓 t sd {tv.std(ddof=1):.2f}・max|t| {hm[2]:+.2f} @ ET {hm[0]:02d} 時（Δ {hm[1]:+.2f} bp）・|t|≥2 の窓 {int((np.abs(tv)>=2).sum())}・12:30-13:30 主セル t {RES[('PRE60', wn)]['t']:+.2f} の順位 {int((np.abs(tv) > abs(RES[('PRE60', wn)]['t'])).sum()) + 1}/24")
     say("    時刻別 Δ(bp): " + " ".join(f"{h:02d}:{d:+.1f}" for h, d, t in ts if np.isfinite(d)))
@@ -185,7 +185,7 @@ for wn, (y0, y1) in WIN.items():
 say("\n## ボラ（記述）: PRE60 の |r| 中央値比 T／C_A と DAY |r| 比（ロールの執行が居るか）")
 for wn, (y0, y1) in WIN.items():
     d_ = df[(df.year >= y0) & (df.year <= y1)]
-    r1 = d_.loc[d_.T, "PRE60"].abs().median() / d_.loc[d_.CA, "PRE60"].abs().median(); r2 = d_.loc[d_.T, "DAY"].abs().median() / d_.loc[d_.CA, "DAY"].abs().median()
+    r1 = d_.loc[d_.TR, "PRE60"].abs().median() / d_.loc[d_.CA, "PRE60"].abs().median(); r2 = d_.loc[d_.TR, "DAY"].abs().median() / d_.loc[d_.CA, "DAY"].abs().median()
     # 奇数月 vs 偶数月 全 BD の比（月パリティ自体のボラ差）
     r3 = d_.loc[d_.odd, "PRE60"].abs().median() / d_.loc[~d_.odd, "PRE60"].abs().median()
     say(f"  - {wn}: |PRE60| 比 {r1:.3f}・|DAY| 比 {r2:.3f}・奇数/偶数月 全 BD |PRE60| 比 {r3:.3f}")
@@ -195,14 +195,14 @@ dus = build("US500")
 for wn, (y0, y1) in WIN.items():
     d_ = dus[(dus.year >= y0) & (dus.year <= y1)]
     if wn.startswith("在"): d_ = d_[d_.year >= 2012]
-    cell(d_, "PRE60", "T", "CA", wn + "（US500）", ("PRE60_US", wn)); cell(d_, "POST60", "T", "CA", wn + "（US500）", ("POST60_US", wn))
+    cell(d_, "PRE60", "TR", "CA", wn + "（US500）", ("PRE60_US", wn)); cell(d_, "POST60", "TR", "CA", wn + "（US500）", ("POST60_US", wn))
 
 say("\n## 年別 Δ_PRE60（T − C_A・bp・記述）")
-say("  " + " ".join(f"{y}:{np.nanmean(df.loc[(df.year==y)&df.T,'PRE60'])-np.nanmean(df.loc[(df.year==y)&df.CA,'PRE60']):+.1f}" for y in range(2010, 2027)))
+say("  " + " ".join(f"{y}:{np.nanmean(df.loc[(df.year==y)&df.TR,'PRE60'])-np.nanmean(df.loc[(df.year==y)&df.CA,'PRE60']):+.1f}" for y in range(2010, 2027)))
 
 # 陽性対照
-d_ = df[(df.year >= 2010) & (df.year <= 2020)].copy(); d_.loc[d_.T, "PRE60"] -= 5.0
-d, t, se, na, nb = welch(d_.loc[d_.T, "PRE60"], d_.loc[d_.CA, "PRE60"])
+d_ = df[(df.year >= 2010) & (df.year <= 2020)].copy(); d_.loc[d_.TR, "PRE60"] -= 5.0
+d, t, se, na, nb = welch(d_.loc[d_.TR, "PRE60"], d_.loc[d_.CA, "PRE60"])
 say(f"\n- 陽性対照（在 T の PRE60 に −5 bp 注入）: Δ {d:+.2f} t {t:+.2f}（元 {RES[('PRE60','在 2010-20')]['t']:+.2f}）")
 
 # ---------------- ゲート ㉛ ----------------
@@ -211,7 +211,7 @@ dj = json.load(open(os.path.join(DATA, "refute_c4_scan_paths_2010_2026.json")));
 et_e = pd.to_datetime([t["entry_time"] for t in TR], unit="s", utc=True).tz_convert("America/New_York").tz_localize(None)
 eo = et_e.normalize().values.astype("datetime64[D]").astype("int64") + dt.date(1970, 1, 1).toordinal()
 hh = et_e.hour.values + et_e.minute.values / 60.0
-Tset = set(df.ord[df.T].tolist()); Cset = set(df.ord[df.CA].tolist())
+Tset = set(df.ord[df.TR].tolist()); Cset = set(df.ord[df.CA].tolist())
 yr = np.array([t["year"] for t in TR]); R = np.array([t["R"] for t in TR]); risk = np.array([t["risk"] for t in TR]); ex = np.array([t["exit"] for t in TR])
 ft = 0.1 / risk; Rs = np.where(ex == "TIME", R - ft, R + ft)
 inT = np.array([o in Tset for o in eo.tolist()]); inC = np.array([o in Cset for o in eo.tolist()]); tw = (hh >= 9.0) & (hh < 13.5)
