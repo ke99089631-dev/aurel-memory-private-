@@ -61,23 +61,31 @@ fin = list(st.values())
 P(f"# c52 SL 滑りの時刻地図（台帳 slippage_sim 注釈）— 実行 {datetime.now().strftime('%Y-%m-%d %H:%M')}")
 P(f"rows {len(rows)} setup {len(setups)} update 適用 {n_upd}")
 
-closed = []
+# 母集団 = reaccel dict が closed の本のみ（top-level exit_reason は chase の出口も上書きする＝第 1 走で 480 本に膨れた・衛生）
+# 注釈（slip_pt/sl_slip_pt/tp_fill_ok・top-level）は top-level exit_time == reaccel.exit_time の本だけ reaccel の出口に帰属させる
+closed = []; n_top_only = 0; n_mismatch = 0; n_noann = 0
 for r in fin:
     ra = r.get("reaccel") or {}
-    er = r.get("exit_reason") or ra.get("exit_reason")
+    if r.get("exit_reason") and not ra.get("exit_reason"):
+        n_top_only += 1
+    er = ra.get("exit_reason")
     if not er:
         continue
-    ent = ra.get("entry", r.get("entry")); sl = ra.get("sl", r.get("sl"))
-    et = r.get("exit_time") or ra.get("exit_time"); en_t = r.get("entry_time") or ra.get("entry_time")
+    ent = ra.get("entry"); sl = ra.get("sl"); et = ra.get("exit_time"); en_t = ra.get("entry_time")
     if ent is None or sl is None or et is None:
         continue
-    closed.append(dict(id=r["id"], er=er, R=r.get("R", ra.get("R")), exit_time=int(et), entry_time=int(en_t) if en_t else None,
+    ann_ok = r.get("exit_time") == et
+    if r.get("exit_time") is None: n_noann += 1
+    elif not ann_ok: n_mismatch += 1
+    closed.append(dict(id=r["id"], er=er, R=ra.get("R"), exit_time=int(et), entry_time=int(en_t) if en_t else None,
                        risk=abs(float(ent) - float(sl)), side=r.get("side"), wall_kind=r.get("wall_kind"),
-                       atr14=(r.get("features") or {}).get("atr14"), slip=r.get("slip_pt"), sl_slip=r.get("sl_slip_pt"),
-                       tp_ok=r.get("tp_fill_ok"), spread=r.get("spread_pt"), slip_src=r.get("slip_src"),
+                       atr14=(r.get("features") or {}).get("atr14"),
+                       slip=r.get("slip_pt") if ann_ok else None, sl_slip=r.get("sl_slip_pt") if ann_ok else None,
+                       tp_ok=r.get("tp_fill_ok") if ann_ok else None, spread=r.get("spread_pt"), slip_src=r.get("slip_src") if ann_ok else None,
                        entry_top=r.get("entry"), entry_re=ra.get("entry"), mfe=ra.get("mfe_R"), mae=ra.get("mae_R"),
                        hold=ra.get("hold_bars")))
-P(f"closed {len(closed)} 内訳 {dict(collections.Counter(c['er'] for c in closed))}")
+P(f"reaccel closed {len(closed)} 内訳 {dict(collections.Counter(c['er'] for c in closed))}")
+P(f"衛生: top-level exit_reason のみ（chase の出口・母集団から除外） {n_top_only} 本／reaccel closed のうち top-level exit_time 無し（注釈なし） {n_noann}・不一致（注釈は別の出口のもの→無効化） {n_mismatch}")
 ts = [c["exit_time"] for c in closed]
 P("exit_time 範囲", datetime.fromtimestamp(min(ts), timezone.utc).strftime("%Y-%m-%d %H:%M"), "→",
   datetime.fromtimestamp(max(ts), timezone.utc).strftime("%Y-%m-%d %H:%M"), "UTC")
@@ -207,6 +215,27 @@ P("\n## 記述⑥ コストの集中度（SL 本の決着帯シェア × 帯の�
 shA = np.mean([c["A"] for c in sl_an]); mA = np.mean([c["sl_slip"] for c in sl_an if c["A"]]) if any(c["A"] for c in sl_an) else float("nan")
 tot = sum(c["sl_slip"] for c in sl_an); totA = sum(c["sl_slip"] for c in sl_an if c["A"])
 P(f"- SL 決着の帯 A シェア {shA:.2f}（本数）・帯 A の滑り合計シェア {totA/tot if tot else float('nan'):.2f}；帯 C 本数シェア {np.mean([c['C'] for c in sl_an]):.2f}・滑り合計シェア {sum(c['sl_slip'] for c in sl_an if c['C'])/tot if tot else float('nan'):.2f}")
-P(f"- 全 SL 滑り合計 {tot:+.2f} USD / SL 本 {len(sl_an)}；R 換算 合計 {sum(c['sl_slip']/c['risk'] for c in sl_an):+.3f}R（台帳 gross ΣR {sum(c['R'] for c in closed if c['R'] is not None):+.1f}R）")
+vr = np.sort(np.array([c['sl_slip']/c['risk'] for c in sl_an]))
+P(f"- 全 SL 滑り合計 {tot:+.2f} USD / SL 本 {len(sl_an)}；R 換算 合計 {vr.sum():+.3f}R（上位 1 本除外 {vr[:-1].sum():+.3f}・上位 3 本除外 {vr[:-3].sum():+.3f}・中央値 {np.median(vr):.4f}R/本）（台帳 gross ΣR {sum(c['R'] for c in closed if c['R'] is not None):+.1f}R）")
+
+# ---------- 事後（判定外）: 外れ値・週末再開・頑健版 ----------
+P("\n## 事後（判定外） 外れ値の正体・日曜再開の SL・頑健版 H_S1")
+top = sorted(sl_an, key=lambda c: -c["sl_slip"])[:5]
+for c in top:
+    dt_e = datetime.fromtimestamp(c["exit_time"], timezone.utc).astimezone(ET); dt_i = datetime.fromtimestamp(c["entry_time"], timezone.utc).astimezone(ET)
+    P(f"- {c['id']} slip {c['sl_slip']:+.3f} USD = {c['sl_slip']/c['risk']:.3f}R  risk {c['risk']:.2f}  建玉 ET {dt_i.strftime('%m-%d %a %H:%M')} → 決着 ET {dt_e.strftime('%m-%d %a %H:%M')}  hold {c['hold']}  {c['side']}  spread {c['spread']}")
+def is_sun_reopen(c):
+    d = datetime.fromtimestamp(c["exit_time"], timezone.utc).astimezone(ET); return d.weekday() == 6 and d.hour == 18
+sun = [c for c in sl_an if is_sun_reopen(c)]; oth = [c for c in sl_an if not is_sun_reopen(c)]
+if sun:
+    P(f"- 日曜再開 18 時 ET で SL 決着 n {len(sun)}（SL 本の {len(sun)/len(sl_an):.1%}）: 滑り 平均 {np.mean([c['sl_slip'] for c in sun]):+.3f} 中央値 {np.median([c['sl_slip'] for c in sun]):+.3f} max {max(c['sl_slip'] for c in sun):+.3f} USD・R 換算 平均 {np.mean([c['sl_slip']/c['risk'] for c in sun]):+.3f}R  vs 他 平均 {np.mean([c['sl_slip'] for c in oth]):+.3f} 中央値 {np.median([c['sl_slip'] for c in oth]):+.3f}・R 平均 {np.mean([c['sl_slip']/c['risk'] for c in oth]):+.4f}R")
+    P(f"  日曜再開 SL の滑り合計 {sum(c['sl_slip']/c['risk'] for c in sun):+.3f}R = 全 SL 滑り（R）の {sum(c['sl_slip']/c['risk'] for c in sun)/vr.sum():.0%}；週末持ち越し closed 本（建玉 金曜 ∧ 決着 日曜以降）{sum(1 for c in closed if datetime.fromtimestamp(c['entry_time'],timezone.utc).astimezone(ET).weekday()==4 and datetime.fromtimestamp(c['exit_time'],timezone.utc).astimezone(ET).date()>datetime.fromtimestamp(c['entry_time'],timezone.utc).astimezone(ET).date()+__import__('datetime').timedelta(days=1))}")
+A = np.array([c["sl_slip"] for c in sl_an if c["A"]]); B = np.array([c["sl_slip"] for c in sl_an if not c["A"]])
+cap = np.quantile(np.concatenate([A, B]), 0.95); wA, wB = np.minimum(A, cap), np.minimum(B, cap)
+d, t, se = welch(wA, wB)
+pool = np.concatenate([A, B]); obs = np.median(A) - np.median(B); cnt = 0
+for _ in range(5000):
+    rng.shuffle(pool); cnt += (np.median(pool[:len(A)]) - np.median(pool[len(A):])) >= obs
+P(f"- 頑健版（全体・winsor 95% cap {cap:.3f}）帯 A−B Δ {d:+.3f} t {t:+.2f} MDE {2*se:.3f}；中央値差 {obs:+.3f} 置換 p(片側) {(cnt+1)/5001:.3f}")
 P(f"\n実行 {time.time()-T0:.1f} s・読んだのは {LEDGER} のみ・書込 {OUT}")
 open(OUT, "w", encoding="utf-8").write("\n".join(lines) + "\n")

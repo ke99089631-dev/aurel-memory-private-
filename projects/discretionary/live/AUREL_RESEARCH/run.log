@@ -1219,3 +1219,38 @@ The first run crashed in the placebo block because a column named `T` collided w
 Sources used for the roll windows: [S&P GSCI Methodology](https://www.spglobal.com/spdji/en/documents/methodologies/methodology-sp-gsci.pdf), [BCOM Methodology](https://assets.bbhub.io/professional/sites/10/BCOM-Methodology-MAR-2022_FINAL.pdf).
 2026/11/19  0:42:47.00 done
 ========== 2026/11/19  6:30:05.13 cycle start ==========
+Cycle 52 is complete. Everything ran synchronously and all records are written under AUREL_RESEARCH.
+
+**What I did**
+
+- Picked a deepening item in the execution dimension: does simulated stop-loss slippage in the live ledger have an ET-hour structure, and is it explained by volatility. Pre-registered two cells, ran the analysis in 3 seconds on `setup_ledger.jsonl` only, no scans or MT5.
+- Exploration attempt: SPDR GLD daily holdings. The public CSV URL now returns a PDF, the xls is 404, and the history page has no download links. Logged as needs-data with three candidate routes.
+
+**Results (reaccel-closed population, 387 trades)**
+
+| Cell | In-sample | Out-of-sample | Verdict |
+|---|---|---|---|
+| H_S1 slip at ET 08–09 exits vs other hours | Δ −0.014 USD, t −1.14, MDE 0.024 | Δ −0.050 USD, t −0.46, MDE 0.217 | null |
+| H_S2 slip tracks ATR, no hour-specific residual | ρ +0.15 | ρ +0.18 | PASS on the rule, economically nil |
+
+- SL slippage is tiny: median 0.0037R per trade, 2.09R total against +55.4R gross.
+- The tail lives at the weekend, not on the clock. One Friday 16:55 ET entry stopped out at the Sunday reopen slipped 7.18 USD, which is 0.92R and 44% of all SL slippage.
+
+**Hygiene finding worth propagating**
+
+The ledger's top-level exit fields are overwritten by chase exits as well as reaccel exits. My first run counted 480 closed trades with a 33% TP rate, which was wrong. Rebuilding from the reaccel dict gives 387 trades and matches cycle25's count for the overlapping period. Annotations should only be attributed when the top-level exit time equals the reaccel exit time. Recorded as methodology candidate 74.
+
+**Strongest counter-argument recorded**
+
+The slippage figures come from a tick-history simulation, not real fills. The 7.18 USD reopen slip in particular reflects the first Sunday tick, which may not match how the broker actually executes stops through a gap.
+
+**Files touched**
+
+- `findings/2026-11-19.md` gained exactly one cycle52 entry.
+- `data/cells.csv` gained two rows, `backlog.md` and `DATA_MAP.md` updated, new script `scripts/c52_sl_slip_clock_map.py` plus result and log files.
+- No orders, no production edits, no process actions. PROMOTED unchanged.
+
+**Next for the lane**
+
+The backlog now has a scan-cache cell to measure the expected weekend-gap cost per trade across 19404 trades using the OHLC cache, which would turn the single-trade tail into an estimate. The task-observer log was not written because its workspace sits outside the lane's write boundary.
+2026/11/19  6:45:17.37 done
