@@ -225,6 +225,7 @@ def frame(D):
               "lrvXcash", "lrv_even", "lrv_odd", "lrv15", "lrv15_5", "lrv30", "lrv30_5",
               "lrvS15", "lrvS15_5", "lrvS30", "lrvS30_5", "nfS", "nf_cash"]:
         F[c] = D[c].to_numpy()[pr]
+    F["y15"] = D["lrv15"].to_numpy()[nx]; F["y30"] = D["lrv30"].to_numpy()[nx]
     F["evt0"] = D["evt"].to_numpy()[pr].astype(float); F["evt1"] = D["evt"].to_numpy()[nx].astype(float)
     F["brk"] = (D["gap"].to_numpy()[nx] > 1).astype(float)
     F["year"] = D["year"].to_numpy()[pr]; F["date"] = D["date"].to_numpy()[pr]
@@ -412,20 +413,19 @@ for wn, (y0, y1) in list(WIN.items())[:2]:
         f"{np.quantile(tb,0.975):+.2f}・片側 p {p_boot:.3f}**（破壊条件 p>0.025）｜曜日マッチ置換 帰無 sd(γ) {gperm.std():.4f}・両側 p {p_perm:.3f}")
 
 # ---------------- R6 sampling frequency ----------------
-say("\n## R6. サンプリング頻度（測定ノイズ）: 5 分 → 15 分 → 30 分で同じ M2 を組み直す（記述）")
+say("\n## R6. サンプリング頻度（測定ノイズ）: 両系列の RV を 15 分・30 分集約で作り直して M2 を再推定（記述）")
 say("| 窓 | 5 分 γ_S (t) | 15 分 γ_S (t) | 30 分 γ_S (t) |")
 say("|---|---|---|---|")
+def coarse_cell(v, suf, ycol):
+    cols = [f"lrv{suf}", f"lrv{suf}_5", "evt0", "evt1", "brk", "lgvz", f"lrvS{suf}", f"lrvS{suf}_5"]
+    vv = v[np.isfinite(v[cols + [ycol]].to_numpy()).all(1)].reset_index(drop=True)
+    r = nw(vv[ycol].to_numpy(), vv[cols]); return r.get(f"lrvS{suf}") + (r.n,)
 for wn, (y0, y1) in list(WIN.items())[:3]:
     v = sub(y0, y1); _, (g5, t5, _), _ = run(v, M2)
-    v15 = v.rename(columns={"lrv15": "Y15"})
-    f15 = v[np.isfinite(v[["lrv15", "lrv15_5", "lrvS15", "lrvS15_5", "lgvz"]].to_numpy()).all(1)].copy()
-    # 被説明も 15 分 RV に差し替える必要がある → y は翌日の lrv15 なので F 作成時の shift を再現
-    say_cols = None
-    _, (g15, t15, _), _ = run(f15.assign(y=f15["y"]), ["lrv15", "lrv15_5", "evt0", "evt1", "brk", "lgvz", "lrvS15", "lrvS15_5"], key="lrvS15")
-    f30 = v[np.isfinite(v[["lrv30", "lrv30_5", "lrvS30", "lrvS30_5", "lgvz"]].to_numpy()).all(1)].copy()
-    _, (g30, t30, _), _ = run(f30, ["lrv30", "lrv30_5", "evt0", "evt1", "brk", "lgvz", "lrvS30", "lrvS30_5"], key="lrvS30")
-    say(f"| {wn} | {g5:+.4f} ({t5:+.2f}) | {g15:+.4f} ({t15:+.2f}) | {g30:+.4f} ({t30:+.2f}) |")
-say("  （注: 被説明変数は 5 分 RV のまま・予測子側だけ粗サンプリング＝「送り手の測定ノイズ」への感度）")
+    g15, t15, _, n15 = coarse_cell(v, "15", "y15")
+    g30, t30, _, n30 = coarse_cell(v, "30", "y30")
+    say(f"| {wn} | {g5:+.4f} ({t5:+.2f}) | {g15:+.4f} ({t15:+.2f}) (n {n15}) | {g30:+.4f} ({t30:+.2f}) (n {n30}) |")
+say("  （被説明・own 項・送り手を同じ頻度でそろえた・5 分でだけ出て粗サンプリングで消えるならマイクロストラクチャー由来）")
 
 # ---------------- R7 shock lag structure ----------------
 say("\n## R7. ショックのラグ構造（c48 のラグ・プロファイルは 5 日平均を外した不公平版）")
@@ -436,9 +436,7 @@ for wn, (y0, y1) in list(WIN.items())[:3]:
     cols = BASE + ["lrvS", "lrv5S", "uS_l1", "uS_l2", "uS_l5"]
     r, (g, t, _), n = run(v, cols)
     o1 = r.get("uS_l1"); o2 = r.get("uS_l2"); o5 = r.get("uS_l5")
-    r2_, _, _ = run(v, M2); s, ts = r2_[0].sum2("lrvS", "lrv5S") if False else nw(
-        sub(y0, y1)[np.isfinite(sub(y0, y1)[M2].to_numpy()).all(1)].y.to_numpy(),
-        sub(y0, y1)[np.isfinite(sub(y0, y1)[M2].to_numpy()).all(1)][M2]).sum2("lrvS", "lrv5S")
+    r2_, _, _ = run(v, M2); s, ts = r2_.sum2("lrvS", "lrv5S")
     say(f"| {wn} | {g:+.4f} ({t:+.2f}) | {o1[0]:+.4f} ({o1[1]:+.2f}) | {o2[0]:+.4f} ({o2[1]:+.2f}) | {o5[0]:+.4f} ({o5[1]:+.2f}) | {s:+.4f} ({ts:+.2f}) |")
 say("  （γ_S+γ_S5 ≈ 0 なら「株ボラの水準は無情報・1 日の偏差だけが効く」＝ボラの伝播としては持続が無い）")
 
