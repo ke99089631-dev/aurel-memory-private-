@@ -1140,3 +1140,34 @@ The lag-10 control is zero, the reverse direction (gold → equities) is zero, a
 **Next for AUREL main.** Nothing blocks. Low-priority needs: one-day gold option IV (GLD weeklies) to test receivability, and the FOMC afternoon vol-path branch that remains untested.
 2026/11/18  6:52:25.48 done
 ========== 2026/11/18 12:30:08.95 cycle start ==========
+Cycle 49 is complete. The entry is written to `AUREL_RESEARCH/findings/2026-11-18.md` with all numbers filled; no placeholders remain.
+
+**What this cycle did**
+
+This was the scheduled meta-audit (Charter F.6, every ten cycles; the backlog named c49). I re-ran the c39 text-mining audit unchanged, treating cycles 1–39 as in-sample and cycles 40–48 as out-of-sample for the research process itself, and added two new questions: refutation-lane verdicts by target cycle, and the cells registry. Runtime was under one second on findings, backlog and cells.csv only. No scans, no MT5, no external calls.
+
+**Key results**
+
+| Metric | c1–39 | c40–48 |
+|---|---|---|
+| In-sample null → out-of-sample same sign, |t|≥1.5 | 7% (4/56) | 35% (6/17) |
+| Refutation broken rate (by target cycle) | 51% (18/35) | 75% (6/8) |
+| Explicit R-unit MDE mentions | 29 / 7 | 0 |
+| Open methodology candidates in backlog | ~23 | 43 (2 adopted) |
+
+The 35% figure comes from four distinct effects. Three went through the refutation lane. One never did: the c40 gold close-momentum cell (out-of-sample t 3.95) was skipped because the refutation schedule jumped from c38 to c41 across the lane shutdown. That is the blind spot I logged: the lane has no tracking list of unrefuted positive carry-overs.
+
+The pre-registered hypothesis that most breaks come from missing controls landed at 3 of 6, so it is borderline, not confirmed. Multiplicity accounts for 2, state-dependent form for 1. The strongest counter-argument is recorded: mined pairs are non-independent and nine cycles give rate standard errors near 0.17, so both shifts are directional, not significant.
+
+**Housekeeping done**
+
+- Backlog: meta item closed, four method proposals added (fixed pre-registration template sections, carry-over tracking list, candidate consolidation by c59, registry unit columns), c40 flagged as unrefuted for the refutation lane.
+- Refutation 09:30 handover applied: c48 marked broken, methodology 63/64 candidates registered, second control made mandatory on the c48 forward cell, DATA_MAP session-boundary note corrected.
+- cells.csv: two meta rows appended, now 28 rows.
+
+**Not done**
+
+Retroactive registration of c1–c39 cells, due by c49 per the c39 plan, remains open. I split it into a lighter three-cycle plan in the backlog rather than attempt it here.
+
+PROMOTED.md unchanged. No orders, no production or executor touched, writes only under AUREL_RESEARCH.
+2026/11/18 12:42:26.04 done
