@@ -1393,3 +1393,30 @@ The handover that matters: the registered forward cell is miscalibrated. Back-so
 Read-only throughout: no orders, no production edits, no process/schtask/MT5 contact, no external calls, no prop. **PROMOTED.md unchanged** — nothing promoted. Per the lane convention I did not write a task-observer log outside AUREL_RESEARCH; the reusable lessons are methodology candidates 65/66/67 in the entry.
 2026/11/18 15:46:47.00 done
 ========== 2026/11/18 21:30:05.29 refute start ==========
+Done. Verdict appended to `AUREL_RESEARCH/findings/2026-11-18.md` under `## [REFUTE] 2026-11-18 21:50`.
+
+## Target
+c50's only positive carry-over — the post-hoc claim that the **5 min before the LBMA auctions sink and the next 5 min bounce, in all 4 regime periods, gold-specific**. c50 had parked its own strongest objection ("bid-only, pre-auction spread widening produces this mechanically; needs XAU ask M1") as undecidable. I went after exactly that, without ask data.
+
+## Verdict: split
+**Replication first:** all 20 cells of c50's profile reproduced to 2 decimals, so the attacks are on the real object.
+
+**Survived (and got stronger):**
+- Multiple testing done on the right family — 288 London slots × 4 periods = 1152 t's. 10:25 is the 2nd most negative in P4 (t −7.9, Bonferroni threshold 3.46). Not a lucky pick.
+- The generic ":25/:55 before the half-hour" effect exists but is 1/10 the size.
+- Clock belongs to London local (BST −1.12 / GMT −1.00, diff t −0.42); ET and UTC grids are blunter.
+- **c50's artifact objection is dead:** measuring the same 5 min by first tick gives −1.09 (t −8.0) vs last tick −1.07; the bar-stitching GAP contributes 0%.
+- **Independent vendor, fully out of sample:** the account's own `spread_log` bid (2026-09-25→11-18, 39 days, after the npz ends) gives **−2.61 bp (t −3.56)**, the most negative of 24 slots in 09:30–11:30.
+- **The cost question is now measured, not deferred:** break-even spread widening w* = 0.1064 USD; the account's quoted spread at 10:25 is 0.1550 vs 0.1549 in the surrounding hour (Δw = +0.00007, 2se 0.0005). The same log *does* detect widening at the 17:00 ET break (0.206, +0.05 USD) — so this is a measurement with a built-in positive control, not a null from blindness.
+
+**Broken:**
+- **Nothing persists.** 10:25→11:30 cumulative = +0.02 bp (t 0.0) in P4; +0.60 (t 0.2) on the independent vendor. It's a 5-min round trip, not a drift.
+- **"All 4 periods" is period aggregation.** In vol units, 2014 and 2017–19 are ≈0, and 2025–26 is 2.5–3.5× 2021–24 — unexplained.
+- **Cost doubling kills the P4 average** (net +0.106 USD at 1×, −0.054 at 2×).
+
+**Two things I broke in my own refutation, recorded as such:** the UK-bank-holiday placebo looked like support (t +3.13) but holiday volatility is 54% of normal, so normalized it's t +1.71 — uninformative. And my first-tick test failed its own positive control (21:55 decomposes identically), so it only rules out the *narrow* artifact; the broad "bid-only move" is closed by the independent vendor and the spread measurement, not by that test.
+
+PROMOTED unchanged — the origin is post-hoc, so the pre-registration half of the promotion bar isn't met; I registered `refute_c50` in `cells.csv` and proposed two additions to c50's forward cell. No orders, no production edits (the two live logs were opened read-only).
+
+One session note worth keeping: the rule that earned its keep here is *a test whose conclusion is "not an artifact" is worthless without a positive control run in the same breath* — mine failed its control and I only caught it because I pre-registered the control. The companion rules (print a placebo group's volatility before reading its null; never write "persists in all N periods" before printing it year-by-year in volatility units) are in the entry as methodology candidates 69–71. I did not write a task-observer log file, since this lane's writes are confined to `AUREL_RESEARCH`.
+2026/11/18 21:55:12.71 done
