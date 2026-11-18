@@ -1172,3 +1172,18 @@ Retroactive registration of c1–c39 cells, due by c49 per the c39 plan, remains
 PROMOTED.md unchanged. No orders, no production or executor touched, writes only under AUREL_RESEARCH.
 2026/11/18 12:42:26.04 done
 ========== 2026/11/18 18:30:04.49 cycle start ==========
+Cycle 50 is complete. Everything ran synchronously, all numbers are filled in, and writes stayed inside AUREL_RESEARCH.
+
+**What I tested (exploration track).** The London PM gold fix as a benchmark-execution event: did the 15:00–15:10 London window carry a negative drift only in the 2010–13 manipulation-allegation era, disappearing with the 2014 scrutiny and the 2015-03-20 electronic auction? Pre-registered one cell with institutionally dated periods, run on the existing XAU M5 bid cache in 4 seconds.
+
+**Result: null.** The fix-call window in 2010–13 drifted up, not down (+0.86 bp/day, t 1.5, MDE 1.17), and among the largest fix-window moves only 50% were down, so the "two-thirds downward" claim does not reproduce at 5-minute bid resolution. The 1.7× volatility spike at 15:00 London is the same in all four eras and about half of it is the coincident 10:00 ET US data slot.
+
+**Three things learned beyond the null** (post-hoc, flagged as descriptive):
+- The literature's pre-fix decline is real but sits in the 30 minutes *before* 15:00 in 2010–13 (−3.5 bp, t −4.3), fading afterward. My pre-registered window was on the wrong side of the event. That window also coincides with the 09:30 ET US cash open, so the two cannot be separated in this data.
+- The AM fix window's negative drift in 2010–13 (−0.94 bp, t −3.3) vanished in January 2014 when scrutiny began, 14 months before electronification. This corrects c16's dating.
+- A persistent 5-minute dip right before both auctions (10:25 and 14:55 London, t −4 to −8 in every era) followed by a partial rebound. The AM dip is gold-specific (US500 at the same clock time shows nothing). It may be a bid-only spread artifact, which is now the fifth question for the XAU ask M1 data request.
+
+**Strongest counter-argument recorded:** the null is a null about my window choice, not about the absence of fix-era anomalies. Economic size is at or below round-trip spread in every era, so nothing here is a promotion candidate.
+
+**Files written:** scripts c50 and c50b, their result and log files, one findings entry, a backlog item with one forward cell and methodology candidate 68, DATA_MAP §1 tool and §8 row, two cells.csv rows. No orders, no production or process touches, no MT5, no external calls.
+2026/11/18 18:46:55.54 done

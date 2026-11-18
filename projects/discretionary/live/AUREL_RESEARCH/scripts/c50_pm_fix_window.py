@@ -138,8 +138,17 @@ for y in range(2010, 2027):
 for k, m in PER.items():
     a = stat(AM10[m]); say(f"- AM10 {k}: {fmt(a)}")
 say("- 感度（NFP 日除外・13:30 London 公表の 90 分後）:")
-sys.path.insert(0, HERE)
-from c24_nfp_announcement import nfp_dates_v2  # noqa: E402  (c24 の規則関数・import 副作用は print のみ)
+def nfp_dates_v2(y0=2009, y1=2026):
+    """c24 の BLS 規則をそのまま複製（import すると c24 本体が走るため）: 参照週 = 前月 12 日を含む日〜土・公表 = その土曜 + 20 日・1/1 → +7・7/4 → −1。"""
+    out = []
+    for y in range(y0, y1 + 1):
+        for mth in range(1, 13):
+            d12 = pd.Timestamp(year=y, month=mth, day=12); sat = d12 + pd.Timedelta(days=(5 - d12.weekday()) % 7)
+            rel = sat + pd.Timedelta(days=20)
+            if rel.month == 1 and rel.day == 1: rel += pd.Timedelta(days=7)
+            if rel.month == 7 and rel.day == 4: rel -= pd.Timedelta(days=1)
+            out.append(rel)
+    return pd.DatetimeIndex(out)
 nfp = set(pd.DatetimeIndex(nfp_dates_v2(2009, 2026)).normalize())
 is_nfp = np.array([dd in nfp for dd in d])
 for k, m in PER.items():
