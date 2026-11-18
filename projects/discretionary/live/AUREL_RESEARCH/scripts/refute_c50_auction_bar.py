@@ -130,7 +130,7 @@ rng = list(range(S(9, 50), S(16, 45)))
 ok = np.isfinite(Cv[:, rng]).all(axis=1) & (np.nansum(1 - Fv[:, S(14, 30):S(15, 30)], axis=1) >= 8)
 PER = {"P1 2010-13": (d <= "2013-12-31"), "P2 2014-15/03": (d >= "2014-01-01") & (d <= "2015-03-19"),
        "P3 2015/03-20 - 20": (d >= "2015-03-20") & (d <= "2020-12-31"), "P4 2021-26H1": (d >= "2021-01-01")}
-PER = {k: (v.to_numpy() if hasattr(v, "to_numpy") else v) & ok for k, v in PER.items()}
+PER = {k: np.asarray(v) & ok for k, v in PER.items()}
 say(f"- データ: XAU_m5_ohlc.npz（{len(ts)} 足・2010-01-01..2026-06-30・ts = 足開始・close は c50 の close npz と完全一致）・US500/US100_m5_close.npz・**多年 scan 無し・M5 読込なし・MT5 なし・外部通信なし・発注なし**。London 平日 {len(d)} 日 → c50 と同じ ok **{int(ok.sum())}** 日（" + " / ".join(f"{k} {int(v.sum())}" for k, v in PER.items()) + ")")
 
 def bar_cc(s):  # c50 の測り方: 足 s（= s..s+5分）のリターン = c(s) - c(s-1)
@@ -238,7 +238,7 @@ for tzn, nm in (("UTC", "UTC"), ("America/New_York", "ET")):
     dd2 = pd.DatetimeIndex(tz.tz_localize(None)).normalize()
     f2 = pd.DataFrame({"day": dd2[mwd], "slot": sl2[mwd], "lc": np.log(cl[mwd])})
     P2 = f2.pivot_table(index="day", columns="slot", values="lc", aggfunc="first").reindex(columns=range(288))
-    d2 = pd.DatetimeIndex(P2.index); v2 = P2.to_numpy(); m4 = (d2 >= "2021-01-01").to_numpy()
+    d2 = pd.DatetimeIndex(P2.index); v2 = P2.to_numpy(); m4 = np.asarray(d2 >= "2021-01-01")
     lo_s, hi_s = (S(8, 0), S(12, 0)) if nm == "UTC" else (S(4, 0), S(8, 0))
     best = []
     for s in range(max(1, lo_s), hi_s):
@@ -302,7 +302,7 @@ say("- 年別（10:25 足・bp・n>=100 の年）: " + " ".join(
     f"{y}:{x25[(yrs==y)&ok][np.isfinite(x25[(yrs==y)&ok])].mean():+.2f}" for y in range(2010, 2027)
     if ((yrs == y) & ok).sum() >= 100))
 m4 = PER["P4 2021-26H1"]
-inm = m4 & (d <= "2024-12-31").to_numpy(); outm = m4 & (d >= "2025-01-01").to_numpy()
+inm = m4 & np.asarray(d <= "2024-12-31"); outm = m4 & np.asarray(d >= "2025-01-01")
 mi_, ti_, ni_, sei_ = stat(x25[inm]); mo_, to_, no_, seo_ = stat(x25[outm])
 say(f"- **P4 の in/out 分割**: in 2021-24 {mi_:+.3f} bp (t {ti_:+.2f}, n {ni_}) → out 2025-26H1 **{mo_:+.3f} bp (t {to_:+.2f}, n {no_}・MDE 2se {2*seo_:.3f})**")
 BREAK5 = (mo_ >= 0) or (abs(to_) < 1.5 and 2 * seo_ > abs(mi_))
@@ -346,7 +346,7 @@ for fn, nmx in (("US500_m5_close.npz", "US500"), ("US100_m5_close.npz", "US100")
     PERU = {"P1 2010-13": (du <= "2013-12-31"), "P2 2014-15/03": (du >= "2014-01-01") & (du <= "2015-03-19"),
             "P3 2015/03-20 - 20": (du >= "2015-03-20") & (du <= "2020-12-31"), "P4 2021-26H1": (du >= "2021-01-01")}
     for k, mk in PERU.items():
-        mk = mk.to_numpy() if hasattr(mk, "to_numpy") else mk
+        mk = np.asarray(mk)
         x = xu[mk]; fr = np.nanmean(flatu[mk]) * 100
         mu2, t2, n2, se2 = stat(x)
         if not np.isfinite(se2): continue
