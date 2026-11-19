@@ -1443,3 +1443,33 @@ c51 (00:40) is a **declared double null** (H_ROLL, H_REV) and `PROMOTED.md` is e
 Read-only throughout: no orders, no production edits, no process/schtask/MT5/external/prop contact. Writes confined to `AUREL_RESEARCH` (2 scripts, 2 result files, cells.csv, findings). **PROMOTED.md unchanged** — correctly still empty. Per this lane's write boundary I did not create a task-observer log outside `AUREL_RESEARCH`; the reusable lessons are candidates 69-revision / 72 / 73 in the entry.
 2026/11/19  3:45:26.25 done
 ========== 2026/11/19  9:30:09.56 refute start ==========
+Done. Verdict appended to `AUREL_RESEARCH/findings/2026-11-19.md` under `[REFUTE] 2026-11-19 09:30`, with a registry row in `data/cells.csv`.
+
+## Target
+cycle52 (06:40) had exactly one rule-wise positive: **H_S2 — Spearman ρ(sl_slip, atr14) = +0.141, permutation p = 0.047 (n=157)**, read as "SL slippage has no clock-specific component, it weakly follows volatility." Plus byproduct (b): "44% of all SL slippage is one weekend-carry bar → the tail lives in the weekend gap."
+
+I deliberately did **not** use c52's own escape hatch (`slippage_sim ≠ real fills`, undecidable without demo_exec fills) — I accepted every sim number as given and attacked only the statistics.
+
+Replication was exact: 20/20 cells to 2 decimals. The ledger had grown 17 rows / 1 SL bar since 06:38, so I pinned a cut at 2026-11-18 17:25 UTC to restore n=157 before testing.
+
+## Verdict: split
+
+**Broken — the rule-wise PASS.** c52 pre-registered 2 judgment cells. Its 3000-draw p=0.047 has MC 95% CI [0.039, 0.055] — not separable from 0.05 at all. At 200,000 draws, p = **0.0387**. Bonferroni/Holm for 2 cells = **0.025**. It doesn't pass the family c52 itself declared.
+
+**Broken — the "face of volatility" reading.** "Follows volatility" claims monotonicity, and it isn't there: decile profile monotonicity Spearman **+0.049** (flat); within all three atr14 terciles ρ is **negative** (−0.194/−0.166/−0.124, combined z −1.98). I calibrated that rather than asserting it — under a *true* monotone ρ=+0.1415 the within-tercile ρs average +0.046 each and P(z ≤ −1.98) = **0.0060**. Attribution also moves off ATR: partial ρ(slip, atr|risk) **+0.062** vs ρ(slip, risk|atr) **+0.174**; in the unit the ledger actually pays, ρ(sl_slip/risk, atr14) = **+0.021 (p 0.79)**, and atr +1sd → **−0.0013R (t −0.22)**.
+
+**Broken — H_S2's second conjunct** is an underpowered null used as a positive condition: MDE 0.0267 vs the ratio's own median 0.0066 = **4.0×**, k* = **2.02×**. That's a same-day recurrence of methodology candidate 69, which the 03:40 refute of c51 had just written.
+
+**Inconclusive, not refuted — byproduct (b).** Weekend carry ranks 1/48 mechanically-enumerated labels and even clears 48-label Bonferroni. But 7 of the 8 labels with p<0.05 are significant only by containing the *same single max bar* (median p 0.046 vs 0.562 for labels that don't), and "Sunday 18:00 ET exit" is **n=1** with p=0.0064. Annotated Sunday-reopen SLs: n=1. Also the directional premise fails — weekend-carry SL rate is **3/8 = 37.5%** vs base **52.2%**. Cost doubling leaves 2.09R → 4.18R = 7.5% of gross, so c52's "bit player" conclusion survives.
+
+## My own failed attack, stated plainly
+My headline hypothesis — SL bars cluster by day so i.i.d. permutation understates the null — **was wrong in the numbers**: day-block inflation 1.00×, circular shift 1.07×, day-cluster bootstrap 1.01× wider than i.i.d. And B-12 I left **withheld**, not broken: day-mean ρ is +0.0098 but between-day r* = 0.238 > within r = 0.166, so n=49 can't support "no relation at day level." Also survived: tie handling (+0.1410 vs +0.1415), trend confound (opposite signs; controlling time *raises* ρ), outlier influence (LODO 0/49 sign flips), sign stability (11/11 subsets ρ>0), and survivorship — I filled c52's open reservation (iii): the 45/202 missing annotations are indifferent to atr14 (Welch t −0.51, MW p 0.82).
+
+## Two things for you
+1. **Self-disclosure (candidate 75):** my first run's `brk()` helper printed the BREAK *condition* text regardless of the verdict, emitting 6 false sentences like `[BREAK-8] not broken — 置換 p 0.0001 ≥ 0.05`. The flags were right, the prose lied. That's a same-day recurrence of candidate 72, in the refutation lane's own code. Fixed to 条件/観測/判定 fields in runs 2–3.
+2. **Verified registry defect (candidate 76):** c52's own H_S2 row in `cells.csv` has an unquoted comma in the `cell` field, so all columns shift right by one — machine-read, its `verdict` is `'n/a'` and the real verdict sits in `gate`. This matters because c49's M7 mines that registry for `forward=yes ∧ verdict empty` to catch unrefuted carryovers. I documented it but **did not edit another lane's row**.
+
+PROMOTED.md unchanged and still empty — nothing was promoted, so there was nothing to withdraw. Writes confined to `AUREL_RESEARCH/{scripts,data,findings}`; `setup_ledger.jsonl` read-only; no orders, no process/executor/live-server contact, no MT5, no prop, no external calls.
+
+One note on scope I should flag: the task-observer skill wants its observation log written under `~/.claude/projects/...`, which is outside this lane's write boundary. Following the boundary and c52's precedent, I wrote nothing there — candidates 75 and 76 are recorded in the findings entry instead.
+2026/11/19  9:50:54.80 done
