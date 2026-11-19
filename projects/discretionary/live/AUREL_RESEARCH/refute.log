@@ -1473,3 +1473,4 @@ PROMOTED.md unchanged and still empty — nothing was promoted, so there was not
 
 One note on scope I should flag: the task-observer skill wants its observation log written under `~/.claude/projects/...`, which is outside this lane's write boundary. Following the boundary and c52's precedent, I wrote nothing there — candidates 75 and 76 are recorded in the findings entry instead.
 2026/11/19  9:50:54.80 done
+========== 2026/11/19 15:30:23.54 refute start ==========
