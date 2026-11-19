@@ -1499,3 +1499,22 @@ I expected the paper-vs-real fill gap to live at **every daily ET 17:00–18:00 
 Read-only throughout: no orders, no production-file or process/executor/live-server contact, no MT5, no prop, no external calls, no secrets. Writes confined to `AUREL_RESEARCH` (3 scripts, 3 result files, 1 entry draft, findings). **PROMOTED.md unchanged — correctly still empty.** cells.csv not appended (this lane adjudicates other lanes' registered cells; it created none). Per the write boundary I did not create a task-observer log outside `AUREL_RESEARCH` — the reusable lessons are candidates 78–81 in the entry.
 2026/11/19 15:59:41.31 done
 ========== 2026/11/19 21:30:20.27 refute start ==========
+Done. Verdict appended to `AUREL_RESEARCH/findings/2026-11-19.md` under `[REFUTE] 2026-11-19 21:30` (verified single copy, 4 cycle + 4 refute headers intact).
+
+## Target
+cycle54 (18:50) had **no** rule-wise positives — H_DIP null both clocks, H_REB PM null, PROMOTED.md empty. So I attacked the three things it registered in positive form: **T1** the "+0.5 bp post-auction 5-min move localized in 2016-20, two independent clocks, ≈0.3% by chance, vanished in 2021+ (㊶ 6th case)" — which c54 itself called "relatively strongly a market fact"; **T2** "the LBMA pre-auction dip is London-specific"; **T3** the gate ㉛ dismissal "BUY ratio 56% × +0.78 bp の別名".
+
+Replication first: **20/20 exact** on c54/c54b, **8/8 exact** on c50's LBMA PRE bars, **4/4 exact** on the gate.
+
+## Verdict: split — existence survived, attribution broke
+
+**My best attack failed and c54 got stronger.** I expected the family to be uncalibrated: c54 scored 4 cells + 4 placebo hours, so I ran the same estimator on **all 288 UTC slots**. 02:15 ranks **1/286** and 06:15 **2/286** on P1 excess t — the non-auction max tops out at +3.56 vs 02:15's +4.83. Also unbroken: clock independence (same-day ρ +0.0007; day-paired permutation puts the joint event at 0/4000, so c54's "≈0.3%" was conservative), robustness (10% trimmed +0.518 at t **8.71**, dropping the 5 largest days *raises* it), 15 filter/window settings (8% spread), and cost — net of one round-trip spread it's **−1.92 bp**, so "受取り不可" is unbreakable.
+
+**Broken — the 2016-04-19 attribution. Three attacks, and neither clock passes two of them.** AM survives the breakpoint sup-t but dies on minute-of-hour matching (the Asian-band `:15` bin is generally positive in P1, so the matched double difference falls +0.415→**+0.312, t 2.01**, under c54's own 2.24 threshold; rank 7/96) and on year strata (**MW p 0.310**). PM survives both of those but dies on the breakpoint scan (24.6% of candidate split months clear t≥2.72; **argmax 2015-04, twelve months before launch**, a plateau across 2015-01…2016-07). The ㊶ "vanished in 2021+" registration should come off on the AM side.
+
+**Broken — T3's explanation, not its conclusion.** Decomposing dcl = s·u: the side-imbalance-only prediction is +0.00350R against **+0.01815R observed = 5.2×**, with cov(s,u) carrying 81%. The gate verdict (不通過) is unchanged, so what broke is the prose — third recurrence this week of candidates 72/75.
+
+## Two things for you
+1. **Four disclosures on my own work, two of them withdrawn flags.** BREAK-L1 was a tautology (the filter drops flat bars; flat bars are 0.000 by definition) — including every dropped day moves P1 by −0.0055 bp. BREAK-K1 fired on rank alone; decomposed, the `:25`/`:55` clock tilt explains a median **11%** of c50's dip, so T2 survived and I downgraded my own flag. And I broke the London→UTC slot mapping **twice** without an exception — `.view("int64")`, then `.asi8/1e9` under pandas 3.0's microsecond dtype — and a `nan%` rode into a verdict line both times. An invariant assert on the mapped bar caught it instantly once added. Methodology candidates **83** (any positive-form prose ships with the formula that reproduces it) and **84** (clock/timezone helpers assert the target's invariant before printing) are in the entry.
+2. Read-only throughout: no orders, no production-file or process/executor/live-server contact, no MT5, no prop, no external calls, no secrets. Writes confined to `AUREL_RESEARCH` (5 scripts, 5 result files, 1 draft, findings). **PROMOTED.md unchanged and correctly still empty.** cells.csv not appended. Per the write boundary I created no task-observer log outside `AUREL_RESEARCH` — the reusable lessons are candidates 83/84 in the entry instead.
+2026/11/19 22:11:55.63 done
