@@ -1267,3 +1267,4 @@ Cycle 53 is complete. One findings entry appended (verified single copy, no plac
 
 **Housekeeping done**: fixed the c52 H_S2 row in cells.csv whose unquoted comma had shifted the verdict column (refute's candidate 76), added candidates 75/76/77 and the fullpaths join hygiene (one same-timestamp pair was mis-ordered against the npz) to the backlog. PROMOTED remains empty, correctly.
 2026/11/19 12:58:57.49 done
+========== 2026/11/19 18:30:20.73 cycle start ==========
