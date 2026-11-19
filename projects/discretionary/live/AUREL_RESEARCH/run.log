@@ -1254,3 +1254,4 @@ The slippage figures come from a tick-history simulation, not real fills. The 7.
 
 The backlog now has a scan-cache cell to measure the expected weekend-gap cost per trade across 19404 trades using the OHLC cache, which would turn the single-trade tail into an estimate. The task-observer log was not written because its workspace sits outside the lane's write boundary.
 2026/11/19  6:45:17.37 done
+========== 2026/11/19 12:30:23.92 cycle start ==========
