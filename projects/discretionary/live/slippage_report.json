@@ -1,53 +1,33 @@
 {
  "summary": {
-  "n": 1,
+  "n": 0,
   "entry_slip_0.3": {
-   "n": 1,
-   "median": 0.04,
-   "mean": 0.04,
-   "p90": 0.04,
-   "adverse_share": 100.0
-  },
-  "chase_slip_0.3": {
-   "n": 1,
-   "median": 0.15,
-   "p90": 0.15
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
+   "adverse_share": 0.0
   },
   "entry_slip_1": {
-   "n": 1,
-   "median": -0.1,
-   "mean": -0.1,
-   "p90": -0.1,
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
    "adverse_share": 0.0
-  },
-  "chase_slip_1": {
-   "n": 1,
-   "median": -0.09,
-   "p90": -0.09
   },
   "entry_slip_3": {
-   "n": 1,
-   "median": -0.12,
-   "mean": -0.12,
-   "p90": -0.12,
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
    "adverse_share": 0.0
-  },
-  "chase_slip_3": {
-   "n": 1,
-   "median": 0.18,
-   "p90": 0.18
   },
   "entry_slip_120": {
-   "n": 1,
-   "median": -0.32,
-   "mean": -0.32,
-   "p90": -0.32,
+   "n": 0,
+   "median": null,
+   "mean": 0.0,
+   "p90": null,
    "adverse_share": 0.0
-  },
-  "chase_slip_120": {
-   "n": 1,
-   "median": 1.87,
-   "p90": 1.87
   },
   "sl": {
    "n": 0,
@@ -58,38 +38,18 @@
    "max": null
   },
   "tp": {
-   "n": 1,
-   "fill_ok": 1,
+   "n": 0,
+   "fill_ok": 0,
    "fill_miss": 0
   },
   "spread_at_entry": {
-   "median": 0.15,
-   "p90": 0.15,
-   "max": 0.15
+   "median": null,
+   "p90": null,
+   "max": null
   },
-  "open_vs_tick_abs_median": 0.0,
+  "open_vs_tick_abs_median": null,
   "adopt_latency_s": 1.0,
-  "generated": "2026-11-20 06:48:29"
+  "generated": "2026-11-20 07:18:32"
  },
- "rows": [
-  {
-   "id": "S-0574",
-   "side": "SELL",
-   "risk": 5.7400000000002365,
-   "exit_reason": "TP",
-   "R": 0.907,
-   "bid0": 3659.2,
-   "spread_pt": 0.15,
-   "slip_0.3": 0.04,
-   "slip_1": -0.1,
-   "slip_3": -0.12,
-   "slip_120": -0.32,
-   "open_vs_tick": 0.0,
-   "chase_slip_0.3": 0.15,
-   "chase_slip_1": -0.09,
-   "chase_slip_3": 0.18,
-   "chase_slip_120": 1.87,
-   "tp_fill_ok": true
-  }
- ]
+ "rows": []
 }
