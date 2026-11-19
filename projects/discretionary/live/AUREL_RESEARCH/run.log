@@ -1268,3 +1268,22 @@ Cycle 53 is complete. One findings entry appended (verified single copy, no plac
 **Housekeeping done**: fixed the c52 H_S2 row in cells.csv whose unquoted comma had shifted the verdict column (refute's candidate 76), added candidates 75/76/77 and the fullpaths join hygiene (one same-timestamp pair was mis-ordered against the npz) to the backlog. PROMOTED remains empty, correctly.
 2026/11/19 12:58:57.49 done
 ========== 2026/11/19 18:30:20.73 cycle start ==========
+Cycle 54 is complete. Everything was run in the foreground and all numbers are filled in.
+
+**What I tested.** Exploration was behind the 2:1 target, so I replicated c50's LBMA finding at a second venue: does the Shanghai Gold Exchange benchmark auction (10:15 and 14:15 Beijing, fixed at 02:15 and 06:15 UTC, launched 2016-04-19) leave the same "5-minute dip before, rebound after" footprint in XAUUSD? The launch date gives a placebo-in-time that c50 lacked. Input was only the existing M5 close cache plus the scan caches, 79 s plus a 12 s post-hoc check.
+
+**Results (pre-registered rules).**
+- Pre-auction dip: null at both auctions. The pre bar in 2016-20 is positive at the morning auction, not negative. Minimum detectable effect is about a third of the LBMA dip, so c50's dip is London-specific, not a property of benchmark auctions in general.
+- Post-auction rebound: positive and strong in 2016-20 at both auctions (two independent clocks, same size), but the rule failed because the 2010-16 placebo bar was also positive at the morning auction, and the afternoon effect vanishes after 2021. Verdict is "regime-independent / not PASS" for AM and null for PM.
+- Gate for the production band: every scan trade alive across the morning auction sits in the jh7-12 band, but the side-signed effect is below the gate threshold. No connection to production.
+
+**Strongest counter-argument, recorded.** The placebo bar I used to reject the rebound sits inside a 2010-16 Asian-morning profile where 10 of 13 bars are positive. Measured relative to its neighbors, the placebo is clean and the rebound meets the letter of the rule in-sample. I did not change the verdict, since that is a post-hoc redesign. It is logged as a new forward hypothesis (low priority, needs the M5 extension past 2026-07), and the pattern is flagged as a likely sixth case of a 2010s effect that faded after 2021. A "quarter-past" placebo hour also fired at half size, and the effect is a quarter of round-trip spread, so it is not a strategy question.
+
+**Files written (all under AUREL_RESEARCH).** Two scripts, two result files, two run logs, one findings entry in today's file, three quoted rows in the cell registry (45 rows, all 17 fields verified), backlog updates including the forward cell, methodology candidate 82, and the four candidates 78–81 the refute lane delegated, and DATA_MAP header, §1, and §8 updates. PROMOTED is unchanged. No orders, no production edits, no process contact, no MT5, no secrets. One external call was made to confirm the auction times and launch date before pre-registration.
+
+Sources:
+- [Notice of Launching Shanghai Gold Benchmark Price (SGE)](https://en.sge.com.cn/eng_news_Announcement/537284)
+- [Shanghai Gold Benchmark Price Launching Ceremony (SGE)](https://en.sge.com.cn/eng_news_News/537464)
+- [Shanghai Gold Benchmark Price launch (World Gold Council)](https://www.gold.org/news-and-events/press-releases/shanghai-gold-benchmark-price-launch)
+- [Shanghai Gold Benchmark Price: New Kid on the Block (BullionStar)](https://www.bullionstar.com/blogs/ronan-manly/shanghai-gold-benchmark-price-new-sge-gold-fix/)
+2026/11/19 18:49:13.97 done
