@@ -67,6 +67,7 @@ def excluded_slots(clockname):
     return ex
 
 def ratio(tab, W, Cb, key):
+    W = [s % 288 for s in W]; Cb = [s % 288 for s in Cb]   # 日付跨ぎ（東京 23:45 UTC）の折り返し
     JW = int(tab[key][W].sum()); NW = int(tab["N"][W].sum()); JC = int(tab[key][Cb].sum()); NC = int(tab["N"][Cb].sum())
     rW = JW / max(NW, 1); rC = JC / max(NC, 1); rho = rW / rC if rC > 0 else np.nan
     se = math.sqrt(1 / max(JW, 0.5) + 1 / max(JC, 0.5)); zst = math.log(rho) / se if rho > 0 else np.nan
@@ -83,7 +84,7 @@ def analyze(clockname, open_slot, wlen=3, thr=4, extra_excl=(), verbose=True, us
     for pname, y0, y1 in periods:
         tab = C["tabs"][pname]; R = ratio(tab, W, Cb, key)
         # day-level
-        m = tab["m"] & np.isin(C["slot"], W); jump = np.abs(C["z"]) >= thr
+        m = tab["m"] & np.isin(C["slot"], [s % 288 for s in W]); jump = np.abs(C["z"]) >= thr
         dW = pd.Series(jump[m]).groupby(C["dayi"][m]).max(); dC_rate = 1 - (1 - R["rC"]) ** len(W)
         R["rho_day"] = dW.mean() / dC_rate if dC_rate > 0 else np.nan; R["nday"] = int(len(dW))
         cand = []
@@ -137,14 +138,14 @@ say("\n## 6. 記述: 開場 ±1 時間の 5 分プロファイル（|z|≥4 率 
 def profile(name, clockname, open_slot):
     C = clock(clockname); rows = []
     for k in range(-12, 15):
-        s = open_slot + k
+        s = (open_slot + k) % 288
         a = C["tabs"]["在 2010-20"]; b = C["tabs"]["外 2021-26H1"]
         ra = a["J4"][s] / max(a["N"][s], 1) * 1e4; rb = b["J4"][s] / max(b["N"][s], 1) * 1e4
         rows.append(f"[{k*5:+d}:{ra:.0f}/{rb:.0f}]")
     say(f"- {name}: " + " ".join(rows))
     # raw vol step (in-sample): median |r| per slot
     m = C["tabs"]["在 2010-20"]["m"]; sl = C["slot"]
-    med = [np.median(np.abs(r[m & (sl == open_slot + k)])) for k in (-6, -3, -1, 0, 1, 2, 3, 6)]
+    med = [np.median(np.abs(r[m & (sl == (open_slot + k) % 288)])) for k in (-6, -3, -1, 0, 1, 2, 3, 6)]
     say(f"  生 |r| 中央値 bp（在・開場 −30/−15/−5/0/+5/+10/+15/+30 分）: " + "/".join(f"{x:.2f}" for x in med))
 for vn, ck, osl, wl in VENUES: profile(vn, ck, osl)
 
@@ -157,7 +158,7 @@ def in_window(tt, clockname, open_slot, wlen):
 Wmask45 = np.zeros(len(j45), bool); Wmask_all = np.zeros(len(ts), bool); per_venue = {}
 for vn, ck, osl, wl in VENUES:
     mv = in_window(j45_t, ck, osl, wl); per_venue[vn] = mv; Wmask45 |= mv
-    Wmask_all |= np.isin(clock(ck)["slot"], [osl + k for k in range(wl)])
+    Wmask_all |= np.isin(clock(ck)["slot"], [(osl + k) % 288 for k in range(wl)])
 occ = Wmask_all[base_ok & (wd_u <= 4)].mean()
 yy45 = j45_t.year.to_numpy()
 for cls in ["UJ", "SJ", "EVDAY"]:
@@ -175,7 +176,7 @@ say("- UJ の ET スロット上位 8: " + ", ".join(f"{s//12:02d}:{(s%12)*5:02d
 
 say("\n## 8. ゲート ㉛（印字のみ）: scan 本の SGE 開場窓建玉（UTC 01:00–01:10）vs 対照建玉（00:00–00:55 ∪ 01:15–02:10）の R*")
 sc = json.load(open(os.path.join(DATA, "refute_c4_scan_paths_2010_2026.json"), encoding="utf-8"))
-sc = pd.DataFrame(sc if isinstance(sc, list) else sc.get("rows", sc))
+sc = pd.DataFrame(sc["trades"] if isinstance(sc, dict) else sc)   # json = {generated, bars, setups, frozen, trades[19404]}
 say(f"- scan json n {len(sc)}・列 {list(sc.columns)[:14]} …")
 etc = sc["entry_time"]
 tt = pd.to_datetime(etc, utc=True, errors="coerce") if etc.dtype == object else pd.to_datetime(etc, unit="s", utc=True)

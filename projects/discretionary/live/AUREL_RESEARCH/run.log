@@ -1288,3 +1288,29 @@ Sources:
 - [Shanghai Gold Benchmark Price: New Kid on the Block (BullionStar)](https://www.bullionstar.com/blogs/ronan-manly/shanghai-gold-benchmark-price-new-sge-gold-fix/)
 2026/11/19 18:49:13.97 done
 ========== 2026/11/20  0:30:21.39 cycle start ==========
+Cycle 55 is complete. One pre-registered exploration item was run end to end, with real numbers, and recorded.
+
+**Question tested.** Does gold's 5-minute "jump" rate cluster in the first 15 minutes after major venue opens (SGE 09:00 CST, London 08:00, COMEX 08:20 ET, NYSE 09:30 ET) beyond what intraday vol seasonality implies? Jumps were defined on returns standardized by a per-year, per-slot MAD in each venue's local clock, so a plain vol step cannot masquerade as a jump.
+
+**Result: null for all four venues.** Opens are real vol steps (raw median move 1.4 to 1.9 times the prior bar), but once seasonal vol is removed the tail is no heavier than the surrounding hour, and at the two US opens it is lighter.
+
+| Venue | ρ in-sample 2010-20 | ρ out-of-sample 2021-26H1 | MDE ρ* (in / out) |
+|---|---|---|---|
+| SGE 09:00 CST | 1.08 | 0.95 | 1.29 / 1.47 |
+| London 08:00 | 1.08 | 1.11 | 1.30 / 1.61 |
+| COMEX 08:20 ET | 0.98 | 0.56 | 1.38 / 1.68 |
+| NYSE 09:30 ET | 0.82 | 0.77 | 1.31 / 1.58 |
+| Positive control: 08:30 ET releases | 2.47 | 2.94 | 1.39 / 1.71 |
+
+The positive control shows the tool detects lumpy information arrival cleanly. Three fake-open negative controls sit near 1.
+
+**Side finding worth more than the main null.** About one fifth of the c45 "unscheduled" 5σ jumps (UJ class) fall inside these open windows, which cover only 4.1% of bars. That is a 4.6 to 5.0 times enrichment, concentrated at 08:20 and 09:30 ET. The trailing-σ detector used in c45 treats the US-morning vol step as jumps. Splitting the UJ arm into open-window and other is a cheap way to sharpen the still-inconclusive "scheduled time vs information" question from c45–c47, and is now in the backlog.
+
+**Strongest counter-argument recorded.** A 5-minute bar cannot distinguish a 1-minute jump followed by churn from 5 minutes of smooth high vol, so this null only says the 5-minute tail does not thicken at opens. Resolution needs the XAU M1 npz cache, which AUREL main must build offline; logged as needs cache.
+
+**Gate.** Scan trades entered in the SGE open window show Δμ −0.071R in-sample (t −0.60, MDE 0.24R), undetermined and wrong-signed, so no production connection.
+
+**Process note.** The first run exceeded the 3-minute budget because it built full-array masks per window. I stopped only my own Python process, rewrote the analysis with per-slot count tables, confirmed the main 12 cells matched to two digits, and completed the rest in about 100 seconds plus an 8-second gate run.
+
+**Files written, all under AUREL_RESEARCH:** scripts c55 and c55b, data/c55_venue_open_jumps_result.md and three run logs, five rows in data/cells.csv, backlog additions (UJ split, M1 cache question, methodology candidate 83), DATA_MAP updates to the header, §2 and a new §8 row, and findings/2026-11-20.md. No orders, no production or prop files touched, no external calls, PROMOTED unchanged. Next cycle should be a deepening item (tally since c33 is now 12 exploration to 8 deepening).
+2026/11/20  1:06:30.82 done
