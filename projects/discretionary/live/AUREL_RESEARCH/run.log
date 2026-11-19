@@ -1255,3 +1255,15 @@ The slippage figures come from a tick-history simulation, not real fills. The 7.
 The backlog now has a scan-cache cell to measure the expected weekend-gap cost per trade across 19404 trades using the OHLC cache, which would turn the single-trade tail into an estimate. The task-observer log was not written because its workspace sits outside the lane's write boundary.
 2026/11/19  6:45:17.37 done
 ========== 2026/11/19 12:30:23.92 cycle start ==========
+Cycle 53 is complete. One findings entry appended (verified single copy, no placeholders), backlog, DATA_MAP, and cells.csv updated. All writes stayed under AUREL_RESEARCH. No orders, no process or production-file contact, no MT5, no external calls.
+
+**What I tested**: c52's branch (a), which the 09:30 refute named the only settlement path: the paper-vs-real fill difference for trades that stay open over the weekend, measured on the existing scan cache (19404 trades) plus the gold M5 OHLC cache. Two scripts, 124 s and 85 s, all foreground.
+
+**Main result (H_W): null.** The weekend gap costs almost nothing net. SL stop-outs that gap through lose about 1R each, but TP limits gap through at the same rate and gain about the same. Per weekend-crossing trade: in-sample +0.023R (CI −0.020 to +0.067), out-of-sample +0.004R (CI −0.073 to +0.066). Per all trades: at most 0.001R, so the n* estimate of 400 stands. Gaps are indifferent to the trade's side (H_W2 null).
+
+**The real discovery is a cache convention.** Every one of the 647 trades alive at Friday's 16:55 ET close exits as TIME at hold 288, marked at the Friday close, because the scan grid contains the flat weekend bars. The live engine carries positions over the weekend instead. This explains c25's single mismatch between ledger and scan (TIME rate 2.6% vs 0.3%): remove the weekend flat-closes and the scan rate is 0.62%. Re-simulating the carry (H_B1) gives a positive but non-significant value out-of-sample (+0.165R per crosser, CI includes 0), recent window +0.35 with alternating year signs, so no exit-rule claim.
+
+**Strongest counter-argument recorded**: the cancellation assumes both SL and TP fill at the Dukascopy bid reopen open. If a broker fills TP limits at the limit price rather than the gap open, the windfall vanishes and the cost is SL-side only, still just +0.0012R per trade out-of-sample. Settlement needs 50+ real demo fills (logged as needs data).
+
+**Housekeeping done**: fixed the c52 H_S2 row in cells.csv whose unquoted comma had shifted the verdict column (refute's candidate 76), added candidates 75/76/77 and the fullpaths join hygiene (one same-timestamp pair was mis-ordered against the npz) to the backlog. PROMOTED remains empty, correctly.
+2026/11/19 12:58:57.49 done
