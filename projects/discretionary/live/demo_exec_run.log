@@ -143,3 +143,4 @@ UnicodeDecodeError: 'utf-8' codec can't decode byte 0x8f in position 0: invalid 
    結果 ok=True retcode=10009 deal=52144708
 [observe・同時2本の枠が埋まり撃たず] T2-1794968700 SELL SL3833.766 TP3733.123
 [skip] S-0561 SELL（発火が古い>180s・バックフィル防止・age=334）
+[snapshot error・継続] PermissionError(13, 'アクセスが拒否されました。')
