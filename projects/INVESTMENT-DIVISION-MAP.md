@@ -99,6 +99,7 @@ audience: 会長(KEIKI MAEDA) — 専門用語ゼロ・畑メタファーで読�
 ---
 
 ## 🔗 リンク
+- **学んだこと帳(有効/無効/現行ルール/未決を1枚に・毎週日曜見直し)**: `projects/LEARNING.md`(2026-11-19 新設)
 - プロップ詳細: `projects/PROP-ROADMAP.md`
 - 裁量（型・ゴールド）運用の正本: `projects/DISCRETIONARY-COPILOT.md`
 - 検証の素データ/結果: `AssetEmpire/empire/research/wall_to_wall/`（RESULTS_gate_us100_wall.md ほか）
