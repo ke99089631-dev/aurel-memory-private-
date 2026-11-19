@@ -2332,3 +2332,7 @@ MemoryError
 [探索観測] yfinance BTC-USD 取得中...
   M5 17237本 (2026-09-21 00:00:00+00:00..2026-11-19 20:20:00+00:00)
   新規記録 0本 / 台帳累計 111本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_d_btc_explore_ledger.jsonl
+[探索観測] yfinance BTC-USD 取得中...
+  M5 17243本 (2026-09-21 00:00:00+00:00..2026-11-19 20:50:00+00:00)
+  新規記録 1本 / 台帳累計 112本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_d_btc_explore_ledger.jsonl
+    2026-11-19 20:40:00+00:00 SELL entry62082.19 risk584.15 R-0.13 net-0.16
