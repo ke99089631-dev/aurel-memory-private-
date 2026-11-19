@@ -1314,3 +1314,4 @@ The positive control shows the tool detects lumpy information arrival cleanly. T
 
 **Files written, all under AUREL_RESEARCH:** scripts c55 and c55b, data/c55_venue_open_jumps_result.md and three run logs, five rows in data/cells.csv, backlog additions (UJ split, M1 cache question, methodology candidate 83), DATA_MAP updates to the header, §2 and a new §8 row, and findings/2026-11-20.md. No orders, no production or prop files touched, no external calls, PROMOTED unchanged. Next cycle should be a deepening item (tally since c33 is now 12 exploration to 8 deepening).
 2026/11/20  1:06:30.82 done
+========== 2026/11/20  6:30:29.85 cycle start ==========
