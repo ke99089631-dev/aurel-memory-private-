@@ -10546,3 +10546,4 @@
 {"kind": "update", "target": "S-0569", "logged_at": "2026-11-19 21:14:15", "slip_src": "tick-sim L=1s", "spread_pt": 0.16, "slip_pt": -0.37, "sl_slip_pt": 0.004}
 {"kind": "update", "target": "S-0570", "logged_at": "2026-11-19 21:15:22", "chase": {"entry": 3724.37, "status": "closed", "exit_reason": "TP", "R": 1.919, "mfe_R": 1.99, "mae_R": 0.14}, "chase_frozen": true}
 {"kind": "update", "target": "S-0570", "logged_at": "2026-11-19 21:15:22", "reaccel": {"retest_time": 1795089300, "retest_jst": "2026-11-19 20:55", "retest_tol": 0.91, "entry": 3718.82, "entry_time": 1795089600, "entry_jst": "2026-11-19 21:00", "sl": 3728.52, "tp": 3716.405, "swing": 3724.94, "wait_bars": 1, "status": "closed", "mfe_R": 0.28, "mae_R": 0.3, "hold_bars": 2, "exit": 3716.405, "exit_reason": "TP", "R": 0.249, "exit_time": 1795090200}, "reaccel_frozen": true}
+{"kind": "update", "target": "S-0570", "logged_at": "2026-11-19 21:55:47", "waiting_resolved": true, "status": "no_retest"}
