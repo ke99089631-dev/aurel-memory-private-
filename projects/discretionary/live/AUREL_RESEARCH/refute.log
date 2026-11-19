@@ -1498,3 +1498,4 @@ I expected the paper-vs-real fill gap to live at **every daily ET 17:00–18:00 
 
 Read-only throughout: no orders, no production-file or process/executor/live-server contact, no MT5, no prop, no external calls, no secrets. Writes confined to `AUREL_RESEARCH` (3 scripts, 3 result files, 1 entry draft, findings). **PROMOTED.md unchanged — correctly still empty.** cells.csv not appended (this lane adjudicates other lanes' registered cells; it created none). Per the write boundary I did not create a task-observer log outside `AUREL_RESEARCH` — the reusable lessons are candidates 78–81 in the entry.
 2026/11/19 15:59:41.31 done
+========== 2026/11/19 21:30:20.27 refute start ==========
