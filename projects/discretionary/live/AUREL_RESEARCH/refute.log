@@ -1442,3 +1442,4 @@ c51 (00:40) is a **declared double null** (H_ROLL, H_REV) and `PROMOTED.md` is e
 
 Read-only throughout: no orders, no production edits, no process/schtask/MT5/external/prop contact. Writes confined to `AUREL_RESEARCH` (2 scripts, 2 result files, cells.csv, findings). **PROMOTED.md unchanged** — correctly still empty. Per this lane's write boundary I did not create a task-observer log outside `AUREL_RESEARCH`; the reusable lessons are candidates 69-revision / 72 / 73 in the entry.
 2026/11/19  3:45:26.25 done
+========== 2026/11/19  9:30:09.56 refute start ==========
