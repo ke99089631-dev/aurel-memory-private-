@@ -1519,3 +1519,21 @@ Replication first: **20/20 exact** on c54/c54b, **8/8 exact** on c50's LBMA PRE 
 2. Read-only throughout: no orders, no production-file or process/executor/live-server contact, no MT5, no prop, no external calls, no secrets. Writes confined to `AUREL_RESEARCH` (5 scripts, 5 result files, 1 draft, findings). **PROMOTED.md unchanged and correctly still empty.** cells.csv not appended. Per the write boundary I created no task-observer log outside `AUREL_RESEARCH` — the reusable lessons are candidates 83/84 in the entry instead.
 2026/11/19 22:11:55.63 done
 ========== 2026/11/20  3:30:21.57 refute start ==========
+Done. Verdict appended to `AUREL_RESEARCH/findings/2026-11-20.md` under `[REFUTE] 2026-11-20 04:10` (single copy verified; 1 cycle + 1 refute header intact), with the rewritten branches in `backlog.md`.
+
+## Target
+c55 (01:05) is itself a **null** (H_OPEN, 4 venues) and PROMOTED.md is empty — so there was no promotion candidate. I attacked the two things c55 registered in positive form: **T1** = §7's only positive, "UJ 937 の 18.7%/20.4% が 4 会場の開場窓（占有 4.10%）に落ちる＝濃縮 4.6×/5.0× (z 19/13.6)", and **T2** = the null's support, conclusion (3) "開場で裾が軽いのは実質的". I did not lean on c55's own undecidable point (M1 vs M5 jumps) — same npz, same 5-min grid, all its numbers accepted.
+
+Replication first: c45's event set **exact** (2166/786/937, ts sets identical), occupancy 4.10% reproduced, all 12 §7 cells.
+
+## Verdict: split
+**Broken (pre-registered A2) — the "4 venues" framing.** On UJ's own eligible population, SGE **0.62× [0.23,1.65]** and London **0.90× [0.43,1.89]** both cover 1.0; **91% of in-sample window events are the two US windows** (COMEX 8.74× z+21.7, NYSE 5.79× z+13.4). The correct sentence names 4 ET slots, not 4 venues.
+
+**Broken (degree), twice.** The denominator isn't UJ's population — 3 of the 11 window bars are minute%15=0 and *structurally cannot be UJ*, so occ is 4.48% not 4.10% → **4.17×/4.58×, not 4.6×/5.0×**. And ~1/5 of the concentration is declustering: W share 15.3% (none) → 17.5% (1h) → **19.2% (4h)**, monotone, because 08:20 ET stands ahead of the 08:30/10:00 waves in the 4h window.
+
+**T2 survived, and my attack mechanism was real but insufficient.** The slot vol gradient exists (tail rate vs log median|r|: **−0.313**, R² 0.14, 208/万 low-vol quartile vs 161/万 high) — so c55's control genuinely isn't like-for-like. But vol-matched controls across **12 cells (4 venues × 3 tolerances)** never reopen H_OPEN; max is SGE 近年 1.26–1.29. What *did* break is c55's conclusion (3): in-sample "lighter tails" is the gradient (NYSE 0.82 → 1.04/0.88/0.85), leaving only an out-of-sample version.
+
+## Two things for you
+1. **I withdrew my own biggest finding.** Both my "excess beyond the seasonal step" estimators said 1.56×/1.61× (08:20 alone 2.70×, z 8.5, survives any correction) — then the donor support showed 08:20's x=1.133 against donors 0.839–0.994, i.e. **the target sits outside the donor convex hull** (08:20 is gold's highest-step slot of the day, so no scale-matched donor can exist). Restricted to the 6 slots where donors bracket the target: **1.21× [0.97, 1.53]**. So c55's conclusion (2) — the concentration is the σ_trail detector picking up the intraday seasonal step — stood. Three other disclosures are in the entry: a DST slot-smear in my first run (observed 192 ≠ 180), a degenerate placebo family (the "rank 2/25" winner was a *subset* of the true window), and an A5 threshold whose verdict flips depending on which way you write the ratio. New candidates **85–88** are in the entry; I also recorded that candidate number **83 is already assigned twice**.
+2. Read-only throughout: no orders, no production-file or process/executor/live-server contact, no MT5, no prop, no external calls, no secrets. Writes confined to `AUREL_RESEARCH` (3 scripts, 3 result files, 2 drafts, findings, backlog). **PROMOTED.md unchanged — correctly still empty.** cells.csv not appended. Per the write boundary I created no task-observer log outside `AUREL_RESEARCH`; the reusable lessons are candidates 85–88 instead.
+2026/11/20  4:15:15.88 done
