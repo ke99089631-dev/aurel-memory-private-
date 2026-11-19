@@ -1474,3 +1474,27 @@ PROMOTED.md unchanged and still empty — nothing was promoted, so there was not
 One note on scope I should flag: the task-observer skill wants its observation log written under `~/.claude/projects/...`, which is outside this lane's write boundary. Following the boundary and c52's precedent, I wrote nothing there — candidates 75 and 76 are recorded in the findings entry instead.
 2026/11/19  9:50:54.80 done
 ========== 2026/11/19 15:30:23.54 refute start ==========
+Done. Verdict appended to `AUREL_RESEARCH/findings/2026-11-19.md` under `[REFUTE] 2026-11-19 15:30` (verified single copy).
+
+## Target
+cycle53 (12:50) had **no** rule-wise positives — H_W, H_B1, H_W2 are all null, and PROMOTED.md is empty. So I attacked the three things it registered in positive form as byproducts: T1 the "SL excess and TP windfall **nearly cancel**" mechanism, T2 the carry value ΔR_carry (recent **+0.3485 [+0.0099, +0.6863]** = the only nominal CI exclusion in its 12-cell family), T3 the survivorship reservation it left explicitly open on the 18 dropped trades. I did not lean on its undecidable escape hatch (Dukascopy bid ≠ real broker fills) — every sim number accepted as given.
+
+Replication was **15/15 exact** before any attack.
+
+## Verdict: split — 3 broken, 6 attacks failed
+
+**Broken — T2 is made of accounting, not market.** ΔR_carry credits the carry side with the FEED_TOL kickback (ft = 0.1 USD/risk) but the Friday-close comparator gets none, and ft only lands on settled trades (70.6%). Strip it: recent CI lower bound **+0.0078 → −0.0023**, so the family's single nominal exclusion stops excluding. In-sample, **91% of the +0.0262 point estimate is ft** (ft-stripped +0.0022).
+
+**Broken — T1 is a ratio claim published as a difference.** ρ = ΣX_SL/ΣX_TP pooled = **1.412, CI [0.624, 3.912]** — it contains 2.0, P(ρ≥1.5) = 46.8%. "Nearly cancels" and "the TP windfall is a quarter of the SL excess" are indistinguishable here. It doesn't exclude 1.0, so cancellation isn't rejected — only its stated precision.
+
+**Broken — T3's stated reason is 0/18 correct.** All 18 dropped trades have **k_c = −2** (entry 17:05 ET Friday); none failed the 3-bar entry test c53 blamed. The mask `hold ≥ k_c+1` admits k_c<0 for free, and `clR[off[i]+k_c[i]]` then reads **the previous trade's path**. The 629 are exactly the k_c≥0 set, so price-dependent attrition is **zero** — the reservation was vacuous, but a latent negative-index defect is real. My pre-registered leg (b) fired (|G|/risk 2.09×); I adjudicated it down rather than taking the printed boolean, since for k_c=−2 the "Friday close" precedes the entry.
+
+## My own main attack failed, and c53 got stronger
+I expected the paper-vs-real fill gap to live at **every daily ET 17:00–18:00 halt**, 5× more often than weekends, making "negligible" true but irrelevant. Applying c53's identical estimator to all 19404 trades at their own exit bars (alignment 96.7%): only **17 SL / 164 TP** gap-throughs, |GAP| median 0.030 USD, true-halt ΣX_SL/N_all = **+0.00011 / +0.00004** — 0.12×/0.4× the weekend figure, not ≥5×. The label-move placebo confirmed weekend specificity rather than denying it (daily-halt events 0.31×/0.10× the size, 0.12×/0.33× the count). Also survived: 0/500 random year-block splits pass H_W (max min-half mean C +0.0155 vs threshold 0.05); asymmetric cost doubling caps at +0.00041R/trade; and c25's TIME-rate mismatch genuinely does disappear (population-matched, binomial p 0.729 vs 0.0041).
+
+## Two things for you
+1. **My break of T2 only reaches the third decimal.** The ft correction moves the point estimate 4% (+0.3485 → +0.3330) — it kills the significance, not the effect. And two independent placebos *failed* to explain that effect: random-exit gives **−0.0754** (opposite sign) and side-flip **+0.2082** (same sign), so it is neither drift exposure nor BUY-side selection — the mechanism c53's own caveat (iv) blamed. Recent ΔR_carry ≈ +0.33 should carry forward as an unexplained weak positive (n=73), not be filed as settled. c53 was right not to promote it; "post-hoc, alternating year signs" closes it too early.
+2. **Three disclosures on my own work**, in the entry: one tautological printed field (`再開足未検出 18`), one wrong bucket label (c53-B's "(c) weekend" is actually holiday/feed-gap reopens — arithmetic unaffected), and the fact that candidate 75's fix (verdict derived from the boolean, printed as 条件/観測/判定) held — no false sentences this run. New methodology candidates **78–81** are in the entry for the research lane.
+
+Read-only throughout: no orders, no production-file or process/executor/live-server contact, no MT5, no prop, no external calls, no secrets. Writes confined to `AUREL_RESEARCH` (3 scripts, 3 result files, 1 entry draft, findings). **PROMOTED.md unchanged — correctly still empty.** cells.csv not appended (this lane adjudicates other lanes' registered cells; it created none). Per the write boundary I did not create a task-observer log outside `AUREL_RESEARCH` — the reusable lessons are candidates 78–81 in the entry.
+2026/11/19 15:59:41.31 done
