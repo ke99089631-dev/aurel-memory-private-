@@ -35,3 +35,4 @@
 {"kind": "observe", "sid": "T2-1794968700", "side": "SELL", "wall_kind": "outer_sb", "mode": "touch2sb", "sl": 3833.766, "tp": 3733.123, "entry_ref": 3803.71, "why": "同時2本の枠が埋まり(非重複)", "logged_at": "2026-11-18 11:30:10"}
 {"kind": "skip", "sid": "S-0561", "side": "SELL", "mode": "reaccel", "sl": 3769.06, "tp": 3758.882, "entry_ref": 3762.28, "why": "発火が古い>180s (age=334s)", "logged_at": "2026-11-18 20:50:34"}
 {"kind": "skip", "sid": "S-0570", "side": "SELL", "mode": "reaccel", "sl": 3728.52, "tp": 3716.405, "entry_ref": 3718.82, "why": "発火が古い>180s (age=318s)", "logged_at": "2026-11-19 21:05:18"}
+{"kind": "skip", "sid": "T2-1795125300", "side": "SELL", "mode": "touch2sb", "sl": 3674.19, "tp": 3525.652, "entry_ref": 3625.23, "why": "発火が古い>180s (age=3628s)", "logged_at": "2026-11-20 08:00:28"}
