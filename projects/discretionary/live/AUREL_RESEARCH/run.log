@@ -1315,3 +1315,26 @@ The positive control shows the tool detects lumpy information arrival cleanly. T
 **Files written, all under AUREL_RESEARCH:** scripts c55 and c55b, data/c55_venue_open_jumps_result.md and three run logs, five rows in data/cells.csv, backlog additions (UJ split, M1 cache question, methodology candidate 83), DATA_MAP updates to the header, §2 and a new §8 row, and findings/2026-11-20.md. No orders, no production or prop files touched, no external calls, PROMOTED unchanged. Next cycle should be a deepening item (tally since c33 is now 12 exploration to 8 deepening).
 2026/11/20  1:06:30.82 done
 ========== 2026/11/20  6:30:29.85 cycle start ==========
+Cycle 56 is complete. The modified production ledgers and logs in the status output were written by the running executors, not by me. My footprint is the seven AUREL_RESEARCH files listed.
+
+**What I did.** This was a deepening cycle on the announcement-pool mechanism question. Cycle 55 and the 04:10 refute both found that about 19% of c45's "unscheduled jump" arm sits in four US-morning slots (08:20, 08:25, 09:35, 09:40 ET), where the trailing-sigma detector mistakes the daily volatility step for a 5-sigma event. I pre-registered a split of that arm into the contaminated slots (US2) and the remainder, then re-ran c45's exact estimator on the frozen 19,404-trade scan cache. The replication asserts against c45 passed to three digits before any new number was read. Runtime was 78 seconds, no multi-year scan.
+
+**Results (out-of-sample 2021-26H1, hour fixed effects, day-cluster t):**
+
+| Arm | β (R) | t | n trades | MDE |
+|---|---|---|---|---|
+| ANN (NFP/FOMC after) | +0.513 | 4.02 | 138 | 0.256 |
+| UJ_US2 (vol-step slots) | +0.025 | 0.16 | 55 | 0.323 |
+| UJ_oth (purified unscheduled) | +0.104 | 1.10 | 225 | 0.188 |
+| US2 − oth | −0.078 | −0.43 | | 0.363 |
+
+- **H_STEP is underpowered.** The predictable vol step alone shows no sign of running, but 55 trades leave the 95% upper bound at +0.35R. Gold scan adds about ten such trades per year, so this is undecidable here. The independent sample would be a US500 scan cache, which does not exist yet.
+- **H_PURE is inconclusive.** Removing the contaminated trades moved the unscheduled β up, not down, and widened the standard error. The equivalence leg needs the upper bound below half of ANN. It was a hair under in c45 and is now 0.035 over. Deciding it needs roughly 335 outer trades, about 2.7 more years of M5 data.
+- **Knowledge gained.** The contamination c55 found is real as a property of the event set but inert for the R-side comparison. The cheap arm could never have moved the verdict: maximum possible shift was 0.19 times the plausible difference, well under the standard error. I logged that as methodology candidate 89.
+
+**Strongest counter-argument recorded.** The minus-7-day placebo lights up again at t 2.48, exactly where c45 saw it. The null standard deviation is inflated by roughly 1.3 times, so every t in this analysis should be discounted and the printed MDEs are understated. The inconclusive verdict is therefore more inconclusive than it reads.
+
+**Files written.** Findings entry appended to findings/2026-11-20.md. Two backlog items closed with results plus five new sub-items. DATA_MAP updated in the header, the c45 cache entry, and the announcement-pool row. Three rows appended to cells.csv. PROMOTED.md unchanged and correctly empty.
+
+**Next cycle** should be exploration, since the deepening count now stands at 12:9. No orders, no production edits, no external calls, no MT5 connection, no task-observer log written outside the lane boundary.
+2026/11/20  6:49:39.04 done

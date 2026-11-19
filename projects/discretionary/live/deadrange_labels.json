@@ -4,26 +4,26 @@
  "fake_th": 0.6,
  "streak_th": 3,
  "n_needed": 30,
- "generated": "2026-11-19 06:45",
+ "generated": "2026-11-20 06:46",
  "summary": {
   "all": {
-   "n": 387,
-   "avg_R": 0.143,
-   "sum_R": 55.42,
+   "n": 395,
+   "avg_R": 0.14,
+   "sum_R": 55.17,
    "win": 47.8,
    "max_dd_R": -15.94
   },
   "dead": {
-   "n": 60,
-   "avg_R": 0.099,
-   "sum_R": 5.92,
-   "win": 41.7,
+   "n": 62,
+   "avg_R": 0.083,
+   "sum_R": 5.17,
+   "win": 41.9,
    "max_dd_R": -9.84
   },
   "not_dead": {
-   "n": 327,
-   "avg_R": 0.151,
-   "sum_R": 49.49,
+   "n": 333,
+   "avg_R": 0.15,
+   "sum_R": 49.99,
    "win": 48.9,
    "max_dd_R": -11.72
   }
@@ -3511,6 +3511,78 @@
    "dead": false,
    "R": -1.0,
    "entry_jst": "2026-11-19 01:50"
+  },
+  "S-0566": {
+   "version": "deadrange_v1",
+   "fake10": 0.4,
+   "fake_n": 10,
+   "streak": 3,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-19 03:10"
+  },
+  "S-0567": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 4,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-19 09:30"
+  },
+  "S-0569": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 5,
+   "dead": true,
+   "R": -1.0,
+   "entry_jst": "2026-11-19 14:25"
+  },
+  "S-0570": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 6,
+   "dead": true,
+   "R": 0.249,
+   "entry_jst": "2026-11-19 21:00"
+  },
+  "S-0571": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-19 23:25"
+  },
+  "S-0572": {
+   "version": "deadrange_v1",
+   "fake10": 0.9,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": 1.477,
+   "entry_jst": "2026-11-20 00:10"
+  },
+  "S-0573": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.291,
+   "entry_jst": "2026-11-20 00:50"
+  },
+  "S-0574": {
+   "version": "deadrange_v1",
+   "fake10": 0.8,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 0.732,
+   "entry_jst": "2026-11-20 06:15"
   }
  }
 }
