@@ -956,3 +956,4 @@
 {"kind": "update", "target": "S-0144", "logged_at": "2026-11-19 12:45:12", "reaccel": {"status": "no_retest"}, "reaccel_frozen": true}
 {"kind": "update", "target": "S-0145", "logged_at": "2026-11-19 13:00:08", "waiting_resolved": true, "status": "no_retest"}
 {"kind": "update", "target": "S-0145", "logged_at": "2026-11-19 13:00:08", "reaccel": {"retest_time": 1795059900, "retest_jst": "2026-11-19 12:45", "retest_tol": 0.74, "status": "waiting"}, "reaccel_frozen": true}
+{"kind": "update", "target": "S-0145", "logged_at": "2026-11-19 13:15:22", "reaccel": {"retest_time": 1795059900, "retest_jst": "2026-11-19 12:45", "retest_tol": 0.74, "status": "invalid", "why": "リテスト中に終値が構造の外"}, "reaccel_frozen": true}
