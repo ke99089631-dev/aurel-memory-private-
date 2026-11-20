@@ -155,3 +155,4 @@ UnicodeDecodeError: 'utf-8' codec can't decode byte 0x8f in position 0: invalid 
 [LIVE→発注] 新規発火 T2-1795141800 SELL outer_sb(touch2sb) lot0.01 SL3627.083 TP3395.579 (entry≈3532.090 wall3562.340)
    結果 ok=True retcode=10009 deal=52795896
 [observe・同時2本の枠が埋まり撃たず] T2-1795142100 SELL SL3605.944 TP3340.644
+[snapshot error・継続] PermissionError(13, 'アクセスが拒否されました。')
