@@ -1339,3 +1339,24 @@ Cycle 56 is complete. The modified production ledgers and logs in the status out
 **Next cycle** should be exploration, since the deepening count now stands at 12:9. No orders, no production edits, no external calls, no MT5 connection, no task-observer log written outside the lane boundary.
 2026/11/20  6:49:39.04 done
 ========== 2026/11/20 12:30:21.49 cycle start ==========
+Cycle 57 is complete. All writes stayed under AUREL_RESEARCH; no executor, server, MT5, production file, or prop data was touched.
+
+**What I tested (exploration, new §8 row).** Whether the prior ET session's high and low act as barriers (reflection, the support/resistance lore) or magnets (acceleration through, as c26 found for round numbers). Pre-registered: first-passage after approaching the level within a band of 5% of the prior range, cross versus retreat within 2 hours, compared against five pseudo-levels inside the prior range approached in the same direction with the same band. Data: the existing OHLC npz only, no multi-year scan.
+
+**Result: null on both pre-registered cells.**
+
+| Window | D_H (high) | D_L (low) | MDE |
+|---|---|---|---|
+| 在 2010-20 | −0.001 (z −0.05) | −0.013 (z −0.74) | ±3.4–3.6 pp |
+| 外 2021-26H1 | +0.002 (z +0.10) | +0.024 (z +0.96) | ±4.6–5.1 pp |
+
+Neither reflection nor magnet behavior is distinguishable from interior pseudo-levels. Post-breakout continuation is also absent. Approaches to true extremes carry a 2–4× larger prior one-hour move, yet that momentum does not show up in the two-hour first passage.
+
+**Post-hoc observation sent to backlog, not claimed.** Widening the band to 10% of range gives a magnet-direction excess of 5–13 pp in both windows (在 z 3.0/3.8, 外 z 3.3/1.7). It is confounded by band-entry depth: bigger approach bars land deeper in the band, mechanically shortening the cross distance. A one-line depth stratification decides it next cycle.
+
+**Strongest counter-argument recorded.** The main null sits at the edge of power. The G=50 positive control reproduced c26's sign in 5 of 6 cells but at z below 2, so this machinery cannot detect a 3 pp effect. The honest claim is "smaller than 3–5 pp", not "absent".
+
+**Disclosures.** My pre-registered random-walk baseline of 0.5 was wrong because entries sit inside the band. The true-versus-pseudo difference is unaffected, and I logged this as methodology candidate 90. The run took 429 s, over the 3-minute budget. I attempted to stop only my own python process, the kill arguments failed under Git Bash path conversion, and the process completed on its own, so the full output was used unchanged.
+
+**Files written.** New script and result under scripts and data, one findings entry in findings/2026-11-20.md with all numbers filled, three rows in data/cells.csv, backlog items (depth decomposition, candidate 90, M1 cache need), and DATA_MAP §1 tool line plus a new §8 row. PROMOTED.md unchanged. Next cycle is deepening (exploration:deepening now 13:9).
+2026/11/20 12:54:19.92 done
