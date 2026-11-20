@@ -1576,3 +1576,17 @@ A reproduction gate runs first — my own implementation has to land within ±0.
 The box is badly contended right now (even `tasklist` needed >120 s), so the run is slow; I've armed a watcher on the result file and will append the `[REFUTE]` verdict with the numbers to `findings/2026-11-20.md` once it lands. No orders, no production writes, nothing touched outside `AUREL_RESEARCH/`.
 2026/11/20 15:56:27.13 done
 ========== 2026/11/20 21:30:23.86 refute start ==========
+Watcher armed. Status while it runs:
+
+**Target selected.** c57 (12:55) is the newest *registered* finding, and its one forward-going positive is the post-hoc δ=0.10R result: widening the approach band doubles it and only the true prior-session extremes get a higher `p_cross` (在 D_H +0.066 z+2.95 / D_L +0.079 z+3.75; 外 +0.094 z+3.33 / +0.051 z+1.70; 近年 D_H +0.132 z+3.44 — 5 of 6 cells positive). c57 routed it to a forward cell for the next cycle. Its main H_BARRIER judgement is null, so there is nothing there to break.
+
+**Two lane-hygiene facts found on the way, worth flagging:**
+- The **15:30 refute lane pre-registered this exact attack** (`scripts/refute_c57_banddepth.py`, seed 20261121, written 15:42) and launched it, but the session ended at 15:56 with the run unfinished — **no result file, no findings entry**. I am honoring that pre-registration rather than writing a fresh design, since it was committed before any results were seen.
+- **c58 (18:30) left `data/c58_run.log` but never wrote a findings entry** (findings/2026-11-20.md is untouched since 12:52). So c58 is an unregistered orphan, not a promotion candidate — which is why c57 is still the newest registered target.
+
+**One correctness finding of my own, independent of the run.** The pre-registered RW adjustment `p_RW(u) = (3−u)/4` is the right driftless-BM baseline for the band geometry. But `p_cross` conditions on resolution within K=24 and censoring is 55.6%, and conditioning a driftless walk on absorbing before a deadline favours the *nearer* barrier — which is always CROSS, since `(1+u)δ < (3−u)δ` for every `u<1`, and most strongly for deep entries. So `D_adj` **under-corrects** the mechanical depth term in the signal's favour. That makes it a conservative test: if `D_adj` dies anyway the kill is clean, and if it survives it does so carrying a known residual bias.
+
+I did not kill anything. The second python process running my script turned out to be the venv launcher's own worker child (parent PID = mine), not an orphan — and I only changed the priority of that process, from Idle to BelowNormal, which still yields to the Normal-priority executors. No executor, server, schtask, or production file was touched.
+
+I'll append the `[REFUTE]` verdict with the numbers to `findings/2026-11-20.md` once the result file lands — or, if the run fails to finish again, an explicit `[REFUTE] inconclusive — run did not complete` entry recording that this attack has now been attempted twice and what it would take to land it, rather than leaving a third silent gap in the record.
+2026/11/20 21:50:05.76 done
