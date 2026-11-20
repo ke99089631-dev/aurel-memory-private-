@@ -4,13 +4,13 @@
  "fake_th": 0.6,
  "streak_th": 3,
  "n_needed": 30,
- "generated": "2026-11-20 06:46",
+ "generated": "2026-11-21 06:45",
  "summary": {
   "all": {
-   "n": 395,
-   "avg_R": 0.14,
-   "sum_R": 55.17,
-   "win": 47.8,
+   "n": 398,
+   "avg_R": 0.148,
+   "sum_R": 58.75,
+   "win": 48.0,
    "max_dd_R": -15.94
   },
   "dead": {
@@ -21,10 +21,10 @@
    "max_dd_R": -9.84
   },
   "not_dead": {
-   "n": 333,
-   "avg_R": 0.15,
-   "sum_R": 49.99,
-   "win": 48.9,
+   "n": 336,
+   "avg_R": 0.159,
+   "sum_R": 53.57,
+   "win": 49.1,
    "max_dd_R": -11.72
   }
  },
@@ -3583,6 +3583,33 @@
    "dead": false,
    "R": 0.732,
    "entry_jst": "2026-11-20 06:15"
+  },
+  "S-0575": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 2.995,
+   "entry_jst": "2026-11-20 09:20"
+  },
+  "S-0576": {
+   "version": "deadrange_v1",
+   "fake10": 0.7,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": 1.585,
+   "entry_jst": "2026-11-20 10:25"
+  },
+  "S-0577": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 0,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-21 03:40"
   }
  }
 }
