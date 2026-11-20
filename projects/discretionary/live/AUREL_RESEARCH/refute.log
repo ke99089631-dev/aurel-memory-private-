@@ -1558,3 +1558,4 @@ I'll be notified when part D finishes. Summary of what's settled so far:
 
 **The live question part D settles:** λ_oth is **1.385** at \|offset\|≤56d but **0.972** at ≤294d — same arm, same construction. If λ tracks offset range rather than arm density, then c56's T1 is wrong as stated about the *estimator*, and the real phenomenon is that near-offset placebos aren't valid nulls (gold's volatility and the 5σ detector's events cluster at multi-week scale) — which would also retract my own part-A λ table and part-B "λ scales with arm density." That reframing, plus an empirical \|t\| critical value to replace the nominal 2.0, is the session's main deliverable. Nothing is appended to `findings/2026-11-20.md` until D returns.
 2026/11/20 10:19:31.90 done
+========== 2026/11/20 15:30:22.31 refute start ==========
