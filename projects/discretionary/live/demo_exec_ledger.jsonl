@@ -38,3 +38,4 @@
 {"kind": "skip", "sid": "T2-1795125300", "side": "SELL", "mode": "touch2sb", "sl": 3674.19, "tp": 3525.652, "entry_ref": 3625.23, "why": "発火が古い>180s (age=3628s)", "logged_at": "2026-11-20 08:00:28"}
 {"kind": "live", "sid": "T2-1795130100", "side": "SELL", "lot": 0.01, "sl": 3680.857, "tp": 3544.059, "entry_ref": 3631.5, "retcode": 10009, "deal": 52740634, "order": 58567293, "fill_price": 3630.88, "ok": true, "logged_at": "2026-11-20 08:20:16"}
 {"kind": "live", "sid": "T2-1795132800", "side": "SELL", "lot": 0.01, "sl": 3665.742, "tp": 3502.323, "entry_ref": 3611.52, "retcode": 10009, "deal": 52752845, "order": 58579591, "fill_price": 3615.13, "ok": true, "logged_at": "2026-11-20 09:05:39"}
+{"kind": "observe", "sid": "T2-1795136700", "side": "SELL", "wall_kind": "outer_sb", "mode": "touch2sb", "sl": 3645.226, "tp": 3445.677, "entry_ref": 3602.83, "why": "同時2本の枠が埋まり(非重複)", "logged_at": "2026-11-20 10:10:35"}
