@@ -146,3 +146,5 @@
 {"kind": "update", "target": "P-0009", "logged_at": "2026-11-21 02:10:23", "mfe_R": 0.81, "mae_R": 0.65, "hold_bars": 19}
 {"kind": "update", "target": "P-0009", "logged_at": "2026-11-21 02:15:10", "mfe_R": 0.81, "mae_R": 0.65, "hold_bars": 20}
 {"kind": "update", "target": "P-0009", "logged_at": "2026-11-21 02:20:33", "mfe_R": 0.81, "mae_R": 0.78, "hold_bars": 21}
+{"id": "P-0010", "kind": "pin", "lane": "pinbar", "logged_at": "2026-11-21 02:25:22", "pin_time": 1795195200, "pin_jst": "2026-11-21 02:20", "side_num": -1, "side": "BUY", "wall": 3514.64, "width": 177.6, "votes": 2, "votes_lab": "票2+", "wick_ext": 3522.89, "body_edge": 3531.18, "beyond": false, "zone": "ダマシ巣", "jst_hour": 2, "status": "waiting"}
+{"kind": "update", "target": "P-0009", "logged_at": "2026-11-21 02:25:22", "status": "closed", "exit": 3526.69, "exit_reason": "SL", "exit_time": 1795195200, "exit_jst": "2026-11-21 02:20", "hold_bars": 22, "mfe_R": 0.81, "mae_R": 1.19, "R": -1.0, "netR": -1.028}
