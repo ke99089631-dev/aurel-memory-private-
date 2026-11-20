@@ -1361,3 +1361,5 @@ Neither reflection nor magnet behavior is distinguishable from interior pseudo-l
 **Files written.** New script and result under scripts and data, one findings entry in findings/2026-11-20.md with all numbers filled, three rows in data/cells.csv, backlog items (depth decomposition, candidate 90, M1 cache need), and DATA_MAP §1 tool line plus a new §8 row. PROMOTED.md unchanged. Next cycle is deepening (exploration:deepening now 13:9).
 2026/11/20 12:54:19.92 done
 ========== 2026/11/20 18:30:18.46 cycle start ==========
+Waiting for the gold out-of-sample and gate sections to finish writing (the permutation and bootstrap loops are the slow part).
+2026/11/20 18:45:35.34 done
