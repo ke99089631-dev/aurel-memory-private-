@@ -1538,3 +1538,23 @@ Replication first: c45's event set **exact** (2166/786/937, ts sets identical), 
 2. Read-only throughout: no orders, no production-file or process/executor/live-server contact, no MT5, no prop, no external calls, no secrets. Writes confined to `AUREL_RESEARCH` (3 scripts, 3 result files, 2 drafts, findings, backlog). **PROMOTED.md unchanged — correctly still empty.** cells.csv not appended. Per the write boundary I created no task-observer log outside `AUREL_RESEARCH`; the reusable lessons are candidates 85–88 instead.
 2026/11/20  4:15:15.88 done
 ========== 2026/11/20  9:30:23.90 refute start ==========
+I'll be notified when part D finishes. Summary of what's settled so far:
+
+**Target:** cycle56 (today 06:43) self-declared `underpowered/inconclusive`, so there was no PASS to break. I attacked its two *supports* instead: **T1** = its headline self-refutation ("null sd is 1.25–1.3× nominal," inferred from **2** placebo draws) and **T2** = the family's only live positive, outer ANN +0.513 (t 4.02).
+
+**Confirmed (parts A–C, all replication asserts passing — 2166/786/937, ANN n138 β+0.514):**
+
+| Attack | Result |
+|---|---|
+| Cost ×3 | ANN survives (+0.538, t 4.18) — but β *rose*, so this contrast makes cost tests anti-conservative |
+| Alt in/out splits (2010-17/18-26, even/odd, 2010-15/16-26) | 3/3 survive |
+| State mismatch (ANN atr 4.88 vs ctrl 2.39 = 2.04×) | survives: +log atr/risk/b → +0.497 (t 3.87); atr-caliper-matched ctrl → +0.493 (t 3.08) |
+| Jackknife 82 event-days / top-k removal | survives (+0.469…+0.535; top-3 removed Δμ +0.366) |
+| Resolved empirical null, n-matched + studentized | survives: **0/594** placebo draws reach \|t\|≥4.02 |
+
+**Two breaks are mine, not c56's — both retracted with evidence:**
+- Part A's BREAK-8 deflated ANN's t by the **oth** arm's λ (λ_ANN is 0.985, not 1.385) *and* deviated from my own pre-registration (which specified nominal p → Bonferroni 1.49e-3, survives).
+- Part B's BREAK-9 compared a β from n=138 against a null whose draws had median n=58. C-4 nailed it: the 4 exceeding draws had n = 10, 16, 13, 22; Spearman(n,\|β\|) = −0.307.
+
+**The live question part D settles:** λ_oth is **1.385** at \|offset\|≤56d but **0.972** at ≤294d — same arm, same construction. If λ tracks offset range rather than arm density, then c56's T1 is wrong as stated about the *estimator*, and the real phenomenon is that near-offset placebos aren't valid nulls (gold's volatility and the 5σ detector's events cluster at multi-week scale) — which would also retract my own part-A λ table and part-B "λ scales with arm density." That reframing, plus an empirical \|t\| critical value to replace the nominal 2.0, is the session's main deliverable. Nothing is appended to `findings/2026-11-20.md` until D returns.
+2026/11/20 10:19:31.90 done
