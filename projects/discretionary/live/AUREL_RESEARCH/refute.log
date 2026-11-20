@@ -1559,3 +1559,19 @@ I'll be notified when part D finishes. Summary of what's settled so far:
 **The live question part D settles:** λ_oth is **1.385** at \|offset\|≤56d but **0.972** at ≤294d — same arm, same construction. If λ tracks offset range rather than arm density, then c56's T1 is wrong as stated about the *estimator*, and the real phenomenon is that near-offset placebos aren't valid nulls (gold's volatility and the 5σ detector's events cluster at multi-week scale) — which would also retract my own part-A λ table and part-B "λ scales with arm density." That reframing, plus an empirical \|t\| critical value to replace the nominal 2.0, is the session's main deliverable. Nothing is appended to `findings/2026-11-20.md` until D returns.
 2026/11/20 10:19:31.90 done
 ========== 2026/11/20 15:30:22.31 refute start ==========
+Pre-registration and attack code are written and the run is in flight. Status:
+
+**Target** (newest weak signal; `PROMOTED.md` is empty so there is no promotion candidate):
+cycle57's **post-hoc δ=0.10R positive** — "widening the band to 0.10R makes only the true prior-session extremes cross more often" (in-sample D_H +0.066 z+2.95 / D_L +0.079 z+3.75; out +0.094 z+3.33 / +0.051 z+1.70; recent D_H +0.132 z+3.44), which c57 routed to a forward cell for the next cycle.
+
+**What I'm attacking with code** (`scripts/refute_c57_banddepth.py`, pre-registered in the docstring, seed 20261121, same npz / same event machine so none of this leans on c57's acknowledged unresolvable points):
+
+- **A1 band-entry depth** — c57's own revival condition. Per-event `u = (X−close_t)/δ`, the correct driftless-BM baseline `p_RW(u) = (3−u)/4` (c57 printed a 0.5 baseline and disclosed it was wrong), depth-quartile-stratified `D_strat`, and RW-adjusted `D_adj`.
+- **A6 censoring selection** — not in c57's self-critique: `p_cross` conditions on resolution with 55.6% censoring, so I add the unconditional competing-risks version.
+- **A2/A3/A4 placebo family** — near-miss levels (H−0.10R, H−0.05R, H+0.05R, H+0.10R), stale extremes (5 sessions back), and a continuous random-m placebo to break c57's degenerate 5-point pseudo pool.
+- **A5 cost doubling** (spread 0.20 → 0.40 USD against the crossing side), **A7 δ-grid shape** (mechanical ⇒ monotone in δ; Osler stop-clustering ⇒ peak at 0.10R), **A8 alternative in/out splits** (4 chronological blocks + odd/even sessions), **A9 time compression** (the flat-bar-dropped grid makes "24 bars = 2 hours" false), **A10 momentum matching**, **A11 Holm + Bonferroni over c57's ~40 descriptive cells (required |z| ≈ 3.23)**.
+
+A reproduction gate runs first — my own implementation has to land within ±0.010 of c57's six δ=0.10R cells, otherwise the verdict is inconclusive on machine mismatch rather than on the signal.
+
+The box is badly contended right now (even `tasklist` needed >120 s), so the run is slow; I've armed a watcher on the result file and will append the `[REFUTE]` verdict with the numbers to `findings/2026-11-20.md` once it lands. No orders, no production writes, nothing touched outside `AUREL_RESEARCH/`.
+2026/11/20 15:56:27.13 done
