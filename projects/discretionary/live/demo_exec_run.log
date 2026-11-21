@@ -157,3 +157,4 @@ UnicodeDecodeError: 'utf-8' codec can't decode byte 0x8f in position 0: invalid 
 [observe・同時2本の枠が埋まり撃たず] T2-1795142100 SELL SL3605.944 TP3340.644
 [snapshot error・継続] PermissionError(13, 'アクセスが拒否されました。')
 [snapshot error・継続] PermissionError(13, 'アクセスが拒否されました。')
+[snapshot error・継続] PermissionError(13, 'アクセスが拒否されました。')
