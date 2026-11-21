@@ -4,13 +4,13 @@
  "fake_th": 0.6,
  "streak_th": 3,
  "n_needed": 30,
- "generated": "2026-11-21 06:45",
+ "generated": "2026-11-22 06:45",
  "summary": {
   "all": {
-   "n": 398,
-   "avg_R": 0.148,
-   "sum_R": 58.75,
-   "win": 48.0,
+   "n": 399,
+   "avg_R": 0.145,
+   "sum_R": 57.75,
+   "win": 47.9,
    "max_dd_R": -15.94
   },
   "dead": {
@@ -21,10 +21,10 @@
    "max_dd_R": -9.84
   },
   "not_dead": {
-   "n": 336,
-   "avg_R": 0.159,
-   "sum_R": 53.57,
-   "win": 49.1,
+   "n": 337,
+   "avg_R": 0.156,
+   "sum_R": 52.57,
+   "win": 49.0,
    "max_dd_R": -11.72
   }
  },
@@ -3610,6 +3610,15 @@
    "dead": false,
    "R": -1.0,
    "entry_jst": "2026-11-21 03:40"
+  },
+  "S-0578": {
+   "version": "deadrange_v1",
+   "fake10": 0.5,
+   "fake_n": 10,
+   "streak": 1,
+   "dead": false,
+   "R": -1.0,
+   "entry_jst": "2026-11-21 04:20"
   }
  }
 }
