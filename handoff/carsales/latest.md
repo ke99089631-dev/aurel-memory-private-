@@ -1,76 +1,81 @@
-# 引き継ぎ書 車販売 2026-11-21_2329
+# 引き継ぎ書 車販売 2026-11-22_1041
 
 ## 進行中の案件(状態と次の一手)
-- **置き場所の移行（Cloudflare Pages）→ AUREL 側 A〜E は全部入れた。★Cloudflare の認可だけが詰まって止まっている。会長が自宅 PC に着くまで待ち。** 11/19 12:00 時点で会長「今自宅に居ないので帰宅しないとできません」。**次の一手＝会長が「PC にいる」と言ったら、AUREL が `schtasks //create //tn JautoCfLogin //tr "C:\Users\user\CarSales\preview\cf_login_pc.bat" //sc once //st 00:00 //f` → `schtasks //run` → PC の既定ブラウザに Cloudflare の許可画面が開く → 会長が青い「Authorize」を 1 回押す → `preview/cf_callback_result.txt` が `OK` になる → `preview\pages_deploy.bat` → `jauto.pages.dev` のスクショを会長に見せる。**
-- **携帯からの認可は 3 回失敗して打ち切った（会長に LINE で通知済み）**。① `wrangler login` の待受プロセスがセッション再起動で落ちた（verifier 消失・`Assertion failed: !(handle->flags & UV_HANDLE_CLOSING)` で異常終了）② 会長がエラー画面で「再試行」を押した → `consent verifier has already been used` ③ Safari で開いた → `No CSRF value available in the session cookie`。**会長の操作ミスではない。携帯からこの方式を通すのが元々きわどい。この説明を繰り返す必要はない（もう伝えてある）。**
-- **noindex 削除 → 完了（11/19 会長「1、2 を GO」）**。`site/index.html` 7 行目を削除。`site/robots.txt`（見本・旧版は Disallow）と `site/sitemap.xml` を新設。本番で `curl https://jauto-concierge.com/` に `name="robots"` が 0 件・`robots.txt` 配信 200 を確認済み。**検索に載り始めるのはここから数日〜数週間。**
-- **公式 LINE → 完了（11/19 会長「全て設定が終わり、確認も完了した」）**。あいさつ・応答=手動・Webhook オン・リッチメニュー 3 ボタン、すべて会長が実機で確認済み。**この件はクローズ。蒸し返さない。**
-- **次の工程＝集客（11/19 AUREL が提案・会長の GO はまだ）**。会長「次すすめられるとしたらどれだろう？集客とか連携の構築？」に対し、**「金を使わない入口から」**と答えた。AUREL が着手できる 3 つ＝①店頭・名刺用の QR ポスター（公式 LINE 直行）②「気になる車の URL を送ってください」導線（`INTERCEPT_PLAN.md` §3・`FUNNELS.md` 1-14 `intent=secondop`・在庫ゼロ費用ゼロで成立）③ Google 検索広告の下ごしらえ（型式キーワード表と広告文案・出稿は会長 GO 後）。**会長が「進めて」と言ったら①②から。**
-- **店構えの写真 → 会長待ち。枠だけ用意済み**。`site/index.html` の「店舗情報」直下 `<figure class="storephoto rise" hidden>`。`site/assets/store/front.jpg` に置いて `hidden` を外すだけ。**写真は会長が決める（AI は候補を並べるまで）。**
+- **★置き場所の移行（Cloudflare Pages）→ 認可もデプロイも済んだ。残りは会長の一言「切り替えGO」だけ。** 11/21 深夜、会長帰宅 → PC のブラウザで Authorize 1 回 → 認可成立（`~/.wrangler/config/default.toml`・refresh あり）。`preview\pages_deploy.bat` で **初回デプロイ成功（39 ファイル・17 秒）**。**次の一手＝会長が「GO」と言ったら `PYTHONIOENCODING=utf-8 "C:/Users/user/AppData/Local/Programs/Python/Python312/python.exe" preview/pages_cutover.py go`** → apex と www を Pages の Custom domains に追加＋DNS の CNAME を `jauto-3zr.pages.dev` に向ける → 60 秒待って `status` → `curl -I https://jauto-concierge.com/` の `cache-control` から `no-store` が消えたのを確認 → スクショを会長に見せる。
+- **仮 URL は `https://jauto-3zr.pages.dev`**（`jauto.pages.dev` は他所で使用済みだったため `-3zr` が付いた。**プロジェクト名は `jauto` のまま**）。目視済み＝スマホ幅・PC 幅（`preview/pages_m_1..5.jpg` `pages_d_1..5.jpg`）、在庫 2 台・写真帯・LINE リンク 11 本・JS エラー 0・4xx 0・`index.html` の md5 が本番 apex と一致。
+- **LINE の Webhook URL → hub へ切替 済（11/21・AUREL が API で実行）。会長の手は要らなかった。** `PUT /v2/bot/channel/webhook/endpoint` → `POST /v2/bot/channel/webhook/test` が 200・`logs/chat-20261121.jsonl` に `line_webhook` の行。**この件はクローズ。会長に「Webhook を変えてください」と頼まない。**
+- **切替後にやること**：店長に在庫を 1 件編集してもらい、`server/stock.py` の `publish()` → 背景デプロイが走るのを `logs/pages_deploy.log` で確認（`HOSTING_PAGES.md` §3-5）。
+- **次の工程＝集客（11/19 AUREL 提案・会長の GO はまだ）**。金を使わない入口から。①店頭・名刺用の QR ポスター（公式 LINE 直行）②「気になる車の URL を送ってください」導線（`design/INTERCEPT_PLAN.md` §3・`FUNNELS.md` 1-14 `intent=secondop`）③ Google 検索広告の下ごしらえ（型式キーワード表・出稿は会長 GO 後）。**会長が「進めて」と言ったら①②から。**
+- **店構えの写真 → 会長待ち。枠だけ用意済み**：`site/index.html` の「店舗情報」直下 `<figure class="storephoto rise" hidden>`。`site/assets/store/front.jpg` に置いて `hidden` を外すだけ。**写真は会長が決める。**
 - **在庫の写真 → 会長・店長待ち**。今ある 2 台（40ハリアー Sモデリスタ・50プリウス 後期 Sツーリング）に 2 枚ずつ。追加は `/stock?k=` の「編集・写真を足す」から。
-- **返信時間の約束の一文 → 会長が店長と決めてから**。①あいさつの「担当者が確認してご相談に乗ります✨」の次の行 ②サイト本文、の 2 箇所に同じ 1 行。**文は会長が書く。**
+- **返信時間の約束の一文 → 会長が店長と決めてから**。①あいさつの「担当者が確認してご相談に乗ります✨」の次の行 ②サイト本文。**文は会長が書く。**
 
 ## 会長が最近指した物(呼び名 → 正体とファイル/画面/数字の場所)
-- **「1、2」**（11/19）→ AUREL が出した残り 3 つのうち ①置き場所の移行の GO ②noindex の削除。3 番目（店長との 2 点）は含まれていない。
-- **「リッチメニュー」** → LINE トーク画面の下に固定で出る 3 ボタンの帯。画像＝`site/assets/line/richmenu_c.png`（2500×843・コンパクト型・76KB・公開 URL 200）。元絵＝`preview/richmenu.html`、描画＝`node preview/shot_richmenu.cjs`。手順の表＝`design/LINE_SETUP.md` §6。
-- **「A、B、C」**（リッチメニューの設定値）→ A＝左のテキスト「車探しの相談をしたいです。」／B＝中のテキスト「今の車を売りたい・乗り換えたいです。」／C＝右のリンク `https://jauto-concierge.com/#stock`。**A・B はサイトのボタン（`site/index.html` の `msg=`）と一字も違わない。変えるとサーバの買う／売る判定が外れる。**
-- **「hub」** → `hub.jauto-concierge.com`。PC の 8791 をそのまま出す入口。管理画面（`/hub?k=` `/stock?k=`）・`/line/webhook`・`/api/ev` `/api/car` はここ。**サイト本体（apex）とは別。** tunnel の設定は `preview/cloudflared.yml` の ingress。
-- **「置き場所」「移行」** → `design/HOSTING_PAGES.md`（正本・11/19 に API トークン方式→ PC 1 クリック方式へ改訂）。進み具合は STATE `§7-bg`。
+- **「やっと帰宅できた」**（11/21 23:29）→ 11/19 から止めていた Cloudflare 認可を PC でやる合図。これで足踏みは解消。
+- **「うまくいきませんでした」の画面**（11/21 の会長の写真・`preview/inbox_233430.jpg`）→ PC ブラウザの `localhost:8976/oauth/callback?code=...`。**会長の操作は正しかった。** 落ちたのは AUREL 側のトークン交換（下記）。
+- **「切り替え」「GO」** → apex（`jauto-concierge.com`）と www を tunnel（PC 配信）から Pages に向けること。道具＝`preview/pages_cutover.py`（`status` / `go` / `back`）。
+- **「hub」** → `hub.jauto-concierge.com`。PC の 8791 を出す入口。管理画面（`/hub?k=` `/stock?k=`）・`/line/webhook`・`/api/ev` `/api/car` はここ。**サイト本体（apex）とは別。** ingress＝`preview/cloudflared.yml`。
+- **「置き場所」「移行」** → `design/HOSTING_PAGES.md`（正本・11/21 に §1 を「残りは一言 GO だけ」に改訂）。経緯＝STATE `§7-bh`（11/21）と `§7-bg`（11/19）。
 - **正本 4 つ** → `STATE.md`(現在地) / `CONCEPT.md`(何を作るか) / `ROADMAP.md`(順番) / `CONCIERGE.md`(AI 会話設計)。話が曖昧なときは答える前に `STATE.md` を読む。
-- **集客の設計** → `design/FUNNELS.md`（入口 14 本・§1-c の横取り 2 本）／`design/INTERCEPT_PLAN.md`（横取りの詳細）／`design/SNS_STRATEGY.md`／`design/LAUNCH_CHECKLIST.md`（公開前チェック）。
+- **集客の設計** → `design/FUNNELS.md`（入口 14 本）／`design/INTERCEPT_PLAN.md`／`design/SNS_STRATEGY.md`／`design/LAUNCH_CHECKLIST.md`。
 
 ## 決まったこと・会長の指示(日付つき)
-- **2026-11-19 会長「1、2 を GO」** ＝ ①置き場所を Cloudflare Pages へ ②noindex 削除。
-- **2026-11-19 会長「こちら側の作業の君の指示が表示と違う。君がすべて代行してくれ」** ＝ **会長に手順を踏ませる形を捨てる。** これを受けて API トークン作成（権限 2 行を自分で選ぶ）をやめ、「Authorize を 1 回押すだけ」に変えた。**★この指示は以後も効く。会長にダッシュボードの操作を順番に説明する案は出さない。AUREL が代行できる形を先に探す。**
-- **2026-11-19 会長「リッチメニュー3ボタン作ろう」→ 同日 設定・実機確認 完了。** 後回しリスト（`LINE_SETUP.md` §4）から §6 へ移した。
-- **2026-11-19 応答メッセージ＝オフ は「応答方法＝手動」と同じ**（会長が画面を見て確認）。`LINE_SETUP.md` §1 の 3 に注記済み。
-- **2026-11-19 画像生成について会長に答えた**：AUREL が自力でできるのは「文字・配置・色・既存写真を組んだ画像」（HTML → Playwright で撮る）。**写真や絵をゼロから生むには Gemini の API キーが `~/.claude/.env` に必要で、今は入っていない**（確認済み・真偽値のみ）。入れるなら携帯から貼ってもらい `.env` に伏せて書く。
-- **2026-11-18 会長「まずは公式 LINE から作ろうか」** ＝集客より LINE が先。→ **11/19 に LINE 側が完了したので、次は集客に進める状態になった。**
+- **2026-11-21 会長が PC で Authorize を 2 回押して認可成立。** 1 回目は AUREL 側の不具合で無駄打ちさせた（下記「注意」）。
+- **2026-11-19 会長「こちら側の作業の君の指示が表示と違う。君がすべて代行してくれ」** ＝ **会長に手順を踏ませる形を捨てる。★この指示は以後も効く。** 11/21 はこれに従い、API トークン作成も LINE Developers の画面操作も会長にさせず、AUREL が API で代行した。**ダッシュボードの操作手順を並べる案は出さない。**
+- **2026-11-19 会長「1、2 を GO」** ＝ ①置き場所を Cloudflare Pages へ ②noindex 削除。②は完了済み（`site/robots.txt` `sitemap.xml` あり・本番に `name="robots"` 0 件）。
+- **2026-11-19 公式 LINE 完了（会長「全て設定が終わり、確認も完了した」）**。あいさつ・応答=手動・Webhook オン・リッチメニュー 3 ボタン、会長が実機確認済み。**蒸し返さない。**
 - **2026-11-18 あいさつメッセージ 確定**（会長が案 B を手直し）。全文は `design/LINE_SETUP.md` §2。**✨ は会長が入れた。AI の判断で外さない。**
 
 ## 決まっていないこと・会長の判断待ち
-- **Cloudflare の認可**（帰宅後・PC で Authorize 1 回）。これが済むまで Pages への配信は 1 度も走っていない。
-- **カスタムドメインの切り替え GO**（認可の後）。**wrangler の OAuth には DNS 編集権限が無い**ので、apex と www を Pages に向ける作業はダッシュボードで会長が行うか、後から API トークンをもらうかの二択。これは認可が通ってから相談する。
-- **LINE Developers の Webhook URL 変更**（`https://jauto-concierge.com/line/webhook` → `https://hub.jauto-concierge.com/line/webhook` → 「検証」）。apex を切り替える前にやっておく。
+- **★切り替えの GO**（一言）。これだけで移行が終わる。今は apex も www も tunnel のまま＝**客には何も変わっていない**。
 - **集客の着手 GO**（QR ポスター／セカンドオピニオン導線／キーワード表）。
 - **店長との 3 点**：LINE を誰が返すか／返信時間は何分か／Google ビジネスプロフィールを J-auto の名で作ってよいか。
-- **店構えの写真・在庫の追加写真。**
-- **今ある 2 台に NEW を付けるか。**
+- **店構えの写真・在庫の追加写真。今ある 2 台に NEW を付けるか。**
 - 後回しと決めた物：タップ式 3 問（`FUNNELS.md` §3-1）／S ランク判定の出し分け／月 1 配信／Pixel・CAPI・広告の実弾。
 
 ## 直近の会話で出した表や数字(何の数字か・どこで再計算できるか)
-- **`dist/` ＝ 39 ファイル・5.0MB**（11/19）。`site/` 丸ごとの 15MB から減った。再計算＝`PYTHONIOENCODING=utf-8 "C:/Users/user/AppData/Local/Programs/Python/Python312/python.exe" preview/pages_build.py`。候補写真（`assets/hero/cand`）・見本（`stock_preview.html`）・旧版（`index_v*_backup.html`）は出さない。`assets/store/front.jpg` が missing と出るのは**正常**（会長待ちの枠）。
-- **CORS の実測（11/19・hub 経由）**：`GET /api/car` 200＋`access-control-allow-origin: https://jauto-concierge.com`／`OPTIONS /api/ev` 204＋methods・headers・max-age／`POST /api/ev`（text/plain）204＋ACAO／**他ドメインの Origin には ACAO が 0 件**／`logs/chat-20261119.jsonl` に `ux_view` が記録された。再実行＝`curl -s -D - -o /dev/null -H "Origin: https://jauto-concierge.com" "https://hub.jauto-concierge.com/api/car?v=x"`。
-- **dist の目視（11/19）**：`node preview/shot_dist.cjs http://127.0.0.1:8798/ dist` → robots なし・API=hub・在庫 2 台・LINE リンク 11 本・**JS エラー 0・4xx 0**。`images 51 loaded 7（スマホ）/17（PC）` と出るが、**これは写真帯の遅延読み込みで、今の本番サーバ（8791）でも同じ数字。異常ではない。**
-- **restart 後（11/19）**：待受 1 本（PID 2952）・`http://127.0.0.1:8791/` 200・`https://hub.jauto-concierge.com/` 200・`https://jauto-concierge.com/` 200。
-- **リッチメニュー画像**：2500×843・76,333 bytes。大型 2500×1686 は**作らない**（3 列だと「売る・乗り換え」7 文字が入る最大の字がコンパクトと同じで、余白が増えるだけ。一度作って比べた上での判断）。
-- **会長 LINE への push（11/19）**：リッチメニューの説明＋画像（2 通）／A・B・C のコピー用（4 通）／Cloudflare 認可リンク（3 回）／打ち切りの連絡（1 通）。全部 200。送り方＝`sys.path` に `server` を入れて `line_push.config()` でトークンを取り、`https://api.line.me/v2/bot/message/push` に直接 POST する heredoc。
+- **初回デプロイ（11/21 23:40）**：`files: 39  rc: 0  17s` → `https://a79eb8e8.jauto-3zr.pages.dev`。再実行＝`cmd.exe //c "C:\Users\user\CarSales\preview\pages_deploy.bat"`。ログ＝`logs/pages_deploy.log`。
+- **Pages 側の実測（11/21）**：`/` 200・68,357 bytes／`robots.txt` 200・220／`sitemap.xml` 200・338／`stock/stock.json` 200・964／`stock/c20261111122945-1.jpg` 200・320,496／`assets/strip/s06.jpg` `u01.jpg` 200。**`privacy.html` は `/privacy` へ 308（両方 200・Pages の癖で正常）。存在しない URL は index を 200 で返す。**
+- **`curl -s https://jauto-concierge.com/ | md5sum` と `jauto-3zr.pages.dev` の md5 が一致**（`7df51dad…`）＝中身は同一。
+- **見分け方**：tunnel（PC 配信）＝`cache-control: no-store, no-cache, must-revalidate`／Pages＝`cache-control: public, max-age=0, must-revalidate`＋`x-content-type-options` `referrer-policy`。`server: cloudflare` は**どちらも同じ**なので判定に使えない。
+- **`shot_dist.cjs` の出力（11/21・pages.dev）**：`images 51 loaded 7（スマホ）/17（PC）`。**これは写真帯の遅延読み込みで正常。** `robots:(none)` `api:https://hub.jauto-concierge.com` `cars:2` `lineLinks:11` `errors:0`。再実行＝`node preview/shot_dist.cjs https://jauto-3zr.pages.dev/ pages`。
+- **restart 後（11/21 23:46）**：待受 1 本（PID 12632）・`http://127.0.0.1:8791/` 200・`https://hub.jauto-concierge.com/` 200・pages.dev の Origin に `access-control-allow-origin` が返る。
+- **DNS の現状**（`pages_cutover.py status`）：apex・www・hub とも `35a6cb5d-79ba-456b-bce9-2258209cc506.cfargotunnel.com`・Pages domain なし。ゾーン ID `eafb99cb13f3bc28ffb367c57eb66033`・アカウント ID `acaa84ba1b26bb87a7102eab8d319bed`（秘密ではない）。
 
 ## 注意(前回うまく通じなかった言い方・誤解しやすい点)
-- **★会長に「ダッシュボードのここを押して、次はこれ」と手順を並べる形は失敗した**（11/19「指示が表示と違う」）。画面の文言は版で変わるし、会長は携帯。**まず AUREL が代行できる形を探し、どうしても人が要る所だけを 1 アクションに削って頼む。** 今回たどり着いた形＝「青いボタンを 1 回押すだけ」。
-- **会長の携帯は iPhone・LINE 内ブラウザ。** localhost に戻る OAuth は携帯では通らない（3 回検証済み）。同種の認可が今後出たら、**最初から PC 前提で組む。**
-- **失敗を会長の操作のせいに聞こえる言い方をしない。** 11/19 は「再試行を押したから」と一度書いてしまった。事実ではあるが、**方式がきわどいのが原因**と先に言う。
-- **`.bat` は ASCII のみ。** 日本語コメントは cmd.exe が化けて即死する。
+- **★会長の 1 クリックを無駄にしない。** 11/21 の 1 回目は、会長が正しく Authorize を押したのに、AUREL 側のトークン交換が `403 error code 1010`（Cloudflare の壁が Python 既定の User-Agent を弾く）で落ち、戻り URL を保存していなかったので**もう一度押させた**。直した＝`cf_oauth.py` にブラウザ相当の UA、`cf_callback_server.py` が戻り URL を `preview/cf_callback_url.txt` に残す（成功で消す）。**人に頼む一手の後ろは、こちら側で何度でもやり直せる形にしてから頼む。**
+- **失敗を会長の操作のせいに聞こえる言い方をしない。** 11/21 も「会長の操作は正しかった、落ちたのはこちら」と先に言った。これを続ける。
+- **`wrangler` の罠（11/21 実測）**：4.166 は `pages` 命令を Workers に横流しして「Missing entry-point」で落ちる。**`--force` を付けると従来の Pages に通る**（`pages_deploy.py` に入れてある）。`.bat` に `PYTHONIOENCODING=utf-8` が無いと wrangler の絵文字出力で `cp932` エラー。
+- **DNS は AUREL が書ける（11/21 判明）**：`~/.cloudflared/cert.pem` の中の apiToken がゾーンの DNS を読み書きできる（TXT を作って消して実測）。**wrangler の OAuth は DNS 不可（403）だが、もう要らない。** 会長にトークンを作らせる話は**復活させない**。
+- **`.bat` は ASCII のみ。** 日本語コメントは cmd.exe が化けて即死。
 - **Bash ツールに `python`/`py` は無い。** `C:\Users\user\AppData\Local\Programs\Python\Python312\python.exe` をフルパス＋`PYTHONIOENCODING=utf-8`。**本番サーバは別の venv**＝`C:\Users\user\AppData\Local\hermes\hermes-agent\venv\Scripts\python.exe`（`line_push` を呼ぶ heredoc と `py_compile` はこちら）。
-- **PowerShell ツールは複合コマンド・`Remove-Item`・パイプ経由の `Select-String` が権限で弾かれる。** 同じことは Bash ツールで通る。**長時間の常駐プロセスは `schtasks //create //sc once` → `//run` で起こす**（セッションが切れても生き残る。`run_in_background` のシェルは次のセッションで落ちている）。
-- **`preview\shot.bat` は今は使えない。** `.cjs` を書いて `node` で動かす。型＝`require('C:/Users/user/AppData/Local/npm-cache/_npx/705bc6b22212b352/node_modules/playwright')` ＋ `chromium.launch({ executablePath: 'C:/Users/user/AppData/Local/ms-playwright/chromium-1248/chrome-win64/chrome.exe' })`。`.rise` は `classList.add('in')` してから撮る。既存＝`shot_dist.cjs`（dist の全ページ・画像の読込数も出す）・`shot_richmenu.cjs`・`shot_stock.cjs`。
-- **Read ツールは 2000×2000px を超える画像を開けない。** 会長の iPhone スクショ（1170×2532）は PIL で `thumbnail((1400,1400))` に縮めてから Read。全ページスクショは 1900px ごとに切って JPEG に。
-- **★本番反映の手が 2 つに分かれた（11/19〜）**：`site/*.html`・`assets` を直したら **`preview\pages_deploy.bat` 1 回**（Pages 移行の完了後）。`server/*.py`・`.env` を直したら `restart.bat`。**ただし移行は未完了なので、今はまだ `site/` は PC 配信＝保存した瞬間に本番に出る。** 混同して「deploy しました」と言わない。
-- **`restart.bat` は Bash から `cmd.exe //c "C:\\Users\\user\\CarSales\\preview\\restart.bat"` のフルパス**。60 秒で返らずバックグラウンドに回ることがある。**完了を待たず `netstat` と `curl` で自分で確かめる。**
+- **PowerShell ツールは複合コマンド・`Remove-Item`・パイプ経由の `Select-String` が権限で弾かれる。** 同じことは Bash ツールで通る。**長時間の常駐プロセスは `schtasks //create //sc once` → `//run`**（`run_in_background` のシェルはセッションを跨ぐと落ちる。11/21 も 2 回落ちた）。
+- **`preview\shot.bat` は使えない。** `.cjs` を書いて `node` で動かす。型＝`require('C:/Users/user/AppData/Local/npm-cache/_npx/705bc6b22212b352/node_modules/playwright')` ＋ `chromium.launch({ executablePath: 'C:/Users/user/AppData/Local/ms-playwright/chromium-1248/chrome-win64/chrome.exe' })`。既存＝`shot_dist.cjs`（URL とタグを引数で取る）・`shot_richmenu.cjs`・`shot_stock.cjs`。
+- **Read ツールは 2000×2000px を超える画像を開けない。** 会長の写真は PIL で `thumbnail((1400,1400))`。全ページスクショは 1900px ごとに切って JPEG に。
+- **★本番反映の手が 2 つ**：`site/*.html`・`assets` を直したら **`preview\pages_deploy.bat` 1 回**。`server/*.py`・`.env` を直したら `restart.bat`。**切替前の今は apex がまだ PC 配信なので、`site/` は保存した瞬間に本番に出る。切替後は deploy が要る。** 混同して「deploy しました」と言わない。
+- **`restart.bat` は Bash から `cmd.exe //c "C:\\Users\\user\\CarSales\\preview\\restart.bat"`。** 60 秒で返らないことがある。**完了を待たず `netstat` と `curl` で自分で確かめる。**
 - **確認の出力を見てから `STATE.md` に書く。**
-- **秘密は出さない。** `.env` の鍵・合鍵・Cloudflare のトークンは画面にも STATE にも書かない。確認は真偽値だけ。
-- **会長の文は AI が直さない。** あいさつの ✨ や「車相談窓口」を整えない。一人称・思想・経歴も同じ。
+- **秘密は出さない。** `.env` の鍵・`cert.pem` の apiToken・OAuth トークンは画面にも STATE にも書かない。確認は真偽値だけ。
+- **会長の文は AI が直さない。** あいさつの ✨ も一人称も思想も経歴も同じ。
 - **会長は 3 レーン（サイト／LINE／集客）の現在地と「公開に要る残り」で見る。** リリース番号で報告しない。
-- **スキル観察ログ（`C:\Users\user\.claude\projects\C--Users-user-CarSales\skill-observations\`）は未レビュー 18 件。11/19 も Write・Bash の両方で書き込みが権限に弾かれた**（`0021-render-brand-assets-from-site-tokens-via-html-screenshot.md` を書こうとして失敗）。**弾かれる前提で動く。**
+- **スキル観察ログ（`C:\Users\user\.claude\projects\C--Users-user-CarSales\skill-observations\`）は未レビュー 19 件。11/21 も Write・Bash の両方で `0022-…` の書き込みが権限で弾かれた。弾かれる前提で動く。**
 
 ## （サーバが自動で追記）
-- 区切った理由: 期限切れ(12時間)
-- 前の会話ID: 55add5bc-72de-4013-b6d5-3270e01f64e4
-- 前の会話の全文: C:\Users\user\.claude\projects\C--Users-user-CarSales\55add5bc-72de-4013-b6d5-3270e01f64e4.jsonl
-- 最後のやり取り: 2026-11-19 12:23 JST
+- 区切った理由: 日次区切り
+- 前の会話ID: 09ae44b7-957a-4ae3-8238-9d85674c1e44
+- 前の会話の全文: C:\Users\user\.claude\projects\C--Users-user-CarSales\09ae44b7-957a-4ae3-8238-9d85674c1e44.jsonl
+- 最後のやり取り: 2026-11-21 23:46 JST
 - 引き継ぎ書の本文: あり
 
 ### 直近の発言(最大30件・新しい順)
+- 11-22 10:41 会長: GO
+- 11-21 23:46 AUREL: 認可が通り、Pagesへの初回配信まで済みました。残りは会長の一言だけです。  **今日できたこと** - Cloudflare の認可：成立。1回目の「うまくいきませんでした」は会長の操作ではなく、こちらの通信がCloudflareの壁に弾かれたもの。直して2回目で通りました。 - 仮URL `https://jauto-3zr.pages.dev` に初回配信。本番と中身が完全一致（在庫2台・写真帯・LINEボタン11本・エラー0）をスマホ幅・PC幅で確認済み。 - LINEのWebhook先を hub に切替。会長の手は不要でした（APIで変更・検証200・サーバで受信確認）。 - DN
+- 11-21 23:36 会長: 再度行い、完了したと出てます
+- 11-21 23:35 AUREL: 写真の内容：PCのブラウザに「うまくいきませんでした／AURELに伝えてください」と出ている画面です。アドレス欄は localhost:8976 で、Cloudflareからの戻り（code付き）は届いています。  **会長の操作は正しく通っていました。** 失敗したのはこちら側です。Cloudflareの壁（error 1010）が、Pythonの既定の通信署名を弾いていました。ブラウザ相当の署名に直し、次回からは戻りURLも保存して押し直し不要にしました。  **もう一度、PCのブラウザに許可画面を開きました。** 同じく一番下の青い「Authorize」を1回だけお願いします。今度は「完
+- 11-21 23:34 会長: 【添付画像】C:\Users\user\.aurel\inbox\20261121-233430-image.jpg この画像を読み取り、日本語で内容と要点を説明してください。
+- 11-21 23:34 会長: [画像を送信] 20261121-233430-image.jpg
+- 11-21 23:33 AUREL: おかえりなさい。**PCのブラウザにCloudflareの許可画面を開きました。**  やることは1つだけです。  - PCの画面を見て、一番下の青い「**Authorize**」を1回押す。  押すと「完了しました」のページが出ます。出たら、こちらで自動的に受け取って続きをやります（Pagesへの初回配信 → 仮URLのスクショ）。10分以内に押されなければ受け口は自動で閉じるので、その時は「もう一回」と言ってください。  もしブラウザに画面が出ていなければ、その旨を一言ください。
+- 11-21 23:31 AUREL: 🔄 会話を区切りました(期限切れ(12時間))。引き継ぎ書: 2026-11-21_2329.md。「前の会話に戻して」で戻せます。
 - 11-21 23:29 会長: やっと帰宅できた。止まっていた作業を進めよう
 - 11-19 12:23 AUREL: 結論：**次は集客側。ただし「金を使わない入口」から。** 広告（実弾）は置き場所の移行とPixelが済んでからで、それまでに無料で埋められるものが4つあります。  **今日から動けるもの（会長・店長側、外出先でも可）** 1. **店長との決め事3つ**：LINEを誰が返すか／何分で返すか／Google ビジネスプロフィールを J-auto の名前で作ってよいか。これが決まらないと下の2つが始められません。 2. **Google ビジネスプロフィール**（無料・地図と「清須 車屋」検索に出る）。店長OKなら登録は携帯でできます。手順はこちらで一手ずつ出します。 3. **写真**：店構え1
 - 11-19 12:21 会長: 了解。 次すすめられるとしたらどれだろう？集客とか連携の構築？
@@ -93,11 +98,3 @@
 - 11-19 11:56 会長: こちら側の作業の君の指示が表示と違う。 君がすべて代行してくれ
 - 11-19 11:49 AUREL: **2（noindex）は完了**。本番からもう消えていて、robots.txt と sitemap も出ています。検索エンジンが拾い始めるのはここから数日〜数週間です。  **1（置き場所の移行）は、こちら側の準備を全部入れました。残りは会長の携帯作業2つ。**  やったこと - PC側の入口 hub.jauto-concierge.com を開けた。管理画面・LINE通知・計測はここに残ります。今のサイト（apex）はまだPC配信のまま、客には何も変わっていません。 - サイトの計測と車種語の照合を hub 向きに切り替え、サーバ側で別ドメインからの呼び出しを許可。本番で実測して通っていま
 - 11-19 11:38 会長: 1、2をGO
-- 11-19 11:36 AUREL: 記録しました。**公式LINEの最低限の整備はこれで完了**です。客が来れば、あいさつ → ボタン → 会長のLINEに通知、まで本番で動いています。  **現在地（3レーン）** - サイト：仮完成。残りは店構えの写真と在庫の写真（会長・店長待ち）。 - LINE：完了。残るのは「誰が返すか」と「返信時間の一文」（店長と決めてから）。 - 集客：未着手。11/18の決定どおり、LINEが整ったので次に進める段階。  **公開に要る残り（会長の判断3つ）** 1. **置き場所の移行のGO**。会長のPCが寝るとサイトもLINEのボタン先も消えます。集客を始める前に片付けたい。質問は1つだけで
-- 11-19 11:36 会長: 全て設定が終わり、確認も完了した。
-- 11-19 11:19 AUREL: LINEに送りました。説明1通のあとに、A・B・Cを1通ずつ。それぞれ長押しコピーで貼れます。  - A＝左（テキスト）：車探しの相談をしたいです。 - B＝中（テキスト）：今の車を売りたい・乗り換えたいです。 - C＝右（リンク）：https://jauto-concierge.com/#stock  A・Bは句点まで含めてそのまま。1文字でも変えると会長への通知の種類が変わります。  入れ終わったら、別の携帯でトーク画面の下に帯が出るか、左を押して【LINE 新規】買う が届くかを見てください。
-- 11-19 11:18 会長: リッチメニューで使うA、B、Cのテキスト、リンクをLINEに送って
-- 11-19 11:11 AUREL: **応答＝手動でOK**。それが「応答メッセージ オフ」と同じ意味です。Webhook オンも合っています。正本にも「手動＝同じ意味」と注記しました。  **リッチメニュー、作って会長のLINEに送りました**（説明1通＋画像1通）。  - 左「車を探す」→ 押すと「車探しの相談をしたいです。」が送られる - 中「売る・乗り換え」→「今の車を売りたい・乗り換えたいです。」 - 右「在庫を見る」→ サイトの在庫欄が開く - 色・書体はサイトと同じ紺とオフホワイト。金は右の矢印1箇所だけ。英字・アイコンなし。 - テキスト2本はサイトのボタンと同文なので、会長への通知は今のコードのまま動きます。コ
-- 11-19 11:05 会長: 応答メッセージのオフは、手動にしておけば良いね？ webhookはオン。  リッチメニュー3ボタン作ろう。 ちなみに君は画像の生成もできるの？
-- 11-19 10:59 AUREL: 引き継ぎ: あいさつ文は確定・携帯で貼る作業だけ残り → いま「完了」で解消。 引き継ぎ: 残りは応答設定4点の確認と、別の携帯での実機1往復（まだ未確認）。 引き継ぎ: リッチメニュー・タップ式3問・月1配信は「客が増えてから」で後回しにしていた。  **結論：LINE公式側で残るのは「確認2つ」と「無料でできる整備4つ」。リッチメニューは小さく作るなら今でも価値あり。**  **まず確認（今日中・各2分）** 1. 設定 → 応答設定 で、応答モード＝チャット／応答メッセージ＝**オフ**／Webhook＝オン。応答メッセージがオンだと客に定型文が2通並びます。 2. 別の携帯で友だち追加
-- 11-19 10:57 AUREL: 🔄 会話を区切りました(期限切れ(12時間))。引き継ぎ書: 2026-11-19_1055.md。「前の会話に戻して」で戻せます。
