@@ -1364,3 +1364,26 @@ Neither reflection nor magnet behavior is distinguishable from interior pseudo-l
 Waiting for the gold out-of-sample and gate sections to finish writing (the permutation and bootstrap loops are the slow part).
 2026/11/20 18:45:35.34 done
 ========== 2026/11/23  0:30:01.93 cycle start ==========
+Cycle 59 is complete and recorded. Nothing further is needed from the environment.
+
+**Outcome: one deepening cycle, both pre-registered cells null, recorded with full numbers.**
+
+**What was tested.** The exit/path family had been closed only for the path before settlement. This cycle measured the path after settlement: does price keep running after a TP at the target wall (waypoint, which would motivate a runner or TP extension), reverse there (terminal, TP well placed), or forget the trade (random walk)? The SL arm tested the stop-hunt reversal lore symmetrically. Events were all TP and SL settlements in the 19404-trade scan cache, aligned to the OHLC npz grid (99.95% grid match, 99.99% agreement with the fullpaths cache). The statistic was the side-signed one-hour drift after the settlement bar, anchored one bar later to strip settlement-bar bounce, minus a twin on the same ET clock, same side, seven days away. Pre-registration lives in the script docstring. Runtime was 7.9 s plus 1.7 s for the supplementary check.
+
+**Results.**
+
+| Arm | In-sample 2010-20 D_12 | OOS 2021-26H1 D_12 |
+|---|---|---|
+| TP | -0.007R, t -0.44, MDE 0.033 | -0.007R, t -0.20, MDE 0.065 |
+| SL | +0.023R, t +1.34, MDE 0.034 | +0.012R, t +0.41, MDE 0.060 |
+
+Both arms null under the pre-fixed rule. The K profile from 5 minutes to 4 hours sits at zero, and the only in-sample nominal value (TP at K48, t -2.1) flips sign out of sample. The exit process stays Markov beyond settlement, so neither a runner nor an earlier TP gets support from this data.
+
+**The one post-hoc signal, and why it died.** The raw-anchor first-passage statistic after SL looked like a reversal in all three windows (z 2.9 to 3.7). Shifting the anchor by one bar erased it out of sample (z 0.9, and zero at a 0.25R barrier). The in-sample residue is confined to short distances and matches the known 2014-20 five-minute lag-1 negative autocorrelation. This is recorded as methodology candidate 91: hit-rate, sign-rate, and median statistics anchored on a conditioned bar must use the shifted anchor as primary.
+
+**Strongest counter-argument kept on record.** OOS MDE of 0.065R is twice the measured cost of 0.03R, so an OOS-only continuation of about 0.05R is not excluded. It is also not resolvable on the scan side within any realistic horizon, so the cell is closed at "in-sample below 0.033R, OOS below 0.065R" with a ledger-based reopen condition.
+
+**Side finding.** Cycle 58 (vol-managed premium, exploration) ran on 11-20 to its log but was never recorded. Its numbers are now logged in the backlog from that log: the US500 positive control did not stand, so by its own rule the gold result is descriptive only. No rerun is needed.
+
+**Files written** (all under AUREL_RESEARCH): findings/2026-11-23.md, backlog.md, DATA_MAP.md, data/cells.csv (3 rows), two scripts and two result files for c59/c59b. The ledger was read only to count trades (399 reaccel closed, 165 post 10-24, so the forward cell waiting for 300 is still pending). No orders, no production edits, no process contact, no MT5, no external calls. PROMOTED unchanged. Next cycle is exploration (tally now 14:10).
+2026/11/23  0:43:41.98 done
