@@ -1388,3 +1388,24 @@ Both arms null under the pre-fixed rule. The K profile from 5 minutes to 4 hours
 **Files written** (all under AUREL_RESEARCH): findings/2026-11-23.md, backlog.md, DATA_MAP.md, data/cells.csv (3 rows), two scripts and two result files for c59/c59b. The ledger was read only to count trades (399 reaccel closed, 165 post 10-24, so the forward cell waiting for 300 is still pending). No orders, no production edits, no process contact, no MT5, no external calls. PROMOTED unchanged. Next cycle is exploration (tally now 14:10).
 2026/11/23  0:43:41.98 done
 ========== 2026/11/23  6:30:02.65 cycle start ==========
+Cycle 60 is complete. One exploration item was pre-registered, run in the foreground, and recorded with filled numbers.
+
+**What was tested.** Whether gold's 5σ unscheduled jumps (the UJ arm of the existing c45 cache) partially reverse within one to four hours, as the liquidity-jump literature predicts, versus information jumps at announcement slots. Only the jump cache and the M5 close npz were used. Integrity checks passed at 100% on both grid alignment and recomputed jump returns. The main run took 1.3 s and the supplement 0.7 s.
+
+**Result: both pre-registered cells are null.**
+
+| Cell | 在 2010-20 | 外 2021-26H1 |
+|---|---|---|
+| UJ drift after 1 h (σ units) | +0.587, t +2.19, MDE 0.54 | −0.131, t −0.28, MDE 0.93 |
+| UJ − ANN difference | +0.41, t +0.6 | −0.41, t −0.3 |
+
+- **No reversal.** In-sample the 95% lower bound sits above zero, so any reversal is excluded. Out-of-sample, reversals larger than about 17% of the jump are excluded.
+- **Underpowered for the economic threshold.** The pre-registered 0.20σ threshold (round-trip spread) cannot be detected: the injection control reached only t 1.44. Winsorizing and post-jump vol standardization did not help, because they shrink the recovery rate as fast as the standard error. I labelled the cell "underpowered" rather than plain null and logged this as methodology candidate 93.
+- **The in-sample continuation is not an edge.** It is tail-driven (median zero), lives in the ET 08–10 hour and the smallest-jump tertile with no dose response, and flips sign out-of-sample.
+
+**Strongest counter-argument recorded.** The UJ arm is contaminated. The c45 calendar covers only NFP, FOMC and CPI, so PPI, retail sales, weekly jobless claims, GDP and ISM releases fall into the "unscheduled" arm, and that is exactly where the in-sample continuation sits. A full US macro release calendar is logged as needs-data; with it, the hypothesis is decidable in-sample as a random-walk structure test.
+
+**Files written** (all under AUREL_RESEARCH): two scripts, two result files, one findings entry in `findings/2026-11-23.md`, three rows in the cells registry, a backlog section, and three data-map updates including a new §8 row. PROMOTED.md was not touched. No orders, no production or prop access, no external calls.
+
+**Next cycle** should be deepening, per the 15:10 exploration ratio. The refute lane's full-match RMT check is the top candidate. The c58 findings gap remains unresolved for a third cycle.
+2026/11/23  6:42:24.33 done
