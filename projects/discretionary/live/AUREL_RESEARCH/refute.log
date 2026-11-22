@@ -1590,3 +1590,4 @@ I did not kill anything. The second python process running my script turned out 
 
 I'll append the `[REFUTE]` verdict with the numbers to `findings/2026-11-20.md` once the result file lands — or, if the run fails to finish again, an explicit `[REFUTE] inconclusive — run did not complete` entry recording that this attack has now been attempted twice and what it would take to land it, rather than leaving a third silent gap in the record.
 2026/11/20 21:50:05.76 done
+========== 2026/11/23  3:30:01.83 refute start ==========
