@@ -1387,3 +1387,4 @@ Both arms null under the pre-fixed rule. The K profile from 5 minutes to 4 hours
 
 **Files written** (all under AUREL_RESEARCH): findings/2026-11-23.md, backlog.md, DATA_MAP.md, data/cells.csv (3 rows), two scripts and two result files for c59/c59b. The ledger was read only to count trades (399 reaccel closed, 165 post 10-24, so the forward cell waiting for 300 is still pending). No orders, no production edits, no process contact, no MT5, no external calls. PROMOTED unchanged. Next cycle is exploration (tally now 14:10).
 2026/11/23  0:43:41.98 done
+========== 2026/11/23  6:30:02.65 cycle start ==========
