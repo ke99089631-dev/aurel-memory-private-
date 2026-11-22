@@ -256,7 +256,7 @@ for arm in ['TP', 'SL']:
             use = m & (okp | okm)
             i0 = ix[use]; s = side[use]; rk = risk[use]; g = day_x[use]
             fE = fpass(i0, s, rk, 48, 0.5, sh).astype(float)
-            tp_ok = okp[use]; tm_ok = okm[use]; nT = tp_ok + tm_ok
+            tp_ok = okp[use]; tm_ok = okm[use]; nT = tp_ok.astype(float) + tm_ok.astype(float)
             fTp = np.where(tp_ok, fpass(np.where(tp_ok, TWP[use], 1), s, rk, 48, 0.5, sh), 0.0)
             fTm = np.where(tm_ok, fpass(np.where(tm_ok, TWM[use], 1), s, rk, 48, 0.5, sh), 0.0)
             mu, se, t = cl_t(fE - (fTp + fTm) / nT, g)
@@ -274,7 +274,7 @@ for wn, wm in [WINS[0], WINS[1]]:
             i0 = ix[use]; s = side[use]; rk = risk[use]; g = day_x[use]
             # level: D_12 with and without injection. injection = +delta R accumulated linearly over 12 bars from bar 1
             c0 = cprime(i0, s, rk, 12, sh)
-            tp_ok = okp[use]; tm_ok = okm[use]; nT = tp_ok + tm_ok
+            tp_ok = okp[use]; tm_ok = okm[use]; nT = tp_ok.astype(float) + tm_ok.astype(float)
             cTp = np.where(tp_ok, cprime(np.where(tp_ok, TWP[use], 1), s, rk, 12, sh), 0.0)
             cTm = np.where(tm_ok, cprime(np.where(tm_ok, TWM[use], 1), s, rk, 12, sh), 0.0)
             cT = (cTp + cTm) / nT
@@ -313,7 +313,7 @@ for arm in ['TP', 'SL']:
         okp = m & (TWP >= 1) & fwd_ok(TWP, 12, 1); okm = m & (TWM >= 1) & fwd_ok(TWM, 12, 1)
         use = m & (okp | okm)
         i0 = ix[use]; s = side[use]; rk = risk[use]; g = day_x[use]
-        tp_ok = okp[use]; tm_ok = okm[use]; nT = tp_ok + tm_ok
+        tp_ok = okp[use]; tm_ok = okm[use]; nT = tp_ok.astype(float) + tm_ok.astype(float)
         cE = cprime(i0, s, rk, 12, 1)
         cTp = np.where(tp_ok, cprime(np.where(tp_ok, TWP[use], 1), s, rk, 12, 1), 0.0)
         cTm = np.where(tm_ok, cprime(np.where(tm_ok, TWM[use], 1), s, rk, 12, 1), 0.0)
@@ -366,7 +366,7 @@ for arm in ['TP', 'SL']:
             okp = m & (TWP >= 1) & fwd_ok(TWP, K, 1); okm = m & (TWM >= 1) & fwd_ok(TWM, K, 1)
             use = m & (okp | okm)
             i0 = ix[use]; s = side[use]; rk = risk[use]; g = day_x[use]
-            tp_ok = okp[use]; tm_ok = okm[use]; nT = tp_ok + tm_ok
+            tp_ok = okp[use]; tm_ok = okm[use]; nT = tp_ok.astype(float) + tm_ok.astype(float)
             cE = cprime(i0, s, rk, K, 1)
             cTp = np.where(tp_ok, cprime(np.where(tp_ok, TWP[use], 1), s, rk, K, 1), 0.0)
             cTm = np.where(tm_ok, cprime(np.where(tm_ok, TWM[use], 1), s, rk, K, 1), 0.0)
@@ -384,7 +384,7 @@ for arm in ['TP', 'SL']:
             okp = m & (TWP >= 1) & fwd_ok(TWP, 12, 1); okm = m & (TWM >= 1) & fwd_ok(TWM, 12, 1)
             use = m & (okp | okm)
             i0 = ix[use]; s = side[use]; rk = risk[use]; g = day_x[use]
-            tp_ok = okp[use]; tm_ok = okm[use]; nT = tp_ok + tm_ok
+            tp_ok = okp[use]; tm_ok = okm[use]; nT = tp_ok.astype(float) + tm_ok.astype(float)
             cE = cprime(i0, s, rk, 12, 1)
             cTp = np.where(tp_ok, cprime(np.where(tp_ok, TWP[use], 1), s, rk, 12, 1), 0.0)
             cTm = np.where(tm_ok, cprime(np.where(tm_ok, TWM[use], 1), s, rk, 12, 1), 0.0)
@@ -414,7 +414,7 @@ for arm in ['TP', 'SL']:
         res = []
         for nm, msk in [('全', use), ('汚染除外', keep)]:
             i0 = ix[msk]; s = side[msk]; rk = risk[msk]; g = day_x[msk]
-            tp_ok = okp[msk]; tm_ok = okm[msk]; nT = tp_ok + tm_ok
+            tp_ok = okp[msk]; tm_ok = okm[msk]; nT = tp_ok.astype(float) + tm_ok.astype(float)
             cE = cprime(i0, s, rk, 12, 1)
             cTp = np.where(tp_ok, cprime(np.where(tp_ok, TWP[msk], 1), s, rk, 12, 1), 0.0)
             cTm = np.where(tm_ok, cprime(np.where(tm_ok, TWM[msk], 1), s, rk, 12, 1), 0.0)
@@ -453,7 +453,7 @@ for wn, wm in WINS:
     use = m & (okp | okm)
     i0 = ix[use]; s = side[use]; rk = risk[use]; g = day_x[use]
     dx = np.abs(cl[i0] - cl[i0 - 1]) / rk; med = np.median(dx)
-    tp_ok = okp[use]; tm_ok = okm[use]; nT = tp_ok + tm_ok
+    tp_ok = okp[use]; tm_ok = okm[use]; nT = tp_ok.astype(float) + tm_ok.astype(float)
     fE = fpass(i0, s, rk, 48, 0.5, 1).astype(float)
     fTp = np.where(tp_ok, fpass(np.where(tp_ok, TWP[use], 1), s, rk, 48, 0.5, 1), 0.0)
     fTm = np.where(tm_ok, fpass(np.where(tm_ok, TWM[use], 1), s, rk, 48, 0.5, 1), 0.0)

@@ -1591,3 +1591,24 @@ I did not kill anything. The second python process running my script turned out 
 I'll append the `[REFUTE]` verdict with the numbers to `findings/2026-11-20.md` once the result file lands — or, if the run fails to finish again, an explicit `[REFUTE] inconclusive — run did not complete` entry recording that this attack has now been attempted twice and what it would take to land it, rather than leaving a third silent gap in the record.
 2026/11/20 21:50:05.76 done
 ========== 2026/11/23  3:30:01.83 refute start ==========
+`[REFUTE]` verdict appended to `AUREL_RESEARCH/findings/2026-11-23.md`. PROMOTED.md unchanged (correctly empty).
+
+**Target.** c59 (00:40) is the newest registered finding. Both main arms are null, so there was nothing to break there — I attacked the four affirmative carryovers that support the null, plus the supplementary script (`c59b`) its knowledge claims actually rest on.
+
+**Three implementation defects found by reading `c59b` before looking at any numbers:** twins built from `+7` days only (c59's own pre-registration says ±7, 2-bar average — the *main* cell does it right); SE is an unpaired binomial that ignores both pairing and the settlement-day clustering the main cell uses; §4 tests `F'` against 0 when the twin `F'` is not 0.
+
+**Reproduction gate PASS** — all 6 `F'` cells to Δ0.000, sign-rates to Δ≤0.05pp, and my A1 reproduces c59's main cell exactly (SL 在 +0.0229, se 0.0171, t +1.34). That double gate caught a bug in *my own* code, not c59's: `nT = tp_ok + tm_ok` is a boolean OR, not a count, so the control leg was doubled. Fixed and re-run before any verdict was written.
+
+**Verdicts (pre-registered rules, `scripts/refute_c59_postexit.py` docstring):**
+
+- **T1 = inconclusive, and c59's stated reason is broken.** Fixing the twin convention and the SE makes the *shifted*-anchor outer sign-rate stronger, not weaker: SL 外 **+2.68 pp, z +2.74**, Holm-surviving (needed 2.50). So "appears only in-sample and only on the raw anchor" is false. What actually kills the outer is a **return-matched twin** — matching the control on the settlement bar's own signed move (which c59's twin never did, though SL bars close near their low by construction): outer dies (F' +0.008, z 0.34), 在 survives (F' +0.064, z 3.21). My pre-registered rule had a gap and the result landed in it; recorded as my design flaw. c59's *operational* conclusion survives — A7's cost doubling kills every window.
+- **T2 = safe but not sufficient.** Injection shows the 1-bar shift retains 94–99% of a genuine drift, so candidate 91 does not over-correct. But 在 survives shifts of 0/1/2/3 bars at z 4.1→3.8, so the shift isn't removing the conditioning it claims to. Proposed replacement registered: match the *control*, don't move the anchor.
+- **T3 = survived.** Best validated estimator takes outer MDE 0.065 → **0.0439R** (attenuation-corrected), short of the 0.035 threshold. c59's "n≈13000" is ~35% overstated (≈8400).
+- **T4 = survived.** 8-cell block family max |t| 2.38 < 2.73. One correction: c59's "在 K48 −0.079" is localized to 2010-13, not an in-sample-wide effect.
+
+**Side finding worth the chairman's attention more than any of the above:** c59's SL null is estimator-fragile. Under winsor±1R the in-sample cell is **+0.0432R, t +4.03**, which passes c59's own in-sample leg and a whole-family Bonferroni (M≈218, |z| 3.67). It stays null only because the out-of-sample leg gives t +1.11 against a required 1.5. A winsorized mean is not a P&L expectation, so this is a distributional statement, not an edge — it reinforces c59's "shape changes, mean doesn't" rather than overturning it. But the honest phrasing of the null is "short by 0.4 t-units on the out-of-sample leg," not "|t|<1.3 everywhere."
+
+**My own most severe refutation, left standing:** the return-matched twin only closes 65% of the conditioning gap (event v −0.365R vs RMT −0.237R), and the residual biases the surviving in-sample effect *upward* — not conservative. A full match (±0.02R, candidate days widened to ±182) is decidable in tens of seconds on the same npz; registered as the top backlog item rather than run here, since it was outside the pre-registration.
+
+Writes: `scripts/refute_c59_postexit.py`, `data/refute_c59_postexit.md`, two staging md files, `backlog.md`, `data/cells.csv` (4 rows), the findings entry — all inside `AUREL_RESEARCH/`. No orders, no MT5, no external calls, no production or prop files touched, no process/executor/server contact. The other files git shows as modified are the running executors writing their own logs. Per this lane's established boundary (and c59's precedent) I did not write a task-observer log outside `AUREL_RESEARCH`; the reusable lessons are registered in-tree as the candidate-91 replacement, new candidate 92, and the reproduction-gate note.
+2026/11/23  3:45:15.33 done
