@@ -1478,3 +1478,28 @@ Picked the deepening item at the top of the backlog: the location/scale two-para
 Exploration:deepening is now 16:12, so the next cycle is exploration. The other deepening candidate, the US500 non-trade-bar pool for refute 15:50, is blocked until AUREL main builds a US500 M5 OHLC npz, since the existing US500 cache is close-only.
 2026/11/24  0:40:32.17 done
 ========== 2026/11/24  6:30:03.93 cycle start ==========
+Cycle 64 is complete and recorded. One findings entry (meta audit 4) was appended to `findings/2026-11-24.md` with all numbers filled, and the backlog, DATA_MAP, and cells registry were updated. No orders, no production or prop files touched, no external calls, no multi-year scan. The audit ran in 1.1 seconds and its reproduction gate matched cycle 49's figures exactly.
+
+**What I chose and why.** The charter requires a meta question every 10 cycles. Meta 3 ran at cycle 49 and the backlog scheduled meta 4 for cycle 59, which never happened. Cycle 63's refutation had just broken a freshly proposed methodology rule, so I re-measured the research lane itself on cycles 50 to 63 using the unchanged cycle-49 miner plus four pre-registered new questions.
+
+**Main finding: the methodology layer has become write-only.**
+
+| Measure | Value |
+|---|---|
+| Methodology candidates numbered 50+ later cited in a pre-registration | 2 of 35 |
+| Rules adopted into the mandatory list since cycle 16 | 0 in 48 cycles |
+| Open backlog items, cycle 49 to now | 118 to 203 |
+| Forward cells decided | 0 |
+
+**Second finding: the lane's only quality instrument went blind.** The refutation lane changed its verdict format around cycle 53 (split verdicts, sub-bullets, bolded headers), so the miner could not read 8 of 11 recent verdicts and found 0 of 11 target cycles with the old pattern. Nobody noticed for 11 cycles. I hand-read all 11: every one is a split. The research lane's main null verdicts survived 11 of 11 times, while 8 of 11 affirmative side-statements broke, mostly from overclaiming (multiple testing, wrongly composed standard errors, the word "確定"). This is a different quantity from the 75 percent broken rate of cycles 40 to 48, so the two are not comparable.
+
+**Other results.** In-sample significant pairs replicated out-of-sample 0 of 5 times in cycles 50 to 63, and reported R-unit in-sample t-statistics now have standard deviation 1.16, essentially the null. Explicit R-unit MDEs recovered from 0 to 8. Market cells with an unrefuted positive: 0, since cycle 40's close-momentum cell was refuted on 11-18 (my pre-registered prediction that it was still unrefuted was wrong).
+
+**Strongest counter-argument recorded.** The 6 percent reuse rate counts only explicit number citations. Candidates 72, 75, and 93 are demonstrably applied without being cited by number, so 6 percent is a lower bound. Meta 5 should measure content fingerprints instead.
+
+**Proposals left in the backlog, not enacted.** Candidate 109 asks the refutation lane for two machine-readable lines, target and verdict, with a split-B/split-S vocabulary. Candidate 110 adds an instrument self-check to every meta. Four rules (72, 75, 93, 69) meet an objective adoption criterion and are queued for the chairman's decision. I also merged the refutation lane's pending backlog additions from this morning into the backlog proper.
+
+**Next cycle** should return to exploration, as cycle 63 directed. Meta 5 is due around cycle 74.
+
+One side note: the task-observer skill asked me to create its observation log outside AUREL_RESEARCH. I did not, since this lane writes only under that folder.
+2026/11/24  6:46:36.72 done
