@@ -1631,3 +1631,30 @@ Writes: `scripts/refute_c59_postexit.py`, `data/refute_c59_postexit.md`, two sta
 Writes, all inside `AUREL_RESEARCH/`: `scripts/refute_c60_postjump{,_b,_c}.py`, `data/refute_c60_postjump{,_b,_c}.md` + run log + staging entry, `data/cells.csv` (4 rows), `backlog.md` (incl. methodology candidates 94/95/96), the findings entry. No orders, no MT5, no external calls, no production/prop files, no process/executor/server contact — the other files git shows modified are the running executors writing their own logs. Per this lane's write boundary (c59/c60 precedent) I did not write a task-observer log outside the tree; the reusable lessons are registered in-tree as candidates 94 (state the functional in any exclusion claim, print the shift function), 95 (always print level units beside σ-standardized cells), 96 (pre-register the twin count).
 2026/11/23  9:48:06.71 done
 ========== 2026/11/23 15:30:03.30 refute start ==========
+All artifacts landed (the auto-sync cron committed them at 15:37/15:52).
+
+## Verdict: cycle61's claim is **broken on all three of its specifics**, but "no residual" is also not demonstrable
+
+Target: c61's `SL 決着後の取引固有残差 +0.0962 (z +3.19)`, judged `H_TRADE`, in-sample 2010-20.
+
+**Gate first:** I reproduced c61's exact design in my own code at **|Δ(D)| = 0.0000, n identical (2121/4921)**. Every difference below is design, not implementation.
+
+**What broke**
+
+1. **Magnitude.** Widening the candidate pool 52 → 362 bars (all weekdays, same ET slot), using all in-tolerance candidates instead of nearest-1, and excluding real trade bars gives **+0.0593 (z 3.03)**. Ablation: pool −0.0405 / all-mean −0.0152 / trade-bar exclusion −0.0005. The drop is almost entirely on the **control** side (F' −0.0344 → +0.0137; the event side barely moves). c61's headline is a property of its 52-candidate same-weekday pool.
+2. **c61's own decisive condition ①** (CEM-3) run at 7× power: **+0.0481 (z 1.57)** — fails c61's own `z ≥ 2.5` bar. Cluster sign-flip permutation **p 0.121**.
+3. **"A 2010-20 property."** Sub-window adjusted residuals: 2010-12 **+0.0812 (z 2.90)**, then 2013-15 +0.016, 2016-18 +0.018, 2019-20 +0.034 (all |z| < 1). It's a **2010-12** phenomenon — D2's own logic applied inside c61's in-sample window.
+4. **c61's alternative hypothesis (b), "the stab-and-recover wick shape," is refuted** — among zero-trade v-matched bars, the deep-vs-shallow wick gap is **+0.0073 (z 0.34)** against the +0.058 needed.
+
+**New confound c61 never matched:** the run-in (`trail`, the 12 bars into the settlement bar) is off by **0.478R** (SL) / 0.756R (TP). It's a real effect (slope −0.0268, z −2.86, measured on zero-trade bars only) but explains just **23%**.
+
+**My own attacks that failed, recorded as favouring c61:** look-ahead/horizon (relaxing the forward-continuity filter leaves D_adj at +0.039–+0.047, z ≈ 3.1), and "the control was another trade's bar" (ΔD −0.0005).
+
+**The most important result is the one against my own conclusion.** My best estimator (regression-adjusted control, +0.0428 z 2.56, 99.6% *marginal* support) **fails its own placebo**: zero-trade pseudo-events in the event's covariate corner produce **+0.0273 (z 1.56)** — 64% of my reported figure. Joint support fails where marginal support looked fine. So "control artifact" and "tighter matching selects weaker events" cannot be separated with this pool, and I did **not** show the residual is zero.
+
+Also: at a 0.20 USD round-trip spread the event's own F'_net is **−0.0296** (−0.1214 at 0.40) — nothing receivable under any design, confirming A7 under doubled cost. And across the 12 control designs ever applied to this cell, Holm passes exactly the **worst-calibrated** ones and fails every better-calibrated one, monotonically.
+
+Registered: decisive condition is a **data** gap, not an analysis choice (extend the non-trade bar pool to other instruments — US500 M5 is already in inventory — until the placebo returns 0), plus methodology candidates 99/100/101. PROMOTED.md untouched (correctly empty).
+
+Two boundary notes: `refute.log` was held open by the lane's running wrapper, so I left both it and the `.refuting` lock alone and wrote the summary to `data/refute_c61_cem_summary.md`. The task-observer log would have required a write outside `AUREL_RESEARCH`, so per this lane's write boundary (as in c59/c60/c61) the reusable lessons went in-tree as candidates 99/100/101 instead.
+2026/11/23 15:54:54.69 done
