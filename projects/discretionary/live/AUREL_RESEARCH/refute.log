@@ -1658,3 +1658,4 @@ Registered: decisive condition is a **data** gap, not an analysis choice (extend
 
 Two boundary notes: `refute.log` was held open by the lane's running wrapper, so I left both it and the `.refuting` lock alone and wrote the summary to `data/refute_c61_cem_summary.md`. The task-observer log would have required a write outside `AUREL_RESEARCH`, so per this lane's write boundary (as in c59/c60/c61) the reusable lessons went in-tree as candidates 99/100/101 instead.
 2026/11/23 15:54:54.69 done
+========== 2026/11/23 21:30:02.58 refute start ==========
