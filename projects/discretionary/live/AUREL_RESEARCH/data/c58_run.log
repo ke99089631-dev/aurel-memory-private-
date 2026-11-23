@@ -1,4 +1,4 @@
-# [cycle58] ボラ管理リターン（volatility-managed）の α — 金 vs US500（陽性対照） — 2026-11-20 18:40 (scripts/c58_vol_managed_premium.py)
+# [cycle58] ボラ管理リターン（volatility-managed）の α — 金 vs US500（陽性対照） — 2026-11-23 18:32 (scripts/c58_vol_managed_premium.py)
 
 ## 1. データ
 - XAU: npz 1728576 本 2010-01-01〜2026-06-30 UTC・flat 全体 32.6%（⑪ 曜日別: 月:6.3 火:4.8 水:4.9 木:5.4 金:31.5 土:99.9 日:75.0）
@@ -44,3 +44,21 @@
   - XAU 外 2021-26H1 VM21_nobrk: n 1121・α +2.14 bp/日（+5.40%/年）・se 1.17・NW t +1.83・HC1 t +1.75・β 0.933・MDE 2.34 bp/日・SR raw +0.80 → VM +1.05（Δ +0.26）
   - XAU 外 2021-26H1 IV: n 1374・α +2.23 bp/日（+5.63%/年）・se 1.00・NW t +2.24・HC1 t +2.25・β 0.952・MDE 2.00 bp/日・SR raw +0.80 → VM +1.08（Δ +0.28）
   - XAU 外 2021-26H1 機構（σ̂21 五分位・翌日 r bp）: Q1 n 283 σ̂ 69 mean +8.6 sd 80 mean/var×1e4 +13.45 | Q2 n 282 σ̂ 81 mean +8.7 sd 86 mean/var×1e4 +11.83 | Q3 n 283 σ̂ 88 mean -0.3 sd 88 mean/var×1e4 -0.40 | Q4 n 282 σ̂ 102 mean +10.4 sd 103 mean/var×1e4 +9.87 | Q5 n 283 σ̂ 164 mean -1.0 sd 170 mean/var×1e4 -0.33 ‖ r on log σ̂ β -6.6 bp/log (t -0.53)
+  - XAU 近年 2024-26H1 VM21: n 641・α +5.87 bp/日（+14.78%/年）・se 2.08・NW t +2.82・HC1 t +2.81・β 0.925・MDE 4.15 bp/日・置換 p 0.022（帰無 sd 1.11）・SR raw +1.23 → VM +1.84（Δ +0.61・CI [+0.18,+1.03]・p_bs 0.014）
+  - XAU 近年 2024-26H1 VM1: n 641・α +7.54 bp/日（+19.00%/年）・se 2.81・NW t +2.69・HC1 t +2.70・β 0.876・MDE 5.61 bp/日・SR raw +1.23 → VM +1.98（Δ +0.74）
+  - XAU 近年 2024-26H1 VM21_nobrk: n 506・α +6.28 bp/日（+15.83%/年）・se 2.20・NW t +2.85・HC1 t +2.65・β 0.920・MDE 4.41 bp/日・SR raw +1.06 → VM +1.73（Δ +0.67）
+  - XAU 近年 2024-26H1 IV: n 622・α +5.25 bp/日（+13.24%/年）・se 1.93・NW t +2.73・HC1 t +2.73・β 0.946・MDE 3.85 bp/日・SR raw +1.14 → VM +1.70（Δ +0.56）
+  - XAU 近年 2024-26H1 機構（σ̂21 五分位・翌日 r bp）: Q1 n 128 σ̂ 73 mean +20.2 sd 78 mean/var×1e4 +33.50 | Q2 n 128 σ̂ 82 mean +11.0 sd 87 mean/var×1e4 +14.47 | Q3 n 128 σ̂ 95 mean +11.8 sd 105 mean/var×1e4 +10.65 | Q4 n 128 σ̂ 125 mean +20.3 sd 152 mean/var×1e4 +8.76 | Q5 n 129 σ̂ 207 mean -11.3 sd 202 mean/var×1e4 -2.76 ‖ r on log σ̂ β -17.3 bp/log (t -1.12)
+
+## 4. ゲート ㉛（scan 本・建玉時 ATR14 三分位・在のみ判定・外は記述）
+- scan json 19404 本・列 ['entry_time', 'year', 'jh', 'wall_kind', 'side', 'risk', 'b', 'R', 'exit', 'hold', 'x0', 'open_gap', 'mfe0', 'mae0']…
+- 在 2010-20: n 11693・R̄* 高 ATR -0.0052 (n 3897) − 低 -0.0140 (n 3898) = Δμ +0.0088R (Welch t +0.37・MDE 0.047)・sd 高 1.17／低 0.90・1/ATR 加重 R̄* -0.0086 vs 単純 -0.0212（差 +0.0127）
+- 外 2021-26H1: n 7708・R̄* 高 ATR +0.0186 (n 2569) − 低 -0.0572 (n 2570) = Δμ +0.0758R (Welch t +2.32・MDE 0.065)・sd 高 1.31／低 1.01・1/ATR 加重 R̄* -0.0430 vs 単純 -0.0204（差 -0.0225）
+- 近年 2024-26H1: n 4005・R̄* 高 ATR -0.0152 (n 1335) − 低 -0.0082 (n 1335) = Δμ -0.0071R (Welch t -0.15・MDE 0.094)・sd 高 1.34／低 1.09・1/ATR 加重 R̄* +0.0125 vs 単純 +0.0057（差 +0.0069）
+
+## 5. 判定（事前規則）
+- C1 US500 在: α +0.58 bp/日 t +0.37 p 0.792 → FAIL（外 α +0.29 t +0.30・2020 除外 α -0.25 t -0.32）
+- C2 XAU: 在 α +0.33 t +0.55 p 0.722（MDE 1.22）／外 α +1.77 t +1.62（MDE 2.19） → H_VM FAIL・H_NEG FAIL → null（C1 FAIL のため記述のみ ㉝）
+
+- 時間 20.7 s・seed 20261120・外部通信なし・scan 無し
+WROTE C:\Users\user\.aurel\memory\projects\discretionary\live\AUREL_RESEARCH\data\c58_vol_managed_result.md
