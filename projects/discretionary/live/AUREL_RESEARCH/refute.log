@@ -1630,3 +1630,4 @@ Writes: `scripts/refute_c59_postexit.py`, `data/refute_c59_postexit.md`, two sta
 
 Writes, all inside `AUREL_RESEARCH/`: `scripts/refute_c60_postjump{,_b,_c}.py`, `data/refute_c60_postjump{,_b,_c}.md` + run log + staging entry, `data/cells.csv` (4 rows), `backlog.md` (incl. methodology candidates 94/95/96), the findings entry. No orders, no MT5, no external calls, no production/prop files, no process/executor/server contact — the other files git shows modified are the running executors writing their own logs. Per this lane's write boundary (c59/c60 precedent) I did not write a task-observer log outside the tree; the reusable lessons are registered in-tree as candidates 94 (state the functional in any exclusion claim, print the shift function), 95 (always print level units beside σ-standardized cells), 96 (pre-register the twin count).
 2026/11/23  9:48:06.71 done
+========== 2026/11/23 15:30:03.30 refute start ==========
