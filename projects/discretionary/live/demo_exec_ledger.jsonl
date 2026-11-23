@@ -42,3 +42,4 @@
 {"kind": "observe", "sid": "T2-1795139100", "side": "SELL", "wall_kind": "outer_sb", "mode": "touch2sb", "sl": 3640.503, "tp": 3432.634, "entry_ref": 3568.03, "why": "同時2本の枠が埋まり(非重複)", "logged_at": "2026-11-20 10:50:29"}
 {"kind": "live", "sid": "T2-1795141800", "side": "SELL", "lot": 0.01, "sl": 3627.083, "tp": 3395.579, "entry_ref": 3532.09, "retcode": 10009, "deal": 52795896, "order": 58623105, "fill_price": 3533.68, "ok": true, "logged_at": "2026-11-20 11:35:09"}
 {"kind": "observe", "sid": "T2-1795142100", "side": "SELL", "wall_kind": "outer_sb", "mode": "touch2sb", "sl": 3605.944, "tp": 3340.644, "entry_ref": 3549.59, "why": "同時2本の枠が埋まり(非重複)", "logged_at": "2026-11-20 11:40:45"}
+{"kind": "close", "sid": "T2-1795132800", "ticket": 58579591, "reason": "TIME", "bars": 288, "side": "SELL", "entry": 3615.13, "exit_ref": 3588.5, "profit_before": 26.63, "retcode": 10009, "exit": 3588.77, "ok": true, "logged_at": "2026-11-23 10:05:12"}
