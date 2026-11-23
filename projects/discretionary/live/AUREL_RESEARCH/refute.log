@@ -1691,3 +1691,4 @@ My own most serious counter-refutation, left standing: the excess has an MDE of 
 
 **PROMOTED.md unchanged** (correctly empty). Writes confined to `AUREL_RESEARCH/scripts/refute_c62_volmanaged{,_b,_c}.py`, `data/refute_c62_*`, and the findings append; `refute.log` and `.refuting` left alone since the lane wrapper holds them. No orders, no production edits, no MT5, no prop, no network. The other files in git status are the live executors writing on their own — not me. Reusable lessons went in-tree as methodology candidates 104–107 rather than to the task-observer log, which would require a write outside this lane's boundary.
 2026/11/23 21:46:12.65 done
+========== 2026/11/24  3:30:02.05 refute start ==========
