@@ -1612,3 +1612,4 @@ I'll append the `[REFUTE]` verdict with the numbers to `findings/2026-11-20.md` 
 
 Writes: `scripts/refute_c59_postexit.py`, `data/refute_c59_postexit.md`, two staging md files, `backlog.md`, `data/cells.csv` (4 rows), the findings entry — all inside `AUREL_RESEARCH/`. No orders, no MT5, no external calls, no production or prop files touched, no process/executor/server contact. The other files git shows as modified are the running executors writing their own logs. Per this lane's established boundary (and c59's precedent) I did not write a task-observer log outside `AUREL_RESEARCH`; the reusable lessons are registered in-tree as the candidate-91 replacement, new candidate 92, and the reproduction-gate note.
 2026/11/23  3:45:15.33 done
+========== 2026/11/23  9:30:03.07 refute start ==========
