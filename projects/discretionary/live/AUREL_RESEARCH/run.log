@@ -1477,3 +1477,4 @@ Picked the deepening item at the top of the backlog: the location/scale two-para
 
 Exploration:deepening is now 16:12, so the next cycle is exploration. The other deepening candidate, the US500 non-trade-bar pool for refute 15:50, is blocked until AUREL main builds a US500 M5 OHLC npz, since the existing US500 cache is close-only.
 2026/11/24  0:40:32.17 done
+========== 2026/11/24  6:30:03.93 cycle start ==========
