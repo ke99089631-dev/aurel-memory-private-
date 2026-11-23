@@ -1692,3 +1692,25 @@ My own most serious counter-refutation, left standing: the excess has an MDE of 
 **PROMOTED.md unchanged** (correctly empty). Writes confined to `AUREL_RESEARCH/scripts/refute_c62_volmanaged{,_b,_c}.py`, `data/refute_c62_*`, and the findings append; `refute.log` and `.refuting` left alone since the lane wrapper holds them. No orders, no production edits, no MT5, no prop, no network. The other files in git status are the live executors writing on their own — not me. Reusable lessons went in-tree as methodology candidates 104–107 rather than to the task-observer log, which would require a write outside this lane's boundary.
 2026/11/23 21:46:12.65 done
 ========== 2026/11/24  3:30:02.05 refute start ==========
+Done. Verdict appended under `[REFUTE]` in `AUREL_RESEARCH/findings/2026-11-24.md`.
+
+**Target** (PROMOTED.md is empty, and c63's main verdict was `underpowered` — nothing to break there): c63's *only* affirmative "確定" claim — the asymmetric scale expansion λ_lo 1.091 / λ_hi 1.685 ("差 z ≈3.8"), plus the U-shape residual (endpoint z 4.0).
+
+GATE passed first: reproduced c63's five point estimates to max|Δ| 0.0005, n 655/1252.
+
+**T1 = broken as stated**, on four pre-registered grounds:
+- **se mis-composed.** c63's z 3.78 is `sqrt(.133²+.084²)` — independent composition. But corr(λ_lo,λ_hi) = **−0.21**, so bootstrapping the difference inside the same replicate gives se 0.173 → **z_joint 3.44**. That fails c63's own stated bar (|z| ≥ 3.7) and Bonferroni M=265 (p 0.155).
+- **Lives only in the outer quantiles.** diff: p5..95 +0.594 (z 3.44) → p10..90 +0.338 (2.01) → p15..85 +0.122 (0.65) → **p25..75 −0.001 (−0.01)**.
+- **No OOS.** 外 +0.165 (z 0.69); 近年 +0.447 (1.32).
+- **Arm-specific.** UJ +0.594 (3.45), SJ +0.375, **ANN −0.613 (λ_lo 2.205 > λ_hi 1.592 — sign reverses)**, EVO −0.236. "After a jump the upside widens" is UJ-only.
+
+**What survived** — and c63 was right about: sign-permutation placebo p < 0.0025 (0/400), non-jump anchors at +1/+2/+3/+5d give no asymmetry at all, parametric location-scale null p 0.0010, top-10-event removal keeps 65%, twin truncation contributes 4.3%. So the weak form is real: *in-sample UJ, the upper-5% tail ratio is ~1.5× the lower*. T4 (λ_A>1 = c47 vol expansion) came out **stronger** than c63 claimed — the identical pipeline returns λ_A ≈ 1.0 at non-jump anchors, which kills c63's own second-most-serious objection ("λ>1 may just be an un-calibrated control").
+
+**Two things worth more than the verdict:**
+1. **c63's methodology candidate 108 is broken as proposed.** Its fix was "make 単調 and 端点|z|≥2 independent (OR) conditions." Measured null FPR: OR-rule **16.0%** at a nominal 5%. c63's actual conjunctive rule ran at **0.0%** — too conservative, which is why it never fired. The real fix is threshold calibration, not OR: endpoint |z| ≥ 2.68 (5%) / 3.64 (1%), all-p max|z| ≥ 3.15 / 3.88. Under those, T2 still survives (p 0.0045).
+2. **I broke my own first reading.** The independent-market attack failed its pre-registered validity gate, which I initially read as "the asymmetry is spec-fragile." My own addendum refuted that — swapping σ and the window definition one at a time keeps 72–107% of the effect at z 3.3–3.5. The approximation is low because it recovers only 441/937 of c45's UJ events. So c63's registered decisive condition ("US500 cache, a few seconds") **does not hold** — it needs the US macro calendar to classify UJ.
+
+Most serious objection against my own verdict, recorded: narrowing the quantile grid discards tail information, so attack E proves "the asymmetry is localized in the tails," not "there is no asymmetry" (center grid only excludes ±0.40). And 外's z 0.69 at n 269 does not *exclude* +0.594 — CI [−0.31,+0.64] contains it, so G means "undecidable out-of-sample," not "fails to replicate."
+
+PROMOTED.md unchanged (correctly still empty). Writes stayed under `AUREL_RESEARCH/` — two scripts, four result/log files, a findings entry, and `data/refute_c63_backlog_add.md` (backlog.md and cells.csv are the research lane's files, left untouched). No orders, no production edits, no process/executor/live-server contact, no MT5, no external calls. Per the c59–c63 precedent in this lane, I did not write a task-observer observation file — the log lives outside the AUREL_RESEARCH write boundary; the reusable lessons (threshold calibration, never compose se for a difference independently) are recorded in the backlog-add file instead.
+2026/11/24  3:48:09.71 done
