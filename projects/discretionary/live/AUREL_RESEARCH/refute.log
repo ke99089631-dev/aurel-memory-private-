@@ -1659,3 +1659,35 @@ Registered: decisive condition is a **data** gap, not an analysis choice (extend
 Two boundary notes: `refute.log` was held open by the lane's running wrapper, so I left both it and the `.refuting` lock alone and wrote the summary to `data/refute_c61_cem_summary.md`. The task-observer log would have required a write outside `AUREL_RESEARCH`, so per this lane's write boundary (as in c59/c60/c61) the reusable lessons went in-tree as candidates 99/100/101 instead.
 2026/11/23 15:54:54.69 done
 ========== 2026/11/23 21:30:02.58 refute start ==========
+Done. Verdict appended to `findings/2026-11-23.md:150` under a `[REFUTE]` header.
+
+## Target: cycle62 (18:40) — volatility-managed α
+
+c62's main judgment was already null (C1 FAIL / C2 null, PROMOTED empty), so there was no promotion candidate to break. I attacked the five assertions holding that null up — and ran the decisive test **c62 itself registered but never executed**: a calibrated null simulation.
+
+**Replication gate passed first** (α +0.334 / +1.773 / +5.866 vs c58c's +0.33 / +1.77 / +5.87, scaling constants identical), so every number is directly comparable.
+
+### I broke my own null before reporting it
+My first calibrated null resampled ε = (r−μ̂)/σ_real iid. Breaking the pairing injects `mean(σ_real)·mean(ε)` into the null drift, and mean(ε) = +0.077 ≠ 0 — which *is* the timing signal. The null was feeding itself the signal (μ_null +19.05 vs true +10.36), inflating the mechanical term +3.17 → +4.72 and the p-value 0.112 → 0.295. The bias pointed toward the conclusion I was about to publish. Fixed by centering the ε pool; all reported numbers are post-fix.
+
+### Verdicts
+| claim | verdict |
+|---|---|
+| main judgment (C1 FAIL / C2 null) | **survived, strengthened** |
+| A1 "63% mechanical, residual = noise" | **survived**, share corrected 63% → **54%**; residual +2.70 bp = +1.29 null sd, p 0.098–0.112, Bonferroni(12) = 1.00 |
+| A2 "circular-shift null is anti-conservative" | **confirmed** — perm centre −0.31 vs calibrated +3.17 = 2.0 perm sd too low |
+| A3 "cost is not the barrier" | **survived**, but only for spread: 59% of α sits in the levered leg (w̄ 1.199, w_max 2.06, excess exposure 0.285 notional); w≤1 keeps just 41% |
+| A4 "+14.8%/yr" | **broken** — scaling constant `c` is fitted inside the evaluation window; causal `c` gives **+10.89%/yr** (t unchanged) |
+| A5 "trend-sign artefact" | **broken as a general mechanism** — US500/US100 go the *other* way, 4/4 cells, Stouffer z −2.16 (p 0.031) |
+
+c62's own worst fear — "the mechanical term could collapse to the permutation null's 0 and the residual return to the full +5.9 bp" — is **broken**: with real forecast error it is +3.17, i.e. 86% of the closed form, not 0.
+
+### New knowledge the cycle produced
+On the daily grid, equity-index vol-management sits **below** the zero-timing null in 8/8 windows. c62 logged C1 FAIL as "power vs absence unseparated"; relative to the correct null the sign is decided — high-σ̂ periods are followed by *better* returns than constant drift predicts, so VM misses post-crash rebounds (consistent with Cederburg et al. 2020).
+
+Also worth flagging against c62's framing: "single 2025 episode" doesn't hold up. Dropping 2025 cuts drift to 41% but leaves α +4.84 and an excess of +3.13 bp — tripping my own pre-registered rule D1 — and ρ(excess_y, μ_y) is still +0.67 (p 0.003) after removing the mechanical term. The excess averages to zero across years (Stouffer −0.09), so c62's direction holds, but the closed form explains only part of the phenomenon.
+
+My own most serious counter-refutation, left standing: the excess has an MDE of ~4.2 bp/day, so a true +2.7 bp timing α is invisible to this test. "Survived" means *no detectable* timing information. Decisive condition registered: forward ≥250 sessions from 2026-07, pre-registering the excess-over-calibrated-null (not α) with excess > 0 ∧ z ≥ 2 ∧ raw SR < 1.
+
+**PROMOTED.md unchanged** (correctly empty). Writes confined to `AUREL_RESEARCH/scripts/refute_c62_volmanaged{,_b,_c}.py`, `data/refute_c62_*`, and the findings append; `refute.log` and `.refuting` left alone since the lane wrapper holds them. No orders, no production edits, no MT5, no prop, no network. The other files in git status are the live executors writing on their own — not me. Reusable lessons went in-tree as methodology candidates 104–107 rather than to the task-observer log, which would require a write outside this lane's boundary.
+2026/11/23 21:46:12.65 done

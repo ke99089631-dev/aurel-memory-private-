@@ -1,0 +1,113 @@
+# [REFUTE c62 supp b] drift-calibrated null (fixes a bias in my own supp a) -- 2026-11-23 21:38 (scripts/refute_c62_volmanaged_b.py)
+
+## 1. size of the bug: mean(eps) and the drift it injected into supp a's null
+| asset | window | n | mu_obs | mean(eps) | injected drift = mean(sig_real)*mean(eps) | mu_null(raw) |
+| XAU | in 2010-20 | 2809 | +2.01 | +0.0227 | +2.03 bp/d | +4.04 |
+| XAU | out 2021-26H1 | 1413 | +5.29 | +0.0378 | +3.67 bp/d | +8.96 |
+| XAU | recent 2024-26H1 | 641 | +10.36 | +0.0768 | +8.63 bp/d | +18.99 |
+| XAU | 2025 | 255 | +19.54 | +0.0692 | +7.32 bp/d | +26.86 |
+| XAU | 2013 | 245 | -13.43 | +0.0334 | +3.81 bp/d | -9.62 |
+| US500 | in 2014-20 | 1716 | +4.13 | +0.0936 | +7.77 bp/d | +11.90 |
+| US500 | in 2014-20 ex2020 | 1526 | +3.66 | +0.0845 | +6.10 bp/d | +9.76 |
+| US500 | out 2021-26H1 | 1384 | +4.88 | +0.0877 | +7.99 bp/d | +12.87 |
+| US500 | recent 2024-26H1 | 628 | +6.95 | +0.0772 | +6.36 bp/d | +13.31 |
+| US100 | in 2014-20 | 1785 | +7.16 | +0.1016 | +10.40 bp/d | +17.56 |
+| US100 | in 2014-20 ex2020 | 1527 | +5.83 | +0.1031 | +9.29 bp/d | +15.11 |
+| US100 | out 2021-26H1 | 1416 | +6.02 | +0.0850 | +10.46 bp/d | +16.48 |
+| US100 | recent 2024-26H1 | 644 | +9.10 | +0.0824 | +9.23 bp/d | +18.33 |
+
+## 2. corrected calibrated null (primary = pool-demeaned eps; sigma_real = sig1 of target day)
+   rule from supp a: c62's 'no timing information' SURVIVES if alpha_obs <= 97.5% of the null; BROKEN if above under both brackets.
+
+### XAU
+- in 2010-20: n 2809 mu +2.01  **alpha_obs +0.33** (NW t +0.55, se 0.61)  formula +0.43
+    raw         : mu_null +4.06  null alpha mean +0.57 sd 0.56 [-0.52,+1.67]  excess -0.24 = -0.42 sd  P(null>=obs) 0.6650  P(null<=obs) 0.3350  null t 97.5% +2.82
+    pool_demean : mu_null +2.05  null alpha mean +0.38 sd 0.55 [-0.69,+1.42]  excess -0.04 = -0.08 sd  P(null>=obs) 0.5330  P(null<=obs) 0.4670  null t 97.5% +2.54  <-- PRIMARY
+    rep_demean  : mu_null +2.01  null alpha mean +0.35 sd 0.54 [-0.68,+1.42]  excess -0.02 = -0.04 sd  P(null>=obs) 0.5025  P(null<=obs) 0.4975  null t 97.5% +2.39
+- out 2021-26H1: n 1413 mu +5.29  **alpha_obs +1.77** (NW t +1.62, se 1.10)  formula +1.40
+    raw         : mu_null +8.98  null alpha mean +1.68 sd 1.07 [-0.33,+3.95]  excess +0.09 = +0.08 sd  P(null>=obs) 0.4490  P(null<=obs) 0.5510  null t 97.5% +3.23
+    pool_demean : mu_null +5.39  null alpha mean +1.20 sd 1.04 [-0.85,+3.26]  excess +0.58 = +0.56 sd  P(null>=obs) 0.2920  P(null<=obs) 0.7080  null t 97.5% +2.94  <-- PRIMARY
+    rep_demean  : mu_null +5.26  null alpha mean +1.22 sd 1.01 [-0.80,+3.23]  excess +0.56 = +0.55 sd  P(null>=obs) 0.2970  P(null<=obs) 0.7030  null t 97.5% +2.74
+- recent 2024-26H1: n 641 mu +10.36  **alpha_obs +5.87** (NW t +2.82, se 2.08)  formula +3.70
+    raw         : mu_null +19.05  null alpha mean +4.72 sd 2.16 [+0.76,+9.14]  excess +1.14 = +0.53 sd  P(null>=obs) 0.2950  P(null<=obs) 0.7050  null t 97.5% +3.89
+    pool_demean : mu_null +10.31  null alpha mean +3.17 sd 2.09 [-1.02,+7.48]  excess +2.70 = +1.29 sd  P(null>=obs) 0.0980  P(null<=obs) 0.9020  null t 97.5% +3.35  <-- PRIMARY
+    rep_demean  : mu_null +10.40  null alpha mean +3.15 sd 1.91 [-0.40,+7.07]  excess +2.72 = +1.42 sd  P(null>=obs) 0.0840  P(null<=obs) 0.9160  null t 97.5% +3.34
+- 2025: n 255 mu +19.54  **alpha_obs +5.21** (NW t +2.50, se 2.08)  formula +3.41
+    raw         : mu_null +26.79  null alpha mean +3.06 sd 1.91 [-0.60,+6.79]  excess +2.15 = +1.13 sd  P(null>=obs) 0.1300  P(null<=obs) 0.8700  null t 97.5% +3.50
+    pool_demean : mu_null +19.68  null alpha mean +2.51 sd 1.97 [-1.27,+6.30]  excess +2.70 = +1.37 sd  P(null>=obs) 0.0835  P(null<=obs) 0.9165  null t 97.5% +3.39  <-- PRIMARY
+    rep_demean  : mu_null +19.63  null alpha mean +2.57 sd 1.94 [-1.11,+6.47]  excess +2.63 = +1.35 sd  P(null>=obs) 0.0885  P(null<=obs) 0.9115  null t 97.5% +3.65
+- 2013: n 245 mu -13.43  **alpha_obs -4.18** (NW t -1.80, se 2.32)  formula -2.04
+    raw         : mu_null -9.68  null alpha mean -1.25 sd 2.18 [-5.55,+2.94]  excess -2.93 = -1.35 sd  P(null>=obs) 0.9055  P(null<=obs) 0.0945  null t 97.5% +1.37
+    pool_demean : mu_null -13.47  null alpha mean -1.40 sd 2.14 [-5.45,+2.83]  excess -2.78 = -1.30 sd  P(null>=obs) 0.9055  P(null<=obs) 0.0945  null t 97.5% +1.28  <-- PRIMARY
+    rep_demean  : mu_null -13.35  null alpha mean -1.38 sd 2.10 [-5.36,+2.91]  excess -2.80 = -1.33 sd  P(null>=obs) 0.9135  P(null<=obs) 0.0865  null t 97.5% +1.47
+
+### US500
+- in 2014-20: n 1716 mu +4.13  **alpha_obs +0.58** (NW t +0.37, se 1.56)  formula +2.93
+    raw         : mu_null +11.98  null alpha mean +5.18 sd 2.50 [+1.76,+9.67]  excess -4.59 = -1.84 sd  P(null>=obs) 0.9950  P(null<=obs) 0.0050  null t 97.5% +4.93
+    pool_demean : mu_null +4.12  null alpha mean +2.46 sd 1.55 [-0.56,+5.57]  excess -1.87 = -1.21 sd  P(null>=obs) 0.8935  P(null<=obs) 0.1065  null t 97.5% +3.43  <-- PRIMARY
+    rep_demean  : mu_null +4.16  null alpha mean +2.55 sd 1.43 [-0.05,+5.43]  excess -1.96 = -1.37 sd  P(null>=obs) 0.9275  P(null<=obs) 0.0725  null t 97.5% +3.40
+- in 2014-20 ex2020: n 1526 mu +3.66  **alpha_obs -0.25** (NW t -0.32, se 0.81)  formula +1.27
+    raw         : mu_null +9.77  null alpha mean +1.72 sd 0.81 [+0.20,+3.29]  excess -1.97 = -2.45 sd  P(null>=obs) 0.9940  P(null<=obs) 0.0060  null t 97.5% +3.75
+    pool_demean : mu_null +3.69  null alpha mean +0.98 sd 0.81 [-0.61,+2.56]  excess -1.23 = -1.53 sd  P(null>=obs) 0.9340  P(null<=obs) 0.0660  null t 97.5% +2.93  <-- PRIMARY
+    rep_demean  : mu_null +3.65  null alpha mean +0.98 sd 0.78 [-0.58,+2.56]  excess -1.23 = -1.58 sd  P(null>=obs) 0.9420  P(null<=obs) 0.0580  null t 97.5% +3.14
+- out 2021-26H1: n 1384 mu +4.88  **alpha_obs +0.29** (NW t +0.30, se 0.98)  formula +1.62
+    raw         : mu_null +12.96  null alpha mean +2.60 sd 1.17 [+0.37,+5.03]  excess -2.31 = -1.97 sd  P(null>=obs) 0.9765  P(null<=obs) 0.0235  null t 97.5% +4.14
+    pool_demean : mu_null +4.97  null alpha mean +1.38 sd 1.08 [-0.69,+3.55]  excess -1.09 = -1.01 sd  P(null>=obs) 0.8350  P(null<=obs) 0.1650  null t 97.5% +3.17  <-- PRIMARY
+    rep_demean  : mu_null +4.84  null alpha mean +1.41 sd 1.02 [-0.61,+3.45]  excess -1.12 = -1.09 sd  P(null>=obs) 0.8645  P(null<=obs) 0.1355  null t 97.5% +2.91
+- recent 2024-26H1: n 628 mu +6.95  **alpha_obs +0.31** (NW t +0.21, se 1.48)  formula +2.59
+    raw         : mu_null +13.31  null alpha mean +3.31 sd 1.96 [-0.11,+7.62]  excess -3.01 = -1.53 sd  P(null>=obs) 0.9555  P(null<=obs) 0.0445  null t 97.5% +3.02
+    pool_demean : mu_null +6.93  null alpha mean +2.01 sd 1.69 [-1.05,+5.51]  excess -1.71 = -1.01 sd  P(null>=obs) 0.8510  P(null<=obs) 0.1490  null t 97.5% +2.82  <-- PRIMARY
+    rep_demean  : mu_null +6.93  null alpha mean +2.03 sd 1.57 [-0.95,+5.38]  excess -1.73 = -1.10 sd  P(null>=obs) 0.8705  P(null<=obs) 0.1295  null t 97.5% +2.87
+
+### US100
+- in 2014-20: n 1785 mu +7.16  **alpha_obs +1.16** (NW t +0.80, se 1.45)  formula +3.66
+    raw         : mu_null +17.55  null alpha mean +5.80 sd 1.70 [+2.73,+9.39]  excess -4.65 = -2.74 sd  P(null>=obs) 0.9980  P(null<=obs) 0.0020  null t 97.5% +4.85
+    pool_demean : mu_null +7.27  null alpha mean +3.21 sd 1.52 [+0.32,+6.16]  excess -2.06 = -1.36 sd  P(null>=obs) 0.9115  P(null<=obs) 0.0885  null t 97.5% +3.72  <-- PRIMARY
+    rep_demean  : mu_null +7.12  null alpha mean +3.22 sd 1.35 [+0.64,+5.97]  excess -2.06 = -1.53 sd  P(null>=obs) 0.9345  P(null<=obs) 0.0655  null t 97.5% +3.85
+- in 2014-20 ex2020: n 1527 mu +5.83  **alpha_obs +0.39** (NW t +0.41, se 0.94)  formula +1.75
+    raw         : mu_null +15.15  null alpha mean +2.45 sd 1.00 [+0.52,+4.50]  excess -2.07 = -2.06 sd  P(null>=obs) 0.9805  P(null<=obs) 0.0195  null t 97.5% +4.45
+    pool_demean : mu_null +5.87  null alpha mean +1.34 sd 0.97 [-0.58,+3.24]  excess -0.96 = -0.99 sd  P(null>=obs) 0.8335  P(null<=obs) 0.1665  null t 97.5% +3.49  <-- PRIMARY
+    rep_demean  : mu_null +5.89  null alpha mean +1.35 sd 0.95 [-0.54,+3.13]  excess -0.96 = -1.02 sd  P(null>=obs) 0.8490  P(null<=obs) 0.1510  null t 97.5% +3.22
+- out 2021-26H1: n 1416 mu +6.02  **alpha_obs +1.08** (NW t +0.91, se 1.19)  formula +1.63
+    raw         : mu_null +16.58  null alpha mean +2.60 sd 1.33 [-0.00,+5.24]  excess -1.52 = -1.14 sd  P(null>=obs) 0.8800  P(null<=obs) 0.1200  null t 97.5% +3.77
+    pool_demean : mu_null +6.15  null alpha mean +1.40 sd 1.36 [-1.21,+3.98]  excess -0.32 = -0.23 sd  P(null>=obs) 0.5935  P(null<=obs) 0.4065  null t 97.5% +2.74  <-- PRIMARY
+    rep_demean  : mu_null +6.07  null alpha mean +1.36 sd 1.30 [-1.29,+3.87]  excess -0.28 = -0.21 sd  P(null>=obs) 0.5900  P(null<=obs) 0.4100  null t 97.5% +2.99
+- recent 2024-26H1: n 644 mu +9.10  **alpha_obs +0.27** (NW t +0.17, se 1.65)  formula +2.50
+    raw         : mu_null +18.30  null alpha mean +3.30 sd 2.11 [-0.45,+7.65]  excess -3.02 = -1.43 sd  P(null>=obs) 0.9385  P(null<=obs) 0.0615  null t 97.5% +2.96
+    pool_demean : mu_null +9.07  null alpha mean +1.98 sd 1.93 [-1.46,+6.04]  excess -1.71 = -0.88 sd  P(null>=obs) 0.8065  P(null<=obs) 0.1935  null t 97.5% +2.62  <-- PRIMARY
+    rep_demean  : mu_null +9.16  null alpha mean +1.98 sd 1.81 [-1.51,+5.76]  excess -1.70 = -0.94 sd  P(null>=obs) 0.8255  P(null<=obs) 0.1745  null t 97.5% +2.45
+
+## 3. tradeable timing statistic  m = mean((r - mu)/sigma_hat21_{d-1})  (uses only information known at d)
+   m > 0 <=> returns were better when the PREDICTED vol was low. Null = pool-demeaned calibrated null.
+- XAU in 2010-20: m_obs +0.010 (x100)  null mean -0.026 sd 0.666  z +0.05  P(null>=obs) 0.4805
+- XAU out 2021-26H1: m_obs +0.618 (x100)  null mean +0.003 sd 1.140  z +0.54  P(null>=obs) 0.2990
+- XAU recent 2024-26H1: m_obs +2.504 (x100)  null mean -0.001 sd 2.029  z +1.23  P(null>=obs) 0.1075
+- XAU 2025: m_obs +2.004 (x100)  null mean +0.014 sd 2.005  z +0.99  P(null>=obs) 0.1625
+- XAU 2013: m_obs -4.208 (x100)  null mean +0.062 sd 2.027  z -2.11  P(null>=obs) 0.9805
+- US500 in 2014-20: m_obs -1.970 (x100)  null mean +0.047 sd 2.326  z -0.87  P(null>=obs) 0.8180
+- US500 in 2014-20 ex2020: m_obs -1.522 (x100)  null mean +0.034 sd 1.238  z -1.26  P(null>=obs) 0.9000
+- US500 out 2021-26H1: m_obs -1.004 (x100)  null mean -0.017 sd 1.344  z -0.73  P(null>=obs) 0.7680
+- US500 recent 2024-26H1: m_obs -1.803 (x100)  null mean -0.007 sd 2.115  z -0.85  P(null>=obs) 0.7970
+- US100 in 2014-20: m_obs -1.609 (x100)  null mean -0.052 sd 1.703  z -0.91  P(null>=obs) 0.8205
+- US100 in 2014-20 ex2020: m_obs -1.000 (x100)  null mean +0.001 sd 1.154  z -0.87  P(null>=obs) 0.8105
+- US100 out 2021-26H1: m_obs -0.211 (x100)  null mean +0.024 sd 1.221  z -0.19  P(null>=obs) 0.5790
+- US100 recent 2024-26H1: m_obs -1.334 (x100)  null mean -0.060 sd 1.812  z -0.70  P(null>=obs) 0.7545
+
+## 4. verdict inputs (pool-demeaned primary)
+| asset | window | alpha_obs | NW t | null mean | null sd | null 97.5% | excess (sd) | P(null>=obs) |
+| XAU | in 2010-20 | +0.33 | +0.55 | +0.38 | 0.55 | +1.42 | -0.08 | 0.5330 |
+| XAU | out 2021-26H1 | +1.77 | +1.62 | +1.20 | 1.04 | +3.26 | +0.56 | 0.2920 |
+| XAU | recent 2024-26H1 | +5.87 | +2.82 | +3.17 | 2.09 | +7.48 | +1.29 | 0.0980 |
+| XAU | 2025 | +5.21 | +2.50 | +2.51 | 1.97 | +6.30 | +1.37 | 0.0835 |
+| XAU | 2013 | -4.18 | -1.80 | -1.40 | 2.14 | +2.83 | -1.30 | 0.9055 |
+| US500 | in 2014-20 | +0.58 | +0.37 | +2.46 | 1.55 | +5.57 | -1.21 | 0.8935 |
+| US500 | in 2014-20 ex2020 | -0.25 | -0.32 | +0.98 | 0.81 | +2.56 | -1.53 | 0.9340 |
+| US500 | out 2021-26H1 | +0.29 | +0.30 | +1.38 | 1.08 | +3.55 | -1.01 | 0.8350 |
+| US500 | recent 2024-26H1 | +0.31 | +0.21 | +2.01 | 1.69 | +5.51 | -1.01 | 0.8510 |
+| US100 | in 2014-20 | +1.16 | +0.80 | +3.21 | 1.52 | +6.16 | -1.36 | 0.9115 |
+| US100 | in 2014-20 ex2020 | +0.39 | +0.41 | +1.34 | 0.97 | +3.24 | -0.99 | 0.8335 |
+| US100 | out 2021-26H1 | +1.08 | +0.91 | +1.40 | 1.36 | +3.98 | -0.23 | 0.5935 |
+| US100 | recent 2024-26H1 | +0.27 | +0.17 | +1.98 | 1.93 | +6.04 | -0.88 | 0.8065 |
+
+- time 24.6s  seed 20261123  no network  no scan  no MT5  no order  writes: data/refute_c62_volmanaged_b.md only
+WROTE C:\Users\user\.aurel\memory\projects\discretionary\live\AUREL_RESEARCH\data\refute_c62_volmanaged_b.md
