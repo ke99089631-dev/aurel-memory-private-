@@ -1,0 +1,15 @@
+# [cycle62 supp c58c] mechanical alpha under constant-drift null vs permutation centre -- 2026-11-23 18:37 (scripts/c58c_mechanical_alpha.py)
+
+## XAU
+- in 2010-20: n 2809  mu +2.01 bp/d  c 94.7  alpha_obs +0.33  beta 0.952 | alpha_null(formula) +0.43 | perm centre +0.02 (sd 0.64) -> excess +0.32 bp/d  z +0.49  p2 0.694 | mechanical share of alpha_obs 6%
+- out 2021-26H1: n 1413  mu +5.29 bp/d  c 104.8  alpha_obs +1.77  beta 0.936 | alpha_null(formula) +1.40 | perm centre -0.02 (sd 0.86) -> excess +1.80 bp/d  z +2.10  p2 0.033 | mechanical share of alpha_obs -1%
+- recent 2024-26H1: n 641  mu +10.36 bp/d  c 120.7  alpha_obs +5.87  beta 0.925 | alpha_null(formula) +3.70 | perm centre -0.31 (sd 1.73) -> excess +6.17 bp/d  z +3.56  p2 0.000 | mechanical share of alpha_obs -5%
+- 2025: n 255  mu +19.54 bp/d  c 110.5  alpha_obs +5.21  beta 0.963 | alpha_null(formula) +3.41 | perm centre -0.55 (sd 2.39) -> excess +5.76 bp/d  z +2.41  p2 0.000 | mechanical share of alpha_obs -11%
+- 2013: n 245  mu -13.43 bp/d  c 104.2  alpha_obs -4.18  beta 0.959 | alpha_null(formula) -2.04 | perm centre +0.38 (sd 1.79) -> excess -4.56 bp/d  z -2.55  p2 0.000 | mechanical share of alpha_obs -9%
+
+## US500
+- in 2014-20: n 1716  mu +4.13 bp/d  c 100.2  alpha_obs +0.58  beta 0.826 | alpha_null(formula) +2.93 | perm centre +0.02 (sd 1.26) -> excess +0.56 bp/d  z +0.45  p2 0.682 | mechanical share of alpha_obs 4%
+- out 2021-26H1: n 1384  mu +4.88 bp/d  c 99.5  alpha_obs +0.29  beta 0.917 | alpha_null(formula) +1.62 | perm centre -0.06 (sd 1.00) -> excess +0.35 bp/d  z +0.35  p2 0.749 | mechanical share of alpha_obs -20%
+
+- time 6.5s  seed 20261123  no network  no scan
+WROTE C:\Users\user\.aurel\memory\projects\discretionary\live\AUREL_RESEARCH\data\c58c_mechanical_alpha.md

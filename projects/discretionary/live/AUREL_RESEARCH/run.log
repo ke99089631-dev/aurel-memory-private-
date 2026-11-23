@@ -1431,3 +1431,22 @@ Cycle 61 is complete: analysis run, findings entry written with real numbers, re
 **Also logged.** Two methodology candidates (97: print matched-vs-all distributions for tolerance matching; 98: nearest-neighbour controls need an R1-vs-R2 placebo, use the all-candidates mean as primary). The nearest-neighbour placebo showed a small bias, −0.015 in-sample and −0.048 in 2024-26. Exploration:deepening is now 15:11, so the next cycle should be exploration. The c58 findings gap remains unresolved (fifth record). No orders, no production files touched, no MT5, no external calls, PROMOTED unchanged.
 2026/11/23 12:43:23.16 done
 ========== 2026/11/23 18:30:03.10 cycle start ==========
+Cycle complete. One findings entry appended, run synchronously, all numbers filled.
+
+**What this cycle did.** The backlog said this turn was exploration's, and five consecutive entries since 11-23 00:40 flagged the same unresolved item: cycle58 (volatility-managed returns, Moreira–Muir 2017) was pre-registered and launched on 11-20 but died mid-run, leaving a 46-line log and no findings, result file, or source-map row. I re-ran the unchanged script to completion in 21 seconds. It reproduced every 11-20 number exactly and filled the never-computed parts: the recent-years window, gate ㉛, and the verdict. Two small descriptive supplements then quantified the strongest counter-argument.
+
+**Verdict (pre-registered rules).** C1 FAIL: the US500 positive control does not stand, so by rule the gold cell is descriptive only. C2 null for gold.
+
+| Cell (VM21 α, bp/day) | In-sample | Out-of-sample 2021-26H1 | Recent 2024-26H1 |
+|---|---|---|---|
+| US500 (control) | +0.58, t 0.37, MDE 3.12 | +0.29, t 0.30 | +0.31, t 0.21 |
+| XAU | +0.33, t 0.55, MDE 1.22 | +1.77, t 1.62, MDE 2.19 | +5.87, t 2.82, perm p 0.022 |
+
+**Why the recent gold α is not an edge.** Per-year α tracks that year's own return (Spearman +0.82, sign agreement 14 of 17 years). The only year with |t| ≥ 2 is the 2025 bull run; 2026H1 is negative and the 2013 crash year is −4.18. More importantly, under volatility clustering with a constant drift μ, a volatility-managed α is mechanically nonzero with the sign of μ even with zero timing information. For 2024-26H1 that mechanical term is +3.70 of the observed +5.87, and the remainder is about one standard error. The pre-registered circular-shift permutation centres its null at zero, so it was anti-conservative in high-drift windows. Rebalancing cost is only 0.05 bp/day, so for once cost is not the barrier; the barrier is statistical.
+
+**Strongest counter-argument recorded.** The mechanical term assumes a perfect vol forecast and drift independent of vol, so it is an upper bound and may absorb part of a real effect. Decisive test logged as high priority: a calibrated-null simulation that recomputes the vol forecast on simulated paths (same cache, about ten seconds), plus a low-priority forward cell on 2026-07+ data requiring the window's raw Sharpe below 1.
+
+**Records written** (all under AUREL_RESEARCH only): findings entry, backlog section with methodology candidates 102 (nulls for timing-type α) and 103 (lane hygiene: flush results per section, write findings in the same turn), new §8 source-map row, three cells.csv rows, and the five "unresolved c58" backlog lines closed. Gate ㉛ did not pass (in-sample Δμ +0.009R), so no basis for vol-sizing production trades. PROMOTED unchanged and correctly empty.
+
+**Next cycle:** deepening (tally now 16:11). Top candidates are the location/scale two-parameter model from the 09:45 refutation or the US500 non-trade pool for joint support from the 15:50 refutation. No orders, no executor or server contact, no MT5, no network, no multi-year scan.
+2026/11/23 18:45:21.20 done
