@@ -1410,3 +1410,23 @@ Cycle 60 is complete. One exploration item was pre-registered, run in the foregr
 **Next cycle** should be deepening, per the 15:10 exploration ratio. The refute lane's full-match RMT check is the top candidate. The c58 findings gap remains unresolved for a third cycle.
 2026/11/23  6:42:24.33 done
 ========== 2026/11/23 12:30:02.48 cycle start ==========
+Cycle 61 is complete: analysis run, findings entry written with real numbers, registry/backlog/DATA_MAP updated, all writes under AUREL_RESEARCH only.
+
+**What I tested (deepening, backlog top item).** The cycle59 refutation left one open question: the post-stop-loss "reversion" in 2010-20 survived a return-matched twin (RMT) control that only calibrated 65% of the settlement bar's move. I pre-registered a full-match RMT (settlement-bar signed move matched within ±0.02R, candidates ±7 to ±182 days, same weekday, same US DST state), plus two shape-matched variants, a placebo, and an injection control. Everything ran on existing caches in 9.4 s plus a 4.1 s supplement.
+
+**Result: pre-registered verdict H_TRADE, in-sample only.**
+
+| Cell (F' = P(+0.5R first) − P(−0.5R first), event − control) | 在 2010-20 | 外 2021-26H1 |
+|---|---|---|
+| SL arm, full match M1 (primary) | +0.096, z 3.19, MDE 0.060 | +0.006, z 0.16, MDE 0.073 |
+| SL arm, control = mean of all tolerance candidates | +0.081, z 2.93 | −0.006, z −0.18 |
+| SL arm, shape-matched M2 / M3 | +0.038 z 0.88 / +0.054 z 1.31 | ≈0 |
+| TP arm, full match M1 | +0.006, z 0.18 | −0.024, z −0.61 |
+
+- **TP side is now fully closed.** The "reversal after take-profit" seen in cycle59 disappears entirely once the settlement bar's move is matched. It was pure microstructure.
+- **SL side cannot be reduced to the bar's close-to-close move** in 2010-20, but the residual is not shown to be trade-specific. SL bars are wick bars (range 24% larger, close near mid vs. near low). Matching shape cuts the effect to about +0.04 with z under 1.4, at half the sample. Out-of-sample all five control types give zero, so under rule D2 this is a description of the 2010-20 regime, not an edge. Cost-adjusted it was already shown non-receivable.
+
+**Strongest counter-argument recorded.** The tolerance match only finds partners for the small settlement bars (matched v −0.15R vs. −0.37R overall, 43% match rate), and M1 does not match bar shape. "Trade-specific" and "wick-bar shape or stop clustering at the wall" remain unseparated. Two decisive, cheap follow-ups are logged in the backlog: a three-variable coarsened exact match with a 7x candidate pool, and a true placebo using tradeless pierce-and-close-back bars at prior-session highs/lows.
+
+**Also logged.** Two methodology candidates (97: print matched-vs-all distributions for tolerance matching; 98: nearest-neighbour controls need an R1-vs-R2 placebo, use the all-candidates mean as primary). The nearest-neighbour placebo showed a small bias, −0.015 in-sample and −0.048 in 2024-26. Exploration:deepening is now 15:11, so the next cycle should be exploration. The c58 findings gap remains unresolved (fifth record). No orders, no production files touched, no MT5, no external calls, PROMOTED unchanged.
+2026/11/23 12:43:23.16 done
