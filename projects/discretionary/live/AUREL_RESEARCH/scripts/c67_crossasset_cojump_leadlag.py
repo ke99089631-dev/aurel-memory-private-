@@ -100,7 +100,8 @@ say(f"- 共通格子 {N} 本（XAU 側 穴 {len(tsX)-len(ts)-int((tsX<ts[0]).sum
 tt = pd.to_datetime(ts, unit="s", utc=True); tny = tt.tz_convert(NY)
 hr = tny.hour.to_numpy(); mn = tny.minute.to_numpy(); wd = tny.weekday.to_numpy(); yr = tny.year.to_numpy()
 etdate = pd.DatetimeIndex(tny.tz_localize(None).normalize()); isev = np.asarray(etdate.isin(evdays))
-dayid = (etdate.asi8 // 86_400_000_000_000).astype(np.int64)
+dayid = etdate.to_numpy().astype("datetime64[D]").astype(np.int64)  # ET 暦日番号（pandas の解像度に依存しない）
+assert len(np.unique(dayid)) > 1000, "dayid 退化"
 slot = (hr * 12 + mn // 5).astype(np.int64)
 trading = (wd <= 4) & ~(hr == 17) & ~((hr == 18) & (mn < 10))
 E = nf3X & nf3S & np.isfinite(sigX) & np.isfinite(sigS) & trading & ~isev
@@ -116,30 +117,42 @@ def shifted(a, fill=False):
 
 def era_mask(lo_, hi_): return (yr >= lo_) & (yr <= hi_)
 
-def rr_lag(J_lead, J_tgt, m, lag=1, excl_same=True):
-    """RR of target jump at t+lag given lead jump at t (and no target jump at t), slot-matched baseline. Returns N, E, cond count, per-day (n,e)."""
-    ok = np.ones(N, bool)
-    for k in range(lag): ok &= np.r_[nxt_ok[k:], [False] * k] if k else nxt_ok
-    Eshift = np.r_[E[lag:], [False] * lag]
-    cond = m & E & Eshift & ok & J_lead
+def shift(a, lag, fill):
+    """out[t] = a[t+lag] (lag may be negative)."""
+    out = np.full(N, fill, dtype=a.dtype)
+    if lag > 0: out[:-lag] = a[lag:]
+    elif lag < 0: out[-lag:] = a[:lag]
+    else: out[:] = a
+    return out
+
+def rr_lag(J_lead, J_tgt, m_cond, m_base=None, lag=1, excl_same=True):
+    """RR of target jump at t+lag given lead jump at t (and no target jump at t). Baseline = slot-matched jump rate of the
+    target among eligible bars of m_base (era). lag<0 = time-reversal placebo. Returns N, E, cond count, day ids, n_i, e_i."""
+    if m_base is None: m_base = m_cond
+    ok = (shift(ts, lag, -10**12) - ts) == 300 * lag
+    cond = m_cond & E & shift(E, lag, False) & ok & J_lead
     if excl_same: cond &= ~J_tgt
-    tgt_next = np.r_[J_tgt[lag:], [False] * lag]
-    base_m = m & E
+    tgt_l = shift(J_tgt, lag, False)
+    base_m = m_base & E
     h = np.bincount(slot[base_m & J_tgt], minlength=288) / np.maximum(np.bincount(slot[base_m], minlength=288), 1)
-    slot_next = np.r_[slot[lag:], np.zeros(lag, np.int64)]
-    e_i = h[slot_next[cond]]; n_i = tgt_next[cond].astype(float)
+    slot_l = shift(slot, lag, 0)
+    e_i = h[slot_l[cond]]; n_i = tgt_l[cond].astype(float)
     return n_i.sum(), e_i.sum(), int(cond.sum()), dayid[cond], n_i, e_i
 
+BOOT_DIAG = []
 def boot_A(d1, n1, e1, d2, n2, e2, B=B_BOOT):
-    days = np.unique(np.r_[d1, d2]); nd = len(days)
+    days = np.unique(np.r_[d1, d2]); nd = int(len(days))
     g1 = np.searchsorted(days, d1); g2 = np.searchsorted(days, d2)
-    N1 = np.bincount(g1, n1, nd); E1 = np.bincount(g1, e1, nd); N2 = np.bincount(g2, n2, nd); E2 = np.bincount(g2, e2, nd)
+    N1 = np.bincount(g1, weights=n1, minlength=nd); E1 = np.bincount(g1, weights=e1, minlength=nd)
+    N2 = np.bincount(g2, weights=n2, minlength=nd); E2 = np.bincount(g2, weights=e2, minlength=nd)
     out = []
     for _ in range(B):
         w = np.bincount(rng.integers(0, nd, nd), minlength=nd).astype(float)
         a1 = (w @ N1) / max(w @ E1, 1e-9); a2 = (w @ N2) / max(w @ E2, 1e-9)
         if a1 > 0 and a2 > 0: out.append(math.log(a1) - math.log(a2))
-    out = np.array(out); return out.std(ddof=1) if len(out) > 10 else np.nan
+    out = np.array(out, dtype=float)
+    BOOT_DIAG.append(f"nd {nd} N1 {N1.sum():.0f} E1 {E1.sum():.2f} N2 {N2.sum():.0f} E2 {E2.sum():.2f} out {len(out)} sd {out.std(ddof=1) if len(out) > 10 else float('nan'):.4f}")
+    return float(out.std(ddof=1)) if len(out) > 10 else float("nan")
 
 def fmt(n, e):
     rr = n / e if e > 0 else np.nan; z = (n - e) / math.sqrt(e) if e > 0 else np.nan
@@ -171,15 +184,40 @@ for theta, tag in ((THETA, "主 θ=4"), (THETA2, "感度 θ=5")):
             f"**{int(n1)}/{e1:.2f} RR {rr1:.2f} (z {z1:+.2f}) [MDE {mde:.2f}]** (cond {c1}) | {int(n2)}/{e2:.2f} RR {rr2:.2f} (z {z2:+.2f}) (cond {c2}) | "
             f"**{A:+.3f} (z {zA:+.2f})** | {int(npl)}/{epl:.2f} RR {rrpl:.2f} (z {zpl:+.2f}) | {rl2:.2f} (z {zl2:+.2f}) | {rl3:.2f} (z {zl3:+.2f}) |")
         RES[(tag, name)] = dict(rr1=rr1, z1=z1, e1=e1, rr2=rr2, z2=z2, A=A, zA=zA, mde=mde, rrpl=rrpl, zpl=zpl, n1=n1, n2=n2, rho0=N00 / E00 if E00 else np.nan, agree=agree, nco=int(co.sum()))
-    # stratified (descriptive) for main theta only
+    say("- bootstrap 診断: " + " ／ ".join(BOOT_DIAG[-3:]))
+    # ---- 時間反転プラセボ・lag プロファイル・自己系列クラスタ（第 1 走の lag2/3 ≈ lag1 を見て追加＝事後・記述） ----
+    say(f"\n### 時間反転と lag プロファイル（{tag}・事後追加）: 「株が先」なら RR(+1) ≫ RR(−1) かつ lag で減衰。ボラ状態の共有なら対称・平坦")
+    say("| 窓 | 系 | RR −12 | −6 | −3 | −2 | **−1** | **+1** | +2 | +3 | +6 | +12 | 自己 RR(+1)（先行系列自身の次足ジャンプ） |")
+    say("|---|---|---|---|---|---|---|---|---|---|---|---|---|")
+    LAGS = (-12, -6, -3, -2, -1, 1, 2, 3, 6, 12)
+    for name, lo_, hi_ in ERAS:
+        m = era_mask(lo_, hi_)
+        for sysname, JL, JT in (("株→金", JS, JX), ("金→株", JX, JS)):
+            cells = []
+            for lg in LAGS:
+                n_, e_, c_, *_ = rr_lag(JL, JT, m, lag=lg); rr_, z_ = fmt(n_, e_)
+                cells.append(f"{rr_:.2f} ({int(n_)}/{e_:.1f})" if abs(lg) == 1 else f"{rr_:.2f}")
+            n_, e_, *_ = rr_lag(JL, JL, m, lag=1, excl_same=False); rrs, zs = fmt(n_, e_)
+            say(f"| {name} | {sysname} | " + " | ".join(cells) + f" | {rrs:.2f} (z {zs:+.1f}) |")
     if theta == THETA:
-        say("\n### 記述: 層別 S→X lag1（在／外）— セッション・先行足の分")
+        # ---- 用量反応（事後・記述）: 先行足 株の z ビン別に 次足 金ジャンプの RR ----
+        say("\n### 用量反応（事後・記述）: 株 t 足の z ビン → 金 t+1 足 ジャンプ RR（¬JX_t・スロット基準）")
+        say("| 窓 | z<1 | [1,2) | [2,3) | [3,4) | [4,5) | ≥5 |")
+        say("|---|---|---|---|---|---|---|")
+        for name, lo_, hi_ in ERAS[:2]:
+            m = era_mask(lo_, hi_); cells = []
+            for a_, b_ in ((0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (5, 99)):
+                JL = E & (zS >= a_) & (zS < b_)
+                n_, e_, c_, *_ = rr_lag(JL, JX, m); rr_, z_ = fmt(n_, e_)
+                cells.append(f"{rr_:.2f} (z {z_:+.1f}・n {int(n_)})")
+            say(f"| {name} | " + " | ".join(cells) + " |")
+        say("\n### 記述: 層別 S→X lag1（在／外）— セッション・先行足の分（基準は窓全体のスロット率）")
         say("| 層 | 窓 | N/E RR (z) | cond |")
         say("|---|---|---|---|")
         for lname, lm in (("US 現物 09:30–16:00 ET", cash), ("現物時間外", ~cash), ("先行足 定時分 :00/15/30/45", sched), ("先行足 非定時分", ~sched)):
             for name, lo_, hi_ in ERAS[:2]:
-                m = era_mask(lo_, hi_) & lm
-                n1, e1, c1, *_ = rr_lag(JS, JX, m); rr1, z1 = fmt(n1, e1)
+                m = era_mask(lo_, hi_)
+                n1, e1, c1, *_ = rr_lag(JS, JX, m & lm, m_base=m); rr1, z1 = fmt(n1, e1)
                 say(f"| {lname} | {name} | {int(n1)}/{e1:.2f} RR {rr1:.2f} (z {z1:+.2f}) | {c1} |")
         # yearly counts
         say("\n### 記述: 年別（θ=4）金 J・株 J・同一足共跳・S→X lag1 N／X→S lag1 N")

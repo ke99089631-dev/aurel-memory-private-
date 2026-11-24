@@ -1551,3 +1551,21 @@ Cycle 66 is complete. The analysis ran synchronously, the findings entry carries
 **Files touched.** New script and result under scripts and data, one findings entry appended to today's file, backlog item closed with four branches, DATA_MAP §2 tool row and header updated, two rows appended to cells.csv with field-count verification. PROMOTED.md unchanged. No orders, no production files, no MT5, no external calls. Next cycle per the running balance is exploration.
 2026/11/24 18:43:40.24 done
 ========== 2026/11/25  0:30:01.99 cycle start ==========
+Cycle 67 is complete and recorded. Everything ran synchronously, all numbers are filled in, and no placeholders remain.
+
+**What I tested.** An exploration item not yet in the source map: whether stock index (US500) and gold 5-minute jumps show tail dependence and a one-bar lead, since cycle 20 only tested linear correlation. Jumps were detected with the cycle 45 detector on both existing M5 caches. Announcement days were excluded, baselines were slot-matched, and the whole run took 12 seconds.
+
+**Results.**
+
+- **H1 (stock jump → gold jump next bar) passed its pre-registered rule.** The relative rate was 2.44 in-sample (2014–20, z +6.3) and 2.01 out-of-sample (2021–26H1, z +5.7). The 7-day-shifted placebo sat at 0.78 and 1.06, so the baseline is calibrated.
+- **But the mechanism is broken, by my own added checks.** The reverse-time rate (gold jump *before* the stock jump) was 2.99 in-sample, higher than the forward 2.44. The excess is flat across ±12 bars and rises smoothly with the leading bar's z from 0.79 to 2.85. That is a shared volatility state, not information propagating with a 5-minute lag.
+- **H2 (asymmetry, stock leads) is null.** Log-ratio difference +0.006 (z +0.03) in-sample, +0.170 (z +0.93) out-of-sample.
+- **New descriptive fact.** When both markets jump in the same bar, signs agreed 30% of the time in 2014–20 and 78% in 2021–26H1. The sign-regime flip seen in cycles 20 and 38 is sharpest in the tails.
+- **Gate ㉛ not passed.** Remaining-path excess for live scan trades hit by a stock jump was within noise in all windows, with no directional information.
+
+**Strongest counter-argument recorded.** A 5-minute grid folds any sub-5-minute lead into the same-bar co-jump, which is where the largest signal sits (ratio 7.6 and 4.5). This cycle excludes only leads of 5 minutes or more. Resolution needs the XAU M1 cache (now its 5th request) plus a US500 M1 cache, logged in backlog and DATA_MAP.
+
+**Two bugs caught by hygiene printing**, both logged as methodology candidates: a lead-lag PASS rule must include time-reversal and decay (115), and cluster bootstraps must assert the cluster count first, because pandas returned second-resolution timestamps that collapsed every bar to one day (116).
+
+**Files written**, all under AUREL_RESEARCH: the new script and result, `findings/2026-11-25.md`, two rows in `cells.csv`, a backlog section with branches, and DATA_MAP header, §6b tool row, and §8 source row. PROMOTED.md is unchanged and correctly empty. No orders, no production files, no MT5, no external calls. Next cycle per the running balance is deepening.
+2026/11/25  0:46:25.98 done
