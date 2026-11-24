@@ -1730,3 +1730,39 @@ Done. Verdict appended under a `[REFUTE]` header in `AUREL_RESEARCH/findings/202
 **Most serious objection against my own verdict, recorded**: both headline verdicts turn on a single count (8/35 vs my 9/35 break threshold; 9/20 vs 10), and Wilson [0.121, 0.390] contains 0.26 — so the honest statement is "reuse is 0.23 [0.12, 0.39], indistinguishable from c64's own 26% body-mention figure." Backlog additions are staged in `data/refute_c64_backlog_add.md` (candidate 111 — four miner conditions) rather than written to `backlog.md`, which is the research lane's file. PROMOTED.md unchanged, correctly empty. No orders, no production edits, no executor/server/MT5/prop contact, no network; `refute.log` and `.refuting` left to the lane wrapper.
 2026/11/24  9:46:28.82 done
 ========== 2026/11/24 15:30:04.74 refute start ==========
+Done. Verdict appended to `AUREL_RESEARCH/findings/2026-11-24.md` under `[REFUTE] 2026-11-24 15:30`.
+
+## What I attacked
+
+PROMOTED.md is empty and c65's two pre-registered cells (C1 XAU, C0 US500) both came back null — nothing promotable to break. So I went after the positive-form claims c65 left beside the null, plus its two methodology claims. Reproduction gate first: c65's four headline β's reproduce to ≤0.0004 using its own `daily_table`/`monthly_table` copied verbatim.
+
+## Verdicts
+
+| Target | Verdict |
+|---|---|
+| **T1** US500 在 β −0.299, t −2.06, p 0.021 ("12m TSMOM appears as reversal") | **broken**, 6 independent grounds |
+| **T2** XAU 在 L=126 "two horizons agree" (t +1.79 / +1.80) | **broken** |
+| **T3** XAU 近年 L=21 t +2.16 | **broken** |
+| **T4** "injection recovery 1.00 ⇒ the rule sees SR 0.6"; MDE=2se | **broken** — forces a correction to c65's conclusion |
+| **T5** candidate ⑲ VR finite-sample bias | **survived**, independently confirmed |
+| c65's null (4) "VR 2–63d indistinguishable from RW" | **survived** — I produced a false positive against it and had to kill my own attack |
+| **T6** cost | **survived** — cost is simply not the binding constraint here |
+
+**T1's autopsy was the whole game.** With binary x, β = (ȳ₊−ȳ₋)/2, and the minority side is **9 months out of 78 in 5 contiguous episodes** — 2015-09/10, 2016-02→05, 2019-01, 2019-06, 2020-04. Those are post-crash V-rebounds. ȳ(x=−1) = +0.688 vs ȳ(x=+1) = +0.090. The full sample gives β −0.060, t −0.56, rotation p 0.556 — so "it appeared in 2014-20" is a within-window restatement of 3–5 events. The US100 "replication" (t −4.06) has a 4-month minority side, **100% the same months** as US500 at y-correlation +0.88.
+
+What *did* survive is the description: β<0 in 11/11 month-boundary shifts, strengthens to t −3.02/−3.66 when influential months are dropped, negative in all 7 leave-one-year-out fits. Correct description, wrong generalization.
+
+## Two findings that reach past c65
+
+**Candidate 112 is calibrated now.** c65 proposed "minority side < 3 months → not identified." Under the null, HC1 |t|≥2 has FPR 0.83 / 0.35 / **0.20** / 0.13 / **0.082** at n_min = 1/2/3/5/9 (n=78). Block placement and random placement give the same FPR (0.189 vs 0.184) — so my pre-registered hypothesis that persistence was the cause was **wrong**; it's HC1's small-minority-cell downward bias. The usable threshold is n_min ≥ 13–15, not 3.
+
+**c65 overstates its own exclusion.** Injection recovery of 1.00 is an OLS identity (error < 1e-9 for any β*), carrying zero power information. True power P(t≥2) is 0.11 at SR 0.3, **0.33 at SR 0.6**, 0.90 at SR 1.2. So "no SR ≥0.6–0.7 TSMOM in gold, excluded in-sample" should read "80% power excludes SR ≳1.0; SR 0.6 is missed two times in three." That correction applies to this lane's past MDE notation generally, which I logged as a cross-cutting backlog item.
+
+## Self-correction worth flagging
+
+My part C used an iid bootstrap as the VR null and got p 0.000 against c65's RW claim for US500 在 VR(2)=0.901. That null is wrong — it destroys volatility clustering, which is exactly what the Lo–MacKinlay robust z corrects for. Under sign-randomization (preserving the |r_t| sequence) it's 0/30 cells below 0.05, min p 0.169; ρ1 −0.099 sits inside the null band and collapses to −0.023 at NFMIN 200. c65 is right; the finding records my false positive. It also prompted **candidate 113**: the refutation lane fires 10–15 attacks per cycle and has never calibrated its *own* false-positive rate.
+
+Writes: `AUREL_RESEARCH/scripts/refute_c65_tsmom{,_b,_c,_d}.py`, `data/refute_c65_*`, `backlog.md`, today's findings. PROMOTED.md unchanged — correctly still empty. No orders, no production edits, no process/MT5/prop contact, no external calls. 123s total across 4 runs.
+
+One note on the machine-wide task-observer rule: its workspace is outside AUREL_RESEARCH, and this lane's boundary is writes-only-under-AUREL_RESEARCH, so I did not write the observation log (same as c59–c65). The two reusable lessons are in `backlog.md` as calibrated-112 and new-113 instead — say the word if you'd rather I lift the write boundary for the observation log.
+2026/11/24 15:50:18.42 done
