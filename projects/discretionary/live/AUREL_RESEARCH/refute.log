@@ -1766,3 +1766,4 @@ Writes: `AUREL_RESEARCH/scripts/refute_c65_tsmom{,_b,_c,_d}.py`, `data/refute_c6
 
 One note on the machine-wide task-observer rule: its workspace is outside AUREL_RESEARCH, and this lane's boundary is writes-only-under-AUREL_RESEARCH, so I did not write the observation log (same as c59–c65). The two reusable lessons are in `backlog.md` as calibrated-112 and new-113 instead — say the word if you'd rather I lift the write boundary for the observation log.
 2026/11/24 15:50:18.42 done
+========== 2026/11/24 21:30:05.09 refute start ==========
