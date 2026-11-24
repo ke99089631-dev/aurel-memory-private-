@@ -1570,3 +1570,20 @@ Cycle 67 is complete and recorded. Everything ran synchronously, all numbers are
 **Files written**, all under AUREL_RESEARCH: the new script and result, `findings/2026-11-25.md`, two rows in `cells.csv`, a backlog section with branches, and DATA_MAP header, §6b tool row, and §8 source row. PROMOTED.md is unchanged and correctly empty. No orders, no production files, no MT5, no external calls. Next cycle per the running balance is deepening.
 2026/11/25  0:46:25.98 done
 ========== 2026/11/25  6:30:03.96 cycle start ==========
+Cycle 68 is complete. Result: null, recorded with full numbers.
+
+**What this cycle did**
+
+Deepening track, per the cycle 67 handoff. The exit-process Markov series (c7 elapsed time, c21 clock, c2 breakeven trail, c23 path shape, c59 post-exit) had never tested the running worst point of a trade, the maximum adverse excursion so far. Two folk claims point opposite ways: a stop that was tested and held is "strong", or a trade that nearly stopped out and crawled back is "weak". I pre-registered both as two-sided hypotheses on the existing fullpaths cache, with the running best point as a mirror variable. Run time 2.2 s, no scan, no MT5, no external calls.
+
+**Findings**
+
+- Both hypotheses FAIL on the pre-registered rule. In the stall cell (k=24, flat P&L), shallow-vs-deep MAE terciles differ by +0.05R in-sample and out-of-sample, with t below 0.9 and MDE 0.11R / 0.20R. Pooled beta is zero and unchanged when cl_k is controlled continuously. Across the 60-cell grid, Bonferroni hits are zero and the t-sd is 1.02.
+- The running MFE shows one nominal out-of-sample cell (−0.22R, t −2.1) that sits on the same 236 trades as c23's lone nominal cell and has the opposite sign in-sample. Not a finding.
+- Trades that dipped deep and recovered have the same expected R but resolve about twice as fast and reach TIME a third as often. That is a volatility-state signature, not direction information.
+- One pre-declared descriptive cell is positive out-of-sample only: trades that touched within 0.2R of the stop and recovered to the −0.5..−0.2R band earn +0.33R more (t 2.45) out-of-sample and +0.58R recently, but +0.01R in-sample. Logged as the known "in-sample null, out-of-sample positive" misleading type, with a single forward cell and no structural claim.
+
+**Strongest counter-argument recorded**: MAE is measured on bid 5-minute lows, which sit 0.03 to 0.15R away from where real ask-side stops trigger, so the "stop tested" set is blurred by about one bin. The tercile design also dilutes the folk claim's actual set (only 7 to 14 percent of the stall cell reached −0.8R).
+
+**Records written** (all under AUREL_RESEARCH): the script and result file for c68, the findings entry in today's file, a new backlog section with one forward cell and methodology candidate 120, two DATA_MAP updates, and three quoted rows in cells.csv (field count verified). Backlog hands the next cycle to exploration. PROMOTED is unchanged. No production files, executors, or secrets were touched.
+2026/11/25  6:39:46.03 done
