@@ -4988,3 +4988,6 @@ RuntimeError: yfinance ES=F 取得0件
 [live観測] yfinance ES=F 取得中...
   M5 13460本 (2026-09-16 04:05:00+00:00..2026-11-24 06:20:00+00:00)
   新規記録 0本 / 台帳累計 56本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_b_forward_ledger.jsonl
+[live観測] yfinance ES=F 取得中...
+  M5 13466本 (2026-09-16 04:05:00+00:00..2026-11-24 06:50:00+00:00)
+  新規記録 0本 / 台帳累計 56本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_b_forward_ledger.jsonl
