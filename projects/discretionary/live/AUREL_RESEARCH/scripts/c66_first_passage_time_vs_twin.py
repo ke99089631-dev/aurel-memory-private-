@@ -59,7 +59,7 @@ z = np.load(os.path.join(DATA, "macro", "XAU_m5_ohlc.npz"))
 TS = z["ts"].astype(np.int64); H, Lo, C = z["high"], z["low"], z["close"]
 NB = len(TS)
 FLAT = (H == Lo)
-wd_utc = ((TS // 86400) + 4) % 7          # 1970-01-01 = 木曜(4) → 0=月 ... 5=土 6=日
+wd_utc = ((TS // 86400) + 3) % 7          # 1970-01-01 = 木曜 → Mon=0 規約で 3；0=月 ... 5=土 6=日（第 1 走は +4 で土=金の取り違え・衛生印字で検出）
 SAT = (wd_utc == 5).astype(np.int64); CSAT = np.concatenate([[0], np.cumsum(SAT)])   # CSAT[i] = # Saturday bars in [0,i)
 ie = np.searchsorted(TS, tr["entry_time"].to_numpy(np.int64))
 ok = (ie < NB) & (TS[np.minimum(ie, NB - 1)] == tr["entry_time"].to_numpy(np.int64))
@@ -213,6 +213,11 @@ def desc(label, wn, mr, hr, mt, ht, B=500):
     return c
 for wn, wm in W.items():
     desc("hold≥0 版（実本に建玉足決着を含む）", wn, wm & dec, HR, dec_tw & wm[:, None], KS.astype(float))
+# 第 3 の規約（第 1 走を見て追加・記述）: 両群とも「建玉後 1 本を生き残った本」= 実 hold≥1（建玉足 0 を生存）／双子 k≥2（次足 1 を生存）・双子 k' = k−1
+KS1 = (KS - 1).astype(float)
+for wn, wm in W.items():
+    desc("両群 1 本生存版（実 hold≥1・双子 k≥2→k−1）", wn, wm & dec & hold1, HR, dec_tw & (KS >= 2) & wm[:, None], KS1)
+say(f"| （参考）hold=0 決着の腕内訳 | 全窓 | TP {int((dec&tp&(hold==0)).sum())}／SL {int((dec&~tp&(hold==0)).sum())} | hold≥1 条件づけは TP 腕を {100*(dec&tp&(hold==0)).sum()/(dec&tp).sum():.1f}%・SL 腕を {100*(dec&~tp&(hold==0)).sum()/(dec&~tp).sum():.1f}% 落とす＝腕非対称 | | | | |")
 for wn, wm in W.items():
     desc("帯 jh7-12", wn, wm & dec & hold1 & band, HR, dec_tw & (wm & band)[:, None], KS.astype(float))
     desc("補 jh∉7-12", wn, wm & dec & hold1 & ~band, HR, dec_tw & (wm & ~band)[:, None], KS.astype(float))
@@ -277,6 +282,18 @@ for i in range(1000):
 se_r = bsr.std(ddof=1)
 dl = lr_l - np.log(cr["rho_real"]); se_dl = np.sqrt(se_l**2 + se_r**2)
 say(f"**台帳 ρ_ledger（hold≥1）= {np.exp(lr_l):.3f}**（mean hold TP {mT_l:.2f} n {nT_l}／SL {mS_l:.2f} n {nS_l}・log se {se_l:.3f}）vs scan 近年 ρ_real {cr['rho_real']:.3f}（se {se_r:.3f}）→ log 差 {dl:+.4f} (t {dl/se_dl:+.2f})・scan 近年 双子 ρ_twin {cr['rho_tw']:.3f} との log 差 {lr_l-np.log(cr['rho_tw']):+.4f}")
+# 幾何（b）の組成差の参照: 台帳 b で解析 ρ_RW・scan 近年を台帳の b 三分位シェアで再重み付け
+ldd = ld[ld.dec & (ld.hold >= 1)]
+a_l = 1 - FT / ldd.risk.to_numpy(); B_l = ldd.b.to_numpy() + FT / ldd.risk.to_numpy()
+pT_l = a_l / (a_l + B_l); pS_l = B_l / (a_l + B_l)
+rho_rw_led = (np.sum(pT_l * B_l * (2 * a_l + B_l) / 3) / pT_l.sum()) / (np.sum(pS_l * a_l * (2 * B_l + a_l) / 3) / pS_l.sum())
+mrec = W["近年2024-26H1"] & dec & hold1
+bins_ = np.array([-np.inf, qb[0], qb[1], np.inf])
+sh_led = np.histogram(ldd.b, bins_)[0] / len(ldd); sh_scan = np.histogram(bb[mrec], bins_)[0] / mrec.sum()
+wgt = (sh_led / sh_scan)[np.digitize(bb, bins_) - 1]
+def rho_w(m, w):
+    return (np.sum(w[m & tp] * HR[m & tp]) / np.sum(w[m & tp])) / (np.sum(w[m & ~tp] * HR[m & ~tp]) / np.sum(w[m & ~tp]))
+say(f"- 幾何の参照: 台帳 b 三分位シェア（scan 全体の切点 {qb[0]:.2f}/{qb[1]:.2f}）{np.round(sh_led,2)} vs scan 近年 {np.round(sh_scan,2)}・解析 ρ_RW 台帳 {rho_rw_led:.3f} vs scan 近年 {rho_rw(mrec):.3f}・scan 近年 ρ_real を台帳 b 組成に再重み付け {rho_w(mrec, wgt):.3f}（生 {rho_w(mrec, np.ones(N)):.3f}）→ 台帳 1.49 のうち b 組成で説明される分 log {np.log(rho_w(mrec, wgt)/rho_w(mrec, np.ones(N))):+.3f}")
 cut = int(datetime(2026, 10, 24, 0, 0, tzinfo=timezone.utc).timestamp())
 for lab, m in [("exit ≤10-24（旧記帳規則の疑い）", ld.exit_time < cut), ("exit >10-24", ld.exit_time >= cut)]:
     sub = ld[m]

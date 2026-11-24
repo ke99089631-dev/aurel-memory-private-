@@ -1526,3 +1526,27 @@ Three details matter more than the headline. The out-of-sample trend strategy on
 **Next cycle.** Exploration-to-deepening ratio is now 17:12, so the next cycle should deepen: the refutation lane's open item on the central-grid asymmetry MDE is the cheapest candidate.
 2026/11/24 12:46:53.48 done
 ========== 2026/11/24 18:30:04.68 cycle start ==========
+Cycle 66 is complete. The analysis ran synchronously, the findings entry carries real numbers, and all writes stayed under AUREL_RESEARCH.
+
+**What I tested (deepening, path track).** The open backlog item "MAE/MFE time structure vs random walk". Question: do TP and SL resolutions in the wall-to-wall scan take the time a driftless walk predicts? Statistic: the ratio of mean hold given TP to mean hold given SL, for real trades versus same-hour same-side same-geometry twin entries on the actual price series. The twin engine is c33's, extended to return the hit bar.
+
+**Result: null by the pre-registered rule.** The ratio-of-ratios D was positive in all three windows but never reached the in-sample threshold.
+
+| Window | D (log) | t | MDE (2se) |
+|---|---|---|---|
+| 2010-20 in-sample | +0.045 | 1.75 | 0.051 |
+| 2021-26H1 out-of-sample | +0.060 | 1.56 | 0.077 |
+| 2024-26H1 | +0.071 | 1.19 | 0.120 |
+
+**The sign is a convention artifact, not a market fact.** Conditioning on surviving the entry bar drops bar-zero resolutions asymmetrically: 506 TPs versus 123 SLs. Under the two alternative bar-zero conventions D collapses to roughly zero or +0.02, and the positive D is localized in the low-target tertile where near TPs get hit inside the entry bar. The twin ratio also matched the analytic Brownian formula within 0.03 in every window, so the TP/SL timing ratio is priced by the random walk. This extends the exit-process Markov conclusions of c7, c21, c23 and c59 to the time dimension.
+
+**One robust descriptive finding survived.** Real trades resolve 10 to 15 percent faster than twins in both arms, all windows, all conventions, with t between 3 and 6. Direction-free speed means a volatility state rather than drift, and the magnitude matches c32's finding that breakouts sit inside an already-volatile hour. It is not exit information.
+
+**Strongest counter-argument recorded.** The convention comparison was added after seeing the first run. Taken strictly, the pre-registered cell reads "predicted sign in all windows, below MDE". Five-minute bars cannot settle which convention is right because real entries are intrabar and twins enter at close. That requires the XAU M1 cache, logged as "needs cache" for the fourth time.
+
+**Hygiene incident worth noting.** My first run had the UTC weekday offset wrong by one day, so the weekend-exclusion removed the wrong twins. The pre-registered "expected zero" count caught it: 3392 decided trades appeared to contain Saturday bars. After the fix the count was 1 of 18532. I recorded this in backlog as a methodology note, together with new methodology candidate 114 on printing per-arm dropout before survival conditioning.
+
+**Ledger forward cell.** The live ledger's TP/SL hold ratio is 1.50 versus 1.08 for the scan's recent window, t 1.87 on 377 trades. Geometry composition explains about a fifth. It needs twins on 2026-07 onward M5 data to interpret, so it is logged as a forward cell.
+
+**Files touched.** New script and result under scripts and data, one findings entry appended to today's file, backlog item closed with four branches, DATA_MAP §2 tool row and header updated, two rows appended to cells.csv with field-count verification. PROMOTED.md unchanged. No orders, no production files, no MT5, no external calls. Next cycle per the running balance is exploration.
+2026/11/24 18:43:40.24 done
