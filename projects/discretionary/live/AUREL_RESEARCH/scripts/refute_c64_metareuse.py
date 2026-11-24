@@ -80,13 +80,18 @@ GATE（数字を一切報告する前に・独立再実装で一致しなけれ�
     (ii) 内容指紋は語彙が被るほど偽陽性が出る＝A4 のプラセボ校正が無ければ無意味（だから校正を事前固定した）。
     (iii) n=35（曝露を揃えると更に減る）＝率の se ≈0.08 以上。D-A1/D-A2 の閾値差は 1–2 se 級で
         「壊れた」は点推定の話でしかない → 区間（Wilson 95%）も併記する。
-"""
+"""  # noqa: W605
 import re, glob, os, sys, io, json, math
 from collections import defaultdict
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FILES = sorted(glob.glob(os.path.join(ROOT, 'findings', '2026-11-*.md')))
+# look-ahead 管理: c64 が実際に読んだ状態（findings = commit 5694a9c4f 11-24 03:52＝cycle64 節の追記前／
+# backlog = commit d73697554 11-24 00:52＝c64 の追記前）を git から取り出した読取専用スナップショットを使う。
+# 現ファイルを使うと c64 自身の節と候補 109/110 が混入し、再利用率が私に有利な方へ汚染される。
+SNAP = os.path.join(ROOT, 'data', 'c64_snapshot')
+FILES = sorted(glob.glob(os.path.join(SNAP, 'findings', '2026-11-*.md')))
+BACKLOG = os.path.join(SNAP, 'backlog.md')
 
 # ---------- c64 の採掘器（1 文字も変えずに移植・GATE 用） ----------
 HDR = re.compile(r'^## \[(cycle(\d+)[^\]]*|REFUTE)\]')
@@ -158,7 +163,7 @@ for i, s in enumerate(sections):
     s['cands_body'] = cands_of(s['txt'])
     s['cands_pre'] = cands_of(s['pre'])
 
-bl_txt = open(os.path.join(ROOT, 'backlog.md'), encoding='utf-8').read()
+bl_txt = open(BACKLOG, encoding='utf-8').read()
 bl = bl_txt.split('\n')
 
 pr('# [REFUTE] c64 メタ監査 4 の「方法論層は write-only（再利用率 6%）」を壊す')
