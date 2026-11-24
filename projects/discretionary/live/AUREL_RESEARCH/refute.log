@@ -1767,3 +1767,42 @@ Writes: `AUREL_RESEARCH/scripts/refute_c65_tsmom{,_b,_c,_d}.py`, `data/refute_c6
 One note on the machine-wide task-observer rule: its workspace is outside AUREL_RESEARCH, and this lane's boundary is writes-only-under-AUREL_RESEARCH, so I did not write the observation log (same as c59–c65). The two reusable lessons are in `backlog.md` as calibrated-112 and new-113 instead — say the word if you'd rather I lift the write boundary for the observation log.
 2026/11/24 15:50:18.42 done
 ========== 2026/11/24 21:30:05.09 refute start ==========
+Verdict appended to `AUREL_RESEARCH/findings/2026-11-24.md` under `## [REFUTE] 2026-11-24 21:30`.
+
+## What I attacked
+
+PROMOTED.md is empty and c66's pre-registered main cell (D, the TP/SL hold ratio vs twins) came back null at 在 t 1.75 — nothing promotable to break. So I went after the five positive-form claims c66 wrote *beside* the null, with 10 pre-registered attacks across 4 runs (95 s).
+
+**Reproduction gate first: bit-exact.** Replaying c66's twin draw with the same seed and loop order reproduced all three D's and all six arm log-ratios to max |Δ| = **0.00004**.
+
+## Verdicts
+
+| Target | Verdict |
+|---|---|
+| **T1** "real trades settle 10–15% faster than twins (both arms, all windows, all conventions)" | **survived** — 9 attacks failed |
+| **T2** "matches c32's vol +5–7% via mean hold ∝ 1/σ²" | **broken**, two independent grounds |
+| **T3** "D is convention-dependent, doesn't stand as a market fact" | **survived, strengthened** past c66's own statement |
+| **T4** "0.5-bar exposure difference, log −0.015 to −0.02" | premise **survived**, the bound **broken** |
+| **T5** "ρ_twin ≈ ρ_RW ±0.03 = a new calibration test" | **survived** at the aggregate, scope narrowed to ±0.15 |
+
+**My refutation of T1 failed, and that is the headline.** Dead-time clock (my main new attack — flat bars as uncrossable dead time): flat fractions are nearly identical real vs twin, shrink ≤9%. Weekday-matched twins: SL arm shrinks 0–4%. Month-block and year-cluster se: t −5.82 / −5.71 vs c66's −6.39. Cost ×2 and ×0 re-derived symmetrically: level holds at −0.08 to −0.10. 17/17 years negative on the SL arm. And censoring runs *against* T1 — twins are censored more often (5.91% vs 5.17%), biasing twin means downward.
+
+**T2's break is the one that reaches past c66.** The vol gap actually present in c66's own sample is **+3.5% / +0.7% / +1.1%** (在/外/近年), not the +5–7% imported from c32 — 2 to 10× smaller. Observed/predicted lands at 3.79 and 7.89 in 外, and outside [0.5, 2.0] in 7 of 9 b×window cells. Separately, the 1/σ² exponent is wrong in this data: the empirically estimated elasticity is **−1.11** (6/6 CIs exclude −2). The attenuation-bias escape doesn't work — a mean difference of a noisy proxy is unbiased, only the regression slope attenuates.
+
+**T3 can be stated more strongly than c66 stated it.** Under a fully symmetric close-entry convention the arm asymmetry *flips sign*, so D's range across conventions is −0.015 to +0.071 — straddling zero, not c66's "0 to +0.06".
+
+## Three of my own attack verdicts I withdrew
+
+- **A3** (CAP truncation → "tail-only") was a misread: the mean-of-conditional under a 288 cap compresses the statistic. The censoring- and arm-probability-invariant form shows only 36–55% of the effect comes from the >96-bar tail.
+- **B3** conflated arm *probability* with arm *timing* — real trades have −0.98pp fewer TPs and +1.72pp more SLs than twins, which alone fixes the sign at every horizon.
+- **A9(ii)** ("the b gradient can't be vol") — I ran the attack on my own verdict and it held: Δσ itself tracks b (在 b-bottom −0.024, b-top +0.092), explaining 89% of the gradient. Withdrawn. It stays *inconclusive at the margin*: that 89% assumes the −2 multiplier my own B2(ii) rejects; at the measured −1.11 it explains 49%.
+- **A9(i)** downgraded twice over — the positive low-b TP arm vanishes under a symmetric convention (+0.0595 → +0.0009) and fails Holm (p 0.028 vs threshold 0.025).
+
+That's 3 withdrawn plus 1 downgraded out of 10 — a **30–40% self-false-discovery rate**, which is the first concrete measurement for candidate 113 (this lane has never calibrated its own FPR). Logged as candidate 117, alongside 115 (the mean-of-conditional statistic conflates three things; pre-register F_a(k) and always print the median) and 116 (re-measure a cited mechanism's number in the current sample before writing "量が合う").
+
+One correction c66 should carry forward: **"10–15% faster" is a statement about the mean, and the median is unchanged** — c66's own median table has real = twin exactly in 外/近年. The censoring-invariant content is "+1.4 to +3.3pp more settled at any horizon."
+
+Writes: `scripts/refute_c66_fpt{,_b,_c,_d}.py`, `data/refute_c66_fpt{,_b,_c,_d}.md` + 4 run logs, `data/refute_c66_backlog_add.md`, today's findings. `backlog.md` and `cells.csv` untouched (research-lane originals — additions staged instead). **PROMOTED.md unchanged, correctly still empty.** No orders, no production edits, no executor/server/schtask/MT5/prop contact, no network, no multi-year scan, ledger not read this cycle.
+
+One standing note: the machine-wide task-observer rule wants its log written, but its workspace sits outside `AUREL_RESEARCH` and this lane's boundary is writes-only-under-`AUREL_RESEARCH`, so I left it alone (same as c59–c66) and put the three reusable lessons in the staged backlog as candidates 115/116/117. Say the word if you'd rather I lift the write boundary for that log specifically.
+2026/11/24 21:52:46.82 done
