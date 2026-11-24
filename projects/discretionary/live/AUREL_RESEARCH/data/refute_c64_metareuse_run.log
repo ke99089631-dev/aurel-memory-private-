@@ -1,0 +1,24 @@
+C:\Users\user\.aurel\memory\projects\discretionary\live\AUREL_RESEARCH\scripts\refute_c64_metareuse.py:2: SyntaxWarning: invalid escape sequence '\w'
+  """
+# [REFUTE] c64 メタ監査 4 の「方法論層は write-only（再利用率 6%）」を壊す
+- 節 126（研究 61・REFUTE 65）・事前固定ブロックを持つ節 75（研究 59・REFUTE 16）
+
+## GATE — c64 の M10/M5 の再現
+  - bl_cands=90: MISMATCH
+  - max=108: MISMATCH
+  - adopted=[4,13,15,16,17]: OK
+  - first_cyc=80: MISMATCH
+  - hi50=35: MISMATCH
+  - lo50=40: OK
+  - reuse_hi=2: OK
+  - reuse_hi_body=9: MISMATCH
+  - reuse_lo=20: OK
+  - open=203: MISMATCH
+  - fwd=39: MISMATCH
+  - needs=37: MISMATCH
+  - meth=80: MISMATCH
+  - bl_lines=384: MISMATCH
+  - 実測: 候補番号 92（最大 110）・adopted [4, 13, 15, 16, 17]・初出 83・hi50 38・lo50 40・再利用 hi 2/38・本文 12/38・lo 20/40・open 212・前向き 40・needs 38・方法論 83・行 395
+  - **GATE FAIL**
+
+GATE FAIL — 再現できないので判定を出さずに停止する（憲章 C・事前固定どおり）。
