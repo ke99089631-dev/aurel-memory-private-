@@ -1260,3 +1260,4 @@
 {"kind": "update", "target": "S-0170", "logged_at": "2026-11-24 18:15:08", "reaccel": {"retest_time": 1795510800, "retest_jst": "2026-11-24 18:00", "retest_tol": 0.99, "status": "waiting"}, "reaccel_frozen": true}
 {"kind": "update", "target": "S-0170", "logged_at": "2026-11-24 18:30:30", "waiting_resolved": true, "entry": 3621.72, "entry_time": 1795511700, "entry_jst": "2026-11-24 18:15", "status": "open", "mfe_R": 1.74, "mae_R": 0.38, "hold_bars": 0}
 {"kind": "update", "target": "S-0170", "logged_at": "2026-11-24 18:45:21", "frozen": true, "status": "closed", "exit": 3625.17, "exit_reason": "SL", "R": -1.0, "mfe_R": 1.74, "mae_R": 1.08, "hold_bars": 1, "exit_time": 1795512600, "outcome": "ダマシ"}
+{"kind": "update", "target": "S-0170", "logged_at": "2026-11-24 19:15:03", "reaccel": {"retest_time": 1795510800, "retest_jst": "2026-11-24 18:00", "retest_tol": 0.99, "status": "no_trigger"}, "reaccel_frozen": true}
