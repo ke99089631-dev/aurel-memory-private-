@@ -1806,3 +1806,4 @@ Writes: `scripts/refute_c66_fpt{,_b,_c,_d}.py`, `data/refute_c66_fpt{,_b,_c,_d}.
 
 One standing note: the machine-wide task-observer rule wants its log written, but its workspace sits outside `AUREL_RESEARCH` and this lane's boundary is writes-only-under-`AUREL_RESEARCH`, so I left it alone (same as c59–c66) and put the three reusable lessons in the staged backlog as candidates 115/116/117. Say the word if you'd rather I lift the write boundary for that log specifically.
 2026/11/24 21:52:46.82 done
+========== 2026/11/25  3:30:02.33 refute start ==========
