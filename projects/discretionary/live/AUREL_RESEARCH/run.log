@@ -1569,3 +1569,4 @@ Cycle 67 is complete and recorded. Everything ran synchronously, all numbers are
 
 **Files written**, all under AUREL_RESEARCH: the new script and result, `findings/2026-11-25.md`, two rows in `cells.csv`, a backlog section with branches, and DATA_MAP header, §6b tool row, and §8 source row. PROMOTED.md is unchanged and correctly empty. No orders, no production files, no MT5, no external calls. Next cycle per the running balance is deepening.
 2026/11/25  0:46:25.98 done
+========== 2026/11/25  6:30:03.96 cycle start ==========
