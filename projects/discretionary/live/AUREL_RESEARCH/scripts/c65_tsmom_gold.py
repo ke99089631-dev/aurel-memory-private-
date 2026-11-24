@@ -200,7 +200,11 @@ for sym in ["XAU", "US500"]:
         for wname, (lo, hi) in W.items():
             w = ok & (yr >= lo) & (yr <= hi)
             if w.sum() < 100: parts.append(f"{wname}: n<100"); continue
-            b, se = ols_nw(y[w], x[w], 21); S = x[w] * y[w]
+            S = x[w] * y[w]
+            nmin = min((x[w] > 0).sum(), (x[w] < 0).sum())
+            if nmin < 20:  # (事後追加・第 3 走) 少数側 <20 日では β が数値的に発散（第 2 走 US500 近年 L=252 t −152 の人工物）→ 識別不能扱い
+                parts.append(f"{wname}: n {w.sum()}・β 識別不能（少数側の符号 {nmin} 日 <20）・SR {S.mean()/S.std(ddof=1)*math.sqrt(252):+.2f}（≈バイ&ホールド）"); continue
+            b, se = ols_nw(y[w], x[w], 21)
             parts.append(f"{wname}: n {w.sum()}・β {b[1]:+.4f} (t {b[1]/se[1]:+.2f}・MDE {2*se[1]:.4f})・SR {S.mean()/S.std(ddof=1)*math.sqrt(252):+.2f}")
         say(f"- L={L}: " + "／".join(parts))
     # variance ratios on daily returns
@@ -209,8 +213,16 @@ for sym in ["XAU", "US500"]:
         w = (yr >= lo) & (yr <= hi) & np.isfinite(r)
         rr = r[w]
         say(f"- {wname} (n {len(rr)}): " + "・".join(f"VR({q}) {vr_lm(rr,q)[0]:.3f} (z {vr_lm(rr,q)[1]:+.2f})" for q in [2, 5, 10, 21, 63]))
-    # yearly VR(21)
-    say("- 年別 VR(21): " + "・".join(f"{y} {vr_lm(r[(yr==y)&np.isfinite(r)],21)[0]:.2f}" for y in sorted(set(yr)) if ((yr == y) & np.isfinite(r)).sum() > 120))
+    # yearly VR(21) + shuffle null (事後追加・第 3 走: 第 2 走で 12/13 年が 1 未満に見えたため、年内シャッフル帰無（自己相関を壊し周辺分布を保存）の中央値と片側 p を併記)
+    ys = [y for y in sorted(set(yr)) if ((yr == y) & np.isfinite(r)).sum() > 120]
+    rows = []; nsig = 0
+    for y in ys:
+        rr = r[(yr == y) & np.isfinite(r)]; v = vr_lm(rr, 21)[0]
+        null = np.array([vr_lm(rng.permutation(rr), 21)[0] for _ in range(300)])
+        p = (null <= v).mean(); nsig += p < 0.05
+        rows.append(f"{y} {v:.2f} (帰無中央値 {np.median(null):.2f}・p {p:.2f})")
+    say("- 年別 VR(21) vs 年内シャッフル帰無 300 回: " + "・".join(rows))
+    say(f"- 年別 VR(21): 帰無中央値を下回る年 {sum(1 for y in ys if True)} 中 {sum(1 for s in rows if float(s.split()[1]) < float(s.split('帰無中央値 ')[1].split('・')[0]))}・片側 p<0.05 の年 {nsig}/{len(ys)}（期待 {0.05*len(ys):.1f}）")
 
 # ====================== gate ㉛ ======================
 say("\n## ゲート ㉛（本番接続・在のみ）: 建玉前有効日までの 252 日トレンド符号 × side（scan 19404 本）")

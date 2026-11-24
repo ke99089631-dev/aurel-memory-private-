@@ -1504,3 +1504,24 @@ Cycle 64 is complete and recorded. One findings entry (meta audit 4) was appende
 One side note: the task-observer skill asked me to create its observation log outside AUREL_RESEARCH. I did not, since this lane writes only under that folder.
 2026/11/24  6:46:36.72 done
 ========== 2026/11/24 12:30:04.01 cycle start ==========
+Cycle 65 is complete. All deliverables are written under AUREL_RESEARCH, the findings entry carries real numbers, and PROMOTED.md stays empty.
+
+**What I tested.** The source map had no row for time-series momentum, the most widely reported time-series edge in the literature. I pre-registered a Moskowitz–Ooi–Pedersen style test on gold with US500 as the home-base comparator: monthly, non-overlapping, volatility-scaled returns regressed on the sign of the trailing 252-day return, with an intercept so drift cannot masquerade as trend following. Both caches already existed, so the run took 16.5 seconds with no multi-year scan.
+
+**Result: null in both markets.**
+
+| Cell | In-sample β (t) | Out-of-sample β (t) | MDE as annual Sharpe |
+|---|---|---|---|
+| Gold, 12-month lookback | +0.052 (+0.52), permutation p 0.60 | +0.012 (+0.08) | 0.70 in / 1.02 out |
+| US500, 12-month lookback | −0.299 (−2.06), p 0.021 | +0.133 (+0.94) | 1.00 in / 0.99 out |
+
+Three details matter more than the headline. The out-of-sample trend strategy on gold shows Sharpe 0.55, but the decomposition attributes 95 percent of it to the long-bias term, not to covariance between trend sign and next-month return. In 2024 to 2026H1 every month carried a positive trend sign, so β is unidentified and trend following is literally buy-and-hold. US500 in-sample came out with the opposite sign to the literature, driven by rebounds after down-trend signs in 2016, 2019 and 2020, and it flipped out of sample. Variance ratios at 2 to 63 days stay within |z| 1.4 of a random walk in every window, which closes gold's own-series statistics from 5 minutes to 3 months when combined with cycle 19. The production gate did not pass (in-sample Δμ −0.006R, MDE 0.040).
+
+**Strongest counter-argument recorded.** This is a power statement, not proof of absence. The literature's single-asset Sharpe of 0.2 to 0.5 sits inside the in-sample confidence interval, and the recent window cannot in principle distinguish trend following from a plain long. The registered resolution is a diversified multi-asset test, logged as a needs-data item.
+
+**Methodology lesson logged as candidate 112.** The script crashed twice on singular design matrices because the sign regressor was uniform in the recent window. Binary-state conditioning should print the minority-side count before any statistics and declare β unidentified below a threshold.
+
+**Files written.** scripts/c65_tsmom_gold.py, data/c65_tsmom_result.md, data/c65_run.log, data/c65_findings_entry.md, three rows in data/cells.csv, a new section at the end of backlog.md, the cycle 65 entry in findings/2026-11-24.md, and a new §8 row plus a §1 tool line in DATA_MAP.md. The task-observer log was not written because it lives outside AUREL_RESEARCH, matching cycles 59 to 64.
+
+**Next cycle.** Exploration-to-deepening ratio is now 17:12, so the next cycle should deepen: the refutation lane's open item on the central-grid asymmetry MDE is the cheapest candidate.
+2026/11/24 12:46:53.48 done
