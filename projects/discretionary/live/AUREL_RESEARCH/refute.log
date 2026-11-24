@@ -1807,3 +1807,27 @@ Writes: `scripts/refute_c66_fpt{,_b,_c,_d}.py`, `data/refute_c66_fpt{,_b,_c,_d}.
 One standing note: the machine-wide task-observer rule wants its log written, but its workspace sits outside `AUREL_RESEARCH` and this lane's boundary is writes-only-under-`AUREL_RESEARCH`, so I left it alone (same as c59–c66) and put the three reusable lessons in the staged backlog as candidates 115/116/117. Say the word if you'd rather I lift the write boundary for that log specifically.
 2026/11/24 21:52:46.82 done
 ========== 2026/11/25  3:30:02.33 refute start ==========
+Done. Appended `[REFUTE]` to `AUREL_RESEARCH/findings/2026-11-25.md`.
+
+## Target
+PROMOTED.md is empty (zero promotion candidates), and c67's main judgements were already self-broken (H1 mechanism) or null (H2). So I attacked the two claims c67 left standing in affirmative form:
+
+- **T1** — "株↔金の 5 分ジャンプの裾依存は実在する (RR 在 2.44 / 外 2.01, プラセボ ≈1)"
+- **T2** — the registered "new fact": co-jump sign agreement 在 30% → 外 78%, "裾で振幅最大・ρ +0.14 より桁違いに大きい"
+
+GATE: replicated c67 6/6 cells exactly (co-jumps 199/189/91, agreement 30/78/80%, θ=5 26/77/70%).
+
+## Verdicts
+**T1 = survived.** Three attacks failed: cluster-robust SE ≈ Poisson SE (z +5.74 vs +6.25); causal expanding-window baseline *raises* RR (2.68→2.98); conditioning the baseline on gold's own vol state looked decisive (RR→1.57/1.19) but the same stratification made the placebo over-predict by 20–34% (0.80/0.69, z −2.7/−5.8, exposed only by going from 1 to 10 placebo shifts) — calibrated RR 1.97/1.73/2.14, z ≈ +4.
+
+**T1's "5-minute-specific" component = broken.** A same-day ±30 min–2 h bar-shift placebo *itself* yields RR 2.25/1.93/2.08 (z +13.4/+11.5/+8.8). Observed/placebo = 1.19/1.17/1.48, and 1.01/0.91/1.06 after stratification. c67's control ② (+7-day shift) crosses days and so destroys the time-of-day environment — it cannot test 5-minute specificity. c67's mechanism reading (±1 h symmetric/flat shared vol state) is strengthened; its headline number moves from 2.68 to 1.01 depending on the control.
+
+**T2 = partially broken.** The numbers replicate exactly and the threshold amplification is real (tail − body = −15.8 pt / +22.8 pt, 3.4σ/6.2σ). But all three interpretive components fail: ① ρ_core is ∓0.133/+0.143; the Gaussian lens exp(2ρab/(1−ρ²)) at a·b≈30 predicts 0.1%/99.9% and is rejected both ways — the inverse lens gives ρ*=−0.011/+0.019, i.e. **1/7–1/12 of the body's ρ**, so "桁違いに大きい" reverses once probability and correlation are put on one scale; ② agreement is flat from θ=1 to 5 and the body (θ=0) 46.0%/55.5% equals the arcsine law 45.8%/54.6% — the amplification completes in the θ 0→1 step, so 4σ is not where it lives; ③ the break is **2020, not the 2021 split** (2014-19 = 20.9%, 2020 = 49.2%), and yearly agreement tracks yearly ρ_core one-for-one (2017 −0.302/5%, 2026 +0.324/88%; BH q<0.05 in 8 of 14 years).
+
+## Most severe refutation of my own refutation
+The same-day placebo may be self-contaminated — if gold's jumps clump in a 2-hour cluster, placebo and observed conditioning bars share the cluster, so ratio≈1 means "inseparable within ±2 h", not "no 5-min component". Decisive test is c67's own 5th question (XAU M1 + US500 M1). Honest interval for the conditional RR: 在 [1.01, 1.97], 外 [0.91, 1.73] — no basis yet for a point estimate.
+
+Also surfaced: **ρ_core ∓0.133/+0.143 does not reconcile with c20's "5-min |ρ| ≤ 0.3%"** — one of them is wrong, and if c20 is, §8's linear null disappears. Logged as unresolved (high). Survivorship: 81 of 366 ET days in 2020 have zero bars on the common grid (Jun 11 / Jul 26 / Aug 15 / Sep 29), i.e. 22% of the pivot year — though with no vol bias (Welch t −0.44).
+
+Methodology candidates 117/118/119 added to backlog. PROMOTED.md unchanged (correctly empty). Writes confined to `AUREL_RESEARCH/` (4 scripts, 8 data files, backlog, findings); no orders, no production edits, no MT5, no prop, no external calls. task-observer's workspace sits outside `AUREL_RESEARCH`, so per the write boundary I left it alone and kept the lessons as candidates 117–119 in the findings — same call the research lane has been making since c59.
+2026/11/25  3:52:37.92 done
