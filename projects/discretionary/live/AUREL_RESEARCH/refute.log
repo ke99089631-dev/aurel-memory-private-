@@ -1883,3 +1883,6 @@ Appended `[REFUTE] 2026-11-25 15:50` to `AUREL_RESEARCH/findings/2026-11-25.md`.
 
 Methodology candidates 124/125/126 and the c19 correction went to `backlog.md`. PROMOTED.md unchanged (correctly empty). Writes confined to `AUREL_RESEARCH/{scripts,data,backlog.md,findings}`; no orders, no production edits, no process/MT5/prop contact, no external calls. task-observer's log sits outside `AUREL_RESEARCH`, so per the c59–c69 write boundary I kept the lessons in the findings body as candidates 124–126 instead — say the word if you'd rather I write them to `~/.aurel/skill-observations/` and I'll do it in a separate pass.
 2026/11/25 15:47:07.53 done
+========== 2026/11/25 21:30:02.92 refute start ==========
+Failed to authenticate: OAuth session expired and could not be refreshed
+2026/11/25 21:30:10.51 done
