@@ -45,3 +45,4 @@
 {"kind": "close", "sid": "T2-1795132800", "ticket": 58579591, "reason": "TIME", "bars": 288, "side": "SELL", "entry": 3615.13, "exit_ref": 3588.5, "profit_before": 26.63, "retcode": 10009, "exit": 3588.77, "ok": true, "logged_at": "2026-11-23 10:05:12"}
 {"kind": "skip", "sid": "S-0598", "side": "BUY", "mode": "reaccel", "sl": 3626.308, "tp": 3639.522, "entry_ref": 3631.04, "why": "発火が古い>180s (age=309s)", "logged_at": "2026-11-24 20:45:09"}
 {"kind": "live", "sid": "T2-1795566600", "side": "SELL", "lot": 0.01, "sl": 3590.138, "tp": 3434.921, "entry_ref": 3549.73, "retcode": 10009, "deal": 54068781, "order": 60020411, "fill_price": 3548.57, "ok": true, "logged_at": "2026-11-25 09:35:07"}
+{"kind": "skip", "sid": "S-0604", "side": "SELL", "mode": "reaccel", "sl": 3553.948, "tp": 3539.83, "entry_ref": 3542.74, "why": "発火が古い>180s (age=332s)", "logged_at": "2026-11-25 09:40:32"}
