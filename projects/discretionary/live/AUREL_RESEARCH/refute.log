@@ -1832,3 +1832,29 @@ Also surfaced: **ρ_core ∓0.133/+0.143 does not reconcile with c20's "5-min |�
 Methodology candidates 117/118/119 added to backlog. PROMOTED.md unchanged (correctly empty). Writes confined to `AUREL_RESEARCH/` (4 scripts, 8 data files, backlog, findings); no orders, no production edits, no MT5, no prop, no external calls. task-observer's workspace sits outside `AUREL_RESEARCH`, so per the write boundary I left it alone and kept the lessons as candidates 117–119 in the findings — same call the research lane has been making since c59.
 2026/11/25  3:52:37.92 done
 ========== 2026/11/25  9:30:03.21 refute start ==========
+Done. Appended `[REFUTE] 2026-11-25 09:55` to `AUREL_RESEARCH/findings/2026-11-25.md`.
+
+**Target:** c68's only positive-form claim — the B2/k=24 "tested the stop edge (MAE_k ≤ −0.8R) and recovered" cell: 外 +0.332R (t 2.45, n 106:366), 近年 +0.581R (t 2.48), 在 +0.013 (t 0.19). c68's main H_MAE/H_MFE verdicts were pre-rule FAILs, so there was nothing to break there.
+
+**Reproduction:** all 6 of c68's printed cells match exactly on Δ, t, and n. Its numbers are clean.
+
+**13 attacks failed — the number is not a mechanical artifact:**
+- Threshold neighbourhood (the ask-side blur): θ=−0.75 gives t **+2.57**, stronger than −0.80
+- Cost ×1/2/3: +0.332 → +0.335, invariant
+- Day-clustered t +2.49 (417 days); block bootstrap p 0.003; 106 trades across 101 days
+- Drop the single most influential trade: t +2.26; 5% trim +0.333; Mann–Whitney p 0.018
+- b control 92%, b-tercile match 104%, risk match 95%, **V_k (vol) control 104%**, year-composition adjustment 94%
+
+**Three attacks landed — verdict `broken` as a registrable weak signal:**
+1. Stratified permutation FWER (20k draws, preserving cell/level/window/n) over *c68's own pre-registered* family: 外 4 cells p=0.065, 12 cells p=0.173, single cell p=0.016. Three fair families, none below 0.05.
+2. 外 ∖ 近年 = 2021-23 gives **+0.088 (t 0.58)**. "外 +0.33 and 近年 +0.58" is one 50-trade block counted twice; 2025's 22 trades carry +1.04.
+3. Absolute −0.8R vs cl_k−0.45R distance cut: t **2.45 → 1.22**, and under the distance-matched definition the upside mirror matches the downside (91–138%), so the downside specificity is a property of the absolute cut only.
+
+**Collateral findings:** c68's mechanism reading ("deep dip = vol-state alias, no direction info") is broken for the absolute-threshold set (V_k control 104%, range proxy 34%, mirror 36%, barrier-RW benchmark exceeded by +7.7pp/+17.8pp while 在 is −0.5pp) but survives for relative definitions. `MDE = 2·se` is the **52%-power** point, not a detection limit — the 80%-power MDE is 0.157R/0.280R/0.483R, i.e. 1.40× wider, and that format is shared by c7/c23/c59/c65/c66/c68. My attack on c68's "60 cells = null width" failed and confirmed it (permutation null count 2.80, observed 4, p 0.317).
+
+**Withdrawn two of my own attacks:** the 182-cell family behind my first `broken` was over-correction (c68 pre-registered θ and B2/B3), and my first power curve added δ on top of the observed Δ. Both corrected in later runs and recorded.
+
+Most serious counter to my own verdict, logged: two of the three breaks say "evidence insufficient", not "no effect" — 在 has ~1.00 power against +0.33R and saw +0.013, so false positive vs. genuinely recent-regime-specific is **not** separated by my code. Only new out-of-sample time can do it; the revised forward cell plus methodology candidates 121–123 went to `backlog.md`.
+
+PROMOTED.md unchanged (correctly empty). Writes confined to `AUREL_RESEARCH/{scripts,data,findings,backlog.md}`; no orders, no production edits, no process/MT5/prop contact. task-observer's log sits outside AUREL_RESEARCH, so per the c59–c68 write boundary I kept the lessons in the findings body as candidates 121–123 instead.
+2026/11/25  9:59:54.04 done
