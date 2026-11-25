@@ -49,3 +49,4 @@
 {"kind": "live", "sid": "T2-1795569900", "side": "SELL", "lot": 0.01, "sl": 3585.415, "tp": 3421.878, "entry_ref": 3541.82, "retcode": 10009, "deal": 54083779, "order": 60035451, "fill_price": 3543.0, "ok": true, "logged_at": "2026-11-25 10:30:15"}
 {"kind": "skip", "sid": "S-0613", "side": "SELL", "mode": "reaccel", "sl": 3538.688, "tp": 3518.868, "entry_ref": 3524.26, "why": "発火が古い>180s (age=327s)", "logged_at": "2026-11-25 14:55:27"}
 {"kind": "skip", "sid": "S-0617", "side": "SELL", "mode": "reaccel", "sl": 3524.484, "tp": 3476.468, "entry_ref": 3511.41, "why": "発火が古い>180s (age=307s)", "logged_at": "2026-11-25 21:00:07"}
+{"kind": "skip", "sid": "S-0615", "side": "SELL", "mode": "reaccel", "sl": 3530.36, "tp": 3516.087, "entry_ref": 3522.41, "why": "発火が古い>180s (age=328s)", "logged_at": "2026-11-25 21:45:28"}
