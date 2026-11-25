@@ -1859,3 +1859,27 @@ Most serious counter to my own verdict, logged: two of the three breaks say "evi
 PROMOTED.md unchanged (correctly empty). Writes confined to `AUREL_RESEARCH/{scripts,data,findings,backlog.md}`; no orders, no production edits, no process/MT5/prop contact. task-observer's log sits outside AUREL_RESEARCH, so per the c59–c68 write boundary I kept the lessons in the findings body as candidates 121–123 instead.
 2026/11/25  9:59:54.04 done
 ========== 2026/11/25 15:30:02.79 refute start ==========
+Appended `[REFUTE] 2026-11-25 15:50` to `AUREL_RESEARCH/findings/2026-11-25.md`.
+
+**Target:** c69 is `void` by its own rule (the calendar positive control failed — US500 npz is a futures-tracking CFD that trades on NYSE holidays), so its main verdict had nothing to break. I went after the three claims it left in positive form, including the one it registered as **得た知識 (1)**.
+
+**Reproduction:** every printed cell of c69/c69b matches on an independent loader and an independent calendar implementation. The numbers are clean.
+
+**T2 = broken (the headline break).** c69b sorted days into RV quintiles using **the same 60 bars** it computed ρ1 from. Under p = m + u, measured RV contains the noise realization, so the lowest quintile over-selects days where noise dominated, and ρ1 = −σ_u²/(σ_e²+2σ_u²) delivers the monotonicity mechanically.
+- Disjoint bars (RV from first half → ρ1 from second half): β 在 **−0.0008 (t −0.16)**, −3% of the same-sample +0.0284.
+- I pre-declared the escape route and closed it: attenuation equals the first-stage slope, so the correct test is 2SLS. **First-stage F = 1353 / 551 / 544** — yet β_IV = **−0.0011 (t −0.16) / −0.0104 (−0.96) / +0.0029 (+0.23)**.
+- Previous-day RV as instrument (the only ex-ante form): 在 −0.0116 (t −1.54), **外 −0.0335 (t −2.74) — nominally significant with the opposite sign.**
+- Two disjoint designs disagree in sign in the same window, both nominally significant → design-dependent, not a market property.
+- A zero-autocorrelation constant-noise simulation reproduces 57%/66% of β/Q1 (outside my pre-declared 70–130% band, so that attack only half-landed; 2SLS took the rest).
+- **Consequence:** c69's use of T2 to "correct c19" must be withdrawn.
+
+**T1 = partially broken.** The raw number repelled every mechanical attack (early-close truncation, tick grid/stale runs, 2020 exclusion, 14/17 years negative p 0.0127, clean survivorship). But in a weekday × log-RV-decile-stratified permutation (B=20000) the **null mean is not zero** — 在 −0.0526 — so 64%/38%/17% of the raw D is reproduced by matched-quiet pseudo-holidays. Holiday-specific effect: 在 −0.0299 (p **0.197**) / 外 −0.0682 (p 0.0074) / 近年 −0.1064 (p 0.0268). The pre-fixed 在→外 protocol fails at the deciding window. **T3** falls too: γ_THIN's t −2.07 is permutation p 0.0755.
+
+**Two of my attacks failed, and one of my own breaks is withdrawn:**
+- c69's 読み分け **survived and got stronger**. My first pass tested the wrong cell; redone at Q1/THIN, mean reversion *grows* with aggregation (THIN ρ1_5/15/30 = 在 −0.095/−0.140/−0.148, 近年 −0.122/−0.136/−0.262). iid noise gives a 15/5 ratio of 0.25–0.29, and no φ in (0,1) reproduces (15/5, 30/5) jointly in 5 of 6 cells. Quote-noise models make the sign but not the growth.
+- c69's H2 "unpayable" **survived**. My first pass seemed to break it (近年 π(6) = 179% of cost); non-overlapping entries + day-clustered bootstrap + net of cost kills it (z +0.07), and at h=12 the control is larger than THIN. The 179% was an artifact of paying one round trip per bar.
+
+**Most serious counter to my own verdict, logged:** my permutation stratifies on the *same-sample* log RV that B1 just showed is mechanically linked to ρ1 — so the null absorbs the artifact, making "64% isn't specific" an upper bound and p 0.197 an upper bound. Honest interval for the holiday-specific effect in 在: **[−0.083, −0.030], p ∈ [0.0003, 0.197]** — not decidable on a bid-only series. Also unexplained by my artifact story: the 2SLS is time-asymmetric (later RV → earlier ρ1 survives at +0.0378, t +5.34, with zero shared bars), leaving room for a real time-of-day × vol interaction.
+
+Methodology candidates 124/125/126 and the c19 correction went to `backlog.md`. PROMOTED.md unchanged (correctly empty). Writes confined to `AUREL_RESEARCH/{scripts,data,backlog.md,findings}`; no orders, no production edits, no process/MT5/prop contact, no external calls. task-observer's log sits outside `AUREL_RESEARCH`, so per the c59–c69 write boundary I kept the lessons in the findings body as candidates 124–126 instead — say the word if you'd rather I write them to `~/.aurel/skill-observations/` and I'll do it in a separate pass.
+2026/11/25 15:47:07.53 done
