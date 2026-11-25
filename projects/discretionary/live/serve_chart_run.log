@@ -559,3 +559,43 @@ Traceback (most recent call last):
     self._sock.sendall(b)
 ConnectionResetError: [WinError 10054] 既存の接続はリモート ホストに強制的に切断されました。
 ----------------------------------------
+----------------------------------------
+Exception occurred during processing of request from ('100.95.10.46', 63416)
+Traceback (most recent call last):
+  File "C:\Users\user\.aurel\memory\projects\discretionary\live\serve_chart.py", line 1261, in do_GET
+    self._send(200, json.dumps(build_setups(tick), ensure_ascii=False), "application/json; charset=utf-8")
+  File "C:\Users\user\.aurel\memory\projects\discretionary\live\serve_chart.py", line 1226, in _send
+    self.end_headers()
+  File "C:\Users\user\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 538, in end_headers
+    self.flush_headers()
+  File "C:\Users\user\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 542, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+  File "C:\Users\user\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 840, in write
+    self._sock.sendall(b)
+ConnectionResetError: [WinError 10054] 既存の接続はリモート ホストに強制的に切断されました。
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\user\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "C:\Users\user\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "C:\Users\user\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 761, in __init__
+    self.handle()
+  File "C:\Users\user\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 436, in handle
+    self.handle_one_request()
+  File "C:\Users\user\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 424, in handle_one_request
+    method()
+  File "C:\Users\user\.aurel\memory\projects\discretionary\live\serve_chart.py", line 1283, in do_GET
+    self._send(500, "err: %s" % e, "text/plain; charset=utf-8")
+  File "C:\Users\user\.aurel\memory\projects\discretionary\live\serve_chart.py", line 1226, in _send
+    self.end_headers()
+  File "C:\Users\user\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 538, in end_headers
+    self.flush_headers()
+  File "C:\Users\user\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 542, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+  File "C:\Users\user\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 840, in write
+    self._sock.sendall(b)
+ConnectionResetError: [WinError 10054] 既存の接続はリモート ホストに強制的に切断されました。
+----------------------------------------
