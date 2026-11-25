@@ -1378,3 +1378,5 @@
 {"kind": "update", "target": "S-0179", "logged_at": "2026-11-25 23:00:25", "reaccel": {"retest_time": 1795614300, "retest_jst": "2026-11-25 22:45", "retest_tol": 5.1, "status": "waiting"}, "reaccel_frozen": true}
 {"kind": "update", "target": "S-0178", "logged_at": "2026-11-25 23:15:11", "waiting_resolved": true, "status": "no_retest"}
 {"kind": "update", "target": "S-0179", "logged_at": "2026-11-25 23:15:11", "waiting_resolved": true, "entry": 3476.62, "entry_time": 1795615200, "entry_jst": "2026-11-25 23:00", "status": "open", "mfe_R": 0.04, "mae_R": 0.52, "hold_bars": 0}
+{"kind": "update", "target": "S-0179", "logged_at": "2026-11-25 23:30:28", "frozen": true, "mfe_R": 0.43, "mae_R": 0.52, "hold_bars": 1}
+{"kind": "update", "target": "S-0179", "logged_at": "2026-11-25 23:30:28", "reaccel": {"retest_time": 1795614300, "retest_jst": "2026-11-25 22:45", "retest_tol": 5.1, "entry": 3475.69, "entry_time": 1795616100, "entry_jst": "2026-11-25 23:15", "sl": 3501.812, "tp": 3433.933, "swing": 3489.76, "wait_bars": 2, "status": "open", "mfe_R": 0.38, "mae_R": 0.35, "hold_bars": 0}, "reaccel_frozen": true}
