@@ -5250,3 +5250,7 @@ OSError: [WinError 1455] ページング ファイルが小さすぎるため、
 [live観測] yfinance NQ=F 取得中...
   M5 13561本 (2026-09-17 04:05:00+00:00..2026-11-25 14:35:00+00:00)
   新規記録 0本 / 台帳累計 44本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_a_forward_ledger.jsonl
+[live観測] yfinance NQ=F 取得中...
+  M5 13567本 (2026-09-17 04:05:00+00:00..2026-11-25 15:05:00+00:00)
+  新規記録 1本 / 台帳累計 45本 → C:\Users\user\.aurel\memory\projects\farms\live\farm_a_forward_ledger.jsonl
+    2026-11-25 14:55:00+00:00 SELL entry25255.2 risk385.5 R-0.26 net-0.26
