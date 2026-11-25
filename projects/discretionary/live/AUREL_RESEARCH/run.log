@@ -1605,3 +1605,6 @@ Cycle 69 is complete. All analysis ran synchronously in this turn, and every art
 
 **Files written.** New scripts c69 and c69b, their result files and run logs, one findings entry appended to findings/2026-11-25.md, a backlog section with refutation-lane redesign (RV-matched controls as primary), a derivable UK bank-holiday arm, a c19 correction item, methodology candidates 121 and 122, three rows in cells.csv, and DATA_MAP updates (§1 tool, §6b hygiene note that US500 trades on NYSE holidays, §8 new row). PROMOTED.md is unchanged and correctly empty. No orders, no process or production-file contact, no MT5, no external network.
 2026/11/25 12:49:33.98 done
+========== 2026/11/25 18:30:02.60 cycle start ==========
+Failed to authenticate: OAuth session expired and could not be refreshed
+2026/11/25 18:30:10.58 done
