@@ -1588,3 +1588,20 @@ Deepening track, per the cycle 67 handoff. The exit-process Markov series (c7 el
 **Records written** (all under AUREL_RESEARCH): the script and result file for c68, the findings entry in today's file, a new backlog section with one forward cell and methodology candidate 120, two DATA_MAP updates, and three quoted rows in cells.csv (field count verified). Backlog hands the next cycle to exploration. PROMOTED is unchanged. No production files, executors, or secrets were touched.
 2026/11/25  6:39:46.03 done
 ========== 2026/11/25 12:30:02.60 cycle start ==========
+Cycle 69 is complete. All analysis ran synchronously in this turn, and every artifact is written under AUREL_RESEARCH only.
+
+**What this cycle tested (exploration track, 19:14 so the next cycle is deepening).** A new source row for the opportunity map: liquidity-provision returns on exogenously thin days. US holidays where gold still trades but US equity and bond participants are absent (MLK, Presidents, Memorial, Juneteenth, Independence, Labor, Thanksgiving) were compared to same-weekday control days on 5-minute mean reversion in the 08:00 to 13:00 ET window. Everything came from existing npz caches and rule-derived calendars. Runtime was 7.7 s plus a 5.7 s post-hoc check.
+
+**Result: void by the pre-registered rule, informative as description.**
+
+- The calendar positive control failed as written. The US500 cache is a futures-tracking CFD that trades on NYSE holidays, so my check against its cash-hours flatness was mis-designed. Calendar validity is evident from three other signatures (gold early close on those days, full-closure days have zero feed, half-days show the expected 0.56 non-flat ratio), but I recorded the formal verdict as void rather than rewrite the rule after the fact.
+- Holiday sessions are genuinely thin: realized variance is 0.21× controls (t about −15 in both sample halves).
+- Mean reversion is stronger on those days: autocorrelation difference −0.08 in-sample (z −3.6) and −0.11 out-of-sample (z −2.7), and in-sample it persists at 15 and 30 minutes, so it is not only quote flicker.
+- The pre-declared London-hours placebo window also showed the effect, and that window itself turned out to be thin (RV 0.56×). The whole day is thin, so the clean "US participants only" identification does not hold.
+- Post-hoc control (labelled as such): on ordinary weekdays gold's 5-minute autocorrelation is monotonically more negative the quieter the day, in all three windows. About half the holiday effect is this general low-volatility state. The holiday-specific residual is around −0.04 at t 1.3 to 2.1, so inconclusive.
+- Not receivable: the contrarian payoff is 0.24 to 0.40 bp per bar against a 0.5 to 1.2 bp round-trip spread. Production gate: n 31 trades, MDE 0.35R, undecidable.
+
+**Strongest counter-argument recorded.** Constant-variance bid quote noise looks relatively larger on quiet days and produces the same sign and the same monotone pattern. Multi-bar persistence argues against pure iid noise, but autocorrelated quote noise cannot be excluded from a bid-only series. XAU ask M1 data is logged as the ninth open question needing it.
+
+**Files written.** New scripts c69 and c69b, their result files and run logs, one findings entry appended to findings/2026-11-25.md, a backlog section with refutation-lane redesign (RV-matched controls as primary), a derivable UK bank-holiday arm, a c19 correction item, methodology candidates 121 and 122, three rows in cells.csv, and DATA_MAP updates (§1 tool, §6b hygiene note that US500 trades on NYSE holidays, §8 new row). PROMOTED.md is unchanged and correctly empty. No orders, no process or production-file contact, no MT5, no external network.
+2026/11/25 12:49:33.98 done
