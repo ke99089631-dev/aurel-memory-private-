@@ -171,3 +171,5 @@ UnicodeDecodeError: 'utf-8' codec can't decode byte 0x8f in position 0: invalid 
 [skip] S-0617 SELL（発火が古い>180s・バックフィル防止・age=307）
 [skip] S-0615 SELL（発火が古い>180s・バックフィル防止・age=328）
 [skip] S-0623 SELL（発火が古い>180s・バックフィル防止・age=327）
+[LIVE→発注] 新規発火 T2-1795661400 BUY outer_sb(touch2sb) lot0.01 SL3536.899 TP3731.103 (entry≈3586.010 wall3591.210)
+   結果 ok=True retcode=10009 deal=54306481
