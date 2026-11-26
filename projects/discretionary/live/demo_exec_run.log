@@ -170,3 +170,4 @@ UnicodeDecodeError: 'utf-8' codec can't decode byte 0x8f in position 0: invalid 
 [skip] S-0613 SELL（発火が古い>180s・バックフィル防止・age=327）
 [skip] S-0617 SELL（発火が古い>180s・バックフィル防止・age=307）
 [skip] S-0615 SELL（発火が古い>180s・バックフィル防止・age=328）
+[skip] S-0623 SELL（発火が古い>180s・バックフィル防止・age=327）
