@@ -177,3 +177,4 @@ UnicodeDecodeError: 'utf-8' codec can't decode byte 0x8f in position 0: invalid 
    結果 ok=True retcode=10009 deal=54372893
 [時間切れクローズ] T2-1795661400 BUY bars=288 entry=3584.62 exit=3645.49 ok=True
 [skip] S-0635 BUY（発火が古い>180s・バックフィル防止・age=330）
+[skip] S-0636 SELL（発火が古い>180s・バックフィル防止・age=329）
