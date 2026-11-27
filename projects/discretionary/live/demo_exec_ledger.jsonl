@@ -56,3 +56,4 @@
 {"kind": "close", "sid": "T2-1795661400", "ticket": 60294070, "reason": "TIME", "bars": 288, "side": "BUY", "entry": 3584.62, "exit_ref": 3645.46, "profit_before": 60.84, "retcode": 10009, "exit": 3645.49, "ok": true, "logged_at": "2026-11-27 15:25:19"}
 {"kind": "skip", "sid": "S-0635", "side": "BUY", "mode": "reaccel", "sl": 3671.45, "tp": 3680.59, "entry_ref": 3674.72, "why": "発火が古い>180s (age=330s)", "logged_at": "2026-11-27 20:30:30"}
 {"kind": "skip", "sid": "S-0636", "side": "SELL", "mode": "reaccel", "sl": 3670.74, "tp": 3661.483, "entry_ref": 3665.23, "why": "発火が古い>180s (age=329s)", "logged_at": "2026-11-27 21:55:29"}
+{"kind": "skip", "sid": "S-0638", "side": "SELL", "mode": "reaccel", "sl": 3662.697, "tp": 3627.847, "entry_ref": 3645.12, "why": "発火が古い>180s (age=328s)", "logged_at": "2026-11-27 22:35:28"}
