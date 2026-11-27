@@ -1,23 +1,23 @@
 {
- "generated": "2026-11-27 06:45",
+ "generated": "2026-11-28 06:45",
  "rule": "R-05 (2026-11-17 会長GO)",
  "metric": "紙・再加速 正味R(コックピットと同じ)",
- "n_closed": 436,
+ "n_closed": 443,
  "g1_chop_avg": {
-  "n": 112,
+  "n": 116,
   "n_needed": 100,
-  "avg_R": 0.067,
+  "avg_R": 0.064,
   "unlabeled": 0,
   "hit": false,
   "state": "本数到達・平均R≥0=無事"
  },
  "g2_drawdown": {
-  "cum_R": 47.13,
+  "cum_R": 45.92,
   "peak_R": 49.54,
-  "dd_now": -2.41,
+  "dd_now": -3.62,
   "limit": -15.0,
   "hit": false,
-  "state": "想定内(-2.4R / 線-15R)"
+  "state": "想定内(-3.6R / 線-15R)"
  },
  "g3_big_share": {
   "n": 100,
