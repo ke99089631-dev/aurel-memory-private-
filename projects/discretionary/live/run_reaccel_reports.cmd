@@ -17,3 +17,6 @@ cd /d C:\Users\user\.aurel\memory\projects\farms\live
 rem Preserve demo SL/TP closes before the 45-day window drops them (2026-11-28, append-only, read-only source)
 cd /d C:\Users\user\.aurel\memory\projects\discretionary\live
 "C:\Users\user\ImperialFlow\venv\Scripts\python.exe" demo_closes_archive.py >> C:\Users\user\.aurel\memory\projects\discretionary\live\reaccel_reports.log 2>&1
+rem Lane health check - alarm when a lane silently stops (2026-11-28 chairman GO)
+cd /d C:\Users\user\.aurel\bin
+"C:\Users\user\ImperialFlow\venv\Scripts\python.exe" lane_health.py >> C:\Users\user\.aurel\memory\projects\discretionary\live\reaccel_reports.log 2>&1
