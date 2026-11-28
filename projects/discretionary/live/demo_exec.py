@@ -70,11 +70,18 @@ ARM = "CHAIRMAN-GO"
 #      根拠=同時1本 合計+55.9R/Sharpe1.09/DD-11.6 → 2本 +105.0/1.55/-15.1(OOS +0.567 Sharpe3.09 p0.002)。3本以上は上積み無しでDDだけ増。
 #   出口(事前固定)=新ルールで確定30本に達した時点でネット平均R<0 なら MAX_CONCURRENT=1 に戻す(時間切れは残す)。
 #   RESULTS: AssetEmpire/empire/research/wall_to_wall/RESULTS_touch2sb_hold_and_concurrency.md
+# ★2026-11-28 会長GO「両方並走でgo」(事前固定 R-07): 再加速とtouch2sbを金デモで同時に走らせ、
+#   **実際に約定した本だけ**で比べる。理由=10-21に touch2sb を選んだ根拠(+0.188R/Sharpe1.0/p0.03)が
+#   11-28の点検で崩れた(夏時間バグで負け8本が無記録→戻すと平均+0.802R→+0.081R・金額-10USD)。
+#   reaccelの紙+45.92Rも正味t=1.58・利益の94.9%が上位10本・答え合わせ未了。**どちらも未証明**。
+#   紙の数字で選ぶのをやめ、実約定で比べる。出口=2026-12-26 または 各車線30本の早い方。
+#   判定の物差しは金額損益と金額ベースDD(Rは診断用)。詳細は fertilizer/PREREGISTERED-RULES.md R-07。
 MAX_HOLD_BARS = 288
-MAX_CONCURRENT = 2
-FIRE_ENGINE = "touch2sb"               # 発注の主系統（touch2sb=本命 / reaccel=旧・観測のみ）
-FIRE_WALL_KINDS = ("outer",)           # (旧reaccel用)発注してよい壁種別。FIRE_MODES空なので実質observe
-FIRE_MODES = ()                        # ★旧reaccelは発注停止(observe継続)。本命は touch2sb_ledger から撃つ
+MAX_CONCURRENT = 2                     # ★車線ごとに2本(合計最大4本)。接頭辞 T2-/S- で数える
+FIRE_ENGINE = "dual"                   # 発注の主系統（touch2sb + reaccel の並走・2026-11-28〜）
+FIRE_WALL_KINDS = ("outer",)           # 再加速で発注してよい壁種別。中壁(mid)/chaseは引き続きobserve(10-21の降格を維持)
+FIRE_MODES = ("reaccel",)              # ★2026-11-28 会長GO: 再加速を発注対象に復帰(外壁のみ)
+LANE_PREFIX = {"touch2sb": "T2-", "reaccel": "S-"}   # 注文コメントの接頭辞で車線を見分ける
 
 
 def load_env():
@@ -129,14 +136,18 @@ def fold_setups():
 
 
 def fired_setups(setups):
-    """発火＝reaccel.status=='open'（entry/sl/tp確定）かつ v1.keep。発火時刻も返す。"""
+    """発火＝reaccel.status=='open'（entry/sl/tp確定）。発火時刻も返す。
+       ★2026-11-28(R-07): **v1.keep(天気フィルタ)での絞り込みをやめた。**
+         会長GO 2026-10-29「晴れ戻し出口を廃止・全部撃ちで理由を浮かばせる段階・keep/dropは観測ラベル」。
+         肥料の執行機は既に全部撃ちだったが、この金デモ側だけ古い絞り込みが残っていた。
+         残したままだと 11月の159本に対し撃てるのは29本(18%)で、しかもその29本は平均-0.1554R
+         (絞らない106本は+0.0038R)=**成績の悪い側だけを撃つ**ことになり、紙と比べられない。
+         keep の値は fire レコードに観測ラベルとして残す(撃つ/撃たないの判断には使わない)。"""
     out = []
     for sid, s in setups.items():
         if s.get("lane") != "3":
             continue
         v1 = s.get("v1") or {}
-        if not v1.get("keep", False):
-            continue
         for mode in ("reaccel", "chase"):
             blk = s.get(mode) or {}
             if blk.get("status") == "open" and blk.get("entry") is not None \
@@ -146,6 +157,7 @@ def fired_setups(setups):
                     "entry": blk["entry"], "sl": blk["sl"], "tp": blk["tp"],
                     "entry_time": blk.get("entry_time") or s.get("break_time") or 0,
                     "wall": s.get("wall"), "wall_kind": s.get("wall_kind"),
+                    "v1_keep": bool(v1.get("keep", False)),   # ★観測ラベルのみ(絞り込みには使わない)
                 })
                 break
     return out
@@ -211,6 +223,29 @@ class DemoSession:
         if ps is None:
             return 0
         return sum(1 for p in ps if int(p.magic) == MAGIC)
+
+    def open_lane_positions(self, mode):
+        """★2026-11-28(R-07): 車線ごとのデモ建玉数。注文コメント ai-demo-<sid> の接頭辞で見分ける。
+           コメントが読めない建玉が1つでもあれば **合計数を返す**(安全側=枠を厳しく見る)。read-only。"""
+        self.assert_demo("建玉確認(車線別)")
+        ps = self.mt5.positions_get(symbol=SYMBOL)
+        if ps is None:
+            return 0
+        mine = [p for p in ps if int(p.magic) == MAGIC]
+        pre = LANE_PREFIX.get(mode)
+        if not pre:
+            return len(mine)
+        n_lane, n_unknown = 0, 0
+        for p in mine:
+            c = (getattr(p, "comment", "") or "")
+            if "ai-demo-" not in c:
+                n_unknown += 1
+            elif c.split("ai-demo-", 1)[1].startswith(pre):
+                n_lane += 1
+        if n_unknown:
+            print("   [枠] コメントが読めない建玉 %d 本 → 安全側で合計 %d 本として数える" % (n_unknown, len(mine)))
+            return len(mine)
+        return n_lane
 
     def bars_since(self, t_open):
         """約定(サーバ時刻epoch)から現在までの確定M5足の本数。MT5の rates.time も同じサーバ時刻基準なので補正不要。"""
@@ -387,15 +422,29 @@ def run(dry=True, armed=False, once=False):
         for f in fires:
             if f["sid"] in seen:
                 continue
-            fresh = (now - float(f["entry_time"])) <= FRESH_SEC if f["entry_time"] else False
+            # ★2026-11-28 会長GO(バグ修正・発注の挙動は変えない): entry_time の基準がレーンで違っていた。
+            #   touch2sb  … entry_time = 「入る足の始値時刻」(= touch2sb_engine が +300 している) = 発火が分かった瞬間
+            #   reaccel/touch2 … entry_time = 「発火した足の始値時刻」。形成中の足は捨てるので、
+            #                    その足が閉じる(+300秒)までエンジンは検知できない。
+            #   → 同じ FRESH_SEC を当てると、再加速の実効許容は 180-300 = マイナス = **到達不可能**だった。
+            #     2026-10-22 に 600→180 へ絞った時点で再加速は観測記録(observe)にも届かず skip になり、
+            #     対照群のラベルが 2026-10-19 以降ずっと壊れていた。
+            #   直し方: 「発火が分かった時刻」に正規化してから鮮度を測る。
+            #     late fill 保護は一切緩まない(どちらも「分かってから FRESH_SEC 秒以内」のまま)。
+            known_delay = 0 if f.get("mode") == "touch2sb" else 300
+            known_at = (float(f["entry_time"]) + known_delay) if f["entry_time"] else None
+            fresh = (now - known_at) <= FRESH_SEC if known_at is not None else False
             tag = "新規発火"
             if not fresh:
-                age = int(now - float(f["entry_time"])) if f["entry_time"] else None
-                print("[skip] %s %s（発火が古い>%ds・バックフィル防止・age=%s）" % (f["sid"], f["side"], FRESH_SEC, age))
+                age = int(now - known_at) if known_at is not None else None
+                raw_age = int(now - float(f["entry_time"])) if f["entry_time"] else None
+                print("[skip] %s %s（発火が古い>%ds・バックフィル防止・分かってから%ss・足の時刻から%ss）"
+                      % (f["sid"], f["side"], FRESH_SEC, age, raw_age))
                 # ★2026-11-11 会長GO: 見送りも台帳に残す(黙って捨てない)。11-01〜の時差ずれで8本を無記録で捨てた反省。
                 log_exec({"kind": "skip", "sid": f["sid"], "side": f["side"], "mode": f.get("mode"),
                           "sl": f["sl"], "tp": f["tp"], "entry_ref": f["entry"],
-                          "why": "発火が古い>%ds (age=%ss)" % (FRESH_SEC, age)})
+                          "age_known_s": age, "age_raw_s": raw_age,
+                          "why": "発火が古い>%ds (分かってから%ss)" % (FRESH_SEC, age)})
                 seen.add(f["sid"]); continue
             # ★方針フィルタ: 本命 touch2sb は発注。旧reaccel等は observe（FIRE_MODES空＝記録のみ）。
             do_fire = (f["mode"] == "touch2sb") or \
@@ -407,15 +456,18 @@ def run(dry=True, armed=False, once=False):
                           "wall_kind": f["wall_kind"], "mode": f["mode"],
                           "sl": f["sl"], "tp": f["tp"], "entry_ref": f["entry"]})
                 seen.add(f["sid"]); continue
-            # ★非重複ガード(touch2sb): 既にデモ建玉があれば今回の発火は撃たない＝backtest(+0.188)の「同時1本」に合わせる。
-            if f["mode"] == "touch2sb" and not dry and armed and sess is not None:
+            # ★同時建玉ガード: 2026-11-28(R-07)から**車線ごとに** MAX_CONCURRENT 本まで(合計最大4本)。
+            #   10-26の事前固定「同時2本」は車線ごとに適用する(touch2sbの根拠はtouch2sbの枠にだけ効く)。
+            if not dry and armed and sess is not None:
                 try:
-                    nopen = sess.open_magic_positions()
+                    nopen = sess.open_lane_positions(f["mode"])
                     if nopen >= MAX_CONCURRENT:
-                        print("[observe・同時%d本の枠が埋まり撃たず] %s %s SL%.3f TP%.3f" % (MAX_CONCURRENT, f["sid"], f["side"], f["sl"], f["tp"]))
+                        print("[observe・%s の枠(同時%d本)が埋まり撃たず] %s %s SL%.3f TP%.3f"
+                              % (f["mode"], MAX_CONCURRENT, f["sid"], f["side"], f["sl"], f["tp"]))
                         log_exec({"kind": "observe", "sid": f["sid"], "side": f["side"],
-                                  "wall_kind": f["wall_kind"], "mode": f["mode"],
-                                  "sl": f["sl"], "tp": f["tp"], "entry_ref": f["entry"], "why": "同時%d本の枠が埋まり(非重複)" % MAX_CONCURRENT})
+                                  "wall_kind": f["wall_kind"], "mode": f["mode"], "lane_open": nopen,
+                                  "sl": f["sl"], "tp": f["tp"], "entry_ref": f["entry"],
+                                  "why": "%s の同時%d本の枠が埋まり" % (f["mode"], MAX_CONCURRENT)})
                         seen.add(f["sid"]); continue
                 except Exception as e:
                     print("[建玉確認エラー・安全側で撃たず] %s %r" % (f["sid"], e))
@@ -437,6 +489,8 @@ def run(dry=True, armed=False, once=False):
                 r = sess.bracket(f["side"], LOT, f["sl"], f["tp"], "ai-demo-%s" % f["sid"])
                 ok = (r is not None and r.retcode == sess.mt5.TRADE_RETCODE_DONE)
                 rec = {"kind": "live", "sid": f["sid"], "side": f["side"], "lot": LOT,
+                       "mode": f.get("mode"), "wall_kind": f.get("wall_kind"),
+                       "v1_keep": f.get("v1_keep"),      # ★R-07: 観測ラベル(絞り込みには使っていない)
                        "sl": f["sl"], "tp": f["tp"], "entry_ref": f["entry"],
                        "retcode": getattr(r, "retcode", None),
                        "deal": getattr(r, "deal", None), "order": getattr(r, "order", None),
