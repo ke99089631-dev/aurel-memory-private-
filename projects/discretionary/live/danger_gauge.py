@@ -7,6 +7,13 @@
   ③ 大当たり頻度: 直近100本(確定・正味)のうち +2R以上の割合が 5% を切ったら触れた(基準10〜12%)。
   どれか1つで「合わない」の検討に入る=レシピ変更でなく サイズ縮小/休止 の検討(会長GO必須)。
   出力: RESULTS_danger_gauge.md / danger_gauge.json(コックピット用)。
+
+  R-06(2026-11-28 会長GO「goしてくれ」・事前固定) 4本目=「遅れの溜まり」:
+    ④ 下向きCUSUM S_i = max(0, S_(i-1) + (k - R_i))、k=0.052(=mu0 +0.104 と mu1 0.000 の中点)。
+       警報線 h=80.0。誤警報の予算「何も壊れていなくても1年(2000本)で鳴る確率<=10%」から校正(実測3.6%)。
+       前向き専用: 2026-11-28 以降の確定本だけを 0 から積む(過去に当てると後出しになる)。
+       役割: R-05の3本は全部「大きく負けたら鳴る」設計で「増えなくなる」動きに鈍い。その穴を埋める。
+       検出の速さ: 本当に平均が0なら中央1051本(約26週)。型の揺れ(sd1.38R/本)が決める下限。
 """
 import os, json, datetime as dt
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -19,6 +26,10 @@ CHOP_SINCE = "2026-11-01"      # 事前固定: 停滞期の起点
 CHOP_N = 100                   # ① 判定本数
 DD_LIMIT = -15.0               # ② 落ち幅
 BIG_R, BIG_WIN, BIG_MIN = 2.0, 100, 0.05   # ③ 直近100本の+2R以上割合 < 5%
+# R-06(2026-11-28 事前固定・これらの値は変えない。変えるなら新番号 R-06b で)
+CUSUM_K = 0.052                # = (mu0 +0.104 + mu1 0.000)/2
+CUSUM_H = 80.0                 # 誤警報<=10%/年の予算から校正(実測3.6%)
+CUSUM_SINCE = "2026-11-28"     # 前向き開始日(これ以降の確定本だけを0から積む)
 
 
 def _cost_model():
@@ -122,20 +133,36 @@ def main():
           "hit": bool(last and len(last) >= BIG_WIN and share < BIG_MIN),
           "state": ("触れた" if (last and len(last) >= BIG_WIN and share < BIG_MIN) else
                     ("健在(%.0f%%)" % (100 * share) if share is not None else "n/a"))}
-    any_hit = g1["hit"] or g2["hit"] or g3["hit"]
+    # ④ R-06 遅れの溜まり(下向きCUSUM・前向き専用)
+    fwd = [x for x in tr if x["exit_jst"] and x["exit_jst"][:10] >= CUSUM_SINCE]
+    S = 0.0; Smax = 0.0; fired_at = None
+    for i, x in enumerate(fwd, 1):
+        S = max(0.0, S + (CUSUM_K - x["R"]))
+        Smax = max(Smax, S)
+        if fired_at is None and S >= CUSUM_H:
+            fired_at = i
+    g4 = {"n": len(fwd), "since": CUSUM_SINCE, "k": CUSUM_K, "h": CUSUM_H,
+          "S": round(S, 2), "S_max": round(Smax, 2), "fired_at": fired_at,
+          "hit": fired_at is not None,
+          "state": ("触れた(%d本目)" % fired_at) if fired_at else
+                   ("遅れ%.1f / 線%.0f(前向き%d本)" % (S, CUSUM_H, len(fwd)))}
+
+    any_hit = g1["hit"] or g2["hit"] or g3["hit"] or g4["hit"]
     res = {"generated": dt.datetime.now().strftime("%Y-%m-%d %H:%M"), "rule": "R-05 (2026-11-17 会長GO)",
            "metric": "紙・再加速 正味R(コックピットと同じ)", "n_closed": len(tr),
-           "g1_chop_avg": g1, "g2_drawdown": g2, "g3_big_share": g3, "any_hit": any_hit,
+           "g1_chop_avg": g1, "g2_drawdown": g2, "g3_big_share": g3, "g4_cusum": g4, "any_hit": any_hit,
            "action": "触れたら『合わない』の検討(サイズ縮小/休止・会長GO)。レシピは変えない。"}
     json.dump(res, open(OUT_JS, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
-    md = "# 危ない判定 R-05(紙・再加速 正味R) %s\n\n" % res["generated"]
+    md = "# 危ない判定 R-05+R-06(紙・再加速 正味R) %s\n\n" % res["generated"]
     md += "確定%d本・正味累積%+.2fR(最高%+.2fR)\n" % (len(tr), cum, peak)
     md += "  ① レンジ側(ER<0.12・%s以降)平均R: n=%d/%d 平均%s → %s%s\n" % (
         CHOP_SINCE, g1["n"], CHOP_N, ("%+.3f" % chop_avg) if chop_avg is not None else "n/a", g1["state"],
         (" (ラベル未付与%d本)" % unl) if unl else "")
     md += "  ② 山からの落ち幅: %+.2fR(線 %.0fR) → %s\n" % (dd_now, DD_LIMIT, g2["state"])
     md += "  ③ 直近%d本の+2R以上: %d本=%s → %s\n" % (len(last), big, ("%.0f%%" % (100 * share)) if share is not None else "n/a", g3["state"])
-    md += "  判定: %s\n" % ("★どれかが触れた → 『合わない』の検討へ(サイズ縮小/休止・会長GO)" if any_hit else "3本とも触れていない → 継続(レシピ不変)")
+    md += "  ④ 遅れの溜まり(R-06・%s以降を0から): %.1f(線 %.0f) → %s\n" % (
+        CUSUM_SINCE, g4["S"], CUSUM_H, g4["state"])
+    md += "  判定: %s\n" % ("★どれかが触れた → 『合わない』の検討へ(サイズ縮小/休止・会長GO)" if any_hit else "4本とも触れていない → 継続(レシピ不変)")
     open(OUT_MD, "w", encoding="utf-8").write(md)
     print(md)
 
