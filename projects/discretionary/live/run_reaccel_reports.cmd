@@ -14,3 +14,6 @@ rem R-05 danger gauge (2026-11-17 chairman GO, read-only, paper net R x3)
 rem Farm A money-based scoring (2026-11-28 chairman GO, read-only, R is diagnostic only)
 cd /d C:\Users\user\.aurel\memory\projects\farms\live
 "C:\Users\user\ImperialFlow\venv\Scripts\python.exe" farm_a_money_report.py >> C:\Users\user\.aurel\memory\projects\discretionary\live\reaccel_reports.log 2>&1
+rem Preserve demo SL/TP closes before the 45-day window drops them (2026-11-28, append-only, read-only source)
+cd /d C:\Users\user\.aurel\memory\projects\discretionary\live
+"C:\Users\user\ImperialFlow\venv\Scripts\python.exe" demo_closes_archive.py >> C:\Users\user\.aurel\memory\projects\discretionary\live\reaccel_reports.log 2>&1
