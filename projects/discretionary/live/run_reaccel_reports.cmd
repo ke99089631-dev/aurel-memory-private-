@@ -11,3 +11,6 @@ rem deadrange_label v1 (2026-11-10 chairman GO, observation label only, read-onl
 "C:\Users\user\ImperialFlow\venv\Scripts\python.exe" deadrange_label.py >> reaccel_reports.log 2>&1
 rem R-05 danger gauge (2026-11-17 chairman GO, read-only, paper net R x3)
 "C:\Users\user\ImperialFlow\venv\Scripts\python.exe" danger_gauge.py >> reaccel_reports.log 2>&1
+rem Farm A money-based scoring (2026-11-28 chairman GO, read-only, R is diagnostic only)
+cd /d C:\Users\user\.aurel\memory\projects\farms\live
+"C:\Users\user\ImperialFlow\venv\Scripts\python.exe" farm_a_money_report.py >> C:\Users\user\.aurel\memory\projects\discretionary\live\reaccel_reports.log 2>&1

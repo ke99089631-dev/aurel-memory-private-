@@ -1,0 +1,40 @@
+{
+ "n_fire": 32,
+ "n_closed": 31,
+ "money": {
+  "total_usd": -176.17,
+  "dd_usd": -296.66,
+  "avg_usd": -5.68
+ },
+ "R": {
+  "total_R": 4.64,
+  "dd_R": -8.51,
+  "avg_R": 0.15
+ },
+ "risk_usd": {
+  "n": 31,
+  "min": 11.2,
+  "med": 28.39,
+  "mean": 33.09,
+  "max": 74.42,
+  "spread_x": 6.6
+ },
+ "risk_skew": {
+  "win_n": 10,
+  "win_avg_risk": 23.59,
+  "los_n": 21,
+  "los_avg_risk": 37.61
+ },
+ "counterfactual_flat_risk_usd": 153.58,
+ "min_lot_floor": {
+  "fires_with_new_fields": 0,
+  "floored": 0,
+  "note": "新しい列は2026-11-28以降の発注にだけ入る。それ以前は幅×ロットから再現。"
+ },
+ "design_risk_frac": 0.004,
+ "design_vs_actual": {
+  "design_dd_pct": 3.4,
+  "actual_dd_pct": 35.52,
+  "over_x": 10.44
+ }
+}

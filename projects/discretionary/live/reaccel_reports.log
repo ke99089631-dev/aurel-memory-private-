@@ -3288,3 +3288,9 @@ C:\Users\user\.aurel\memory\projects\discretionary\live\danger_gauge.py:99: Depr
   ③ 直近100本の+2R以上: 9本=9% → 健在(9%)
   判定: 3本とも触れていない → 継続(レシピ不変)
 
+Traceback (most recent call last):
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_a_money_report.py", line 130, in <module>
+    main()
+  File "C:\Users\user\.aurel\memory\projects\farms\live\farm_a_money_report.py", line 126, in main
+    print(m)
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2014' in position 21: illegal multibyte sequence

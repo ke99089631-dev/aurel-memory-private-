@@ -122,20 +122,41 @@ class FarmSession:
         return df.iloc[:-1]
 
     def lot_for(self, risk_price):
-        """口座0.4%/trade からロット。risk_price=SL幅(価格単位)。1価格単位あたりの$=tick_value/tick_size。"""
+        """口座0.4%/trade からロット。risk_price=SL幅(価格単位)。1価格単位あたりの$=tick_value/tick_size。
+        ★ロットは変えない(凍結仕様)。2026-11-28: last_risk に「実際に賭かった金額リスク」を残すだけ追加。
+          この口座では volume_min が床になって 32/32本で 0.4% が効いていない(=Rと口座が別物になる)。
+          床が効いていることを台帳に見えるようにするのが目的。撃つ/撃たないの判断は一切変えない。"""
         mt5 = self.mt5
         ai = mt5.account_info(); si = mt5.symbol_info(self.sym)
+        self.last_risk = {}
         try:
             tick_val = si.trade_tick_value; tick_sz = si.trade_tick_size
             val_per_price = tick_val / tick_sz            # $ / 1価格単位 / 1lot (×pointしない)
             risk_usd = ai.balance * RISK_FRAC
             if risk_price <= 0 or val_per_price <= 0:
-                return float(si.volume_min or 0.01)
-            lot = risk_usd / (risk_price * val_per_price)
+                lot = float(si.volume_min or 0.01)
+                self.last_risk = {"risk_budget_usd": round(risk_usd, 2), "lot_wanted": None,
+                                  "floored_by_min": True, "why": "risk_price/val_per_price が取れない"}
+                return lot
+            want = risk_usd / (risk_price * val_per_price)
             step = si.volume_step or 0.01
-            lot = max(si.volume_min or 0.01, round(lot / step) * step)
-            return float(min(lot, si.volume_max or lot))
+            vmin = si.volume_min or 0.01
+            lot = max(vmin, round(want / step) * step)
+            lot = float(min(lot, si.volume_max or lot))
+            actual = lot * risk_price * val_per_price      # 実際に賭かる金額リスク
+            self.last_risk = {
+                "risk_budget_usd": round(risk_usd, 2),          # 0.4%の予算
+                "lot_wanted": round(want, 4),                   # 予算どおりなら出るはずのロット
+                "lot_min": float(vmin), "lot_step": float(step),
+                "floored_by_min": bool(lot > want + 1e-9 and abs(lot - vmin) < 1e-9),
+                "risk_usd_actual": round(actual, 2),            # 実際の金額リスク
+                "risk_pct_actual": round(100.0 * actual / ai.balance, 3) if ai.balance else None,
+                "over_budget_x": round(actual / risk_usd, 2) if risk_usd else None,
+                "usd_per_R": round(actual, 2),                  # 1Rの値段(=実際の金額リスク)
+            }
+            return lot
         except Exception:
+            self.last_risk = {"why": "symbol_info/account_info が取れない"}
             return float(getattr(si, "volume_min", 0.01) or 0.01)
 
     def open_magic_positions(self, magic):
@@ -373,8 +394,14 @@ def scan_once(sess, state, armed):
     r = sess.bracket(side, lot, sl, tp, "farmA-%s" % cid, MAGIC)
     ok = (r is not None and r.retcode == sess.mt5.TRADE_RETCODE_DONE)
     base.update({"mode": "fire", "lot": lot, "retcode": getattr(r, "retcode", None),
-                 "deal": getattr(r, "deal", None), "position": getattr(r, "order", None), "ok": ok}); _log(base)
-    print("[発注%s] %s lot%.2f SL%.2f TP%.2f ret=%s" % ("OK" if ok else "NG", side, lot, sl, tp, getattr(r, "retcode", None)))
+                 "deal": getattr(r, "deal", None), "position": getattr(r, "order", None), "ok": ok})
+    base.update(getattr(sess, "last_risk", None) or {})   # 2026-11-28 追加: 金額リスクの記録(ロットは不変)
+    _log(base)
+    lr = getattr(sess, "last_risk", None) or {}
+    print("[発注%s] %s lot%.2f SL%.2f TP%.2f ret=%s | 1Rの値段%s$ (予算%s$ の%s倍%s)" % (
+        "OK" if ok else "NG", side, lot, sl, tp, getattr(r, "retcode", None),
+        lr.get("risk_usd_actual"), lr.get("risk_budget_usd"), lr.get("over_budget_x"),
+        "・最小ロットの床" if lr.get("floored_by_min") else ""))
     return state, False
 
 
